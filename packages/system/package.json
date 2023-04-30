@@ -1,0 +1,43 @@
+{
+  "name": "@jay-js/system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/"
+  },
+  "scripts": {
+    "dist": "npx tsc",
+    "prebuild": "node ./scripts/prebuild.js",
+    "lint": "eslint ./src/**/*.{js,ts}",
+    "pub": "npx tsc && npm publish ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AJCastello/jay-js.git",
+    "directory": "packages/ui"
+  },
+  "keywords": [
+    "Jay",
+    "js",
+    "single page application",
+    "library"
+  ],
+  "author": "AJ Castello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AJCastello/jay-js/issues"
+  },
+  "homepage": "https://github.com/AJCastello/jay-js#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.39.0",
+    "typescript": "^4.9.3"
+  }
+}
