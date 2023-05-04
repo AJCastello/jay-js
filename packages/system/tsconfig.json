@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
     "sourceMap": true,
     "declaration": true,
-    "declarationMap": true,
-    "rootDir": "src"
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": true,
   },
-  "include": ["src"]
+  "include": ["./src/**/*","./src/index.ts"],
+  "exclude": [
+    "./node_modules",
+    "./dist",
+    "./scripts"
+  ]
 }

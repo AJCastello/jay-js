@@ -1,0 +1,14 @@
+{
+  "replace": {
+    "main": "index.js",
+    "types": "index.d.ts"
+  },
+  "remove": [
+    "files",
+    "exports",
+    "scripts",
+    "publishConfig",
+    "clean-package",
+    "devDependencies"
+  ]
+}

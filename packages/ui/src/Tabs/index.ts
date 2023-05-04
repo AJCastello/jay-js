@@ -9,18 +9,22 @@ interface ITabList {
 
 interface ITabLink {
   label: string;
-  content: Content; 
+  active?: boolean;
+  disabled?: boolean;
+  content: Content;
+  className?: string;
 }
 
 interface ITabs {
   tabList?: ITabList;
-  size?: "xs" | "sm" | "md" | "lg";
-  variant?: string;
-  tabs: ITabLink[];
+  size?: "tab-xs" | "tab-sm" | "tab-md" | "tab-lg";
+  variant?: "tab-bordered" | "tab-lifted";
   boxed?: boolean;
+  tabs: ITabLink[];
+  className?: string;
 }
 
-function getContent(content: Content){
+function getContent(content: Content) {
   if (typeof content === "function") {
     return content();
   }
@@ -33,23 +37,37 @@ export function Tabs({
   variant,
   boxed,
   tabs,
+  className,
   ...props
 }: ITabs): HTMLDivElement {
 
+  const classNames = [
+    "tabs",
+    boxed ? "tab-boxed" : "",
+    className || "",
+  ].filter(Boolean).join(" ").trim();
+
   const tabContent = Section({
-    className: `tab-content flex flex-grow ${boxed && "tab-boxed"}`,
+    className: "tab-content flex flex-grow",
     content: getContent(tabs[0].content),
   });
 
   const tabsList = Section({
-    className: "tabs",
+    className: classNames,
     content: tabs.map((tab, index) => {
-      
+
+      const tabClassNames = [
+        "tab",
+        "no-underline",
+        tab.active ? "tab-active" : "",
+        tab.disabled ? "tab-disabled" : "",
+        size,
+        variant,
+        tab.className || "",
+      ].filter(Boolean).join(" ").trim();
+
       const tabButton = Link({
-        className: `tab no-underline	
-        ${variant && `tab-${variant}`}
-        ${size && `tab-${size}`}
-        `,
+        className: tabClassNames,
         content: tab.label,
         onclick: () => {
           handleFocusedLine(tabButton);

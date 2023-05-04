@@ -1,10 +1,17 @@
+type DragStartEvent = (event: DragEvent) => void;
+type DragEndEvent = (event: DragEvent) => void;
+type DragOverEvent = (event: DragEvent) => void;
+type DragEnterEvent = (event: DragEvent) => void;
+type DragLeaveEvent = (event: DragEvent) => void;
+type DropEvent = (event: DragEvent, draggedItem: EventTarget | null) => void;
+
 interface DraggableOptions {
-  onDragStart?: (event: DragEvent) => void;
-  onDragEnd?: (event: DragEvent) => void;
-  onDragOver?: (event: DragEvent) => void;
-  onDragEnter?: (event: DragEvent) => void;
-  onDragLeave?: (event: DragEvent) => void;
-  onDrop?: (event: DragEvent, draggedItem: EventTarget | null) => void;
+  onDragStart?: DragStartEvent;
+  onDragEnd?: DragEndEvent;
+  onDragOver?: DragOverEvent;
+  onDragEnter?: DragEnterEvent;
+  onDragLeave?: DragLeaveEvent;
+  onDrop?: DropEvent;
 }
 
 export function Draggable(
@@ -20,33 +27,17 @@ export function Draggable(
 ): void {
   let draggedItem: EventTarget | null = null;
 
-  element.addEventListener("dragstart", function (event) {
+  onDragStart && element.addEventListener("dragstart", (event) => {
     draggedItem = event.target;
     onDragStart && onDragStart(event);
   });
 
-  element.addEventListener("dragend", function (event) {
-    event.preventDefault();
-    onDragEnd && onDragEnd(event);
-  });
+  onDragEnd && element.addEventListener("dragend", onDragEnd);
+  onDragOver && element.addEventListener("dragover", onDragOver);
+  onDragEnter && element.addEventListener("dragenter", onDragEnter);
+  onDragLeave && element.addEventListener("dragleave", onDragLeave);
 
-  element.addEventListener("dragover", function (event) {
-    event.preventDefault();
-    onDragOver && onDragOver(event);
-  });
-
-  element.addEventListener("dragenter", function (event) {
-    event.preventDefault();
-    onDragEnter && onDragEnter(event);
-  });
-
-  element.addEventListener("dragleave", function (event) {
-    event.preventDefault();
-    onDragLeave && onDragLeave(event);
-  });
-
-  element.addEventListener("drop", function (event){
-    event.preventDefault();
-    onDrop && onDrop(event, draggedItem);
+  onDrop && element.addEventListener("drop", (event) => {
+    onDrop(event, draggedItem);
   });
 }

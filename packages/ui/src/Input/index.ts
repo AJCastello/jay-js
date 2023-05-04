@@ -11,8 +11,9 @@ interface Helper {
   label: string;
 }
 
+type FormControlContent = string | HTMLElement | Node | (string | HTMLElement | Node)[]
+
 export interface IInput extends IBaseElement {
-  id?: string;
   type?: string;
   value?: string;
   label?: string;
@@ -20,16 +21,16 @@ export interface IInput extends IBaseElement {
   helpers?: Array<Helper>;
   className?: string;
   placeholder?: string;
-  variant?: string;
-  color?: "primary" | "secondary" | "accent" | "success" | "warning" | "info" | "error";
-  size?: "lg" | "md" | "sm" | "xs";
+  bordered?: boolean;
+  ghost?: boolean;
+  color?: "input-primary" |  "input-secondary" |  "input-accent" |  "input-success" |  "input-warning" |  "input-info" |  "input-error" ;
+  size?: "input-lg" | "input-md" | "input-sm" | "input-xs";
   mask?: any;
   startAdornment?: (inputElement: HTMLInputElement) => HTMLElement;
   endAdornment?: (inputElement: HTMLInputElement) => HTMLElement;
 }
 
 export function Input({
-  id,
   type,
   value,
   label,
@@ -37,7 +38,8 @@ export function Input({
   helpers,
   className,
   placeholder,
-  variant,
+  bordered,
+  ghost,
   color,
   size,
   mask,
@@ -48,17 +50,16 @@ export function Input({
 
   const classNameProps = [
     "input",
-    variant ? `input-${variant}` : "",
-    size ? `input-${size}` : "",
-    color ? `input-${color}` : "",
+    bordered ? "input-bordered" : "",
+    ghost ? "input-ghost" : "",
+    color,
+    size,
     className || "",
     "input-placeholder"
   ].filter(Boolean).join(" ").trim();
 
-
   // Create the input element 
   const inputElement = BaseElement({
-    id,
     tag: "input",
     className: classNameProps,
     ...props
@@ -72,7 +73,7 @@ export function Input({
     IMask(inputElement, mask);
   }
 
-  const formControlContent: any = [];
+  const formControlContent: FormControlContent = [];
 
   // Create startAdornment and endAdornment containers if provided
   const startAdornmentContainer = startAdornment && Section({
@@ -145,8 +146,8 @@ export function Input({
   }
 
   // Append startAdornment and endAdornment containers if provided
-  startAdornment && formControlContent.push(startAdornmentContainer);
-  endAdornment && formControlContent.push(endAdornmentContainer);
+  startAdornmentContainer && formControlContent.push(startAdornmentContainer);
+  endAdornmentContainer && formControlContent.push(endAdornmentContainer);
 
   // TODO: allow for custom styles
   const formControl = Section({

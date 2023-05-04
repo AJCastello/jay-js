@@ -1,78 +1,108 @@
-# Jay JS - State
+# @jay-js/system State
 
-Jay JS is a simple and lightweight library for managing state in JavaScript and TypeScript applications.
+The `State` component in the `@jay-js/system` library provides a simple yet powerful state management solution for your TypeScript or JavaScript projects. With its reactive design, it enables efficient management of data and updates in your application.
 
-## State Controller
+## Installation
 
-The state controller allows you to manage your application's state easily and efficiently. It provides a way to store and update states, as well as notify components or functions about state changes.
+To install the `@jay-js/system` library, use one of the following package managers:
 
-### How to use
-
-1. Import the `State` function from the Jay JS package:
-
-   ```javascript
-   import { State } from "jay-js";
-   ```
-
-2. Create a new state using the `State` function:
-
-   ```javascript
-   const counter = State(0);
-   ```
-
-3. Use the `set` and `get` methods to update and retrieve the state:
-
-   ```javascript
-   counter.set(1);
-   console.log(counter.get()); // 1
-   ```
-
-4. Subscribe to state changes using the `sub` method:
-
-   ```javascript
-   counter.sub("counterListener", (newValue) => {
-     console.log("Counter changed:", newValue);
-   });
-   ```
-
-5. Unsubscribe from state changes using the `unsub` method:
-
-   ```javascript
-   counter.unsub("counterListener");
-   ```
-
-6. Manually trigger all subscribed effects using the `trigger` method:
-
-   ```javascript
-   counter.trigger();
-   ```
-
-### API
-
-- `set(newData: T)`: Sets the new value of the state. If `newData` is a function, the current state will be passed to the function and the result will be the new state.
-
-- `get(callback?: (data: T) => void)`: Returns the current value of the state. If a callback is provided, it will be called with the current state value.
-
-- `sub(id: string, effect: (newValue: T) => void)`: Subscribes to state changes. The `effect` function will be called whenever the state is updated. The function receives the new state value as an argument.
-
-- `unsub(id: string)`: Unsubscribes from a previously registered effect using the `sub` method.
-
-- `trigger()`: Manually triggers all subscribed effects, calling them with the current state value.
-
-### Example
-
-```javascript
-import { State } from "jay-js/state";
-
-const counter = State(0);
-
-counter.sub("counterListener", (newValue) => {
-  console.log("Counter changed:", newValue);
-});
-
-counter.set(1); // Logs "Counter changed: 1"
+```sh
+npm install @jay-js/system
 ```
 
-## Contributing
+or
 
-We welcome your contributions! Please feel free to open an issue or pull request on the project repository.
+```sh
+yarn add @jay-js/system
+```
+
+## Usage
+
+First, import the `State` component from the `@jay-js/system` library:
+
+```typescript
+import { State } from '@jay-js/system';
+```
+
+Next, create a state object with an initial value:
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+}
+
+const person = State<Person>({
+  name: 'John',
+  age: 30,
+});
+```
+
+You can then interact with the state using the provided methods:
+
+- `set`: Update the state value
+- `get`: Retrieve the current state value
+- `sub`: Subscribe to state updates
+- `unsub`: Unsubscribe from state updates
+- `trigger`: Manually trigger an update
+
+### Updating State
+
+```typescript
+person.set({ name: 'Jane', age: 25 }); // Set the new state value directly
+person.set((currentState) => ({ ...currentState, age: currentState.age + 1 })); // Update the state value based on the current state
+```
+
+### Retrieving State
+
+```typescript
+const currentState = person.get(); // Get the current state value
+```
+
+### Subscribing to Updates
+
+```typescript
+person.sub('mySubscription', (data) => {
+  console.log('Updated state:', data);
+});
+```
+
+### Unsubscribing from Updates
+
+```typescript
+person.unsub('mySubscription');
+```
+
+### Manually Triggering an Update
+
+```typescript
+person.trigger();
+```
+
+## Examples
+
+Here's an example demonstrating how to use the `State` component to manage a counter:
+
+```typescript
+import { State } from '@jay-js/system';
+
+interface Counter {
+  count: number;
+}
+
+const counter = State<Counter>({
+  count: 0,
+});
+
+counter.sub('log', (data) => {
+  console.log('Current count:', data.count);
+});
+
+counter.set((currentState) => ({ count: currentState.count + 1 })); // Increment the counter
+```
+
+In this example, the `State` component manages the counter state, automatically notifying subscribed functions of changes.
+
+## Conclusion
+
+The `State` component in the `@jay-js/system` library provides a powerful, lightweight state management solution for your TypeScript or JavaScript projects. Its reactive design ensures efficient updates and easy integration with your application. Give it a try and simplify your state management tasks!

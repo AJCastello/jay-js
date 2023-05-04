@@ -1,5 +1,5 @@
 
-import { BaseElement, IBaseElement, Img, RippleEffect, Section, ISection, Typography, ITypography, IImg, useListener } from "..";
+import { BaseElement, IBaseElement, Img, RippleEffect, Section, ISection, Typography, ITypography, IImg } from "..";
 
 export interface ICard extends IBaseElement {
   className?: string;
@@ -11,10 +11,10 @@ export interface ICard extends IBaseElement {
   cardTitle?: ITypography;
   cardDescription?: ITypography;
   cardActions?: ISection;
-  //content?: HTMLElement[];
 
-  variant?: boolean;
+  bordered?: boolean;
   compact?: boolean;
+  ripple?: boolean;
 }
 
 export function Card({
@@ -28,14 +28,15 @@ export function Card({
   cardDescription,
   cardActions,
 
-  variant,
+  bordered,
   compact,
+  ripple = true,
   ...props
 }: ICard): HTMLDivElement {
-  
+
   const classNameData = [
     "card shadow-md hover:shadow-xl transition-all duration-500 ease-in-out relative overflow-hidden",
-    variant ? "card-bordered" : "",
+    bordered ? "card-bordered" : "",
     compact ? "card-compact" : "card-normal",
     imagePosition == "left" || imagePosition == "right" ? "card-side" : "",
     imageFull ? "image-full" : "",
@@ -105,11 +106,9 @@ export function Card({
     }
   }
 
-  cardElement.addEventListener("click", event => {
+  ripple && cardElement.addEventListener("click", event => {
     const ripple = RippleEffect(event);
     cardElement.append(ripple);
-    props.listeners && useListener("click", props.listeners);
-    props.onclick?.bind(cardElement)(event);
   });
 
   return cardElement;

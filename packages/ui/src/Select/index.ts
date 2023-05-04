@@ -7,8 +7,13 @@ type Helper = {
 
 export interface ISelect extends IBaseElement {
   className?: string;
-  variant?: string;
-  size?: string;
+
+  bordered?: boolean;
+  ghost?: boolean;
+
+  color?: "select-primary" | "select-secondary" | "select-accent" | "select-success" | "select-warning" | "select-info" | "select-error";
+  size?: "select-lg" | "select-md" | "select-sm" | "select-xs";
+
   options?: Array<Partial<HTMLOptionElement>>,
   label?: string;
   labelAlt?: string;
@@ -19,8 +24,10 @@ export interface ISelect extends IBaseElement {
 
 export function Select({
   className,
-  variant,
+  bordered,
+  ghost,
   size,
+  color,
   options,
   label,
   labelAlt,
@@ -32,8 +39,10 @@ export function Select({
 
   const classNameData = [
     "select",
-    variant ? `select-${variant}` : "",
-    size ? `select-${size}` : "",
+    bordered ? "select-bordered" : "",
+    ghost ? "select-ghost" : "",
+    size,
+    color,
     className || "",
   ].filter(Boolean).join(" ").trim();
 

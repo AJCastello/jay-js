@@ -1,10 +1,10 @@
-export interface ImportedModule {
+export interface IImportedModule {
   module: any;
   lastUsed: number;
   collect: boolean;
 }
 
-export interface LazyModuleProps {
+export interface ILazyModule {
   module: string;
   import: () => Promise<any>;
   route?: string;

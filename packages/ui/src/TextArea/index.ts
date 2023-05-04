@@ -17,9 +17,10 @@ export interface ITextarea extends IBaseElement {
   helpers?: Array<Helper>;
   className?: string;
   placeholder?: string;
-  variant?: string;
-  color?: "primary" | "secondary" | "accent" | "success" | "warning" | "info" | "error";
-  size?: "lg" | "md" | "sm" | "xs";
+  bordered?: boolean;
+  ghost?: boolean;
+  color?: "textarea-primary" |  "textarea-secondary" |  "textarea-accent" |  "textarea-success" |  "textarea-warning" |  "textarea-info" |  "textarea-error" ;
+  size?: "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
   mask?: IMask.Masked<any>;
 }
 
@@ -30,7 +31,8 @@ export function TextArea({
   helpers,
   className,
   placeholder,
-  variant,
+  bordered,
+  ghost,
   color,
   size,
   mask,
@@ -39,9 +41,10 @@ export function TextArea({
 
   const classNames = [
     "textarea",
-    variant ? `textarea-${variant}` : "",
-    color ? `textarea-${color}` : "",
-    size ? `textarea-${size}` : "",
+    bordered ? "textarea-bordered" : "",
+    ghost ? "textarea-ghost" : "",
+    color,
+    size,
     className || "",
     "textarea-placeholder",
   ].filter(Boolean).join(" ").trim();

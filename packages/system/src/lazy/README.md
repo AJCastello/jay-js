@@ -1,4 +1,4 @@
-# Jay JS - LazyModule
+# Jay JS - Lazy LoadingModule
 
 The `LazyModule` component is a utility for loading and rendering components or modules asynchronously in your web application. It efficiently manages the lifecycle of imported modules by collecting unused modules and unmounting them from memory. This helps optimize the performance of your application by reducing memory consumption and improving load times.
 
@@ -55,7 +55,6 @@ Function that returns an HTMLElement with the loaded module.
 
 - `module`: Required. The module's name.
 - `import`: Required. A function that returns a Promise for importing the module.
-- `style`: Optional. An object containing custom CSS styles for the module section.
 - `collect`: Optional. A boolean that indicates whether the module should be collected when it's not in use (default: true).
 
 ### Example

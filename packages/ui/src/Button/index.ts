@@ -1,12 +1,19 @@
-import { Icon, BaseElement, RippleEffect, IBaseElement, useListener } from "..";
+import { Icon, BaseElement, RippleEffect, IBaseElement } from "..";
+
+// wide
+// "btn-wide"	Responsive	Wide button (more horizontal padding)
 
 export interface IButton extends IBaseElement {
   type?: string;
   className?: string;
-  variant?: string;
-  color?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link" | "outline"
+  size?: "btn-lg" | "btn-md" | "btn-sm" | "btn-xs";
+  format?: "btn-circle" | "btn-square";
+  color?: "btn-primary" | "btn-secondary" | "btn-accent" | "btn-info" | "btn-success" | "btn-warning" | "btn-error"
+  variant?: "btn-ghost" | "btn-link" | "btn-outline";
+  active?: "btn-active" | "btn-disabled";
   content?: string | HTMLElement;
   disabled?: boolean;
+
   startIcon?: {
     icon: string;
     type?: string;
@@ -17,38 +24,57 @@ export interface IButton extends IBaseElement {
     type?: string;
     className?: string;
   };
-  loading?: boolean;
-  size?: "lg" | "md" | "sm" | "xs";
-  format?: "circle" | "square";
+
   fullWidth?: boolean;
+
+  glass?: boolean;
+  loading?: boolean;
+  animation?: boolean;
+
+  ripple?: boolean;
 }
 
 export function Button({
   type,
   className,
-  variant,
-  color,
   content,
   disabled,
   startIcon,
   endIcon,
-  loading,
+
   size,
   format,
+  color,
+  variant,
+  active,
+
   fullWidth,
+
+  glass,
+  loading,
+  animation,
+
+  ripple = true,
   ...props
 }: IButton): HTMLButtonElement {
   const resetCss = className && className.includes("--r");
 
   const classNameData = [
     "btn",
-    size ? `btn-${size}` : "",
-    format ? `btn-${format}` : "",
-    color ? `btn-${color}` : "",
+    size,
+    format,
+    color,
+    variant,
+    active,
+
     fullWidth ? "btn-block" : "",
-    variant ? `btn-${variant}` : "",
+
+    glass,
+    loading,
+    animation ? "no-animation" : "",
+
     "relative overflow-hidden",
-    className ? className : "",
+    className ? className : ""
   ].filter(Boolean).join(" ").trim();
 
   const objButton = BaseElement({
@@ -60,6 +86,7 @@ export function Button({
   }) as HTMLButtonElement;
 
   type && (objButton.type = type);
+
   disabled && objButton.setAttribute("disabled", "true");
 
   const buttonContent = [];
@@ -76,12 +103,10 @@ export function Button({
 
   objButton.content = buttonContent;
 
-  objButton.addEventListener("click", (event) => {
+  ripple && objButton.addEventListener("click", (event) => {
     if (!disabled) {
       const ripple = RippleEffect(event);
       objButton.append(ripple);
-      props.listeners && useListener("click", props.listeners);
-      props.onclick?.bind(objButton)(event);
     }
   });
 

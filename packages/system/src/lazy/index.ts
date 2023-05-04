@@ -1,9 +1,9 @@
 // components
 import { ErrorImport, NotFound, ModuleWrapper } from "./components";
-import { LazyModuleProps } from "./types";
+import { ILazyModule } from "./types";
 import { ImportedModules } from "./utils/collector";
 
-export function LazyModule(module: LazyModuleProps, loader?: HTMLElement) {
+export function LazyModule(module: ILazyModule, loader?: HTMLElement) {
 
   if (!module) {
     return NotFound();
@@ -37,3 +37,5 @@ export function LazyModule(module: LazyModuleProps, loader?: HTMLElement) {
   return moduleSection;
 }
 
+
+export * from "./types";

@@ -1,4 +1,4 @@
-import { Button, IButton, useListener, RippleEffect } from "..";
+import { Button, IButton, RippleEffect } from "..";
 
 export type IIconButton = IButton
 
@@ -22,8 +22,6 @@ export function IconButton({
   iconButton.addEventListener("click", (event) => {
     const ripple = RippleEffect(event as MouseEvent);
     iconButton.append(ripple);
-    props.listeners && useListener("click", props.listeners);
-    props.onclick?.bind(iconButton)(event);
   });
 
   return iconButton;

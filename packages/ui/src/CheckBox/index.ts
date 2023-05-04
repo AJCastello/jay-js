@@ -5,11 +5,12 @@ export interface ICheckBox extends IBaseElement {
   label?: string;
   checked?: boolean;
   className?: string;
-  color?: "primary" | "secondary" | "accent" | "success" | "warning" | "info" | "error";
-  size?: "lg" | "md" | "sm" | "xs";
+  color?: "checkbox-primary" |  "checkbox-secondary" |  "checkbox-accent" |  "checkbox-success" |  "checkbox-warning" |  "checkbox-info" |  "checkbox-error" ;
+  size?: "checkbox-lg" | "checkbox-md" | "checkbox-sm" | "checkbox-xs";
   position?: "before" | "after";
   formControl?: IBaseElement;
 }
+
 
 export function CheckBox({
   value,
@@ -25,8 +26,8 @@ export function CheckBox({
 
   const classNameData = [
     "checkbox",
-    color ? `checkbox-${color}` : "",
-    size ? `checkbox-${size}` : "",
+    color,
+    size,
     className || "",
   ].filter(Boolean).join(" ").trim();
 

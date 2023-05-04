@@ -1,0 +1,12 @@
+tab-content
+flex
+flex-grow 
+tab
+tab-boxed
+tabs
+tab-active
+tab-disabled
+no-underline
+tabs-wrapper
+flex-col
+w-full

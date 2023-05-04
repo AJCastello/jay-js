@@ -1,44 +1,48 @@
-export type StateType = {
-  set: (newData: any) => void;
-  get: (callback?: (data: any) => void) => any;
-  sub: (id: string, effect: (data: any) => void) => any;
+export type StateType<T> = {
+  set: (newData: T | ((currentState: T) => T)) => void;
+  get: (callback?: (data: T) => void) => T;
+  sub: (id: string, effect: (data: T) => void) => any;
   unsub: (id: string) => void;
   trigger: () => void;
-  effect: Map<any, any>;
-  data: any;
-}
+  effect: Map<string, (data: T) => void>;
+  data: T;
+};
 
-export const State = <T>(data: T): StateType => ({
-  set(newData: T) {
-    if (typeof newData === "function") {
-      data = newData(data as T);
-    } else {
-      data = newData;
-    }
+export const State = <T>(data: T): StateType<T> => {
+  const state: StateType<T> = {
+    set: (newData: T | ((currentState: T) => T)): void => {
+      if (typeof newData === "function") {
+        data = (newData as (currentState: T) => T)(data);
+      } else {
+        data = newData;
+      }
 
-    if (this.effect.size === 0) {
-      return;
-    }
-    this.effect.forEach((item: (arg0: T) => any) => item(data as T));
-  },
-  get(callback) {
-    if (callback) {
-      callback(data as T);
-    }
-    return data as T;
-  },
-  sub(id, effect) {
-    this.effect.set(id, effect);
-  },
-  unsub(id) {
-    this.effect.delete(id);
-  },
-  trigger() {
-    if (this.effect.size === 0) {
-      return;
-    }
-    this.effect.forEach((item: (arg0: T) => any) => item(data as T));
-  },
-  effect: new Map(),
-  data
-});
+      if (state.effect.size === 0) {
+        return;
+      }
+      state.effect.forEach((item: (arg0: T) => any) => item(data));
+    },
+    get: (callback?: (data: T) => void): T => {
+      if (callback) {
+        callback(data);
+      }
+      return data;
+    },
+    sub: (id: string, effect: (data: T) => void) => {
+      state.effect.set(id, effect);
+    },
+    unsub: (id: string) => {
+      state.effect.delete(id);
+    },
+    trigger: () => {
+      if (state.effect.size === 0) {
+        return;
+      }
+      state.effect.forEach((item: (arg0: T) => any) => item(data));
+    },
+    effect: new Map(),
+    data,
+  };
+
+  return state;
+};

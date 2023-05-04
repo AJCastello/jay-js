@@ -6,8 +6,8 @@ export interface IToggle extends IBaseElement {
   label?: string;
   checked?: boolean;
   className?: string;
-  color?: "primary" | "secondary" | "accent" | "success" | "warning" | "info" | "error";
-  size?: "lg" | "md" | "sm" | "xs";
+  color?: "toggle-primary" |  "toggle-secondary" |  "toggle-accent" |  "toggle-success" |  "toggle-warning" |  "toggle-info" |  "toggle-error" ;
+  size?: "toggle-lg" | "toggle-md" | "toggle-sm" | "toggle-xs";
   position?: "before" | "after";
   formControl?: IBaseElement;
 }
@@ -27,8 +27,8 @@ export function Toggle({
 
   const classNameData = [
     "toggle",
-    color ? `toggle-${color}` : "",
-    size ? `toggle-${size}` : "",
+    color,
+    size,
     className || "",
   ].filter(Boolean).join(" ").trim();
 

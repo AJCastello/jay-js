@@ -5,12 +5,10 @@ export interface ITypography extends IBaseElement {
 }
 
 export function Typography({ 
-  id, 
   variant = "p",
   ...props
 }: ITypography): HTMLElement {
   const paragraph = BaseElement({
-    id,
     tag: variant,
     ...props
   });
