@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/system",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -16,7 +16,7 @@
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
     "build": "swc src -d dist --source-maps inline && npm run build:types",
-    "postbuild": "cpy ./src/**/*.css ./dist && clean-package && cpy ./package.json ./dist && clean-package restore",
+    "postbuild": "cpy ./src/**/*.css ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     
     "pub": "cd ./dist && npm publish --access public",
 
