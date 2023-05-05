@@ -33,7 +33,12 @@ export function Draggable(
   });
 
   onDragEnd && element.addEventListener("dragend", onDragEnd);
-  onDragOver && element.addEventListener("dragover", onDragOver);
+
+  element.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    onDragOver && onDragOver(event);
+  });
+
   onDragEnter && element.addEventListener("dragenter", onDragEnter);
   onDragLeave && element.addEventListener("dragleave", onDragLeave);
 
