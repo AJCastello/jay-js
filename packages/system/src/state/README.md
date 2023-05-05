@@ -50,7 +50,14 @@ You can then interact with the state using the provided methods:
 
 ```typescript
 person.set({ name: 'Jane', age: 25 }); // Set the new state value directly
+
 person.set((currentState) => ({ ...currentState, age: currentState.age + 1 })); // Update the state value based on the current state
+// or
+person.set((currentState) => {
+  currentState.age =  currentState.age + 1;
+  return currentState;
+});
+
 ```
 
 ### Retrieving State
@@ -99,6 +106,11 @@ counter.sub('log', (data) => {
 });
 
 counter.set((currentState) => ({ count: currentState.count + 1 })); // Increment the counter
+// or
+counter.set((currentState) => {
+  currentState.count = currentState.count + 1;
+  return currentState;
+});
 ```
 
 In this example, the `State` component manages the counter state, automatically notifying subscribed functions of changes.

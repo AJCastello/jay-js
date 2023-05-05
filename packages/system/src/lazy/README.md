@@ -23,7 +23,7 @@ The `LazyModule` component also manages the module lifecycle by periodically che
 To use the `LazyModule` component, first import it into your project:
 
 ```typescript
-import { LazyModule } from "jay-js/lazy-module";
+import { LazyModule } from "@jay-js/system";
 ```
 
 Next, create a module object containing the module's name, import function, and any additional properties required by the module. Here's an example:
@@ -60,7 +60,7 @@ Function that returns an HTMLElement with the loaded module.
 ### Example
 
 ```typescript
-import { LazyModule } from "jay-js/lazy-module";
+import { LazyModule } from "@jay-js/system";
 
 export function MyComponent() {
   const module = {

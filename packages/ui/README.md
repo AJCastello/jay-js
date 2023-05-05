@@ -2,6 +2,8 @@
 
 Jay-JS UI is a modern, lightweight, and fully customizable UI component library for building responsive and scalable web applications. It is built with simplicity and flexibility in mind, making it easy to use and adapt to various web projects.
 
+You can use it headless or with Tailwind CSS with daisyUI plugin (already included in the package) to create stunning user interfaces for your web applications.
+
 ## Installation
 
 To install Jay-JS UI, simply run the following command in your project directory:
@@ -19,7 +21,7 @@ import { Button, IButton } from "@jay-js/ui";
 
 const myButton = Button({
   content: "Click me",
-  variant: "primary",
+  color: "btn-primary",
   onclick: () => {
     console.log("Button clicked!");
   },
