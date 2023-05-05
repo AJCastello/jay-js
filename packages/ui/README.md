@@ -1,4 +1,4 @@
-# Jay-JS UI
+# @jay-js/ui
 
 Jay-JS UI is a modern, lightweight, and fully customizable UI component library for building responsive and scalable web applications. It is built with simplicity and flexibility in mind, making it easy to use and adapt to various web projects.
 
@@ -8,8 +8,16 @@ You can use it headless or with Tailwind CSS with daisyUI plugin (already includ
 
 To install Jay-JS UI, simply run the following command in your project directory:
 
+**Using npm:**
+
+```bash
+npm install @jay-js/ui
 ```
-npm i @jay-js/ui
+
+**Using yarn:**
+
+```bash
+yarn add @jay-js/ui
 ```
 
 ## Usage
