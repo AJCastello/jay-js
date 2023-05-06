@@ -18,6 +18,7 @@ export * from "./CheckBox";
 export * from "./Divider";
 export * from "./Dropdown";
 export * from "./Form";
+export * from "./Fragment";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./Img";
