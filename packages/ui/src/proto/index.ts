@@ -1,5 +1,6 @@
 interface HTMLElement {
   content: string | HTMLElement | Node | DocumentFragment | (string | HTMLElement | Node)[];
+  children: string | HTMLElement | Node | DocumentFragment | HTMLCollection | (string | HTMLElement | Node)[];
 }
 
 Object.defineProperty(HTMLElement.prototype, "content", {
@@ -28,11 +29,10 @@ Object.defineProperty(HTMLElement.prototype, "content", {
   configurable: true
 });
 
-
 Object.defineProperty(HTMLElement.prototype, "children", {
   get: function getChildren() {
     if (!this.children) return null;
-    return this.children;
+    return this.children as HTMLCollection;
   },
   set: function setContent(value) {
 
