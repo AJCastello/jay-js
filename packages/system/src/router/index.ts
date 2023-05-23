@@ -21,13 +21,35 @@ export function getParams(): Record<string, string> {
 }
 
 export function getPotentialMatch() {
+  let pathName = location.pathname;
+
+  if (pathName.substring(pathName.length - 1) === "/") {
+    pathName = pathName.substring(0, pathName.length - 1)
+  }
+
   const potentialMatches = contextRoutes.map((route) => {
     return {
       route: route,
-      result: location.pathname.match(pathToRegex(route.path)),
+      result: pathName.match(pathToRegex(route.path)),
     };
   });
-  const resultMatch = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
+
+  const resultMatch = potentialMatches.reduce((acc, curr) => {
+    if (curr.result !== null) {
+      if (acc.result === null) {
+        return curr;
+      }
+      if (curr.result.length > acc.result.length) {
+        return curr;
+      }
+    }
+    return acc;
+  }, {
+    route: contextRoutes[0],
+    result: null
+  });
+
+
   const match = resultMatch
     ? resultMatch
     : { route: contextRoutes[0], result: [location.pathname] };
