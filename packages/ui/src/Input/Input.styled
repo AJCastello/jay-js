@@ -16,3 +16,9 @@ form-control
 relative
 input-bordered
 input-ghost
+left-3
+right-3 
+top-1/2 
+z-10 
+transform 
+-translate-y-1/2
