@@ -11,7 +11,7 @@ export interface IButton extends IBaseElement {
   color?: "btn-primary" | "btn-secondary" | "btn-accent" | "btn-info" | "btn-success" | "btn-warning" | "btn-error"
   variant?: "btn-ghost" | "btn-link" | "btn-outline";
   active?: "btn-active" | "btn-disabled";
-  content?: string | HTMLElement;
+
   disabled?: boolean;
 
   startIcon?: {
@@ -97,7 +97,13 @@ export function Button({
     );
   } else {
     startIcon && buttonContent.push(Icon(startIcon));
-    content && buttonContent.push(content);
+    if (content) {
+      if (Array.isArray(content)) {
+        buttonContent.push(...content);
+      } else {
+        buttonContent.push(content);
+      }
+    }
     endIcon && buttonContent.push(Icon(endIcon));
   }
 
