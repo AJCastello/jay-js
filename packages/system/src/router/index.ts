@@ -1,6 +1,6 @@
 type Route = {
   path: string;
-  element: () => HTMLElement | (() => Promise<HTMLElement>) | undefined;
+  element: () => (HTMLElement | DocumentFragment) | (() => Promise<HTMLElement | DocumentFragment>) | undefined;
   target: HTMLElement;
 };
 
