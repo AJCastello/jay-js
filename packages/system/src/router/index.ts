@@ -2,6 +2,7 @@ type Route = {
   path: string;
   element: () => (HTMLElement | DocumentFragment) | (() => Promise<HTMLElement | DocumentFragment>) | undefined;
   target: HTMLElement;
+  children?: Route[];
 };
 
 const contextRoutes: Route[] = [];
@@ -56,6 +57,31 @@ export function getPotentialMatch() {
   return match;
 }
 
+function Routes(inputRoutes: Route[], prefix = "") {
+  const outputRoutes: Route[] = [];
+
+  function buildRoutes(routes: Route[], prefix: string) {
+    for (let route of routes) {
+      let newPath = [prefix, route.path].join("/").replace(/\/+$/, "");
+
+      if (route.element) {
+        outputRoutes.push({
+          path: newPath,
+          element: route.element,
+          target: route.target,
+        });
+      }
+
+      if (route.children) {
+        buildRoutes(route.children, newPath);
+      }
+    }
+  }
+
+  buildRoutes(inputRoutes, prefix);
+  return outputRoutes;
+}
+
 export async function Router(routes: Route[] = contextRoutes) {
   if (routes.length === 0) {
     throw new Error("No routes provided");
@@ -63,7 +89,7 @@ export async function Router(routes: Route[] = contextRoutes) {
 
   if (contextRoutes.length === 0) {
     contextRoutes.splice(0, contextRoutes.length);
-    contextRoutes.push(...routes);
+    contextRoutes.push(...Routes(routes));
   }
 
   const match = getPotentialMatch();
