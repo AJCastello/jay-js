@@ -26,6 +26,7 @@ export * from "./IconButton";
 export * from "./Img";
 export * from "./Input";
 export * from "./Link";
+export * from "./Modal";
 export * from "./ResizableSplitter";
 export * from "./RippleEffect";
 export * from "./Section";
