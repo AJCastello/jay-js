@@ -7,7 +7,7 @@ export interface ICheckBox extends IBaseElement {
   className?: string;
   color?: "checkbox-primary" |  "checkbox-secondary" |  "checkbox-accent" |  "checkbox-success" |  "checkbox-warning" |  "checkbox-info" |  "checkbox-error" ;
   size?: "checkbox-lg" | "checkbox-md" | "checkbox-sm" | "checkbox-xs";
-  position?: "before" | "after";
+  position?: "checkbox-before" | "checkbox-after";
   formControl?: IBaseElement;
 }
 
@@ -19,7 +19,7 @@ export function CheckBox({
   className,
   color,
   size,
-  position = "after",
+  position = "checkbox-after",
   formControl,
   ...props
 }: ICheckBox): HTMLDivElement | HTMLInputElement {
@@ -55,7 +55,7 @@ export function CheckBox({
 
     labelElement.append(labelText);
 
-    if (position === "before") {
+    if (position === "checkbox-before") {
       labelElement.append(checkboxElement);
     } else {
       labelElement.prepend(checkboxElement);
