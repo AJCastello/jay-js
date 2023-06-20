@@ -8,7 +8,7 @@ export interface IToggle extends IBaseElement {
   className?: string;
   color?: "toggle-primary" |  "toggle-secondary" |  "toggle-accent" |  "toggle-success" |  "toggle-warning" |  "toggle-info" |  "toggle-error" ;
   size?: "toggle-lg" | "toggle-md" | "toggle-sm" | "toggle-xs";
-  position?: "before" | "after";
+  position?: "toggle-before" | "toggle-after";
   formControl?: IBaseElement;
 }
 
@@ -20,7 +20,7 @@ export function Toggle({
   className,
   color,
   size,
-  position = "after",
+  position = "toggle-after",
   formControl,
   ...props
 }: IToggle): HTMLDivElement | HTMLInputElement {
@@ -57,7 +57,7 @@ export function Toggle({
 
     labelElement.append(labelText);
 
-    if (position === "before") {
+    if (position === "toggle-before") {
       labelElement.append(toggleElement);
     } else {
       labelElement.prepend(toggleElement);
