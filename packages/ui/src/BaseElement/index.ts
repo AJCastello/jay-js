@@ -14,6 +14,7 @@ export interface IBaseElement extends Partial<Omit<HTMLElement, "style">> {
   listeners?: Listener;
   style?: Partial<CSSStyleDeclaration>;
   dataset?: Partial<DOMStringMap>;
+  [key: string]: any;
 }
 
 export function BaseElement({
