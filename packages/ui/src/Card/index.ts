@@ -35,7 +35,8 @@ export function Card({
 }: ICard): HTMLDivElement {
 
   const classNameData = [
-    "card shadow-md hover:shadow-xl transition-all duration-500 ease-in-out relative overflow-hidden",
+    "card shadow-md hover:shadow-xl transition-all duration-500 ease-in-out",
+    ripple ? "relative overflow-hidden" : "",
     bordered ? "card-bordered" : "",
     compact ? "card-compact" : "card-normal",
     imagePosition == "left" || imagePosition == "right" ? "card-side" : "",
