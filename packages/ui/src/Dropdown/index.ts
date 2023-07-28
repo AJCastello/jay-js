@@ -41,7 +41,7 @@ export function Dropdown({
   const labelElement = Typography({
     ...label,
     variant: label.variant || "label",
-    className: `btn ${label.className || ""}`,
+    className: label.className || "",
     tabIndex: 0
   });
 
