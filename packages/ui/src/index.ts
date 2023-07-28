@@ -18,6 +18,7 @@ export * from "./Button";
 export * from "./Card";
 export * from "./CheckBox";
 export * from "./Divider";
+export * from "./Drawer";
 export * from "./Dropdown";
 export * from "./Form";
 export * from "./Fragment";
