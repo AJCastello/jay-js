@@ -7,7 +7,7 @@ export interface IAlert extends ISection {
   className?: string;
 }
 
-type IconsNames = "circle-exclamation" | "triangle-exclamation" | "circle-info" | "circle-check";
+type IconsNames = "ph-warning-circle" | "ph-warning" | "ph-info" | "ph-check-circle";
 
 type IconsType = {
   [key in AlertSeverity]: IconsNames;
@@ -21,10 +21,10 @@ export function Alert({
 }: IAlert): HTMLDivElement {
 
   const icons: IconsType = {
-    "alert-error": "circle-exclamation",
-    "alert-warning": "triangle-exclamation",
-    "alert-info": "circle-info",
-    "alert-success": "circle-check",
+    "alert-error": "ph-warning-circle",
+    "alert-warning": "ph-warning",
+    "alert-info": "ph-info",
+    "alert-success": "ph-check-circle",
   };
 
   const classNames = [
@@ -37,7 +37,7 @@ export function Alert({
     className: classNames,
     content: Section({
       content: [
-        Icon({ icon: icons[severity] }),
+        Icon({ icon: `ph-duotone ${icons[severity]}` }),
         Typography({
           variant: "span",
           content: content,
