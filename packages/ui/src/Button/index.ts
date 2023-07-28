@@ -4,7 +4,7 @@ import { Icon, BaseElement, RippleEffect, IBaseElement } from "..";
 // "btn-wide"	Responsive	Wide button (more horizontal padding)
 
 export interface IButton extends IBaseElement {
-  type?: string;
+  type?: "button" | "submit" | "reset";
   className?: string;
   size?: "btn-lg" | "btn-md" | "btn-sm" | "btn-xs";
   format?: "btn-circle" | "btn-square";
@@ -35,7 +35,7 @@ export interface IButton extends IBaseElement {
 }
 
 export function Button({
-  type,
+  type = "button",
   className,
   content,
   disabled,
@@ -79,7 +79,7 @@ export function Button({
 
   const objButton = BaseElement({
     tag: "button",
-    className: resetCss
+    className: resetCss 
       ? className
       : classNameData,
     ...props,
