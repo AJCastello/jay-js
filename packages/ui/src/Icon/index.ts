@@ -3,6 +3,7 @@ import { BaseElement, IBaseElement } from "..";
 export interface IIcon extends IBaseElement {
   icon?: string;
   type?: string;
+  prefix?: string;
 }
 
 export function Icon({
@@ -13,7 +14,7 @@ export function Icon({
   const iconElement = BaseElement({
     tag: "i",
     ...props,
-    className: `fa-${type} fa-${icon} ${props.className || ""}`,
+    className: `${type} ${icon} ${props.className || ""}`,
   });
 
   return iconElement;
