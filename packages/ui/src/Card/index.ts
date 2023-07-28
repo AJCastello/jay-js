@@ -1,5 +1,5 @@
 
-import { BaseElement, IBaseElement, Img, RippleEffect, Section, ISection, Typography, ITypography, IImg } from "..";
+import { BaseElement, IBaseElement, Img, RippleEffect, Box, IBox, Typography, ITypography, IImg } from "..";
 
 export interface ICard extends IBaseElement {
   className?: string;
@@ -10,7 +10,8 @@ export interface ICard extends IBaseElement {
   
   cardTitle?: ITypography;
   cardDescription?: ITypography;
-  cardActions?: ISection;
+  cardActions?: IBox;
+  cardBody?: IBox;
 
   bordered?: boolean;
   compact?: boolean;
@@ -27,6 +28,7 @@ export function Card({
   cardTitle,
   cardDescription,
   cardActions,
+  cardBody,
 
   bordered,
   compact,
@@ -45,7 +47,7 @@ export function Card({
   ].filter(Boolean).join(" ").trim();
   
   // Create the card element
-  const cardElement = Section({
+  const cardElement = Box({
     className: classNameData,
     ...props,
   });
@@ -55,8 +57,9 @@ export function Card({
   } else {
 
     // Create the card body
-    const cardBody = Section({
-      className: "card-body",
+    const cardBodyBox = Box({
+      ...cardBody,
+      className: `card-body ${cardBody?.className || ""}`,
     });
 
     // Create and append the title if provided
@@ -66,7 +69,7 @@ export function Card({
         variant: "h2",
         className: `card-title ${cardTitle.className || ""}`,
       });
-      cardBody.append(titleElement);
+      cardBodyBox.append(titleElement);
     }
 
     // Create and append the content if provided
@@ -76,19 +79,19 @@ export function Card({
         ...cardDescription,
         className: `card-description ${cardDescription.className || ""}`,
       });
-      cardBody.append(descriptionElement);
+      cardBodyBox.append(descriptionElement);
     }
 
     // Create and append the card actions if provided
     if (cardActions) {
-      const actionsElement = Section({
+      const actionsElement = Box({
         ...cardActions,
         className: `card-actions ${cardActions.className || ""}`,
       });
-      cardBody.append(actionsElement);
+      cardBodyBox.append(actionsElement);
     }
 
-    cardElement.append(cardBody);
+    cardElement.append(cardBodyBox);
 
     // Create the figure if image is provided
     if (image) {
