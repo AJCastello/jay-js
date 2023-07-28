@@ -1,6 +1,6 @@
 type Route = {
   path: string;
-  element: () => (HTMLElement | DocumentFragment) | (() => Promise<HTMLElement | DocumentFragment>) | undefined;
+  element?: () => (HTMLElement | DocumentFragment) | (() => Promise<HTMLElement | DocumentFragment>) | undefined;
   target: HTMLElement;
   children?: Route[];
 };
@@ -10,10 +10,15 @@ const contextRoutes: Route[] = [];
 const pathToRegex = (path: string) => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
 export function getParams(): Record<string, string> {
+  let params: Record<string, string> = {};
+
   const match = getPotentialMatch();
-  const values = match.result?.slice(1);
-  const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map((result) => result[1]);
-  const params = Object.fromEntries(keys.map((key, i) => [key, (values as any)[i]]));
+
+  if (match.result) {
+    const values = match.result?.slice(1);
+    const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map((result) => result[1]);
+    params = Object.fromEntries(keys.map((key, i) => [key, (values as any)[i]]));
+  }
 
   const searchParams = new URLSearchParams(window.location.search);
   searchParams.forEach((value, key) => (params[key] = value));
@@ -62,7 +67,7 @@ function Routes(inputRoutes: Route[], prefix = "") {
 
   function buildRoutes(routes: Route[], prefix: string) {
     for (let route of routes) {
-      let newPath = [prefix, route.path].join("/").replace(/\/+$/, "");
+      let newPath = [prefix, route.path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
 
       if (route.element) {
         outputRoutes.push({
@@ -87,11 +92,14 @@ export async function Router(routes: Route[] = contextRoutes) {
     throw new Error("No routes provided");
   }
 
-  if (contextRoutes.length === 0) {
-    contextRoutes.splice(0, contextRoutes.length);
-    contextRoutes.push(...Routes(routes));
-  }
+  contextRoutes.length === 0
+  contextRoutes.splice(0, contextRoutes.length);
+  contextRoutes.push(...Routes(routes));
 
+  getRoute();
+}
+
+async function getRoute() {
   const match = getPotentialMatch();
 
   if (match.route.element) {
@@ -110,9 +118,9 @@ export async function Router(routes: Route[] = contextRoutes) {
 
 export function Navigate(path: string) {
   history.pushState(null, "", path);
-  Router();
+  getRoute();
 }
 
 window.addEventListener("popstate", () => {
-  Router();
+  getRoute();
 });
