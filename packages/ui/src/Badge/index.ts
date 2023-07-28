@@ -23,8 +23,8 @@ export function Badge({
 
   const badgeElement = BaseElement({
     tag: "span",
-    className: classNameData,
     ...props,
+    className: classNameData,
   }) as HTMLSpanElement;
 
   return badgeElement;
