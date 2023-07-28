@@ -77,12 +77,12 @@ export function Input({
 
   // Create startAdornment and endAdornment containers if provided
   const startAdornmentContainer = startAdornment && Section({
-    className: "absolute left-3 top-1/2 z-10 transform -translate-y-1/2",
+    className: "absolute left-3 top-1/2 z-2 transform -translate-y-1/2",
     content: startAdornment(inputElement)
   });
 
   const endAdornmentContainer = endAdornment && Section({
-    className: "absolute right-3 top-1/2 z-10 transform -translate-y-1/2",
+    className: "absolute right-3 top-1/2 z-2 transform -translate-y-1/2",
     content: endAdornment(inputElement)
   });
 
