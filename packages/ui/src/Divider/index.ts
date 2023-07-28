@@ -1,11 +1,11 @@
-import { Section, ISection } from "../Section";
+import { Box, IBox } from "../Box";
 
-export type IDivider = ISection
+export type IDivider = IBox
 
 export function Divider(props: IDivider = {}): HTMLDivElement {
-  const divider = Section({
-    className: "divider",
+  const divider = Box({
     ...props,
+    className: `divider ${props.className || ""}`,
   });
   return divider;
 }
