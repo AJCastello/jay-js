@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/ui",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "A library of UI components for Jay JS {headless or} with Tailwind CSS and daisyUI.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",

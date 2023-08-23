@@ -1,4 +1,4 @@
-import { Icon, Section, ISection, Typography } from "..";
+import { Icon, Box, ISection, Typography } from "..";
 
 type AlertSeverity = "alert-error" | "alert-warning" | "alert-info" | "alert-success";
 
@@ -33,17 +33,15 @@ export function Alert({
     className || "",
   ].filter(Boolean).join(" ").trim();
 
-  const alert = Section({
+  const alert = Box({
     className: classNames,
-    content: Section({
-      content: [
-        Icon({ icon: `ph-duotone ${icons[severity]}` }),
-        Typography({
-          variant: "span",
-          content: content,
-        }),
-      ],
-    }),
+    content: [
+      Icon({ icon: `ph-duotone ${icons[severity]}` }),
+      Typography({
+        variant: "span",
+        content: content,
+      }),
+    ],
     ...props
   });
 
