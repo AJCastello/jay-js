@@ -5,5 +5,5 @@ export interface IRefObject<T> {
 export function useRef<T>(): IRefObject<T> {
   return {
     current: null
-  }
+  };
 }

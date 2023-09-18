@@ -127,7 +127,7 @@ function Routes(inputRoutes: Array<IRoute>, target?: HTMLElement, prefix = ""): 
   return outputRoutes;
 }
 
-export async function Router(routes: Array<IRoute>, target?: HTMLElement) {
+export function Router(routes: Array<IRoute>, target?: HTMLElement) {
   if (routes.length === 0) {
     throw new Error("No routes provided");
   }
