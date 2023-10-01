@@ -24,7 +24,7 @@ export function RenderElements({
     if (!Array.isArray(data)) return;
 
     data.forEach((item) => {
-      let element = item.component({ id: item.id, ...item.props });
+      const element = item.component({ id: item.id, ...item.props });
 
       if (item.props?.content && item.props?.content.length > 0) {
         if (item.component?.name === "Section" || item.name === "Section") {

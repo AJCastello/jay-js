@@ -46,7 +46,7 @@ Jay-JS UI offers a wide range of components that can be easily customized to fit
 - BaseElement
 - Button
 - Card
-- CheckBox
+- Checkbox
 - Divider
 - Dropdown
 - Form

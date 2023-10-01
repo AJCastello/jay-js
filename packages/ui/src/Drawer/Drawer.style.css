@@ -1,8 +1,0 @@
-.drawer-transform {
-  transition: transform .3s ease-in-out;
-}
-
-.overlay-opacity {
-  transition: opacity .3s ease-in-out;
-  opacity: 0;
-}
