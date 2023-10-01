@@ -2,7 +2,7 @@ import { uniKey } from "../utils/uniKey";
 
 interface IRoute {
   path: string;
-  element?: () => (HTMLElement | DocumentFragment) | (() => Promise<HTMLElement | DocumentFragment>) | undefined;
+  element?: (HTMLElement | DocumentFragment) | (() => (HTMLElement | DocumentFragment)) | (() => Promise<HTMLElement | DocumentFragment>) | undefined;
   target?: HTMLElement;
   layout?: boolean;
   children?: Array<IRoute>;
@@ -13,9 +13,32 @@ interface IRouteBuild extends IRoute {
   parentLayoutId?: string;
 }
 
+interface IRouterOptions {
+  target?: HTMLElement;
+  onError?: (error: RouterError) => void;
+  beforeResolve?: (route: IRouteBuild) => boolean;
+}
+
+
+type ErrorOptions = {
+  cause?: "no-routes" | "no-match" | "render-route" | "render-layout";
+};
+
+class RouterError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+      super(message);
+      if (options) {
+          this.cause = options.cause;
+      }
+      Object.setPrototypeOf(this, new.target.prototype); // Restaurar a cadeia de protótipos
+  }
+}
+
 const contextRoutes: Array<IRouteBuild> = [];
+let contextRoutesOptions: IRouterOptions = {};
 
 const pathToRegex = (path: string) => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
+
 
 export function getParams(): Record<string, string> {
   let params: Record<string, string> = {};
@@ -127,13 +150,22 @@ function Routes(inputRoutes: Array<IRoute>, target?: HTMLElement, prefix = ""): 
   return outputRoutes;
 }
 
-export function Router(routes: Array<IRoute>, target?: HTMLElement) {
+export function Router(routes: Array<IRoute>, options?: IRouterOptions) {
+
+  if (options) {
+    contextRoutesOptions = options;
+  }
+
   if (routes.length === 0) {
-    throw new Error("No routes provided");
+    if (options?.onError) {
+      options.onError(new RouterError("No routes provided", { cause: "no-routes" }));
+      return;
+    }
+    throw new RouterError("No routes provided", { cause: "no-routes" });
   }
   contextRoutes.length === 0;
   contextRoutes.splice(0, contextRoutes.length);
-  contextRoutes.push(...Routes(routes, target));
+  contextRoutes.push(...Routes(routes, options?.target));
   getRoute();
 }
 
@@ -169,21 +201,41 @@ async function getTarget(route: IRouteBuild) {
   return route.target;
 }
 
+
 async function getElement(route: IRouteBuild) {
-  if (route && route.element) {
-    if (route.element instanceof Promise) {
-      const element = await route.element() as HTMLElement;
+  try {
+    if (route && route.element) {
+      if (typeof route.element === "function" && route.element instanceof Promise) {
+        const element = await route.element() as HTMLElement;
+        if (route.layout) {
+          element.dataset.layoutId = route.id;
+        }
+        return element;
+      }
+
+      if (typeof route.element === "function") {
+        const element = route.element() as HTMLElement;
+        if (route.layout) {
+          element.dataset.layoutId = route.id;
+        }
+        return element;
+      }
+
+      const element = route.element as HTMLElement;
       if (route.layout) {
         element.dataset.layoutId = route.id;
       }
       return element;
     }
-    const element = route.element() as HTMLElement;
-    if (route.layout) {
-      element.dataset.layoutId = route.id;
+  } catch (error) {
+    if (contextRoutesOptions.onError) {
+      console.error(error);
+      contextRoutesOptions.onError(new RouterError("Error rendering route", { cause: "render-route" }));
+      return;
     }
-    return element;
+    throw error;
   }
+
 }
 
 async function renderRoute(route: IRouteBuild): Promise<HTMLElement | undefined> {
@@ -202,7 +254,21 @@ async function renderRoute(route: IRouteBuild): Promise<HTMLElement | undefined>
 
 async function getRoute() {
   const match = getPotentialMatch();
-  if (!match.result) return;
+
+  if (contextRoutesOptions.beforeResolve) {
+    const beforeResolve = contextRoutesOptions.beforeResolve(match.route);
+    if (!beforeResolve) {
+      return;
+    }
+  }
+
+  if (!match.result) {
+    if (contextRoutesOptions.onError) {
+      contextRoutesOptions.onError(new RouterError("No match found", { cause: "no-match" }));
+      return;
+    }
+    return;
+  };
 
   if (match.route.layout) {
     const matchLayoutIndex = getPotentialMatchIndex();
