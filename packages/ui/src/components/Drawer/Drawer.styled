@@ -1,6 +1,7 @@
 justify-start
 justify-end
 items-start
+absolute
 items-en
 fixed
 inset-0

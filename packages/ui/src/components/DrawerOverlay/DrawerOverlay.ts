@@ -1,6 +1,6 @@
+import { useDrawer } from "../../hooks";
 import { mergeClasses } from "../../utils";
 import { Box, IBox } from "../Box";
-import { useDrawerToggle } from "../Drawer";
 
 interface IDrawerOverlay extends IBox {
   for: string;
@@ -21,7 +21,7 @@ export function DrawerOverlay({
     props.className
   ]);
 
-  const drawerToggle = useDrawerToggle({ for: props.for });
+  const drawerToggle = useDrawer({ for: props.for });
 
   return Box({
     ...props,
