@@ -38,6 +38,8 @@ export * from "./TabItem";
 export * from "./Tabs";
 export * from "./TextArea";
 export * from "./TextInput";
+export * from "./Toast";
+export * from "./ToastContainer";
 export * from "./Toggle";
 export * from "./Tooltip";
 export * from "./Typography";
