@@ -26,6 +26,7 @@ export * from "./List";
 export * from "./ListItem";
 export * from "./Loading";
 export * from "./Modal";
+export * from "./Outlet";
 export * from "./ResizableSplitter";
 export * from "./RippleEffect";
 export * from "./Section";
