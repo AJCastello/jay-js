@@ -1,1 +1,1 @@
-export { Outlet } from "./Outlet";
+export * from "./Outlet";
