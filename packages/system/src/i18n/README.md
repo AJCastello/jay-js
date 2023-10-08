@@ -33,17 +33,17 @@ First, import the `i18nProvider` from the package:
 import { i18nProvider } from "@jay-js/system";
 ```
 
-This provider allows you to initialize the internationalization system and configure it according to your needs.
+This provider allows you to initialize the internationalization system and optionsure it according to your needs.
 
-### Configuration
+### Optionsuration
 
-To set up the i18n system, you need to define your language configurations. Here's an example:
+To set up the i18n system, you need to define your language optionsurations. Here's an example:
 
 ```typescript
 import { useI18n } from "@jay-js/system";
 import { Ii18nBase } from "./i18nbase.interface";
 
-export const i18nConfig = {
+export const i18nOptions = {
   defaultLocale: "pt-BR",
   languages: [
     {
@@ -60,7 +60,7 @@ export const i18nConfig = {
 export const i18n = useI18n<Ii18nBase>();
 ```
 
-In this configuration:
+In this optionsuration:
 
 - **defaultLocale**: Specifies the default language to be used.
 - **saveToLocalStorage**: Whether to save the current language to local storage.

@@ -1,16 +1,16 @@
-import { themeConfig } from "./themeDefineConfig";
+import { themeOptions } from "./themeDefineOptions";
 
 export function setTheme(theme: string) {
-  if (themeConfig.useAsDataset) {
-    themeConfig.target.dataset.theme = theme;
+  if (themeOptions.useAsDataset) {
+    themeOptions.target.dataset.theme = theme;
   }
 
-  if (themeConfig.useAsClass) {
-    themeConfig.target.classList.remove(...themeConfig.themeList || [themeConfig.defaultTheme, themeConfig.defaultDarkTheme]);
-    themeConfig.target.classList.add(theme);
+  if (themeOptions.useAsClass) {
+    themeOptions.target.classList.remove(...themeOptions.themeList || [themeOptions.defaultTheme, themeOptions.defaultDarkTheme]);
+    themeOptions.target.classList.add(theme);
   }
 
-  if (themeConfig.saveToLocalStorage) {
+  if (themeOptions.saveToLocalStorage) {
     try {
       localStorage.setItem("theme", theme);
     } catch (e) {

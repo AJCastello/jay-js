@@ -1,14 +1,14 @@
-import { Ii18nConfig, Ii18nLanguages } from "../types";
-import { i18nConfig, i18nDefineConfig } from "./i18nDefineConfig";
+import { Ii18nOptions, Ii18nLanguages } from "../types";
+import { i18nOptions, i18nDefineOptions } from "./i18nDefineOptions";
 import { i18nContext } from "./i18nContext";
 import { initLanguage } from "./initLanguage";
 
-export function i18nProvider(onLoad: (i18n: Ii18nLanguages) => void, config?: Partial<Ii18nConfig>) {
-  if (config) {
-    i18nDefineConfig(config);
+export function i18nProvider(onLoad: (i18n: Ii18nLanguages) => void, options?: Partial<Ii18nOptions>) {
+  if (options) {
+    i18nDefineOptions(options);
   }
   initLanguage();
-  if (!i18nConfig.languages.length) {
+  if (!i18nOptions.languages.length) {
     throw new Error("@jay-js/system: No languages defined");
   }
   i18nContext.sub("i18n", async (i18n) => {

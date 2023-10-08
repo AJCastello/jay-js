@@ -1,4 +1,4 @@
-export interface IThemeConfig {
+export interface IThemeOptions {
   target: HTMLElement;
   saveToLocalStorage: boolean;
   defaultTheme: string;
@@ -9,5 +9,5 @@ export interface IThemeConfig {
 }
 
 export interface IThemeProvider {
-  config?: Partial<IThemeConfig>;
+  options?: Partial<IThemeOptions>;
 }

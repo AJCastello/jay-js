@@ -1,4 +1,4 @@
-import { i18nConfig } from "./i18nDefineConfig";
+import { i18nOptions } from "./i18nDefineOptions";
 import { i18nContext } from "./i18nContext";
 
 declare global {
@@ -9,15 +9,15 @@ declare global {
 
 export function initLanguage() {
   if (navigator && (navigator.language || navigator.userLanguage)) {
-    i18nConfig.defaultLocale = navigator.language || navigator.userLanguage || i18nConfig.defaultLocale;
+    i18nOptions.defaultLocale = navigator.language || navigator.userLanguage || i18nOptions.defaultLocale;
   }
 
   const defaultLocaleStored = localStorage.getItem("default-locale");
   if (defaultLocaleStored) {
-    i18nConfig.defaultLocale = defaultLocaleStored;
+    i18nOptions.defaultLocale = defaultLocaleStored;
   }
   
-  const defaultI18n = i18nConfig.languages.find((lang) => lang.code === i18nConfig.defaultLocale) || i18nConfig.languages[0];
+  const defaultI18n = i18nOptions.languages.find((lang) => lang.code === i18nOptions.defaultLocale) || i18nOptions.languages[0];
   if (!defaultI18n) {
     throw new Error("@jay-js/system: Failed to load default language");
   }
