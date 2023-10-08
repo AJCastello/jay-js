@@ -7,7 +7,3 @@ export interface IThemeOptions {
   useAsClass?: boolean;
   themeList?: Array<string>;
 }
-
-export interface IThemeProvider {
-  options?: Partial<IThemeOptions>;
-}
