@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/ui",
-  "version": "2.1.1",
+  "version": "2.2.1",
   "description": "A library of UI components for Jay JS {headless or} with Tailwind CSS and daisyUI.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -15,9 +15,9 @@
     "build2": "npx tsc",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
     "prebuild": "rimraf ./dist",
-    "build": "swc src -d dist --source-maps inline && npm run build:types",
+    "build": "swc src -d dist --source-maps inline && pnpm run build:types",
     "postbuild": "cpy ./src/**/*.{css,styled} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
-    "pub": "cd ./dist && npm publish --access public",
+    "pub": "cd ./dist && pnpm publish --access public",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ./src/**/*.{js,ts}"
   },
