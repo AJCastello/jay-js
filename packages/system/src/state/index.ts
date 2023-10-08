@@ -1,5 +1,9 @@
+type setOptions = {
+  silent: boolean;
+};
+
 export type StateType<T> = {
-  set: (newData: T | ((currentState: T) => T)) => void;
+  set: (newData: T | ((currentState: T) => T), options?: setOptions) => void;
   get: (callback?: (data: T) => void) => T;
   sub: (id: string, effect: (data: T) => void, run?: boolean) => void;
   unsub: (id: string) => void;
@@ -11,11 +15,15 @@ export type StateType<T> = {
 
 export const State = <T>(data: T): StateType<T> => {
   const state: StateType<T> = {
-    set: (newData: T | ((currentState: T) => T)): void => {
+    set: (newData: T | ((currentState: T) => T), options?: setOptions): void => {
       if (typeof newData === "function") {
         data = (newData as (currentState: T) => T)(data);
       } else {
         data = newData;
+      }
+
+      if (options?.silent) {
+        return;
       }
 
       if (state.effect.size === 0) {
