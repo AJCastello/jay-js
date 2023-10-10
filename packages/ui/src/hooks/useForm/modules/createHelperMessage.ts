@@ -1,4 +1,5 @@
-import { Typography } from "@jay-js/ui";
+
+import { Typography } from "../../../components";
 import * as yup from "yup";
 
 export function createHelperMessage(error: yup.ValidationError) {
