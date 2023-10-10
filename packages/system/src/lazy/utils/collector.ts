@@ -35,13 +35,13 @@ const resetIdle = () => {
   }
 };
 
-const idleConfig = {
+const idleOptions = {
   passive: true,
   capture: true
 };
 
-window.addEventListener("mousemove", resetIdle, idleConfig);
-window.addEventListener("keypress", resetIdle, idleConfig);
+window.addEventListener("mousemove", resetIdle, idleOptions);
+window.addEventListener("keypress", resetIdle, idleOptions);
 
 setInterval(() => {
   idleTime++;
