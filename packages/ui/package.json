@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/ui",
-  "version": "2.2.1",
+  "version": "2.3.2",
   "description": "A library of UI components for Jay JS {headless or} with Tailwind CSS and daisyUI.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -54,6 +54,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "tailwind-merge": "^1.14.0"
+    "tailwind-merge": "^1.14.0",
+    "yup": "^1.3.2"
   }
 }
