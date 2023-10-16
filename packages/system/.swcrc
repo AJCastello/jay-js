@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
+  "module": {
+    "type": "es6"
+  },
   "jsc": {
     "parser": {
       "syntax": "typescript",
