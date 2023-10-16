@@ -1,6 +1,6 @@
 import { BaseElement, IBaseElement } from "..";
 
-export type ISelectItem = IBaseElement & Partial<Omit<HTMLOptionElement, "style">>
+export type ISelectItem = IBaseElement & Partial<Omit<HTMLOptionElement, "style" | "children">>
 
 export function SelectItem({ 
   ...props

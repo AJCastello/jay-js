@@ -1,6 +1,6 @@
 import { BaseElement, IBaseElement } from "..";
 
-export type IListItem = IBaseElement & Partial<Omit<HTMLUListElement, "style">>
+export type IListItem = IBaseElement & Partial<Omit<HTMLUListElement, "style" | "children">>
 
 export function ListItem({ 
   ...props

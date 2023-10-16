@@ -1,7 +1,7 @@
 import { BaseElement, IBaseElement } from "..";
 import { mergeClasses } from "../../";
 
-export type ILink = IBaseElement & Partial<Omit<HTMLAnchorElement, "style">>;
+export type ILink = IBaseElement & Partial<Omit<HTMLAnchorElement, "style" | "children">>;
 
 export function Link({ ...props }: ILink = {}): HTMLAnchorElement {
   const className = mergeClasses([

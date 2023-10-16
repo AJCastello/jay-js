@@ -13,7 +13,7 @@ export interface ITextareaExt extends IBaseElement {
   size?: "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
 }
 
-export type ITextarea = ITextareaExt & Partial<Omit<HTMLTextAreaElement, "style">>;
+export type ITextarea = ITextareaExt & Partial<Omit<HTMLTextAreaElement, "style" | "children">>;
 
 export function TextArea({
   value,
@@ -60,7 +60,7 @@ export function TextArea({
     const labelText = Typography({
       variant: "span",
       className: "label-text",
-      content: label,
+      children: label,
     });
 
     labelElement.append(labelText);
@@ -69,7 +69,7 @@ export function TextArea({
       const labelTextAlt = Typography({
         variant: "span",
         className: "label-text-alt",
-        content: labelAlt,
+        children: labelAlt,
       });
       labelElement.append(labelTextAlt);
     }
@@ -80,13 +80,13 @@ export function TextArea({
     const placeholderElement = Typography({
       variant: "label",
       className: "textarea-placeholder-label bg-base-100 rounded px-2",
-      content: placeholder,
+      children: placeholder,
     });
 
     formControl.append(
       Box({
         className: "relative w-full flex flex-col",
-        content: [textareaElement, placeholderElement],
+        children: [textareaElement, placeholderElement],
       })
     );
   } else {

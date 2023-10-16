@@ -6,10 +6,10 @@ export interface IToastExt extends IBaseElement {
   vertical?: "toast-top" | "toast-middle" | "toast-bottom";
   duration?: number;
   asChild?: boolean;
-  content?: HTMLElement;
+  children?: HTMLElement;
 }
 
-export type IToast = IToastExt & Partial<Omit<HTMLDivElement, "style">>;
+export type IToast = IToastExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
 
 export function Toast({
   horizontal = "toast-end",

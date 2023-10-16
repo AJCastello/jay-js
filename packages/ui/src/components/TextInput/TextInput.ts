@@ -62,7 +62,7 @@ export function TextInput({
     const labelText = Typography({
       variant: "span",
       className: "label-text",
-      content: label,
+      children: label,
     });
 
     labelElement.append(labelText);
@@ -71,7 +71,7 @@ export function TextInput({
       const labelTextAlt = Typography({
         variant: "span",
         className: "label-text-alt",
-        content: labelAlt,
+        children: labelAlt,
       });
       labelElement.append(labelTextAlt);
     }
@@ -82,7 +82,7 @@ export function TextInput({
     if (startAdornment) {
       return Box({
         className: "absolute left-3 top-1/2 z-2 transform -translate-y-1/2",
-        content: typeof startAdornment === "function" ? startAdornment(inputElement) : startAdornment
+        children: typeof startAdornment === "function" ? startAdornment(inputElement) : startAdornment
       });
     }
     return "";
@@ -92,7 +92,7 @@ export function TextInput({
     if (endAdornment) {
       return Box({
         className: "absolute right-3 top-1/2 z-2 transform -translate-y-1/2",
-        content: typeof endAdornment === "function" ? endAdornment(inputElement) : endAdornment
+        children: typeof endAdornment === "function" ? endAdornment(inputElement) : endAdornment
       });
     }
     return "";
@@ -102,12 +102,12 @@ export function TextInput({
     const placeholderElement = Typography({
       variant: "label",
       className: "input-placeholder-label bg-base-100 rounded px-2",
-      content: placeholder
+      children: placeholder
     });
 
     formControl.append(Box({
       className: "relative w-full flex flex-col",
-      content: [
+      children: [
         getStartAdornment(),
         inputElement,
         placeholderElement,

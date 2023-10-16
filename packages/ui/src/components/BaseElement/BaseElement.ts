@@ -7,7 +7,7 @@ export type Listener = {
   [K in ListenerKeys]?: (this: GlobalEventHandlers, ev: GlobalEventHandlersEventMap[K]) => any
 }
 
-export interface IBaseElement extends Partial<Omit<HTMLElement, "style">> {
+export interface IBaseElement extends Partial<Omit<HTMLElement, "style" | "children">> {
   id?: string;
   tag?: string;
   className?: string;
@@ -15,7 +15,7 @@ export interface IBaseElement extends Partial<Omit<HTMLElement, "style">> {
   ref?: IRefObject<HTMLElement>;
   dataset?: Partial<DOMStringMap>;
   style?: Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
-  // [key: string]: any;
+  children?: (string | Node) | (string | Node)[]
 }
 
 export function BaseElement<T>({
@@ -23,6 +23,7 @@ export function BaseElement<T>({
   tag,
   ref,
   style,
+  children,
   dataset,
   className,
   listeners,
@@ -48,6 +49,14 @@ export function BaseElement<T>({
   dataset && Object.entries(dataset).forEach(([key, value]) => {
     baseElement.dataset[key] = value as string;
   });
+
+  if (children) {
+    if (Array.isArray(children)) {
+      baseElement.append(...children);
+    } else {
+      baseElement.append(children);
+    }
+  }
 
   props && Object.entries(props).forEach(([key, value]) => {
     try {

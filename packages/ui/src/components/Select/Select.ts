@@ -11,7 +11,7 @@ export interface ISelectExt extends IBaseElement {
   helpers?: Array<HTMLElement>;
 }
 
-export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style">>;
+export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children">>;
 
 export function Select({
   bordered,
@@ -55,7 +55,7 @@ export function Select({
       const labelText = Typography({
         variant: "span",
         className: "label-text",
-        content: label,
+        children: label,
       });
 
       labelElement.append(labelText);
@@ -64,7 +64,7 @@ export function Select({
         const labelTextAlt = Typography({
           variant: "span",
           className: "label-text-alt",
-          content: labelAlt,
+          children: labelAlt,
         });
         labelElement.append(labelTextAlt);
       }

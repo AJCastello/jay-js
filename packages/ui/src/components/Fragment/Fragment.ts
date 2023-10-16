@@ -1,8 +1,8 @@
-interface IFragment extends Partial<DocumentFragment> {
-  content: string | HTMLElement | Node | (string | HTMLElement | Node)[];
+interface IFragment extends Partial<Omit<DocumentFragment, "children">> {
+  children: string | Node | (string | Node)[];
 }
 
-export function Fragment({ content, ...props }: IFragment) {
+export function Fragment({ children, ...props }: IFragment) {
   const fragment = document.createDocumentFragment();
 
   props && Object.entries(props).forEach(([key, value]) => {
@@ -16,12 +16,12 @@ export function Fragment({ content, ...props }: IFragment) {
     }
   });
 
-  if (Array.isArray(content)) {
-    content.forEach((item) => {
+  if (Array.isArray(children)) {
+    children.forEach((item) => {
       fragment.append(item);
     });
   } else {
-    content && fragment.append(content);
+    children && fragment.append(children);
   }
 
   return fragment;

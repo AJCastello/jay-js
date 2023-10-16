@@ -2,7 +2,7 @@ export interface IElementData {
   id?: string;
   name?: string;
   component: (options: any) => any;
-  props?: any & { content?: Array<IElementData> };
+  props?: any & { children?: Array<IElementData> };
 }
 
 export interface IRenderElements {
@@ -26,11 +26,11 @@ export function RenderElements({
     data.forEach((item) => {
       const element = item.component({ id: item.id, ...item.props });
 
-      if (item.props?.content && item.props?.content.length > 0) {
+      if (item.props?.children && item.props?.children.length > 0) {
         if (item.component?.name === "Section" || item.name === "Section") {
           element.innerHTML = "";
         }
-        RenderElement(item.props.content, element);
+        RenderElement(item.props.children, element);
       }
       target.append(element);
     });
