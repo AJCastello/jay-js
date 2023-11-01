@@ -1,7 +1,7 @@
 // Node.js built-in modules
-import fs from "fs";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs-extra";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // External libraries
 import { JSDOM } from "jsdom";
@@ -14,12 +14,11 @@ import { Route } from "../types";
 import { jayJsOptions } from "../options/jayJsDefineOptions";
 
 // Local configurations
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const indexRef: string = fs.readFileSync(join(process.cwd(), "index.html"), "utf8");
-const index: string = indexRef.replace(`<script type="module" src="/${jayJsOptions.build?.srcPath}/main.ts"></script>`, "");
+const index: string = indexRef.replace(`<script type="module" src="/${jayJsOptions.build?.srcDir}/main.ts"></script>`, "");
 
 const indexDom = new JSDOM(index, { url: "http://localhost/" });
 
@@ -27,14 +26,12 @@ const indexDom = new JSDOM(index, { url: "http://localhost/" });
 // const configURL = pathToFileURL(configPath);
 // try {
 //   const config = await import(configURL.href);
-//   console.log("Configuração carregada:", config.default);
-//   // Use "config" conforme necessário
 // } catch (error) {
-//   console.error("Erro ao carregar o arquivo de configuração:", error);
+//   console.error("Failed to load config file:", error);
 // }
 
 Object.getOwnPropertyNames(indexDom.window).forEach((property: string) => {
-  if (typeof (global as any)[property] === 'undefined') {
+  if (typeof (global as any)[property] === "undefined") {
     const descriptor = Object.getOwnPropertyDescriptor(indexDom.window, property);
     if (descriptor) {
       Object.defineProperty(global, property, descriptor);
@@ -44,7 +41,7 @@ Object.getOwnPropertyNames(indexDom.window).forEach((property: string) => {
 
 export async function renderHTMLFiles(): Promise<void> {
   const relativePath = path.relative(__dirname, process.cwd());
-  const mainPath = path.join(relativePath, jayJsOptions.build?.distPath as string, "main.js");
+  const mainPath = path.join(relativePath, jayJsOptions.build?.distDir as string, "main.js");
   const validPath = mainPath.replace(/\\/g, "/");
 
   const { resolvedRoutes }: { resolvedRoutes: Map<string, Route> } = await import(validPath);
@@ -115,9 +112,9 @@ export async function renderHTMLFiles(): Promise<void> {
   if (dynamicRoutes.size > 0) {
     for (const [key, value] of dynamicRoutes.entries()) {
       const useContent = value.element.useContent;
-      // {dir: "support", param: "slug"}
+      useContent.fileExt = "js";
 
-      const contentPath = path.join(process.cwd(), jayJsOptions.build?.distPath as string, "content", useContent.dir);
+      const contentPath = path.join(process.cwd(), jayJsOptions.build?.distDir as string, "content", useContent.dir);
       const contentFiles = fs.readdirSync(contentPath);
       const contentFilesCollection: Array<string> = [];
 
@@ -164,10 +161,34 @@ export async function renderHTMLFiles(): Promise<void> {
   }
 }
 
-renderHTMLFiles().then(() => {
-  console.log("Done processing all directories.");
+function distPath(dir: string) {
+  return path.join(process.cwd(), jayJsOptions.build?.distDir as string, dir);
+}
+
+function srcPath(dir: string) {
+  return path.join(process.cwd(), jayJsOptions.build?.srcDir as string, dir);
+}
+
+async function manageDirectories() {
+  try {
+    await fs.remove(srcPath("content_transformed"));
+    await fs.remove(distPath("content"));
+    await fs.move(distPath("content_transformed"), distPath("content"));
+
+  } catch (error) {
+    console.error("Failed to manage directories:", error);
+  }
+}
+
+async function main() {
+  await manageDirectories();
+  await renderHTMLFiles();
+}
+
+main().then(() => {
+  console.log("Static files rendered successfully!");
   process.exit(0);
-}).catch(error => {
-  console.error(`Error during processing: ${error.message}`);
+}).catch((error) => {
+  console.error("Failed to render static files:", error);
   process.exit(1);
-});
+})

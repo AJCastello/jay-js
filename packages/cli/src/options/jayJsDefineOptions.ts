@@ -2,8 +2,8 @@ import { IJayJsOptions } from "../types/index.js";
 
 export let jayJsOptions: IJayJsOptions = {
   build: {
-    srcPath: "src",
-    distPath: "dist",
+    srcDir: "src",
+    distDir: "dist",
     outDir: "public_temp",
   }
 };
