@@ -5,14 +5,24 @@
   "version": "1.0.0",
   "repository": "https://github.com/AJCastello/jay-js.git",
   "scripts": {
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "ui": "turbo run build --scope @jay-js/ui",
+    "system": "turbo run build --scope @jay-js/system",
+    "cli": "turbo run build --scope @jay-js/cli",
+    "jsx": "turbo run build --scope @jay-js/jsx",
+    "static": "turbo run build --scope @jay-js/static",
+    "update:links": "npm run link:cli && npm run link:system && npm run link:ui && npm run link:jsx && npm run link:static",
+    "link:cli": "cd packages/cli/dist && npm link && cd ../../..",
+    "link:system": "cd packages/system/dist && npm link && cd ../../..",
+    "link:ui": "cd packages/ui/dist && npm link && cd ../../..",
+    "link:jsx": "cd packages/jsx/dist && npm link && cd ../../..",
+    "link:static": "cd packages/static/dist && npm link && cd ../../.."
+    
   },
   "author": "AJ Castello",
   "license": "MIT",
   "workspaces": [
-    "packages/*",
-    "examples/*",
-    "implement/*"
+    "packages/*"
   ],
   "devDependencies": {
     "@swc/cli": "^0.1.62",
