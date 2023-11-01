@@ -5,21 +5,18 @@ import { useFormOptions } from "../modules/useFormDefineOptions";
 
 export function updateUI(element: HTMLElement, error: yup.ValidationError | null) {
   if (useFormOptions.showHelper) {
-
     const helper = element.closest(".form-control")?.querySelector(`[data-helper="${element.id}"]`) as HTMLElement;
     if (helper) {
+      helper.innerHTML = "";
       if (error) {
         if (useFormOptions.customHelperContainer) {
-          helper.content = useFormOptions.customHelperContainer(error);
+          helper.append(useFormOptions.customHelperContainer(error));
         } else {
-          helper.content = createHelperMessage(error);
+          helper.append(createHelperMessage(error));
         }
-      } else {
-        helper.content = "";
       }
     }
   }
-
   if (error) {
     changeClass(element, error.type?.startsWith("warning") ? "input-warning" : "input-error");
   } else {

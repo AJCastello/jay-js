@@ -7,7 +7,7 @@ export interface IBadgeExt extends IBaseElement {
   size?: "badge-lg" | "badge-md" | "badge-sm" | "badge-xs";
 }
 
-export type IBadge = IBadgeExt & Partial<Omit<HTMLSpanElement, "style">>;
+export type IBadge = IBadgeExt & Partial<Omit<HTMLSpanElement, "style" | "children">>;
 
 export function Badge({
   variant,

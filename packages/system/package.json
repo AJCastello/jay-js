@@ -1,9 +1,10 @@
 {
   "name": "@jay-js/system",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -27,7 +28,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AJCastello/jay-js.git",
-    "directory": "packages/ui"
+    "directory": "packages/system"
   },
   "keywords": [
     "Jay",

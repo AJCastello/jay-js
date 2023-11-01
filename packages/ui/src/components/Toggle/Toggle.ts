@@ -42,7 +42,7 @@ export function Toggle({
     const labelText = Typography({
       variant: "span",
       className: "label-text",
-      content: label,
+      children: label,
     });
 
     labelElement.append(labelText);
@@ -56,7 +56,7 @@ export function Toggle({
     const formControlContainer = Box({
       ...formControl,
       className: mergeClasses(["form-control", formControl?.className]),
-      content: labelElement,
+      children: labelElement,
     });
     
     return formControlContainer;

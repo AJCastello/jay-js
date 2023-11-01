@@ -18,7 +18,7 @@ export function useToast({
     duration,
     vertical,
     horizontal,
-    content,
+    children,
     ...props
   }: IToast) {
     const toastSettings = (toastContainer as HTMLDivElement).dataset;
@@ -49,8 +49,8 @@ export function useToast({
 
     if (existingToast) {
       const currentToast = existingToast as HTMLDivElement;
-      if (content) {
-        const currentNode = content as HTMLElement;
+      if (children) {
+        const currentNode = children as HTMLElement;
         currentToast.prepend(currentNode);
         setTimeout(() => {
           currentNode.remove();
@@ -64,11 +64,11 @@ export function useToast({
       duration,
       vertical,
       horizontal,
-      content,
+      children,
     })
 
-    if (content) {
-      const currentNode = content as HTMLElement;
+    if (children) {
+      const currentNode = children as HTMLElement;
       setTimeout(() => {
         currentNode.remove();
       }, duration);

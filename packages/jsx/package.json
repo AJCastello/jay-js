@@ -1,0 +1,58 @@
+{
+  "name": "@jay-js/jsx",
+  "version": "1.0.0",
+  "description": "A JSX library for Jay JS",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/"
+  },
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
+    "build": "swc src -d dist --source-maps inline && pnpm run build:types",
+    "postbuild": "cpy ./src/**/*.css ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
+    "pub": "cd ./dist && pnpm publish --access public",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src/**/*.{js,ts}"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "clean-package": "../../clean-package.config.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AJCastello/jay-js.git",
+    "directory": "packages/system"
+  },
+  "keywords": [
+    "Jay",
+    "js",
+    "single page application",
+    "library",
+    "ui",
+    "components",
+    "jsx",
+    "tsx"
+  ],
+  "author": "AJ Castello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AJCastello/jay-js/issues"
+  },
+  "homepage": "https://github.com/AJCastello/jay-js#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "^8.39.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@jay-js/ui": "^2.5.2"
+  }
+}

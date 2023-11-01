@@ -1,9 +1,9 @@
-import { BaseElement, IBaseElement, Typography, Box, Input } from "..";
+import { BaseElement, IBaseElement, Box, Input } from "..";
 import { mergeClasses } from "../../";
 
 export interface ICheckboxExt extends IBaseElement {
   value?: string;
-  label?: string | HTMLElement | Node | (string | HTMLElement | Node)[];
+  label?: string | Node | (string | Node)[];
   checked?: boolean;
   color?: "checkbox-primary" | "checkbox-secondary" | "checkbox-accent" | "checkbox-success" | "checkbox-warning" | "checkbox-info" | "checkbox-error";
   size?: "checkbox-lg" | "checkbox-md" | "checkbox-sm" | "checkbox-xs";
@@ -38,7 +38,7 @@ export function Checkbox({
     const labelElement = BaseElement({
       tag: "label",
       className: "label cursor-pointer justify-start gap-2",
-      content: label
+      children: label
     });
 
     if (position === "checkbox-before") {
@@ -50,7 +50,7 @@ export function Checkbox({
     const formControlContainer = Box({
       ...formControl,
       className: mergeClasses(["form-control", formControl?.className]),
-      content: labelElement,
+      children: labelElement,
     });
 
     return formControlContainer;

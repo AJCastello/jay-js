@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
+  "module": {
+    "type": "es6"
+  },
   "jsc": {
     "parser": {
       "syntax": "typescript",
@@ -10,7 +13,7 @@
     "target": "es2015",
     "loose": false,
     "externalHelpers": false,
-    "keepClassNames": false
+    "keepClassNames": false,
   },
   "minify": false
 }

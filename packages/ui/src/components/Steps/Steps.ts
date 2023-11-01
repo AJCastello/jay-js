@@ -11,6 +11,7 @@ export function Steps({
 }: ISteps): HTMLUListElement {
   const className = mergeClasses([
     "steps",
+    orientation,
     props.className,
   ]);
 

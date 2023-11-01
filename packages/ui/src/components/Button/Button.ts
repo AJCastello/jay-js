@@ -14,7 +14,7 @@ export interface IButtonExt extends IBaseElement {
   animation?: boolean;
 }
 
-export type IButton = IButtonExt & Partial<Omit<HTMLButtonElement, "style">>;
+export type IButton = IButtonExt & Partial<Omit<HTMLButtonElement, "style" | "children">>;
 
 export function Button({
   type = "button",
