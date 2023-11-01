@@ -14,15 +14,14 @@ export function jayJsViteStatic(options: IJayJsViteOptions) {
     name: "jay-js-vite",
     transform(src: string, id: string) {
       if ([".md"].includes(extname(id))) {
-        const newSrc = parseMarkdown(src);
-        
+        const parsedMarkdown = parseMarkdown(src);
+        const newSrc = `export default ${JSON.stringify(parsedMarkdown, null, 2)};`;
         return {
           code: newSrc,
           map: null
         };
       }
       if ([".ts", ".js", ".tsx", ".jsx"].includes(extname(id))) {
-        // detects if the file has a useCollection method
         const useCollectionData = extractUseCollectionData(src);
         if (useCollectionData) {
           buildCollection(useCollectionData);
