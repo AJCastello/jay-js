@@ -52,7 +52,7 @@
     "eslint": "^8.39.0",
     "typescript": "^5.0.4"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@jay-js/ui": "^2.5.2"
   }
 }
