@@ -4,8 +4,9 @@ import { marked } from "marked";
 import fs from 'fs';
 import path from 'path';
 import { jayJsOptions } from "../options/jayJsDefineOptions";
+import { execSync } from "child_process";
 
-export function parseMarkdown(src: string): any {
+function parseMarkdown(src: string): any {
   try {
     const { data, content } = matter(src);
     const htmlContent = marked(content);
@@ -16,7 +17,7 @@ export function parseMarkdown(src: string): any {
   }
 }
 
-export function transformMarkdownFile(filePath: string) {
+function transformMarkdownFile(filePath: string) {
   const markdownContent = fs.readFileSync(filePath, 'utf8');
   const transformedContent = parseMarkdown(markdownContent);
   const transformedJsContent = `export default ${JSON.stringify(transformedContent, null, 2)};`;
@@ -25,7 +26,12 @@ export function transformMarkdownFile(filePath: string) {
   console.log(`File transformed: ${filePath} -> ${newFilePath}`);
 }
 
-export function searchAndTransformMarkdownFiles(dir: string) {
+function removeMarkdownFile(filePath: string) {
+  fs.unlinkSync(filePath);
+  console.log(`File removed: ${filePath}`);
+}
+
+function searchAndTransformMarkdownFiles(dir: string) {
   const files = fs.readdirSync(dir);
   for (const file of files) {
     const filePath = path.join(dir, file);
@@ -34,9 +40,13 @@ export function searchAndTransformMarkdownFiles(dir: string) {
       searchAndTransformMarkdownFiles(filePath);
     } else if (/\.(md|mdx)$/.test(filePath)) {
       transformMarkdownFile(filePath);
+      removeMarkdownFile(filePath);
     }
   }
 }
 
-const pathToSrc = path.join(process.cwd(), jayJsOptions.build?.srcPath as string)
-searchAndTransformMarkdownFiles(pathToSrc);
+const buildCommand = `cpy ${jayJsOptions.build?.srcDir}/content/**/* ${jayJsOptions.build?.srcDir}/content_transformed/`;
+execSync(buildCommand, { stdio: "inherit" });
+
+const pathToContentTransformed = path.join(process.cwd(), jayJsOptions.build?.srcDir as string, "content_transformed")
+searchAndTransformMarkdownFiles(pathToContentTransformed);
