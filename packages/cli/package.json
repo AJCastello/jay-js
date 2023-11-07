@@ -17,12 +17,12 @@
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
-    "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
     "build": "swc src -d dist --source-maps inline && pnpm run build:types",
-    "postbuild": "cpy ./src/**/*.css ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
-    "pub": "cd ./dist && pnpm publish --access public",
+    "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
+    "postbuild": "clean-package && cpy ./templates/**/* ./dist/commands/init/templates && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
+    "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ./src/**/*.{js,ts}"
+    "lint": "eslint ./src/**/*.{js,ts,tsx,jsx}"
   },
   "publishConfig": {
     "access": "public"
@@ -55,6 +55,7 @@
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/fs-extra": "^11.0.3",
+    "@types/inquirer": "^9.0.6",
     "@types/jsdom": "^21.1.4",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
@@ -62,15 +63,17 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "@jay-js/system": "^2.4.3",
-    "@jay-js/ui": "^2.5.2",
     "@jay-js/jsx": "^1.0.0",
-    "@jay-js/static": "^1.0.0"    
+    "@jay-js/static": "^1.0.0",
+    "@jay-js/system": "^2.4.3",
+    "@jay-js/ui": "^2.5.2"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "fs-extra": "^11.1.1",
     "gray-matter": "^4.0.3",
+    "inquirer": "^9.2.11",
     "jsdom": "^22.1.0",
     "marked": "^9.1.3"
   }
