@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Outlet, Typography } from "@jay-js/ui";
 
 // components
@@ -14,6 +13,7 @@ export function Layout() {
         {i18n("welcomeMessage")}
       </Typography>
       <NavBar />
+      <Divider />
       <Outlet />
     </section>
   )

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { getParams } from "@jay-js/system";
 import { Divider } from "@jay-js/ui";
 

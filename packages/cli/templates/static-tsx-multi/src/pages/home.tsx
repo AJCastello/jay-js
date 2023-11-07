@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Button } from "@jay-js/ui";
 
 export function Home() {

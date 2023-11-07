@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Navigate } from "@jay-js/system";
 
 export function NavBar() {
