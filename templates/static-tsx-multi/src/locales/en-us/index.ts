@@ -6,6 +6,9 @@ const enUS: Ii18nBase = {
     home: "Home",
     about: "About",
     blog: "Blog"
+  },
+  about: {
+    content: "This is your lazy loaded About page."
   }
 }
 

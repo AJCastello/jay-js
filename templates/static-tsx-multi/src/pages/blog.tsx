@@ -16,7 +16,7 @@ export async function Blog() {
 
   return (
     <main className="grid grid-cols-3 gap-6">
-      {data.map((item: any) => {
+      {data.map((item) => {
         return <a
           href={`/blog/${item.slug}`}
           className="bg-base-200 hover:bg-primary hover:text-primary-content no-underline p-4 rounded-lg transition-colors duration-300"

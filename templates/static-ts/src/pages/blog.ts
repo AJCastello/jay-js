@@ -13,7 +13,7 @@ export async function Blog() {
   return Section({
     variant: "main",
     className: "grid grid-cols-3 gap-6",
-    children: data.map((item: any) => {
+    children: data.map((item) => {
       return Link({
         href: `/blog/${item.slug}`,
         className: "bg-base-200 hover:bg-primary hover:text-primary-content no-underline p-4 rounded-lg transition-colors duration-300",

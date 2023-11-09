@@ -4,5 +4,8 @@ export interface Ii18nBase {
     home: string;
     about: string;
     blog: string;
+  },
+  about: {
+    content: string;
   }
 }
