@@ -23,7 +23,9 @@ interface ElementFunction {
 export interface IJayJsOptions{
   build?: {
     srcDir?: string;
-    distDir?: string;
     outDir?: string;
+    transformedDir?: string;
+    contentDir: string;
+    contentTransformedDir: string;
   }
 }

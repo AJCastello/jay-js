@@ -3,8 +3,10 @@ import { IJayJsOptions } from "../types/index.js";
 export let jayJsOptions: IJayJsOptions = {
   build: {
     srcDir: "src",
-    distDir: "dist",
-    outDir: "public_temp",
+    outDir: "dist",
+    transformedDir: "transformed",
+    contentDir: "content",
+    contentTransformedDir: "content_transformed",
   }
 };
 
