@@ -1,4 +1,4 @@
-import { Box, IBaseElement, IBox, ITypography, Typography } from "..";
+import { Box, IBaseElement } from "..";
 import { mergeClasses } from "../../";
 
 export interface IDropdown extends IBaseElement {
@@ -6,28 +6,6 @@ export interface IDropdown extends IBaseElement {
   openOnHover?: boolean;
   forceOpen?: boolean;
   toEnd?: boolean;
-}
-
-export function DropdownContent({ ...props }: IBox): HTMLDivElement {
-  const className = mergeClasses([
-    "dropdown-content",
-    props.className
-  ]);
-  const dropdownContent = Box({
-    ...props,
-    className,
-    tabIndex: 0
-  }) as HTMLDivElement;
-  return dropdownContent;
-}
-
-export function DropdownLabel({ ...props }: ITypography): HTMLLabelElement {
-  const dropdownLabel = Typography({
-    ...props,
-    tabIndex: 0,
-    variant: "label"
-  }) as HTMLLabelElement;
-  return dropdownLabel;
 }
 
 export function Dropdown({
