@@ -1,4 +1,4 @@
-import { IRouteInstance, IRouterOptions } from "../types";
+import { IRouteInstance, IRouterOptions } from "../types/index.js";
 
 export let routerOptions: IRouterOptions = {
   target: document.body

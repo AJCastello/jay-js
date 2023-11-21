@@ -1,5 +1,5 @@
-import { i18nOptions } from "./i18nDefineOptions";
-import { i18nContext } from "./i18nContext";
+import { i18nOptions } from "./i18nDefineOptions.js";
+import { i18nContext } from "./i18nContext.js";
 
 export function setLanguage(code: string) {
   const language = i18nOptions.languages.find((lang) => lang.code === code);

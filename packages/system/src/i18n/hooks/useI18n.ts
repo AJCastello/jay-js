@@ -1,5 +1,5 @@
-import { i18nContext } from "../modules/i18nContext";
-import { AllPaths, GetTypeAtPath } from "../types";
+import { i18nContext } from "../modules/i18nContext.js";
+import { AllPaths, GetTypeAtPath } from "../types/index.js";
 
 interface Ii18nContext {
   emptyValue: "string"

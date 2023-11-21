@@ -1,6 +1,6 @@
-import { IPotentialMatch } from "../types";
-import { pathToRegex } from "../utils/pathToRegex";
-import { resolvedRoutes } from "./routerDefineOptions";
+import { IPotentialMatch } from "../types/index.js";
+import { pathToRegex } from "../utils/pathToRegex.js";
+import { resolvedRoutes } from "./routerDefineOptions.js";
 
 export function getPotentialMatches(): Array<IPotentialMatch> {
   let pathName = location.pathname;

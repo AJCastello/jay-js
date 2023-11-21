@@ -1,7 +1,7 @@
-import { IRoute, IRouterOptions } from "../types";
-import { Routes } from "./Routes";
-import { getRoute } from "./getRoute";
-import { resolvedRoutes, routerDefineOptions } from "./routerDefineOptions";
+import { IRoute, IRouterOptions } from "../types/index.js";
+import { Routes } from "./Routes.js";
+import { getRoute } from "./getRoute.js";
+import { resolvedRoutes, routerDefineOptions } from "./routerDefineOptions.js";
 
 export function Router(routes: Array<IRoute>, options?: IRouterOptions) {
   if (options) {

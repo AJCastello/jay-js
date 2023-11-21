@@ -1,5 +1,5 @@
-import { IRouteInstance } from "../types";
-import { routerOptions } from "./routerDefineOptions";
+import { IRouteInstance } from "../types/index.js";
+import { routerOptions } from "./routerDefineOptions.js";
 
 export async function getElement(route: IRouteInstance) {
   try {

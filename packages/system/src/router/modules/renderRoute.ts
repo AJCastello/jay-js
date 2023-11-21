@@ -1,6 +1,6 @@
-import { IRouteInstance } from "../types";
-import { getElement } from "./getElement";
-import { getTarget } from "./getTarget";
+import { IRouteInstance } from "../types/index.js";
+import { getElement } from "./getElement.js";
+import { getTarget } from "./getTarget.js";
 
 export async function renderRoute(route: IRouteInstance): Promise<HTMLElement | undefined> {
   if (route.element && route.target) {
