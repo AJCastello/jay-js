@@ -1,3 +1,3 @@
-export { useForm } from "./modules/useForm";
-export { useFormDefineOptions } from "./modules/useFormDefineOptions";
-export * from "./types";
+export { useForm } from "./modules/useForm.js";
+export { useFormDefineOptions } from "./modules/useFormDefineOptions.js";
+export * from "./types/index.js";
