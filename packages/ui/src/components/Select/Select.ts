@@ -11,7 +11,7 @@ export interface ISelectExt extends IBaseElement {
   helpers?: Array<HTMLElement>;
 }
 
-export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children">>;
+export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children" | "size">>;
 
 export function Select({
   bordered,
