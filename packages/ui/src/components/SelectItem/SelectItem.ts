@@ -1,4 +1,4 @@
-import { BaseElement, IBaseElement } from "..";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
 
 export type ISelectItem = IBaseElement & Partial<Omit<HTMLOptionElement, "style" | "children">>
 

@@ -1,4 +1,4 @@
-import { BaseElement, IBaseElement } from "../BaseElement";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
 
 export interface ISection extends IBaseElement {
   variant?: "header" | "footer" | "main" | "aside" | "section" | "article" | "nav" | "div" ;

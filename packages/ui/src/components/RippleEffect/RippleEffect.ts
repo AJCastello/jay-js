@@ -1,15 +1,8 @@
-import { BaseElement } from "../BaseElement";
+import { BaseElement } from "../BaseElement/index.js";
 
 import "./RippleEffect.style.css";
 
 export function RippleEffect(event: MouseEvent): HTMLSpanElement {
-  
-  // TODO: check if this is needed
-  // const target = event.target as HTMLElement;
-  // const rect = target.getBoundingClientRect();
-  // const x = event.clientX - rect.left;
-  // const y = event.clientY - rect.top;
-
   const x = (event as any).layerX;
   const y = (event as any).layerY;
 

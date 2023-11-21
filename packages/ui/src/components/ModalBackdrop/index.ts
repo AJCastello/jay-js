@@ -1,1 +1,1 @@
-export * from "./ModalBackdrop";
+export * from "./ModalBackdrop.js";

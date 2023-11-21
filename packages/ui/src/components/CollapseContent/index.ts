@@ -1,1 +1,1 @@
-export { CollapseContent } from "./CollapseContent";
+export { CollapseContent } from "./CollapseContent.js";

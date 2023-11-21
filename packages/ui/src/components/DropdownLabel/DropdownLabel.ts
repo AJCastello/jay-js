@@ -1,4 +1,4 @@
-import { ITypography, Typography } from "../Typography";
+import { ITypography, Typography } from "../Typography/index.js";
 
 export function DropdownLabel({ ...props }: ITypography): HTMLLabelElement {
   const dropdownLabel = Typography({

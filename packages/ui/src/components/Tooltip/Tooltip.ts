@@ -1,5 +1,5 @@
-import { BaseElement, IBaseElement } from "../BaseElement";
-import { mergeClasses } from "../../utils";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 interface ITooltip extends IBaseElement {
   tip: string;

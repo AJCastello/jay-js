@@ -1,7 +1,7 @@
 import * as yup from "yup";
-import { createHelperMessage } from "../modules/createHelperMessage";
-import { changeClass } from "./changeClass";
-import { useFormOptions } from "../modules/useFormDefineOptions";
+import { createHelperMessage } from "../modules/createHelperMessage.js";
+import { changeClass } from "./changeClass.js";
+import { useFormOptions } from "../modules/useFormDefineOptions.js";
 
 export function updateUI(element: HTMLElement, error: yup.ValidationError | null) {
   if (useFormOptions.showHelper) {

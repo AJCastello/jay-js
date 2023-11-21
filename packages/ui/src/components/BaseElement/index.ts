@@ -1,1 +1,1 @@
-export * from "./BaseElement";
+export * from "./BaseElement.js";

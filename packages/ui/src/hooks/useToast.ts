@@ -1,4 +1,4 @@
-import { IToast, Toast } from "../components/Toast/Toast";
+import { IToast, Toast } from "../components/Toast/Toast.js";
 
 interface IUseToast {
   for?: string;

@@ -1,5 +1,6 @@
-import { IBaseElement, Box } from "..";
-import { mergeClasses } from "../../utils";
+import { IBaseElement } from "../BaseElement/index.js";
+import { Box } from "../Box/Box.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 interface ITabs extends IBaseElement {
   boxed?: boolean;

@@ -1,1 +1,1 @@
-export * from "./ModalBox";
+export * from "./ModalBox.js";

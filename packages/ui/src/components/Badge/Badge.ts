@@ -1,5 +1,5 @@
-import { BaseElement, IBaseElement } from "../BaseElement";
-import { mergeClasses } from "../../utils/mergeClasses";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IBadgeExt extends IBaseElement {
   variant?: "badge-outline";

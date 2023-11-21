@@ -1,7 +1,7 @@
-import { mergeClasses } from "../../utils";
-import { IBox } from "../Box";
-import { Button } from "../Button";
-import { Form } from "../Form";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { IBox } from "../Box/index.js";
+import { Button } from "../Button/index.js";
+import { Form } from "../Form/index.js";
 
 export function ModalBackdrop({ 
   ...props

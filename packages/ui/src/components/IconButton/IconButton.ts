@@ -1,4 +1,4 @@
-import { Button, IButton } from "..";
+import { Button, IButton } from "../Button/index.js";
 
 export type IIconButton = IButton;
 

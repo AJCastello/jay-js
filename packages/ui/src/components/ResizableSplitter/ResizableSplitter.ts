@@ -1,6 +1,5 @@
-// TODO: Refactor
-
-import { Box, IBaseElement } from "..";
+import { Box } from "../Box/index.js";
+import { IBaseElement } from "../BaseElement/index.js";
 
 export interface IResizableSplitter extends IBaseElement {
   direction?: "horizontal" | "vertical";

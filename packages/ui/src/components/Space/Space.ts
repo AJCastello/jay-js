@@ -1,4 +1,5 @@
-import { Box, IBaseElement } from "..";
+import { IBaseElement } from "../BaseElement/index.js";
+import { Box } from "../Box/Box.js";
 
 export interface ISpace extends IBaseElement {
   height?: string;

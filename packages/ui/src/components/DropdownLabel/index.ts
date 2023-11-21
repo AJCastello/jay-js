@@ -1,1 +1,1 @@
-export * from "./DropdownLabel";
+export * from "./DropdownLabel.js";

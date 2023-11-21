@@ -1,6 +1,6 @@
-import { mergeClasses } from "../../utils";
-import { IBaseElement } from "../BaseElement";
-import { Box } from "../Box";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { IBaseElement } from "../BaseElement/index.js";
+import { Box } from "../Box/index.js";
 
 export interface IDrawer extends IBaseElement {
   asChild?: boolean;

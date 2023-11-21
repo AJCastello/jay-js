@@ -1,5 +1,5 @@
-import { mergeClasses } from "../../utils";
-import { Box, IBox } from "../Box";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { Box, IBox } from "../Box/index.js";
 
 export function ModalAction({ ...props }: IBox): HTMLDivElement {
   const className = mergeClasses(["modal-action", props.className]);

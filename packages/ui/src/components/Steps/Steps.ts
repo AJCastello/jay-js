@@ -1,5 +1,5 @@
-import { List, IList } from "../List";
-import { mergeClasses } from "../../utils";
+import { List, IList } from "../List/List.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 interface ISteps extends IList {
   orientation?: "steps-vertical" | "steps-horizontal";

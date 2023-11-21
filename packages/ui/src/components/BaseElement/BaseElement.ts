@@ -1,5 +1,5 @@
-import { IRefObject } from "../../hooks";
-import { uniKey } from "../../utils";
+import { IRefObject } from "../../hooks/useRef.js";
+import { uniKey } from "../../utils/uniKey.js";
 
 type ListenerKeys = keyof GlobalEventHandlersEventMap;
 

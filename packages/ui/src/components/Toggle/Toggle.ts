@@ -1,5 +1,9 @@
-import { BaseElement, IBaseElement, Typography, Box, Input } from "..";
-import { mergeClasses } from "../../utils";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { Box } from "../Box/Box.js";
+import { Typography } from "../Typography/Typography.js";
+import { Input } from "../Input/Input.js";
+
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IToggleExt extends IBaseElement {
   label?: string;

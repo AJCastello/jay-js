@@ -1,5 +1,5 @@
-import { BaseElement, IBaseElement } from "..";
-import { mergeClasses } from "../../utils";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IModalExt extends IBaseElement {
   position?: "modal-top" | "modal-bottom" | "modal-middle";

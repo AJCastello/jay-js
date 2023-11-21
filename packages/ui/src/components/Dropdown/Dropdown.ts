@@ -1,5 +1,6 @@
-import { Box, IBaseElement } from "..";
-import { mergeClasses } from "../../";
+import { Box } from "../Box/index.js";
+import { IBaseElement } from "../BaseElement/index.js"; 
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IDropdown extends IBaseElement {
   position?: "dropdown-top" | "dropdown-bottom" | "dropdown-left" | "dropdown-right";

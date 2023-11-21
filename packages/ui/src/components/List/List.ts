@@ -1,4 +1,4 @@
-import { BaseElement, IBaseElement } from "../BaseElement";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
 
 export type IList = IBaseElement & Partial<Omit<HTMLUListElement, "style" | "children">>;
 

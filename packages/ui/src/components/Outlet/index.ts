@@ -1,1 +1,1 @@
-export * from "./Outlet";
+export * from "./Outlet.js";

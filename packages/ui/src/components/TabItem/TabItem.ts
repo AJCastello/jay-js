@@ -1,5 +1,5 @@
-import { mergeClasses } from "../../utils";
-import { ILink, Link } from "../Link";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { ILink, Link } from "../Link/Link.js";
 
 interface ITabItem extends ILink {
   size?: "tab-xs" | "tab-sm" | "tab-md" | "tab-lg";
