@@ -121,7 +121,7 @@ export async function renderHTMLFiles(): Promise<void> {
           fs.mkdirSync(outputDir, { recursive: true });
         }
 
-        fs.writeFileSync(outputPath, indexDocument.documentElement.outerHTML);
+        fs.writeFileSync(outputPath, `<!DOCTYPE html>${indexDocument.documentElement.outerHTML}`);
       }
     }
   }
@@ -173,7 +173,7 @@ export async function renderHTMLFiles(): Promise<void> {
             fs.mkdirSync(outputDir, { recursive: true });
           }
 
-          fs.writeFileSync(outputPath, indexDocument.documentElement.outerHTML);
+          fs.writeFileSync(outputPath, `<!DOCTYPE html>${indexDocument.documentElement.outerHTML}`);
         }
       }
     }
