@@ -3,7 +3,7 @@ type DragEndEvent = (event: DragEvent) => void;
 type DragOverEvent = (event: DragEvent) => void;
 type DragEnterEvent = (event: DragEvent) => void;
 type DragLeaveEvent = (event: DragEvent) => void;
-type DropEvent = (event: DragEvent, draggedItem: EventTarget | null) => void;
+type DropEvent = (event: DragEvent, draggedItem: HTMLElement | null) => void;
 
 interface DraggableOptions {
   onDragStart?: DragStartEvent;
@@ -25,10 +25,10 @@ export function Draggable(
     onDrop
   }: DraggableOptions = {}
 ): void {
-  let draggedItem: EventTarget | null = null;
+  let draggedItem: HTMLElement | null = null;
 
   onDragStart && element.addEventListener("dragstart", (event) => {
-    draggedItem = event.target;
+    draggedItem = event.target as HTMLElement;
     onDragStart && onDragStart(event);
   });
 

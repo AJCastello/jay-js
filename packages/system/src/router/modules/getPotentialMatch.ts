@@ -1,6 +1,6 @@
-import { IPotentialMatch, IRouteInstance } from "../types";
-import { getPotentialMatches } from "./getPotentialMatches";
-import { resolvedRoutes } from "./routerDefineOptions";
+import { IPotentialMatch, IRouteInstance } from "../types/index.js";
+import { getPotentialMatches } from "./getPotentialMatches.js";
+import { resolvedRoutes } from "./routerDefineOptions.js";
 
 export function getPotentialMatch(): IPotentialMatch {
   const potentialMatches = getPotentialMatches();

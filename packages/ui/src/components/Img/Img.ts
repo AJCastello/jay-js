@@ -1,4 +1,4 @@
-import { BaseElement, IBaseElement } from "..";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
 
 export type IImg = IBaseElement & Partial<Omit<HTMLImageElement, "style">>;
 

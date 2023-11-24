@@ -1,5 +1,5 @@
-import { getPotentialMatches } from "./getPotentialMatches";
-import { resolvedRoutes } from "./routerDefineOptions";
+import { getPotentialMatches } from "./getPotentialMatches.js";
+import { resolvedRoutes } from "./routerDefineOptions.js";
 
 export function getPotentialMatchIndex() {
   const potentialMatches = getPotentialMatches();

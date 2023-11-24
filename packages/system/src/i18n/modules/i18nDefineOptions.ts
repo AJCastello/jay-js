@@ -1,4 +1,4 @@
-import { Ii18nOptions } from "../types";
+import { Ii18nOptions } from "../types/index.js";
 
 export let i18nOptions: Ii18nOptions = {
   languages: [],

@@ -1,5 +1,10 @@
-import { Box, BaseElement, Typography, IBaseElement, Input } from "..";
-import { mergeClasses } from "../../utils";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { Typography } from "../Typography/Typography.js";
+import { Input } from "../Input/Input.js";
+import { Box } from "../Box/Box.js";
+
+import { mergeClasses } from "../../utils/mergeClasses.js";
+
 import "./TextInput.style.css";
 
 export interface ITextInputExt extends IBaseElement {

@@ -1,6 +1,6 @@
-import { Box } from "..";
-import { mergeClasses } from "../../utils";
-import { IToast } from "../Toast/Toast";
+import { Box } from "../Box/Box.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { IToast } from "../Toast/Toast.js";
 
 export function ToastContainer({
   horizontal = "toast-end",

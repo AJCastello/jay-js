@@ -1,2 +1,2 @@
-export * from "./types";
-export * from "./LazyModule";
+export * from "./types/index.js";
+export * from "./LazyModule.js";

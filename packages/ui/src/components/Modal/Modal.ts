@@ -1,40 +1,14 @@
-import { BaseElement, IBaseElement, IBox, Box, Form, Button } from "..";
-import { mergeClasses } from "../../utils";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
-export type IModal = IBaseElement & Partial<Omit<HTMLDialogElement, "style" | "children">>;
-
-export function ModalBox({ ...props }: IBox): HTMLDivElement {
-  const className = mergeClasses(["modal-box", props.className]);
-  const modalContent = Box({
-    ...props,
-    className
-  });
-  return modalContent;
+export interface IModalExt extends IBaseElement {
+  position?: "modal-top" | "modal-bottom" | "modal-middle";
 }
 
-export function ModalAction({ ...props }: IBox): HTMLDivElement {
-  const className = mergeClasses(["modal-action", props.className]);
-  const modalContent = Box({
-    ...props,
-    className
-  });
-  return modalContent;
-}
-
-export function ModalBackdrop({ ...props }: IBox): HTMLFormElement {
-  const className = mergeClasses(["modal-backdrop", props.className]);
-  const modalBackdrop = Form({
-    ...props,
-    method: "dialog",
-    className,
-    children: Button({
-      children: "close"
-    })
-  });
-  return modalBackdrop;
-}
+export type IModal = IModalExt & Partial<Omit<HTMLDialogElement, "style" | "children">>;
 
 export function Modal({
+  position,
   ...props
 }: IModal): HTMLDialogElement {
   const className = mergeClasses(["modal", props.className]);

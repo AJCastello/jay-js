@@ -1,5 +1,5 @@
-import { mergeClasses } from "../../utils";
-import { Box, IBox } from "../Box";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { Box, IBox } from "../Box/index.js";
 
 interface IDrawerContent extends IBox {
   position?: "top" | "left" | "right" | "bottom";

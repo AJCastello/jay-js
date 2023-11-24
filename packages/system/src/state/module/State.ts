@@ -1,4 +1,4 @@
-import { StateType, setOptions } from "../type";
+import { StateType, setOptions } from "../type/index.js";
 
 export const State = <T>(data: T): StateType<T> => {
   const state: StateType<T> = {

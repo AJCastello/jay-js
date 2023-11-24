@@ -1,4 +1,4 @@
-import { IImportedModule } from "../types";
+import { IImportedModule } from "../types/index.js";
 
 export const ImportedModules: { [key: string]: IImportedModule } = {};
 

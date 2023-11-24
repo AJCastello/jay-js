@@ -1,20 +1,9 @@
 #!/usr/bin/env node
 
-import path from "path";
-import { Command } from "commander";
-import { execSync } from "child_process";
-import { fileURLToPath } from "url";
-import inquirer, { QuestionCollection } from "inquirer";
+// terminal
 import chalk from "chalk";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const relativePath = path.relative(process.cwd(), __dirname);
-
-function joinPathRelative(...paths: string[]) {
-  return path.join(relativePath, ...paths).replace(/\\/g, "/");
-}
+import { Command } from "commander";
+import inquirer, { QuestionCollection } from "inquirer";
 
 const program = new Command();
 
@@ -24,11 +13,8 @@ program
   .option("--static", "Compiles the project to a static site")
   .action(async (options) => {
     if (options.static) {
-      console.log("Compiling to static site...");
-      const fileLoaderPath = joinPathRelative("../utils/loader.js");
-      const renderPath = joinPathRelative("../commands/render.js");
-      const buildCommand = `node --experimental-modules --es-module-specifier-resolution=node --experimental-loader ${fileLoaderPath} ${renderPath}`;
-      execSync(buildCommand, { stdio: "inherit" });
+      const { render } = await import("../commands/render/index.js");
+      await render();
     } else {
       console.log("Other build options are not yet available");
     }
@@ -38,16 +24,12 @@ program
   .command("prepare")
   .description("Prepare content for static site generation")
   .option("--static", "Prepare static content")
-  .action((options) => {
-    if (options.static) {
-      console.log("Preparing static content...");
-      const preparerPath = joinPathRelative("../commands/prepare.js");
-      execSync("rimraf dist public_temp", { stdio: "inherit" });
-      execSync("cpy public/**/* public_temp", { stdio: "inherit" });
-      execSync("postcss ./src/styles --dir ./public_temp/styles", { stdio: "inherit" });
-      execSync(`node --experimental-modules --es-module-specifier-resolution=node ${preparerPath}`, { stdio: "inherit" });
-    }
+  .action(async (options) => {
+    const { prepare } = await import("../commands/prepare/index.js");
+    await prepare();
   });
+
+  
 
 program
   .command("init")
@@ -78,11 +60,7 @@ program
         name: "buildTool",
         message: "What build tool do you want to use?",
         choices: [
-          { name: chalk.green("Vite"), value: "vite" },
-          // { name: chalk.cyan("Bun (experimental) - soon"), value: "bun" },
-          // { name: chalk.blue("Webpack - soon"), value: "webpack" },
-          // { name: chalk.yellow("Rollup - soon"), value: "rollup" },
-          // { name: chalk.red("esbuild - soon"), value: "esbuild" },
+          { name: chalk.green("Vite"), value: "vite" }
         ],
         loop: false,
       },
@@ -153,10 +131,12 @@ program
       },
     ];
 
-    inquirer.prompt(questions).then(async (answers) => {
-      const { init } = await import("../commands/init/index.js");
-      init(answers);
-    });
+    inquirer
+      .prompt(questions)
+      .then(async (options) => {
+        const { init } = await import("../commands/init/index.js");
+        await init(options);
+      });
   });
 
 program.parse(process.argv);

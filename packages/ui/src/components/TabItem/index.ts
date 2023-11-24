@@ -1,1 +1,1 @@
-export * from "./TabItem";
+export * from "./TabItem.js";

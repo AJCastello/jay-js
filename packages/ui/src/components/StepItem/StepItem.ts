@@ -1,5 +1,5 @@
-import { mergeClasses } from "../../utils";
-import { IListItem, ListItem } from "../ListItem";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { IListItem, ListItem } from "../ListItem/ListItem.js";
 
 export interface IStepItem extends IListItem {
   color?: "step-primary" | "step-secondary" | "step-accent" | "step-info" | "step-success" | "step-warning" | "step-error";

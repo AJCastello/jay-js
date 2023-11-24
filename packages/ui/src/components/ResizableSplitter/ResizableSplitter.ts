@@ -1,9 +1,8 @@
-// TODO: Refactor
-
-import { Box, IBaseElement } from "..";
+import { Box } from "../Box/index.js";
+import { IBaseElement } from "../BaseElement/index.js";
 
 export interface IResizableSplitter extends IBaseElement {
-  direction: "horizontal" | "vertical";
+  direction?: "horizontal" | "vertical";
 }
 
 function bindColumnResizeHandler(
@@ -28,15 +27,16 @@ function bindColumnResizeHandler(
     const minColumnSize = 50;
     
     if (direction === "horizontal") {
-      const mousePosition = e.clientY - (handle.parentElement?.offsetTop || 0);
-      const newSizePrevious = Math.max(mousePosition - (previousElement?.offsetTop || 0), minColumnSize);
+      const parent = handle.parentElement;
+      const mousePosition = e.clientY;
+      const newSizePrevious = Math.max((mousePosition - parent?.offsetTop! || 0) - (previousElement?.offsetTop || 0), minColumnSize);
       const newSizeNext = Math.max((nextElement?.offsetTop || 0) + (nextElement?.clientHeight || 0) - mousePosition, minColumnSize);
       previousElement?.style.setProperty("height", `${newSizePrevious}px`);
       nextElement?.style.setProperty("height", `${newSizeNext}px`);
       return;
     }
 
-    const mousePosition = e.clientX - (handle.parentElement?.offsetLeft || 0);
+    const mousePosition = e.clientX;
     const newSizePrevious = Math.max(mousePosition - (previousElement?.offsetLeft || 0), minColumnSize);
     const newSizeNext = Math.max((nextElement?.offsetLeft || 0) + (nextElement?.clientWidth || 0) - mousePosition, minColumnSize);
     previousElement?.style.setProperty("width", `${newSizePrevious}px`);
@@ -49,9 +49,9 @@ function bindColumnResizeHandler(
 }
 
 export function ResizableSplitter({
-  direction,
+  direction = "vertical",
   ...props
-}: IResizableSplitter) {
+}: IResizableSplitter = {}) {
   const splitter = Box({
     className: "bg-base-300 flex flex-shrink-0",
     style: {

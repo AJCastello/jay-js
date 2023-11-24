@@ -1,5 +1,5 @@
-import { Box, IBox } from "..";
-import { mergeClasses } from "../../";
+import { Box, IBox } from "../Box/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IDivider extends IBox {
   orientation?: "divider-vertical" | "divider-horizontal";

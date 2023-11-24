@@ -1,4 +1,4 @@
-import { IUseFormOptions } from "../types";
+import { IUseFormOptions } from "../types/index.js";
 
 export let useFormOptions: IUseFormOptions = {
   showHelper: true,

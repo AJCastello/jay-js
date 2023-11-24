@@ -1,5 +1,9 @@
-import { BaseElement, Box, IBaseElement, Typography } from "..";
-import { mergeClasses } from "../../utils";
+import { Box } from "../Box/Box.js";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { Typography } from "../Typography/Typography.js";
+
+import { mergeClasses } from "../../utils/mergeClasses.js";
+
 import "./TextArea.style.css";
 
 export interface ITextareaExt extends IBaseElement {
@@ -9,7 +13,7 @@ export interface ITextareaExt extends IBaseElement {
   placeholder?: string;
   bordered?: boolean;
   ghost?: boolean;
-  color?: "textarea-primary" |  "textarea-secondary" |  "textarea-accent" |  "textarea-success" |  "textarea-warning" |  "textarea-info" |  "textarea-error" ;
+  color?: "textarea-primary" | "textarea-secondary" | "textarea-accent" | "textarea-success" | "textarea-warning" | "textarea-info" | "textarea-error";
   size?: "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
 }
 
@@ -26,7 +30,7 @@ export function TextArea({
   color,
   size,
   ...props
-}: ITextarea) : HTMLDivElement {
+}: ITextarea): HTMLDivElement {
 
   const className = mergeClasses([
     "textarea",
@@ -46,7 +50,7 @@ export function TextArea({
   }) as HTMLTextAreaElement;
 
   const inputId = textareaElement.id;
-  
+
   const formControl = Box({
     className: "form-control relative"
   });

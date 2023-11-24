@@ -1,4 +1,4 @@
-import { getPotentialMatch } from "./getPotentialMatch";
+import { getPotentialMatch } from "./getPotentialMatch.js";
 
 export function getParams(): Record<string, string> {
   let params: Record<string, string> = {};

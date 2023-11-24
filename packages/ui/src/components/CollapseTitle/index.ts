@@ -1,1 +1,1 @@
-export { CollapseTitle } from "./CollapseTitle";
+export { CollapseTitle } from "./CollapseTitle.js";

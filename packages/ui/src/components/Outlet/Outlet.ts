@@ -1,4 +1,4 @@
-import { Box } from "..";
+import { Box } from "../Box/index.js";
 
 export function Outlet() {
   return Box({

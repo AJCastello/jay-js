@@ -1,4 +1,4 @@
-import { IThemeOptions } from "../types";
+import { IThemeOptions } from "../types/index.js";
 
 export let themeOptions: IThemeOptions = {
   target: document.documentElement,

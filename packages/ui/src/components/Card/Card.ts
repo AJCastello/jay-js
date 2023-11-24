@@ -1,5 +1,8 @@
-import { IBaseElement, RippleEffect, Box } from "..";
-import { mergeClasses } from "../../";
+import { IBaseElement } from "../BaseElement/index.js";
+import { RippleEffect } from "../RippleEffect/index.js";
+import { Box } from "../Box/index.js";
+
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface ICard extends IBaseElement {
   imagePosition?: "left" | "right";

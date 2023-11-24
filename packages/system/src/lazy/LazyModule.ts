@@ -1,11 +1,11 @@
 // components
-import { ErrorImport, NotFound, ModuleWrapper } from "./components";
+import { ErrorImport, NotFound, ModuleWrapper } from "./components/index.js";
 
 // collector
-import { ImportedModules } from "./utils/collector";
+import { ImportedModules } from "./utils/collector.js";
 
 // types
-import { ILazyModule } from "./types";
+import { ILazyModule } from "./types/index.js";
 
 export function LazyModule(module: ILazyModule, loader?: HTMLElement) {
   if (!module) {

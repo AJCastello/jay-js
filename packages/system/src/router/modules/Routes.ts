@@ -1,5 +1,5 @@
-import { uniKey } from "../../utils/uniKey";
-import { IRoute, IRouteInstance } from "../types";
+import { uniKey } from "../../utils/uniKey.js";
+import { IRoute, IRouteInstance } from "../types/index.js";
 
 export function Routes(inputRoutes: Array<IRoute>, target?: HTMLElement, prefix = ""): Array<IRouteInstance> {
   const outputRoutes: Array<IRouteInstance> = [];

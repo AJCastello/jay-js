@@ -1,5 +1,6 @@
-import { Box, IBaseElement } from "..";
-import { mergeClasses } from "../../utils";
+import { Box  } from "../Box/index.js";
+import { IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IToastExt extends IBaseElement {
   horizontal?: "toast-start" | "toast-center" | "toast-end";

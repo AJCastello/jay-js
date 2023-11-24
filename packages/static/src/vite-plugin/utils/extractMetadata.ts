@@ -1,5 +1,5 @@
 // types
-import { Metadata } from "../types";
+import { Metadata } from "../types/index.js";
 
 // parser
 import matter from "gray-matter";

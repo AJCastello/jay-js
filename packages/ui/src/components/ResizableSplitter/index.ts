@@ -1,1 +1,1 @@
-export * from "./ResizableSplitter";
+export * from "./ResizableSplitter.js";

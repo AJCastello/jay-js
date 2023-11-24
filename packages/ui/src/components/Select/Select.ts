@@ -1,5 +1,6 @@
-import { BaseElement, IBaseElement, Typography } from "..";
-import { mergeClasses } from "../../utils";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { Typography } from "../Typography/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface ISelectExt extends IBaseElement {
   bordered?: boolean;
@@ -11,7 +12,7 @@ export interface ISelectExt extends IBaseElement {
   helpers?: Array<HTMLElement>;
 }
 
-export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children">>;
+export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children" | "size">>;
 
 export function Select({
   bordered,

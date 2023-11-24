@@ -1,1 +1,1 @@
-export * from "./CardFigure";
+export * from "./CardFigure.js";

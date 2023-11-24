@@ -1,6 +1,6 @@
-import { useDrawer } from "../../hooks";
-import { mergeClasses } from "../../utils";
-import { Box, IBox } from "../Box";
+import { useDrawer } from "../../hooks/useDrawer.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { Box, IBox } from "../Box/index.js";
 
 interface IDrawerOverlay extends IBox {
   for: string;

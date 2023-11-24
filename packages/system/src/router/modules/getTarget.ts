@@ -1,6 +1,6 @@
-import { IRouteInstance } from "../types";
-import { renderRoute } from "./renderRoute";
-import { resolvedRoutes } from "./routerDefineOptions";
+import { IRouteInstance } from "../types/index.js";
+import { renderRoute } from "./renderRoute.js";
+import { resolvedRoutes } from "./routerDefineOptions.js";
 
 export async function getTarget(route: IRouteInstance) {
   if (route.parentLayoutId) {

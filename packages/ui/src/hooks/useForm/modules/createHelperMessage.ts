@@ -1,5 +1,5 @@
 
-import { Typography } from "../../../components";
+import { Typography } from "../../../components/index.js";
 import * as yup from "yup";
 
 export function createHelperMessage(error: yup.ValidationError) {

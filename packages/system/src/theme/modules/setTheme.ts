@@ -1,4 +1,4 @@
-import { themeOptions } from "./themeDefineOptions";
+import { themeOptions } from "./themeDefineOptions.js";
 
 export function setTheme(theme: string) {
   if (themeOptions.useAsDataset) {

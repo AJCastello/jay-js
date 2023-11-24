@@ -1,8 +1,8 @@
 
 import * as yup from "yup";
-import { IUseForm, IUseFormProps } from "../types";
-import { updateUI } from "../utils/updateUI";
-import { useFormDefineOptions } from "./useFormDefineOptions";
+import { IUseForm, IUseFormProps } from "../types/index.js";
+import { updateUI } from "../utils/updateUI.js";
+import { useFormDefineOptions } from "./useFormDefineOptions.js";
 
 export function useForm<T>({
   initialValues,

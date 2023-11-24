@@ -1,5 +1,5 @@
-import { mergeClasses } from "../../utils";
-import { ITypography, Typography } from "../Typography";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { ITypography, Typography } from "../Typography/index.js";
 
 export function CardDescription({ ...props }: ITypography): HTMLElement {
   const className = mergeClasses([

@@ -1,4 +1,4 @@
-export { themeDefineOptions } from "./modules/themeDefineOptions";
-export { themeProvider } from "./modules/themeProvider";
-export { setTheme } from "./modules/setTheme";
-export * from "./types/index";
+export { themeDefineOptions } from "./modules/themeDefineOptions.js";
+export { themeProvider } from "./modules/themeProvider.js";
+export { setTheme } from "./modules/setTheme.js";
+export * from "./types/index.js";

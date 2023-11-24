@@ -1,7 +1,7 @@
-import { getPotentialMatch } from "./getPotentialMatch";
-import { getPotentialMatchIndex } from "./getPotentialMatchIndex";
-import { renderRoute } from "./renderRoute";
-import { routerOptions } from "./routerDefineOptions";
+import { getPotentialMatch } from "./getPotentialMatch.js";
+import { getPotentialMatchIndex } from "./getPotentialMatchIndex.js";
+import { renderRoute } from "./renderRoute.js";
+import { routerOptions } from "./routerDefineOptions.js";
 
 export async function getRoute() {
   const match = getPotentialMatch();

@@ -1,4 +1,4 @@
-import { BaseElement, IBaseElement } from "..";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
 
 export type IForm = IBaseElement & Partial<Omit<HTMLFormElement, "style" | "children">>;
 

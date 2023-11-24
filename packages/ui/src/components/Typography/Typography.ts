@@ -1,4 +1,4 @@
-import { BaseElement, IBaseElement } from "..";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
 
 export interface ITypography extends IBaseElement {
   variant?: string;

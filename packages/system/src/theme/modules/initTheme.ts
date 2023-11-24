@@ -1,5 +1,5 @@
-import { setTheme } from "./setTheme";
-import { themeOptions } from "./themeDefineOptions";
+import { setTheme } from "./setTheme.js";
+import { themeOptions } from "./themeDefineOptions.js";
 
 export function initTheme() {
   let themeToSet = themeOptions.defaultTheme;

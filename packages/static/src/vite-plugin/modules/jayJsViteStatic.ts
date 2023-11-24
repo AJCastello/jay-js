@@ -1,5 +1,5 @@
 import { extname } from "path";
-import { IJayJsViteOptions } from "../types";
+import { IJayJsViteOptions } from "../types/index.js";
 import { jayJsViteDefineOptions } from "../options/jayJsViteDefineOptions.js";
 import { buildCollection } from "../services/buildCollection.js";
 import { extractUseCollectionData } from "../utils/extractUseCollectionData.js";

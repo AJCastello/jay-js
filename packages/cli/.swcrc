@@ -10,7 +10,7 @@
       "decorators": true
     },
     "transform": {},
-    "target": "es2015",
+    "target": "esnext",
     "loose": false,
     "externalHelpers": false,
     "keepClassNames": false

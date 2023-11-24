@@ -4,3 +4,6 @@ implement
 package-lock.json
 dist
 .turbo/
+.nx/
+.nx/cache
+pnpm-lock.yaml

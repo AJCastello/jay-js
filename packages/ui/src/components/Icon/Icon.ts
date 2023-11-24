@@ -1,5 +1,5 @@
-import { BaseElement, IBaseElement } from "..";
-import { mergeClasses } from "../..";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface IIcon extends IBaseElement {
   icon?: string;

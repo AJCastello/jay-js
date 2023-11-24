@@ -5,25 +5,27 @@
   "version": "1.0.0",
   "repository": "https://github.com/AJCastello/jay-js.git",
   "scripts": {
-    "build": "turbo run build",
-    "build:ui": "turbo run build --scope @jay-js/ui",
-    "build:system": "turbo run build --scope @jay-js/system",
-    "build:cli": "turbo run build --scope @jay-js/cli",
-    "build:jsx": "turbo run build --scope @jay-js/jsx",
-    "build:static": "turbo run build --scope @jay-js/static",
+    "build:turbo": "turbo run build",
+    "build": "nx run-many -t build",
+    "build:ui": "nx build @jay-js/ui",
+    "build:system": "nx build @jay-js/system", 
+    "build:cli": "nx build @jay-js/cli",
+    "build:jsx": "nx build @jay-js/jsx",
+    "build:static": "nx build @jay-js/static",
     "update:links": "pnpm run link:cli && pnpm run link:system && pnpm run link:ui && pnpm run link:jsx && pnpm run link:static",
-    "link:cli": "(cd packages/cli/dist && pnpm link --global)",
+    "daemon:clean": "turbo daemon clean",
+    "link:cli": "(cd packages/cli/dist && npm link)",
     "link:system": "(cd packages/system/dist && pnpm link --global)",
     "link:ui": "(cd packages/ui/dist && pnpm link --global)",
     "link:jsx": "(cd packages/jsx/dist && pnpm link --global)",
     "link:static": "(cd packages/static/dist && pnpm link --global)",
     "unlink:all": "pnpm run unlink:static && pnpm run unlink:jsx && pnpm run unlink:ui && pnpm run unlink:system && pnpm run unlink:cli",
-    "unlink:cli": "pnpm unlink --global @jay-js/cli",
-    "unlink:system": "pnpm unlink --global @jay-js/system",
-    "unlink:ui": "pnpm unlink --global @jay-js/ui",
-    "unlink:jsx": "pnpm unlink --global @jay-js/jsx",
-    "unlink:static": "pnpm unlink --global @jay-js/static"
-  },  
+    "unlink:cli": "npm unlink @jay-js/cli",
+    "unlink:system": "npm unlink @jay-js/system",
+    "unlink:ui": "npm unlink @jay-js/ui",
+    "unlink:jsx": "npm unlink @jay-js/jsx",
+    "unlink:static": "npm unlink @jay-js/static"
+  },
   "author": "AJ Castello",
   "license": "MIT",
   "workspaces": [
@@ -35,6 +37,8 @@
     "clean-package": "^2.2.0",
     "cpy-cli": "^4.2.0",
     "rimraf": "^5.0.0",
-    "turbo": "^1.9.3"
-  }
+    "turbo": "^1.10.16",
+    "nx": "17.0.3"
+  },
+  "packageManager": "pnpm@8.10.2"
 }

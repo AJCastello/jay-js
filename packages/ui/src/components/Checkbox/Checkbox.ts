@@ -1,5 +1,8 @@
-import { BaseElement, IBaseElement, Box, Input } from "..";
-import { mergeClasses } from "../../";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { Box } from "../Box/index.js";
+import { Input } from "../Input/index.js";
+
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export interface ICheckboxExt extends IBaseElement {
   value?: string;

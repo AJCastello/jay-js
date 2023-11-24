@@ -1,5 +1,5 @@
-import { BaseElement, IBaseElement } from "..";
-import { mergeClasses } from "../../";
+import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 interface ILoadingExt extends IBaseElement {
   type?: "loading-spinner" | "loading-dots" | "loading-ring" | "loading-ball" | "loading-bars" | "loading-infinity";
