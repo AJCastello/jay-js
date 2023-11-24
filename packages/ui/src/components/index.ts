@@ -43,6 +43,8 @@ export * from "./SelectItem/index.js";
 export * from "./Space/index.js";
 export * from "./StepItem/index.js";
 export * from "./Steps/index.js";
+export * from "./Swap/index.js";
+export * from "./SwapItem/index.js";
 export * from "./TabItem/index.js";
 export * from "./Tabs/index.js";
 export * from "./TextArea/index.js";
