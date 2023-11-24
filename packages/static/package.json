@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/static",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A static site tools manager for Jay JS",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
