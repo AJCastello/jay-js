@@ -5,26 +5,34 @@
   "version": "1.0.0",
   "repository": "https://github.com/AJCastello/jay-js.git",
   "scripts": {
-    "build:turbo": "turbo run build",
     "build": "nx run-many -t build",
     "build:ui": "nx build @jay-js/ui",
     "build:system": "nx build @jay-js/system", 
     "build:cli": "nx build @jay-js/cli",
     "build:jsx": "nx build @jay-js/jsx",
     "build:static": "nx build @jay-js/static",
-    "update:links": "pnpm run link:cli && pnpm run link:system && pnpm run link:ui && pnpm run link:jsx && pnpm run link:static",
-    "daemon:clean": "turbo daemon clean",
-    "link:cli": "(cd packages/cli/dist && npm link)",
+        
+    "pub:all": "pnpm run pub:cli && pnpm run pub:system && pnpm run pub:ui && pnpm run pub:jsx && pnpm run pub:static",
+    "pub:cli": "(cd packages/cli/dist && npm publish --access public)",
+    "pub:system": "(cd packages/system/dist && npm publish --access public)",
+    "pub:ui": "(cd packages/ui/dist && npm publish --access public)",
+    "pub:jsx": "(cd packages/jsx/dist && npm publish --access public)",
+    "pub:static": "(cd packages/static/dist && npm publish --access public)",
+    
+    "link:all": "pnpm run link:cli && pnpm run link:system && pnpm run link:ui && pnpm run link:jsx && pnpm run link:static",
+    "link:cli": "(cd packages/cli/dist && pnpm link --global)",
     "link:system": "(cd packages/system/dist && pnpm link --global)",
     "link:ui": "(cd packages/ui/dist && pnpm link --global)",
     "link:jsx": "(cd packages/jsx/dist && pnpm link --global)",
     "link:static": "(cd packages/static/dist && pnpm link --global)",
+
+
     "unlink:all": "pnpm run unlink:static && pnpm run unlink:jsx && pnpm run unlink:ui && pnpm run unlink:system && pnpm run unlink:cli",
-    "unlink:cli": "npm unlink @jay-js/cli",
-    "unlink:system": "npm unlink @jay-js/system",
-    "unlink:ui": "npm unlink @jay-js/ui",
-    "unlink:jsx": "npm unlink @jay-js/jsx",
-    "unlink:static": "npm unlink @jay-js/static"
+    "unlink:cli": "npm unlink --global @jay-js/cli",
+    "unlink:system": "npm unlink --global @jay-js/system",
+    "unlink:ui": "npm unlink --global @jay-js/ui",
+    "unlink:jsx": "npm unlink --global @jay-js/jsx",
+    "unlink:static": "npm unlink --global @jay-js/static"
   },
   "author": "AJ Castello",
   "license": "MIT",
