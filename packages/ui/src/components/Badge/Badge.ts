@@ -23,11 +23,9 @@ export function Badge({
     props.className,
   ]);
 
-  const badgeElement = BaseElement<IBadge>({
+  return BaseElement<IBadge>({
     tag: "span",
     ...props,
     className
   }) as HTMLSpanElement;
-
-  return badgeElement;
 }

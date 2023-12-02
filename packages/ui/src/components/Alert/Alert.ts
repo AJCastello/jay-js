@@ -18,10 +18,8 @@ export function Alert({
     props.className,
   ]);
 
-  const alert = BaseElement({
+  return BaseElement({
     ...props,
     className,
   }) as HTMLDivElement;
-
-  return alert;
 }

@@ -5,10 +5,8 @@ export type IBox = IBaseElement
 export function Box({
   ...props
 }: IBox = {}) {
-  const box = BaseElement({
+  return BaseElement({
     tag: "div",
     ...props
   }) as HTMLDivElement;
-
-  return box;
 }
