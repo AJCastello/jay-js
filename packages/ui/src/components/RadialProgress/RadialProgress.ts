@@ -15,15 +15,23 @@ export function RadialProgress({
 }: IRadialProgress = {}): HTMLDivElement {
   const className = mergeClasses(["radial-progress", props.className]);
 
-  return BaseElement({
+  const element = BaseElement({
     tag: "div",
     ...props,
     className,
-    style: {
-      "--value": value,
-      "--size": size,
-      "--thickness": thickness,
-    },
     role: "progressbar",
   }) as HTMLDivElement;
+
+  element.setAttribute(
+    "style",
+    `
+    --value: ${value};
+    --size: ${size};
+    --thickness: ${thickness};`
+  );
+
+
+  
+
+  return element;
 }
