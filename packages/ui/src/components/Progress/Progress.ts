@@ -10,9 +10,11 @@ type ProgressColor =
   | "progress-warning"
   | "progress-error";
 
-export interface IProgress extends IBaseElement {
+export interface IProgressExt extends IBaseElement {
   color?: ProgressColor;
 }
+
+type IProgress = IProgressExt & Partial<Omit<HTMLProgressElement, "style" | "children">>
 
 export function Progress({
   color,
