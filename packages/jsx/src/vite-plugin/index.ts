@@ -5,7 +5,7 @@ function jayJsxPlugin() {
     config(config: any) {
       return {
         esbuild: {
-          jsxInject: 'import { jayJSX, Fragment } from "@jay-js/jsx/runtime/jsx-runtime";',
+          jsxInject: 'import { jayJSX, Fragment } from "@jay-js/jsx/runtime/jsx-runtime.js";',
         }
       };
     }
