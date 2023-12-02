@@ -1,34 +1,45 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { ILink, Link } from "../Link/Link.js";
+import { IBaseElement } from "../BaseElement/BaseElement.js";
+import { Input } from "../Input/Input.js";
+import { Link } from "../Link/Link.js";
 
-interface ITabItem extends ILink {
+interface ITabItemExt extends IBaseElement {
   size?: "tab-xs" | "tab-sm" | "tab-md" | "tab-lg";
-  variant?: "tab-bordered" | "tab-lifted";
+  type?: "input" | "link";
   active?: boolean;
   disabled?: boolean;
 }
 
+export type ITabItem = ITabItemExt & Partial<Omit<HTMLAnchorElement, "style" | "children">>;
+
 export function TabItem({
   size,
-  variant,
   active,
+  type,
   disabled,
   ...props
-}: ITabItem): HTMLAnchorElement {
+}: ITabItem): HTMLAnchorElement | HTMLInputElement {
   const className = mergeClasses([
     "tab",
-    "no-underline",
     active ? "tab-active" : "",
     disabled ? "tab-disabled" : "",
     size,
-    variant,
     props.className,
   ]);
 
-  const tabButton = Link({
+  if(type === "input") {
+    return Input({
+      className,
+      type: "radio",
+      name: (props as Partial<HTMLInputElement>).name,
+      role: "tab",
+      ariaLabel: props.children?.toString() ?? "",
+    });
+  }
+
+  return Link({
     ...props,
+    role: "tab",
     className,
   });
-
-  return tabButton;
 }

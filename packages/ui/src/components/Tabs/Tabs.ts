@@ -3,21 +3,22 @@ import { Box } from "../Box/Box.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 
 interface ITabs extends IBaseElement {
-  boxed?: boolean;
+  variant?: "tabs-boxed" | "tabs-bordered" | "tabs-lifted";
 }
 
 export function Tabs({
-  boxed,
+  variant,
   ...props
 }: ITabs): HTMLDivElement {
   const className = mergeClasses([
     "tabs",
-    boxed ? "tab-boxed" : "",
+    variant,
     props.className,
   ]);
 
   const tabs = Box({
     ...props,
+    role: "tablist",
     className,
   });
 
