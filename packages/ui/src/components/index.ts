@@ -42,6 +42,8 @@ export * from "./Modal/index.js";
 export * from "./ModalAction/index.js";
 export * from "./ModalBackdrop/index.js";
 export * from "./ModalBox/index.js";
+export * from "./Navbar/index.js";
+export * from "./NavbarComponent/index.js";
 export * from "./Outlet/index.js";
 export * from "./Progress/index.js";
 export * from "./RadialProgress/index.js";
