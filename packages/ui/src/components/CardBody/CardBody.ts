@@ -6,9 +6,9 @@ export function CardBody({ ...props }: IBox): HTMLElement {
     "card-body",
     props.className
   ]);
-  const cardBody = Box({
+  
+  return Box({
     ...props,
     className
   });
-  return cardBody;
 }

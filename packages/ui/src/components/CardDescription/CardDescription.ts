@@ -6,9 +6,8 @@ export function CardDescription({ ...props }: ITypography): HTMLElement {
     "card-description",
     props.className
   ]);
-  const cardDescription = Typography({
+  return Typography({
     ...props,
     className
   });
-  return cardDescription;
 }
