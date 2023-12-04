@@ -1,14 +1,17 @@
-import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBox } from "../Box/index.js";
-import { Button } from "../Button/index.js";
 import { Form } from "../Form/index.js";
+import { Button } from "../Button/index.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
+import { IModalBackdrop } from "./ModalBackdrop.types.js";
 
-export function ModalBackdrop({ 
+export function ModalBackdrop({
   ...props
- }: IBox): HTMLFormElement {
-  const className = mergeClasses(["modal-backdrop", props.className]);
+}: IModalBackdrop = {}): HTMLFormElement {
+  const className = mergeClasses([
+    "modal-backdrop",
+    props.className
+  ]);
 
-  const modalBackdrop = Form({
+  return Form({
     ...props,
     method: "dialog",
     className,
@@ -16,5 +19,4 @@ export function ModalBackdrop({
       children: "close"
     })
   });
-  return modalBackdrop;
 }

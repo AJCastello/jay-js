@@ -1,11 +1,9 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
-
-export type IForm = IBaseElement & Partial<Omit<HTMLFormElement, "style" | "children">>;
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IForm } from "./Form.types.js";
 
 export function Form({ ...props }: IForm): HTMLFormElement {
-  const form = BaseElement<IForm>({
+  return BaseElement<IForm>({
     ...props,
     tag: "form",
   }) as HTMLFormElement;
-  return form;
 }

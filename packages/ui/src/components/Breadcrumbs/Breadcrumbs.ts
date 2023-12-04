@@ -1,11 +1,6 @@
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/Box.js";
-
-export interface IBreadcrumbsExt extends IBox {
- // options
-}
-
-export type IBreadcrumbs = IBreadcrumbsExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+import { IBreadcrumbs } from "./Breadcrumbs.types.js";
 
 export function Breadcrumbs({
   ...props
@@ -15,8 +10,8 @@ export function Breadcrumbs({
     props.className,
   ]);
 
-  return Box({
+  return BaseElement<IBreadcrumbs>({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 }

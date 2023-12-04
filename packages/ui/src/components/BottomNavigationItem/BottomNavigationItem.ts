@@ -1,12 +1,6 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement, IBaseElement } from "../BaseElement/BaseElement.js";
-
-export interface IBottomNavigationItemExt extends IBaseElement {
-  active?: boolean;
-  disabled?: boolean;
-}
-
-export type IBottomNavigationItem = IBottomNavigationItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IBottomNavigationItem } from "./BottomNavigationItem.types.js";
 
 export function BottomNavigationItem({
   active,
@@ -20,7 +14,7 @@ export function BottomNavigationItem({
     props.className
   ]);
 
-  return BaseElement({
+  return BaseElement<IBottomNavigationItem>({
     ...props,
     className
   }) as HTMLDivElement;

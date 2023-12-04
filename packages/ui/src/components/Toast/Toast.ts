@@ -1,23 +1,13 @@
-import { Box  } from "../Box/index.js";
-import { IBaseElement } from "../BaseElement/index.js";
+import { IToast } from "./Toast.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface IToastExt extends IBaseElement {
-  horizontal?: "toast-start" | "toast-center" | "toast-end";
-  vertical?: "toast-top" | "toast-middle" | "toast-bottom";
-  duration?: number;
-  asChild?: boolean;
-  children?: HTMLElement;
-}
-
-export type IToast = IToastExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
 
 export function Toast({
   horizontal = "toast-end",
   vertical = "toast-top",
   asChild = false,
   ...props
-}: IToast): HTMLDivElement {
+}: IToast = {}): HTMLDivElement {
   const className = mergeClasses([
     "toast",
     asChild ? "absolute" : "",
@@ -26,7 +16,7 @@ export function Toast({
     props.className,
   ]);
 
-  const toast = Box({ ...props, className });
+  const toast = BaseElement({ ...props, className }) as HTMLDivElement;
 
   const resizeObserver = new ResizeObserver(entries => {
     if (!toast.firstChild) {

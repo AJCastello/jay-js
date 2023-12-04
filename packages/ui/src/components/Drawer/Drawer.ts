@@ -1,17 +1,12 @@
+import { IDrawer } from "./Drawer.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBaseElement } from "../BaseElement/index.js";
-import { Box } from "../Box/index.js";
-
-export interface IDrawer extends IBaseElement {
-  asChild?: boolean;
-  position?: "top" | "left" | "right" | "bottom";
-}
 
 export function Drawer({
   asChild = false,
   position = "left",
   ...props
-}: IDrawer): HTMLElement {
+}: IDrawer = {}): HTMLDivElement {
 
   const positionClass = {
     left: "justify-start",
@@ -30,10 +25,10 @@ export function Drawer({
     props.className
   ]);
 
-  const drawer = Box({
+  const drawer = BaseElement({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 
   const drawerId = drawer.id;
 

@@ -1,14 +1,14 @@
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { ICardActions } from "./CardActions.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBox, Box } from "../Box/index.js";
 
-export function CardActions({ ...props }: IBox): HTMLElement {
+export function CardActions({ ...props }: ICardActions): HTMLDivElement {
   const className = mergeClasses([
     "card-actions",
     props.className
   ]);
-  const cardActions = Box({
+  return BaseElement<ICardActions>({
     ...props,
     className
-  });
-  return cardActions;
+  }) as HTMLDivElement;
 }

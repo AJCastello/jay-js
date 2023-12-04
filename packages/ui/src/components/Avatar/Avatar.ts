@@ -1,11 +1,6 @@
+import { IAvatar } from "./Avatar.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/Box.js";
-
-export interface IAvatarExt extends IBox {
-  state?: "online" | "offline";
-}
-
-export type IAvatar = IAvatarExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
 
 export function Avatar({
   state,
@@ -17,8 +12,8 @@ export function Avatar({
     props.className,
   ]);
 
-  return Box({
+  return BaseElement<IAvatar>({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 }

@@ -1,20 +1,14 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { ITooltip } from "./Tooltip.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-interface ITooltip extends IBaseElement {
-  tip: string;
-  position?: "tooltip-top" | "tooltip-bottom" | "tooltip-left" | "tooltip-right";
-  forceOpen?: boolean;
-  color?: "tooltip-primary" | "tooltip-secondary" | "tooltip-accent" | "tooltip-info" | "tooltip-success" | "tooltip-warning" | "tooltip-error";
-}
 
 export function Tooltip({
   tip,
+  color,
   position = "tooltip-top",
   forceOpen = false,
-  color,
   ...props
-}: ITooltip) {
+}: ITooltip = {}) {
   const className = mergeClasses([
     "tooltip",
     position,
@@ -29,7 +23,7 @@ export function Tooltip({
     className,
   }) as HTMLDivElement;
 
-  tooltipContainer.setAttribute("data-tip", tip);
+  tooltipContainer.setAttribute("data-tip", tip || "");
 
   return tooltipContainer;
 }

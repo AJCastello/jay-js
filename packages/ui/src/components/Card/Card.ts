@@ -1,16 +1,7 @@
-import { IBaseElement } from "../BaseElement/index.js";
+import { ICard } from "./Card.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { RippleEffect } from "../RippleEffect/index.js";
-import { Box } from "../Box/index.js";
-
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface ICard extends IBaseElement {
-  imagePosition?: "left" | "right";
-  imageFull?: boolean;
-  variant?: "card-bordered";
-  format?: "card-compact" | "card-normal";
-  ripple?: boolean;
-}
 
 export function Card({
   imagePosition,
@@ -30,7 +21,7 @@ export function Card({
     props.className
   ]);
 
-  const cardElement = Box({ ...props, className });
+  const cardElement = BaseElement<ICard>({ ...props, className }) as HTMLDivElement;
 
   ripple && cardElement.addEventListener("click", event => {
     const ripple = RippleEffect(event);

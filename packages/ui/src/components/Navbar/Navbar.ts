@@ -1,11 +1,6 @@
+import { INavbar } from "./Navbar.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/Box.js";
-
-export interface INavbarExt extends IBox {
- // options
-}
-
-export type INavbar = INavbarExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
 
 export function Navbar({
   ...props
@@ -15,8 +10,8 @@ export function Navbar({
     props.className,
   ]);
 
-  return Box({
+  return BaseElement({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 }

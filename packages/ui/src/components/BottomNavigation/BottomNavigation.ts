@@ -1,12 +1,6 @@
-import { IBaseElement } from "../BaseElement/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box } from "../Box/Box.js";
-
-export interface IBottomNavigationExt extends IBaseElement {
-  size?: "btm-nav-xs" | "btm-nav-sm" | "btm-nav-md" | "btm-nav-lg";
-}
-
-export type IBottomNavigation = IBottomNavigationExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+import { IBottomNavigation } from "./BottomNavigation.types.js";
 
 export function BottomNavigation({
   size,
@@ -18,7 +12,7 @@ export function BottomNavigation({
     props.className,
   ]);
 
-  return Box({
+  return BaseElement<IBottomNavigation>({
     ...props,
     className
   }) as HTMLDivElement;;

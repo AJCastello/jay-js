@@ -1,13 +1,6 @@
-import { Box } from "../Box/index.js";
-import { IBaseElement } from "../BaseElement/index.js"; 
+import { IDropdown } from "./Dropdown.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface IDropdown extends IBaseElement {
-  position?: "dropdown-top" | "dropdown-bottom" | "dropdown-left" | "dropdown-right";
-  openOnHover?: boolean;
-  forceOpen?: boolean;
-  toEnd?: boolean;
-}
+import { BaseElement } from "../BaseElement/BaseElement.js";
 
 export function Dropdown({
   position = "dropdown-bottom",
@@ -25,10 +18,8 @@ export function Dropdown({
     props.className,
   ]);
 
-  const dropdownElement = Box({
+  return BaseElement<IDropdown>({
     ...props,
     className,
   }) as HTMLDivElement;
-
-  return dropdownElement;
 }

@@ -1,15 +1,12 @@
-import { Button, IButton } from "../Button/index.js";
-
-export type IIconButton = IButton;
+import { Button } from "../Button/index.js";
+import { IIconButton } from "./IconButton.types.js";
 
 export function IconButton({
   ...props
 }: IIconButton): HTMLButtonElement {
-  const iconButton = Button({
+  return Button({
     ...props,
     type: "button",
     format: "btn-circle",
-  });
-
-  return iconButton;
+  });;
 }

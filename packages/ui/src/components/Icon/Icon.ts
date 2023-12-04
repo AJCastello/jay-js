@@ -1,10 +1,6 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { IIcon } from "./Icon.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface IIcon extends IBaseElement {
-  icon?: string;
-  type?: string;
-}
 
 export function Icon({
   icon,
@@ -16,11 +12,10 @@ export function Icon({
     icon,
     props.className,
   ]);
-  const iconElement = BaseElement({
+
+  return BaseElement({
     tag: "i",
     ...props,
     className,
   });
-
-  return iconElement;
 }

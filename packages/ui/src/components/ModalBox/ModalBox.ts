@@ -1,11 +1,17 @@
+import { IModalBox } from "./ModalBox.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/index.js";
 
-export function ModalBox({ ...props }: IBox): HTMLDivElement {
-  const className = mergeClasses(["modal-box", props.className]);
-  const modalContent = Box({
+export function ModalBox({
+  ...props
+}: IModalBox = {}): HTMLDivElement {
+  const className = mergeClasses([
+    "modal-box",
+    props.className
+  ]);
+
+  return BaseElement<IModalBox>({
     ...props,
     className
-  });
-  return modalContent;
+  }) as HTMLDivElement;
 }

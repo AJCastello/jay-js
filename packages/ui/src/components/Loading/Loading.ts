@@ -1,12 +1,6 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-interface ILoadingExt extends IBaseElement {
-  type?: "loading-spinner" | "loading-dots" | "loading-ring" | "loading-ball" | "loading-bars" | "loading-infinity";
-  size?: "loading-xs" | "loading-sm" | "loading-md" | "loading-lg";
-}
-
-export type ILoading = ILoadingExt & Partial<Omit<HTMLSpanElement, "style">>;
+import { ILoading } from "./Loading.types.js";
 
 export function Loading({
   type = "loading-spinner",
@@ -19,11 +13,10 @@ export function Loading({
     size,
     props.className
   ]);
-  const loadingElement = BaseElement<ILoading>({
+
+  return BaseElement<ILoading>({
     tag: "span",
     ...props,
     className,
   }) as HTMLSpanElement;
-
-  return loadingElement;
 }

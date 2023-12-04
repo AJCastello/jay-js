@@ -1,18 +1,7 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { ISelect } from "./Select.types.js";
 import { Typography } from "../Typography/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface ISelectExt extends IBaseElement {
-  bordered?: boolean;
-  ghost?: boolean;
-  color?: "select-primary" | "select-secondary" | "select-accent" | "select-success" | "select-warning" | "select-info" | "select-error";
-  size?: "select-lg" | "select-md" | "select-sm" | "select-xs";
-  label?: string;
-  labelAlt?: string;
-  helpers?: Array<HTMLElement>;
-}
-
-export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children" | "size">>;
 
 export function Select({
   bordered,
@@ -24,7 +13,7 @@ export function Select({
   helpers,
   value,
   ...props
-}: ISelect) {
+}: ISelect = {}) {
   const className = mergeClasses([
     "select",
     bordered ? "select-bordered" : "",

@@ -1,6 +1,6 @@
-import { Box } from "../Box/Box.js";
+import { IToast } from "../Toast/Toast.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IToast } from "../Toast/Toast.js";
 
 export function ToastContainer({
   horizontal = "toast-end",
@@ -14,7 +14,7 @@ export function ToastContainer({
     props.className,
   ]);
 
-  const toastContainer = Box({ 
+  return BaseElement({ 
     ...props, 
     className,
     dataset: {
@@ -23,7 +23,5 @@ export function ToastContainer({
       duration: duration.toString(),
       asChild: asChild ? "true" : "false",
     },
-  });
-  
-  return toastContainer;
+  }) as HTMLDivElement;
 }

@@ -1,7 +1,6 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export type ILink = IBaseElement & Partial<Omit<HTMLAnchorElement, "style" | "children">>;
+import { ILink } from "./Link.types.js";
 
 export function Link({ ...props }: ILink = {}): HTMLAnchorElement {
   const className = mergeClasses([
@@ -9,11 +8,9 @@ export function Link({ ...props }: ILink = {}): HTMLAnchorElement {
     props.className,
   ]);
 
-  const link = BaseElement<ILink>({
+  return BaseElement<ILink>({
     ...props,
     tag: "a",
-    className 
+    className
   }) as HTMLAnchorElement;
-    
-  return link;
 }
