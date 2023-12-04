@@ -1,0 +1,23 @@
+file-input
+file-input-bordered
+file-input-ghost
+file-input-placeholder
+label
+label-text
+label-text-alt
+absolute
+left-3
+top-1/2
+z-2
+transform
+-translate-y-1/2
+right-3
+file-input-placeholder-label
+bg-base-100
+rounded px-2
+relative
+w-full
+flex
+flex-col
+form-control
+relative
