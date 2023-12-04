@@ -1,5 +1,6 @@
 export type setOptions = {
-  silent: boolean;
+  silent?: boolean;
+  target?: string | Array<string>;
 };
 
 export type StateType<T> = {
