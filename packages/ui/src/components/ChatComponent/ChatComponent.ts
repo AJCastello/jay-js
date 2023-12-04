@@ -1,12 +1,6 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/index.js";
-
-export interface IChatComponentExt extends IBox {
-  component?: "chat-bubble" | "chat-image" | "chat-header" | "chat-footer";
-  color?: "chat-bubble-primary" | "chat-bubble-secondary" | "chat-bubble-accent" | "chat-bubble-info" | "chat-bubble-success" | "chat-bubble-warning" | "chat-bubble-error";
-}
-
-export type IChatComponent = IChatComponentExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IChatComponent } from "./ChatComponent.types.js";
 
 export function ChatComponent({
   color,
@@ -18,8 +12,8 @@ export function ChatComponent({
     props.className,
   ]);
 
-  return Box({
+  return BaseElement({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 }

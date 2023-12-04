@@ -1,14 +1,11 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IInput } from "./Input.types.js";
 
-export type IInput = IBaseElement & Partial<Omit<HTMLInputElement, "style" | "size" | "label">>
-
-export function Input<T>({ 
+export function Input<T>({
   ...props
 }: IInput & T): HTMLInputElement {
-  const listItem = BaseElement<IInput & T>({
+  return BaseElement<IInput & T>({
     ...props,
     tag: "input",
   }) as HTMLInputElement;
-  
-  return listItem;
 }

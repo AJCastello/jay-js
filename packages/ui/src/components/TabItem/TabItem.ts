@@ -1,16 +1,7 @@
-import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBaseElement } from "../BaseElement/BaseElement.js";
-import { Input } from "../Input/Input.js";
 import { Link } from "../Link/Link.js";
-
-interface ITabItemExt extends IBaseElement {
-  size?: "tab-xs" | "tab-sm" | "tab-md" | "tab-lg";
-  type?: "input" | "link";
-  active?: boolean;
-  disabled?: boolean;
-}
-
-export type ITabItem = ITabItemExt & Partial<Omit<HTMLAnchorElement, "style" | "children">>;
+import { Input } from "../Input/Input.js";
+import { ITabItem } from "./TabItem.types.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export function TabItem({
   size,
@@ -18,7 +9,7 @@ export function TabItem({
   type,
   disabled,
   ...props
-}: ITabItem): HTMLAnchorElement | HTMLInputElement {
+}: ITabItem = {}): HTMLAnchorElement | HTMLInputElement {
   const className = mergeClasses([
     "tab",
     active ? "tab-active" : "",

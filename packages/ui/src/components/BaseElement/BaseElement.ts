@@ -1,22 +1,5 @@
-import { IRefObject } from "../../hooks/useRef.js";
 import { uniKey } from "../../utils/uniKey.js";
-
-type ListenerKeys = keyof GlobalEventHandlersEventMap;
-
-export type Listener = {
-  [K in ListenerKeys]?: (this: GlobalEventHandlers, ev: GlobalEventHandlersEventMap[K]) => any
-}
-
-export interface IBaseElement extends Partial<Omit<HTMLElement, "style" | "children">> {
-  id?: string;
-  tag?: string;
-  className?: string;
-  listeners?: Listener;
-  ref?: IRefObject<HTMLElement>;
-  dataset?: Partial<DOMStringMap>;
-  style?: Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
-  children?: (string | Node) | (string | Node)[]
-}
+import { IBaseElement } from "./BaseElement.types.js";
 
 export function BaseElement<T>({
   id,

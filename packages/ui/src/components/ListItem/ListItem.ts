@@ -1,14 +1,11 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { IListItem } from "./ListItem.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 
-export type IListItem = IBaseElement & Partial<Omit<HTMLUListElement, "style" | "children">>
-
-export function ListItem({ 
+export function ListItem({
   ...props
-}: IListItem): HTMLUListElement {
-  const listItem = BaseElement<IListItem>({
+}: IListItem = {}): HTMLLIElement {
+  return BaseElement<IListItem>({
     tag: "li",
     ...props
-  }) as HTMLUListElement;
-  
-  return listItem;
+  }) as HTMLLIElement;
 }

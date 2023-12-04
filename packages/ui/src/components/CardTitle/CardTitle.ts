@@ -1,14 +1,15 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { ITypography, Typography } from "../Typography/index.js";
+import { Typography } from "../Typography/index.js";
+import { ICardTitle } from "./CardTitle.types.js";
 
-export function CardTitle({ ...props }: ITypography): HTMLElement {
+export function CardTitle({ ...props }: ICardTitle): HTMLElement {
   const className = mergeClasses([
     "card-title",
     props.className
   ]);
-  const cardTitle = Typography({
+  
+  return Typography({
     ...props,
     className
   });
-  return cardTitle;
 }

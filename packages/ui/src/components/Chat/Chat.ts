@@ -1,11 +1,6 @@
+import { IChat } from "./Chat.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/Box.js";
-
-export interface IChatExt extends IBox {
-  position?: "chat-start" | "chat-end";
-}
-
-export type IChat = IChatExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+import { BaseElement } from "../BaseElement/BaseElement.js";
 
 export function Chat({
   position = "chat-start",
@@ -17,8 +12,8 @@ export function Chat({
     props.className,
   ]);
 
-  return Box({
+  return BaseElement<IChat>({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 }

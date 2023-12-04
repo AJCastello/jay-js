@@ -1,18 +1,14 @@
-import { Box, IBox } from "../Box/index.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface IDivider extends IBox {
-  orientation?: "divider-vertical" | "divider-horizontal";
-};
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IDivider } from "./Divider.types.js";
 
 export function Divider({ orientation, ...props }: IDivider = {}): HTMLDivElement {
-  const divider = Box({
+  return BaseElement<IDivider>({
     ...props,
     className: mergeClasses([
       "divider",
       orientation,
       props.className
     ])
-  });
-  return divider;
+  }) as HTMLDivElement;
 }

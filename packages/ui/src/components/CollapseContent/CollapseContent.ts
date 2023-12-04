@@ -1,8 +1,6 @@
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBaseElement } from "../BaseElement/index.js";
-import { Box } from "../Box/index.js";
-
-export type ICollapseContent = IBaseElement;
+import { ICollapseContent } from "./CollapseContent.types.js";
 
 export function CollapseContent({
   ...props
@@ -12,8 +10,8 @@ export function CollapseContent({
     props.className
   ]);
 
-  return Box({
+  return BaseElement({
     ...props,
     className
-  }) 
+  }) as HTMLDivElement;
 }

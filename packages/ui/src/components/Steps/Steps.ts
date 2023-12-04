@@ -1,24 +1,19 @@
-import { List, IList } from "../List/List.js";
+import { List } from "../List/List.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-interface ISteps extends IList {
-  orientation?: "steps-vertical" | "steps-horizontal";
-}
+import { ISteps } from "./Steps.types.js";
 
 export function Steps({
   orientation = "steps-horizontal",
   ...props
-}: ISteps): HTMLUListElement {
+}: ISteps = {}): HTMLUListElement {
   const className = mergeClasses([
     "steps",
     orientation,
     props.className,
   ]);
 
-  const stepList = List({
+  return List({
     ...props,
     className,
   });
-
-  return stepList;
 }

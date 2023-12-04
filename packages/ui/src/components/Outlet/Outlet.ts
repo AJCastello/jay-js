@@ -1,12 +1,12 @@
-import { Box } from "../Box/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 
-export function Outlet() {
-  return Box({
+export function Outlet(): HTMLDivElement {
+  return BaseElement({
     style: {
       display: "contents"
     },
     dataset: {
       "router": "outlet"
     }
-  });
+  }) as HTMLDivElement;
 }

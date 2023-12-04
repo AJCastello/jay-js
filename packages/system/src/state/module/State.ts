@@ -16,6 +16,25 @@ export const State = <T>(data: T): StateType<T> => {
       if (state.effect.size === 0) {
         return;
       }
+
+      if (options?.target) {
+        if (Array.isArray(options.target)) {
+          options.target.forEach((item: string) => {
+            const effect = state.effect.get(item);
+            if (effect) {
+              effect(data);
+            }
+          });
+          return;
+        }
+
+        const effect = state.effect.get(options.target);
+        if (effect) {
+          effect(data);
+        }
+        return;
+      }
+
       state.effect.forEach((item: (arg0: T) => any) => item(data));
     },
     get: (callback?: (data: T) => void): T => {

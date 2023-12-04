@@ -1,1 +1,2 @@
-export { CollapseContent } from "./CollapseContent.js";
+export * from "./CollapseContent.js";
+export * from "./CollapseContent.types.js";

@@ -1,22 +1,19 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { IModal } from "./Modal.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface IModalExt extends IBaseElement {
-  position?: "modal-top" | "modal-bottom" | "modal-middle";
-}
-
-export type IModal = IModalExt & Partial<Omit<HTMLDialogElement, "style" | "children">>;
 
 export function Modal({
   position,
   ...props
-}: IModal): HTMLDialogElement {
-  const className = mergeClasses(["modal", props.className]);
-  const modal = BaseElement({
+}: IModal = {}): HTMLDialogElement {
+  const className = mergeClasses([
+    "modal",
+    props.className
+  ]);
+
+  return BaseElement<IModal>({
     ...props,
     tag: "dialog",
     className
   }) as HTMLDialogElement;
-
-  return modal;
 }

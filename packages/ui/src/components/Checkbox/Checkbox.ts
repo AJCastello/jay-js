@@ -1,20 +1,8 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { Box } from "../Box/index.js";
 import { Input } from "../Input/index.js";
-
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-export interface ICheckboxExt extends IBaseElement {
-  value?: string;
-  label?: string | Node | (string | Node)[];
-  checked?: boolean;
-  color?: "checkbox-primary" | "checkbox-secondary" | "checkbox-accent" | "checkbox-success" | "checkbox-warning" | "checkbox-info" | "checkbox-error";
-  size?: "checkbox-lg" | "checkbox-md" | "checkbox-sm" | "checkbox-xs";
-  position?: "checkbox-before" | "checkbox-after";
-  formControl?: IBaseElement;
-}
-
-export type ICheckbox = ICheckboxExt & Partial<Omit<HTMLInputElement, "style" | "size" | "label">>;
+import { ICheckbox } from "./Checkbox.types.js";
 
 export function Checkbox({
   label,

@@ -1,10 +1,9 @@
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBaseElement } from "../BaseElement/index.js";
-import { Box } from "../Box/index.js";
-
-export type ICollapseTitle = IBaseElement;
+import { ICollapseTitle } from "./CollapseTitle.types.js";
 
 export function CollapseTitle({
+  summary,
   ...props
 }: ICollapseTitle = {}): HTMLDivElement {
   const className = mergeClasses([
@@ -12,8 +11,9 @@ export function CollapseTitle({
     props.className
   ]);
 
-  return Box({
+  return BaseElement({
+    tag: summary ? "details" : "div",
     ...props,
     className
-  }) 
+  }) as HTMLDivElement;
 }

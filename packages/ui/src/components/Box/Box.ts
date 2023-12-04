@@ -1,12 +1,10 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
-
-export type IBox = IBaseElement
+import { IBox } from "./Box.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 
 export function Box({
   ...props
 }: IBox = {}) {
-  return BaseElement({
-    tag: "div",
+  return BaseElement<IBox>({
     ...props
   }) as HTMLDivElement;
 }

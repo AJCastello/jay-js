@@ -1,8 +1,22 @@
-import { Box } from "../Box/index.js";
-import { IBaseElement } from "../BaseElement/index.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IResizableSplitter } from "./ResizableSplitter.types.js";
 
-export interface IResizableSplitter extends IBaseElement {
-  direction?: "horizontal" | "vertical";
+export function ResizableSplitter({
+  direction = "vertical",
+  ...props
+}: IResizableSplitter = {}) : HTMLDivElement {
+  const splitter = BaseElement({
+    className: "bg-base-300 flex flex-shrink-0",
+    style: {
+      cursor: direction === "horizontal" ? "row-resize" : "col-resize",
+      width: direction === "horizontal" ? "100%" : "0.25rem",
+      height: direction === "horizontal" ? "0.25rem" : "100%",
+    },
+    ...props,
+  }) as HTMLDivElement;
+
+  bindColumnResizeHandler(splitter, direction);
+  return splitter;
 }
 
 function bindColumnResizeHandler(
@@ -25,7 +39,7 @@ function bindColumnResizeHandler(
     if (!isDragging) return;
     e.preventDefault();
     const minColumnSize = 50;
-    
+
     if (direction === "horizontal") {
       const parent = handle.parentElement;
       const mousePosition = e.clientY;
@@ -46,21 +60,4 @@ function bindColumnResizeHandler(
   document.addEventListener("mouseup", () => {
     isDragging = false;
   });
-}
-
-export function ResizableSplitter({
-  direction = "vertical",
-  ...props
-}: IResizableSplitter = {}) {
-  const splitter = Box({
-    className: "bg-base-300 flex flex-shrink-0",
-    style: {
-      cursor: direction === "horizontal" ? "row-resize" : "col-resize",
-      width: direction === "horizontal" ? "100%" : "0.25rem",
-      height: direction === "horizontal" ? "0.25rem" : "100%",
-    },
-  });
-
-  bindColumnResizeHandler(splitter, direction);
-  return splitter;
 }

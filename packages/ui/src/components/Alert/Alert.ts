@@ -1,12 +1,6 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { IAlert } from "./Alert.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-
-type AlertSeverity = "alert-error" | "alert-warning" | "alert-info" | "alert-success";
-
-export interface IAlert extends IBaseElement {
-  severity?: AlertSeverity;
-  className?: string;
-}
 
 export function Alert({
   severity = "alert-info",
@@ -18,7 +12,7 @@ export function Alert({
     props.className,
   ]);
 
-  return BaseElement({
+  return BaseElement<IAlert>({
     ...props,
     className,
   }) as HTMLDivElement;

@@ -1,14 +1,11 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/index.js";
-
-interface IDrawerContent extends IBox {
-  position?: "top" | "left" | "right" | "bottom";
-}
+import { IDrawerContent } from "./DrawerContent.types.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
 
 export function DrawerContent({
   position = "left",
   ...props
-}: IDrawerContent): HTMLElement {
+}: IDrawerContent = {}): HTMLDivElement {
   const translateClass = {
     left: "-translate-x-full",
     right: "translate-x-full",
@@ -30,8 +27,8 @@ export function DrawerContent({
     props.className
   ]);
 
-  return Box({
+  return BaseElement<IDrawerContent>({
     ...props,
     className
-  });
+  }) as HTMLDivElement;
 }

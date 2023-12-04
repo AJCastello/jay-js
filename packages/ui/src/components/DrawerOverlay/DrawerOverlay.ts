@@ -1,14 +1,11 @@
 import { useDrawer } from "../../hooks/useDrawer.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Box, IBox } from "../Box/index.js";
-
-interface IDrawerOverlay extends IBox {
-  for: string;
-}
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { IDrawerOverlay } from "./DrawerOverlay.types.js";
 
 export function DrawerOverlay({
   ...props
-}: IDrawerOverlay ): HTMLDivElement {
+}: IDrawerOverlay): HTMLDivElement {
   const className = mergeClasses([
     "transition-opacity",
     "ease-in-out",
@@ -23,12 +20,12 @@ export function DrawerOverlay({
 
   const drawerToggle = useDrawer({ for: props.for });
 
-  return Box({
+  return BaseElement<IDrawerOverlay>({
     ...props,
     className,
     dataset: {
       drawerFor: props.for
     },
     onclick: drawerToggle
-  });
+  }) as HTMLDivElement;
 }

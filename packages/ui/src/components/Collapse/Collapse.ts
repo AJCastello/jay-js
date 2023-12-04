@@ -1,19 +1,14 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBaseElement } from "../BaseElement/index.js";
-import { Box } from "../Box/index.js";
-
-export interface ICollapse extends IBaseElement {
-  variant?: "collapse-arrow" | "collapse-plus";
-  forceOpen?: boolean;
-  forceClose?: boolean;
-}
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { ICollapse } from "./Collapse.types.js";
 
 export function Collapse({
+  details,
   variant,
   forceOpen,
   forceClose,
   ...props
-}: ICollapse = {}): HTMLDivElement {
+}: ICollapse = {}): HTMLDivElement | HTMLDetailsElement {
   const className = mergeClasses([
     "collapse",
     variant,
@@ -22,8 +17,9 @@ export function Collapse({
     props.className
   ]);
 
-  return Box({
+  return BaseElement<ICollapse>({
+    tag: details ? "details" : "div",
     ...props,
     className
-  }) 
+  }) as HTMLDivElement | HTMLDetailsElement 
 }

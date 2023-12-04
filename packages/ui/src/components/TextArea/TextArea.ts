@@ -1,23 +1,10 @@
-import { Box } from "../Box/Box.js";
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
-import { Typography } from "../Typography/Typography.js";
-
-import { mergeClasses } from "../../utils/mergeClasses.js";
-
 import "./TextArea.style.css";
 
-export interface ITextareaExt extends IBaseElement {
-  label?: string;
-  labelAlt?: string;
-  helpers?: Array<HTMLElement>;
-  placeholder?: string;
-  bordered?: boolean;
-  ghost?: boolean;
-  color?: "textarea-primary" | "textarea-secondary" | "textarea-accent" | "textarea-success" | "textarea-warning" | "textarea-info" | "textarea-error";
-  size?: "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
-}
-
-export type ITextarea = ITextareaExt & Partial<Omit<HTMLTextAreaElement, "style" | "children">>;
+import { Box } from "../Box/Box.js";
+import { ITextarea } from "./TextArea.types.js";
+import { Typography } from "../Typography/Typography.js";
+import { BaseElement } from "../BaseElement/BaseElement.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
 export function TextArea({
   value,
@@ -30,7 +17,7 @@ export function TextArea({
   color,
   size,
   ...props
-}: ITextarea): HTMLDivElement {
+}: ITextarea = {}): HTMLDivElement {
 
   const className = mergeClasses([
     "textarea",
