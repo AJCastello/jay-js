@@ -1,9 +1,8 @@
+import "./RippleEffect.style.css";
 import { BaseElement } from "../BaseElement/BaseElement.js";
 
-import "./RippleEffect.style.css";
-
 export function RippleEffect(event: MouseEvent): HTMLSpanElement {
-    if ("layerX" in event && "layerY" in event) {
+  if ("layerX" in event && "layerY" in event) {
     const x = event.layerX;
     const y = event.layerY;
 

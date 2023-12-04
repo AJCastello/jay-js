@@ -1,8 +1,3 @@
-import { IBox } from "../Box/Box.js";
+import { IBaseElement } from "../BaseElement/BaseElement.types.js";
 
-export interface IDiffExt extends IBox {
- // options
-}
-
-export type IDiff = IDiffExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
-
+export type IDiff = IBaseElement & Partial<Omit<HTMLDivElement, "style" | "children">>;
