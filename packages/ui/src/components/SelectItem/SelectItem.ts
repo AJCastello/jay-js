@@ -1,14 +1,13 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
+import { ISelectItem } from "./SelectItem.types.js";
+import { BaseElement } from "../BaseElement/index.js";
 
-export type ISelectItem = IBaseElement & Partial<Omit<HTMLOptionElement, "style" | "children">>
-
-export function SelectItem({ 
+export function SelectItem({
   ...props
-}: ISelectItem): HTMLOptionElement {
+}: ISelectItem = {}): HTMLOptionElement {
   const SelectItem = BaseElement<ISelectItem>({
     tag: "option",
     ...props
   }) as HTMLOptionElement;
-  
+
   return SelectItem;
 }

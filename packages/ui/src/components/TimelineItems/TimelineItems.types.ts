@@ -1,8 +1,4 @@
-import { IBox } from "../Box/Box.js";
+import { IListItem } from "../ListItem/ListItem.types.js";
 
-export interface ITimelineItemsExt extends IBox {
-  /** */
-}
-
-export type ITimelineItems = ITimelineItemsExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+export type ITimelineItems = IListItem;
 

@@ -1,8 +1,7 @@
-import { IBox } from "../Box/Box.js";
+import { IBaseElement } from "../BaseElement/BaseElement.types.js";
 
-export interface IDiffItemExt extends IBox {
+export interface IDiffItemExt extends IBaseElement {
   side?: "left" | "right";
 }
 
-export type IDiffItem = IDiffItemExt &
-  Partial<Omit<HTMLDivElement, "style" | "children">>;
+export type IDiffItem = IDiffItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;

@@ -1,4 +1,5 @@
-import { IToast, Toast } from "../components/Toast/Toast.js";
+import { Toast } from "../components/Toast/Toast.js";
+import { IToast } from "../components/Toast/Toast.types.js";
 
 interface IUseToast {
   for?: string;
@@ -65,7 +66,7 @@ export function useToast({
       vertical,
       horizontal,
       children,
-    })
+    });
 
     if (children) {
       const currentNode = children as HTMLElement;
@@ -75,5 +76,5 @@ export function useToast({
     }
 
     toastContainer.appendChild(newToast);
-  }
+  };
 }
