@@ -1,35 +1,11 @@
-import { BaseElement, IBaseElement } from "../BaseElement/index.js";
-import { Typography } from "../Typography/Typography.js";
-import { Input } from "../Input/Input.js";
 import { Box } from "../Box/Box.js";
-
+import { Input } from "../Input/Input.js";
+import { IFileInput } from "./FileInput.types.js";
+import { BaseElement } from "../BaseElement/index.js";
+import { Typography } from "../Typography/Typography.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 
 import "./FileInput.style.css";
-
-export interface IFileInputExt extends IBaseElement {
-  label?: string;
-  labelAlt?: string;
-  helpers?: Array<HTMLElement>;
-  bordered?: boolean;
-  ghost?: boolean;
-  color?:
-    | "file-input-primary"
-    | "file-input-secondary"
-    | "file-input-accent"
-    | "file-input-success"
-    | "file-input-warning"
-    | "file-input-info"
-    | "file-input-error";
-  inputSize?:
-    | "file-input-lg"
-    | "file-input-md"
-    | "file-input-sm"
-    | "file-input-xs";
-}
-
-export type IFileInput = IFileInputExt &
-  Partial<Omit<HTMLInputElement, "style" | "size" | "label">>;
 
 export function FileInput({
   label,
