@@ -1,6 +1,6 @@
-import { IBox } from "../Box/Box.types.js";
+import { IBaseElement } from "../BaseElement/BaseElement.types.js";
 
-export interface IAvatarExt extends IBox {
+export interface IAvatarExt extends IBaseElement {
   state?: "online" | "offline";
 }
 
