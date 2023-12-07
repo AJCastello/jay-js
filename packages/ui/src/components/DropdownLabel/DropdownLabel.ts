@@ -1,6 +1,6 @@
 import { ITypography, Typography } from "../Typography/index.js";
 
-export function DropdownLabel({ ...props }: ITypography): HTMLLabelElement {
+export function DropdownLabel({ ...props }: ITypography<"label">): HTMLLabelElement {
   return Typography({
     ...props,
     tabIndex: 0,
