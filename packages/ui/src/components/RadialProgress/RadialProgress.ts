@@ -20,17 +20,17 @@ export function RadialProgress({
   }) as HTMLDivElement; 
   
   if(value){
-    const currentStyle = element.getAttribute("style");
+    const currentStyle = element.getAttribute("style") ?? "";
     element.setAttribute("style", `${currentStyle} --value: ${value};`);
   }
 
   if(size){
-    const currentStyle = element.getAttribute("style");
+    const currentStyle = element.getAttribute("style") ?? "";
     element.setAttribute("style", `${currentStyle} --size: ${size};`);
   }
 
   if(thickness){
-    const currentStyle = element.getAttribute("style");
+    const currentStyle = element.getAttribute("style") ?? "";
     element.setAttribute("style", `${currentStyle} --thickness: ${thickness};`);
   }
   
