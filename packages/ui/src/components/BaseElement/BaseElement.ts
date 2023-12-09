@@ -1,7 +1,7 @@
 import { uniKey } from "../../utils/uniKey.js";
-import { IBaseElement } from "./BaseElement.types.js";
+import { IBase, TBaseMap, TBaseVariants } from "./BaseElement.types.js";
 
-export function BaseElement<T>({
+export function Base<T extends TBaseVariants>({
   id,
   tag,
   ref,
@@ -11,39 +11,40 @@ export function BaseElement<T>({
   className,
   listeners,
   ...props
-}: IBaseElement & T): HTMLElement {
-  const baseElement = document.createElement(tag || "div");
+}: IBase<T>): TBaseMap[T] {
+  tag
+  const base = document.createElement(tag || "div");
 
-  ref && (ref.current = baseElement);
+  ref && (ref.current = base);
 
-  className && (baseElement.className = className);
+  className && (base.className = className);
 
-  id ? baseElement.id = id : baseElement.id = uniKey();
+  id ? base.id = id : base.id = uniKey();
 
   listeners && Object.entries(listeners).forEach(([key, value]) => {
-    baseElement.addEventListener(key, value as EventListener);
+    base.addEventListener(key, value as EventListener);
   });
 
   style && Object.entries(style).forEach(([key, value]: [string, any]) => {
     if (key === "parentRule" || key === "length") return;
-    baseElement.style[key as keyof IBaseElement["style"]] = value;
+    base.style[key as keyof IBase["style"]] = value;
   });
 
   dataset && Object.entries(dataset).forEach(([key, value]) => {
-    baseElement.dataset[key] = value as string;
+    base.dataset[key] = value as string;
   });
 
   if (children) {
     if (Array.isArray(children)) {
-      baseElement.append(...children);
+      base.append(...children);
     } else {
-      baseElement.append(children);
+      base.append(children);
     }
   }
 
   props && Object.entries(props).forEach(([key, value]) => {
     try {
-      (baseElement as any)[key] = value;
+      (base as any)[key] = value;
     } catch (error) {
       if (error instanceof TypeError) {
         console.warn(`JayJS: Cannot set property '${key}' of type '${typeof value}' to '${value}'.`);
@@ -52,5 +53,9 @@ export function BaseElement<T>({
     }
   });
 
-  return baseElement;
+  return base as TBaseMap[T];
 }
+
+const div = Base({
+  tag: "blockquote"
+});
