@@ -138,19 +138,17 @@ export type TBaseMap = {
   //[key: string]: HTMLElement;
 }
 
-export type TBaseVariants = keyof TBaseMap;
+export type TBaseVariants = keyof HTMLElementTagNameMap
 
 export type IBase<T extends TBaseVariants> = {
   id?: string;
-  tag?: T | "div";
+  tag?: T; // | HTMLDivElement["tagName"];
   className?: string;
   listeners?: Listener;
   ref?: IRefObject<HTMLElement>;
   dataset?: Partial<DOMStringMap>;
   style?: Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
   children?: (string | Node) | (string | Node)[]
-} & Partial<Omit<TBaseMap[T], "children" | "style">>; 
-
-//export type IBase<T extends TBaseVariants> = TBase<T>;
+} & Partial<Omit<HTMLElementTagNameMap[T], "children" | "style">>; 
 
 // TODO: Check elements that omits sizes and rename it

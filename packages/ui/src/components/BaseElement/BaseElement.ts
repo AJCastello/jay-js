@@ -1,9 +1,12 @@
 import { uniKey } from "../../utils/uniKey.js";
-import { IBase, TBaseMap, TBaseVariants } from "./BaseElement.types.js";
+import { IBase, TBaseVariants } from "./BaseElement.types.js";
 
-export function Base<T extends TBaseVariants>({
+// export function Base(): HTMLDivElement;
+// export function Base<T extends TBaseVariants>({ }: Omit<IBase<T>, "tagName">): HTMLDivElement;
+
+export function Base<T extends TBaseVariants = "div" >({
   id,
-  tag,
+  tag = "div" as T,
   ref,
   style,
   children,
@@ -11,9 +14,9 @@ export function Base<T extends TBaseVariants>({
   className,
   listeners,
   ...props
-}: IBase<T>): TBaseMap[T] {
-  tag
-  const base = document.createElement(tag || "div");
+}: IBase<T> = {}) {
+
+  const base = document.createElement(tag);
 
   ref && (ref.current = base);
 
@@ -27,7 +30,7 @@ export function Base<T extends TBaseVariants>({
 
   style && Object.entries(style).forEach(([key, value]: [string, any]) => {
     if (key === "parentRule" || key === "length") return;
-    base.style[key as keyof IBase["style"]] = value;
+    base.style[key as keyof Omit<CSSStyleDeclaration, "parentRule" | "length">] = value;
   });
 
   dataset && Object.entries(dataset).forEach(([key, value]) => {
@@ -53,9 +56,14 @@ export function Base<T extends TBaseVariants>({
     }
   });
 
-  return base as TBaseMap[T];
+  return base;
 }
 
-const div = Base({
-  tag: "blockquote"
+const div = Base();
+const div2 = Base({});
+
+const h1 = Base({ tag: "" });
+const label = Base({
+  tag: "label",
+  htmlFor: "test",
 });
