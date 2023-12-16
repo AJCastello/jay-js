@@ -1,7 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface INavbarComponentExt extends IBaseElement {
-    component?: "navbar-start" | "navbar-center" | "navbar-end";
-}
-
-export type INavbarComponent = INavbarComponentExt &  Partial<Omit<HTMLDivElement, "style" | "children">>;
+export type TNavbarComponent<T extends TBaseTagMap> = {
+  component?: "navbar-start" | "navbar-center" | "navbar-end";
+} & TBase<T>;

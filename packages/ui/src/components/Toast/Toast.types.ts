@@ -1,11 +1,9 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IToastExt extends IBaseElement {
+export type TToast<T extends TBaseTagMap> = {
   horizontal?: "toast-start" | "toast-center" | "toast-end";
   vertical?: "toast-top" | "toast-middle" | "toast-bottom";
   duration?: number;
   asChild?: boolean;
   children?: HTMLElement;
-}
-
-export type IToast = IToastExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

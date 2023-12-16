@@ -1,16 +1,19 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TLink } from "./Link.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { ILink } from "./Link.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Link({ ...props }: ILink = {}): HTMLAnchorElement {
+export function Link<T extends TBaseTagMap = "a">({
+  ...props
+}: TLink<T> = { tag: "a" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "link",
     props.className,
   ]);
 
-  return BaseElement<ILink>({
+  return Base({
     ...props,
     tag: "a",
-    className
-  }) as HTMLAnchorElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

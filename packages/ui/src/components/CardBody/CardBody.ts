@@ -1,15 +1,18 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { ICardBody } from "./CardBody.types.js";
+import { Base } from "../Base/Base.js";
+import { TCardBody } from "./CardBody.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function CardBody({ ...props }: ICardBody): HTMLDivElement {
+export function CardBody<T extends TBaseTagMap = "div">({
+  ...props
+}: TCardBody<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "card-body",
-    props.className
+    props.className,
   ]);
-  
-  return BaseElement<ICardBody>({
+
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

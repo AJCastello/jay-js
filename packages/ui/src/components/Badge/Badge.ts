@@ -1,13 +1,14 @@
 import { IBadge } from "./Badge.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Badge({
+export function Badge<T extends TBaseTagMap = "div">({
   variant,
   color,
   size,
   ...props
-}: IBadge = {}): HTMLSpanElement {
+}: IBadge<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "badge",
     variant,
@@ -16,9 +17,11 @@ export function Badge({
     props.className,
   ]);
 
-  return BaseElement<IBadge>({
+  return Base({
     tag: "span",
     ...props,
     className
-  }) as HTMLSpanElement;
+  }) as HTMLElementTagNameMap[T];
 }
+
+  

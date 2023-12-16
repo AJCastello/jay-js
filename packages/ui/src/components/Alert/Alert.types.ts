@@ -1,8 +1,7 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
 type AlertSeverity = "alert-error" | "alert-warning" | "alert-info" | "alert-success";
 
-export interface IAlert extends IBaseElement {
+export type TAlert<T extends TBaseTagMap> = {
   severity?: AlertSeverity;
-  className?: string;
-}
+} & TBase<T>;

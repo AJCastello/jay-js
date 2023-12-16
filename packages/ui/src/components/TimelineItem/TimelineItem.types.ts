@@ -1,8 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ITimelineItemExt extends IBaseElement {
+export type ITimelineItem<T extends TBaseTagMap> = {
   component?: "timeline-start" | "timeline-middle" | "timeline-end";
   boxed?: boolean;
-}
-
-export type ITimelineItem = ITimelineItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

@@ -1,7 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IModalExt extends IBaseElement {
+export type TModal<T extends TBaseTagMap> = {
   position?: "modal-top" | "modal-bottom" | "modal-middle";
-}
-
-export type IModal = IModalExt & Partial<Omit<HTMLDialogElement, "style" | "children">>;
+} & TBase<T>;

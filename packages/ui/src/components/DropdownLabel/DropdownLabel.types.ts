@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IDropdownLabel = IBaseElement & Partial<Omit<HTMLDivElement, "style">>;
+export type TDropdownLabel<T extends TBaseTagMap> = TBase<T>;

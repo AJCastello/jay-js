@@ -1,5 +1,5 @@
 import { Toast } from "../components/Toast/Toast.js";
-import { IToast } from "../components/Toast/Toast.types.js";
+import { TToast } from "../components/Toast/Toast.types.js";
 
 interface IUseToast {
   for?: string;
@@ -21,14 +21,14 @@ export function useToast({
     horizontal,
     children,
     ...props
-  }: IToast) {
+  }: TToast<"div">) {
     const toastSettings = (toastContainer as HTMLDivElement).dataset;
 
     if (!vertical) {
-      vertical = (toastSettings.vertical as IToast["vertical"]) || "toast-top";
+      vertical = (toastSettings.vertical as TToast<"div">["vertical"]) || "toast-top";
     }
     if (!horizontal) {
-      horizontal = (toastSettings.horizontal as IToast["horizontal"]) || "toast-end";
+      horizontal = (toastSettings.horizontal as TToast<"div">["horizontal"]) || "toast-end";
     }
     if (!duration) {
       duration = Number(toastSettings.duration) || 5000;

@@ -1,12 +1,12 @@
 import "./RippleEffect.style.css";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 
 export function RippleEffect(event: MouseEvent): HTMLSpanElement {
   if ("layerX" in event && "layerY" in event) {
     const x = event.layerX;
     const y = event.layerY;
 
-    const circle = BaseElement({
+    const circle = Base({
       tag: "span",
       className: "ripple-effect",
       style: {
@@ -22,7 +22,7 @@ export function RippleEffect(event: MouseEvent): HTMLSpanElement {
     return circle;
   }
   console.warn("RippleEffect: invalid event");
-  return BaseElement({
+  return Base({
     tag: "span"
   }) as HTMLSpanElement;
 }

@@ -1,11 +1,12 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IInput } from "./Input.types.js";
+import { Base } from "../Base/Base.js";
+import { TInput } from "./Input.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Input<T>({
+export function Input<T extends TBaseTagMap = "input">({
   ...props
-}: IInput & T): HTMLInputElement {
-  return BaseElement<IInput & T>({
+}: TInput<T> = { tag: "input"}): HTMLElementTagNameMap[T] {
+  return Base({
     ...props,
     tag: "input",
-  }) as HTMLInputElement;
+  }) as HTMLElementTagNameMap[T];
 }

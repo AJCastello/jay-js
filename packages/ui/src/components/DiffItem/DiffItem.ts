@@ -1,15 +1,19 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IDiffItem } from "./DiffItem.types.js";
+import { Base } from "../Base/Base.js";
+import { TDiffItem } from "./DiffItem.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function DiffItem({ side, ...props }: IDiffItem = {}): HTMLDivElement {
+export function DiffItem<T extends TBaseTagMap = "div">({
+  side,
+  ...props
+}: TDiffItem<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
-    side === "left" ? "diff-item-1" : "diff-item-2",
+    side === "left" ? "diff-left" : "diff-right",
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
     className,
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

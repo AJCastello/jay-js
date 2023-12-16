@@ -1,5 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IKbd extends IBaseElement {
+export type TKbd<T extends TBaseTagMap> = {
   size?: "kbd-lg" | "kbd-md" | "kbd-sm" | "kbd-xs";
-}
+} & TBase<T>;

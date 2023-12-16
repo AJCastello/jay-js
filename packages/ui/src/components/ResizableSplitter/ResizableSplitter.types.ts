@@ -1,5 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
-
-export interface IResizableSplitter extends IBaseElement {
+export interface IResizableSplitter {
   direction?: "horizontal" | "vertical";
 }

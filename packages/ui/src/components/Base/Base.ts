@@ -1,12 +1,9 @@
 import { uniKey } from "../../utils/uniKey.js";
-import { IBase, TBaseVariants } from "./BaseElement.types.js";
+import { TBase, TBaseElement, TBaseTagMap, TStyle } from "./Base.types.js";
 
-// export function Base(): HTMLDivElement;
-// export function Base<T extends TBaseVariants>({ }: Omit<IBase<T>, "tagName">): HTMLDivElement;
-
-export function Base<T extends TBaseVariants = "div" >({
+export function Base<T extends TBaseTagMap = "div">({ 
   id,
-  tag = "div" as T,
+  tag,
   ref,
   style,
   children,
@@ -14,9 +11,9 @@ export function Base<T extends TBaseVariants = "div" >({
   className,
   listeners,
   ...props
-}: IBase<T> = {}) {
+}: TBase<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
 
-  const base = document.createElement(tag);
+  const base = document.createElement(tag || "div");
 
   ref && (ref.current = base);
 
@@ -30,7 +27,7 @@ export function Base<T extends TBaseVariants = "div" >({
 
   style && Object.entries(style).forEach(([key, value]: [string, any]) => {
     if (key === "parentRule" || key === "length") return;
-    base.style[key as keyof Omit<CSSStyleDeclaration, "parentRule" | "length">] = value;
+    base.style[key as keyof TStyle] = value;
   });
 
   dataset && Object.entries(dataset).forEach(([key, value]) => {
@@ -50,20 +47,11 @@ export function Base<T extends TBaseVariants = "div" >({
       (base as any)[key] = value;
     } catch (error) {
       if (error instanceof TypeError) {
-        console.warn(`JayJS: Cannot set property '${key}' of type '${typeof value}' to '${value}'.`);
+        console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
         throw error;
       }
     }
   });
 
-  return base;
+  return base as HTMLElementTagNameMap[T];
 }
-
-const div = Base();
-const div2 = Base({});
-
-const h1 = Base({ tag: "" });
-const label = Base({
-  tag: "label",
-  htmlFor: "test",
-});

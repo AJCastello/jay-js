@@ -1,22 +1,22 @@
-import { Form } from "../Form/index.js";
-import { Button } from "../Button/index.js";
+import { Form } from "../Form/Form.js";
+import { Base } from "../Base/Base.js";
+import { TForm } from "../Form/Form.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IModalBackdrop } from "./ModalBackdrop.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function ModalBackdrop({
+export function ModalBackdrop<T extends TBaseTagMap = "form">({
   ...props
-}: IModalBackdrop = {}): HTMLFormElement {
+}: TForm<T> = { tag: "form" }): HTMLFormElement {
   const className = mergeClasses([
     "modal-backdrop",
     props.className
   ]);
 
   return Form({
-    ...props,
-    method: "dialog",
     className,
-    children: Button({
+    children: Base({
+      tag: "button",
       children: "close"
     })
-  });
+  }) as HTMLFormElement;
 }

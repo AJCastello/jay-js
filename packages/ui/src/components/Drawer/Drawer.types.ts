@@ -1,6 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IDrawer extends IBaseElement {
+export type TDrawer<T extends TBaseTagMap> = {
   asChild?: boolean;
   position?: "top" | "left" | "right" | "bottom";
-}
+} & TBase<T>;

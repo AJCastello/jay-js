@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IModalAction = IBaseElement;
+export type TModalAction<T extends TBaseTagMap> = TBase<T>;

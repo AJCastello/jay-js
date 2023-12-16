@@ -1,7 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IDiffItemExt extends IBaseElement {
+export type TDiffItem<T extends TBaseTagMap> = {
   side?: "left" | "right";
-}
-
-export type IDiffItem = IDiffItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

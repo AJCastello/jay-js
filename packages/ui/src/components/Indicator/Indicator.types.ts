@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IIndicator = IBaseElement;
+export type TIndicator<T extends TBaseTagMap> = TBase<T>;

@@ -1,6 +1,7 @@
-import { IList } from "../List/List.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
+import { TList } from "../List/List.types.js";
 
-export interface IMenu extends IList {
+export type TMenu<T extends TBaseTagMap> = {
   size?: "menu-xs" | "menu-sm" | "menu-md" | "menu-lg";
   position?: "menu-vertical" | "menu-horizontal";
-}
+} & TList<T>;

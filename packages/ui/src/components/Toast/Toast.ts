@@ -1,13 +1,14 @@
-import { IToast } from "./Toast.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TToast } from "./Toast.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Toast({
+export function Toast<T extends TBaseTagMap = "div">({
   horizontal = "toast-end",
   vertical = "toast-top",
   asChild = false,
   ...props
-}: IToast = {}): HTMLDivElement {
+}: TToast<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "toast",
     asChild ? "absolute" : "",
@@ -16,15 +17,17 @@ export function Toast({
     props.className,
   ]);
 
-  const toast = BaseElement({ ...props, className }) as HTMLDivElement;
+  const toast = Base({ 
+    ...props, 
+    className 
+  }) as HTMLElementTagNameMap[T];
 
   const resizeObserver = new ResizeObserver(entries => {
     if (!toast.firstChild) {
       toast.remove();
-    }    
+    } 
   });
 
   resizeObserver.observe(toast);
   return toast;
 }
-

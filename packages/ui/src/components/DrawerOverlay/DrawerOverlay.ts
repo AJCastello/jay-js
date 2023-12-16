@@ -1,11 +1,12 @@
+import { Base } from "../Base/Base.js";
 import { useDrawer } from "../../hooks/useDrawer.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IDrawerOverlay } from "./DrawerOverlay.types.js";
+import { TDrawerOverlay } from "./DrawerOverlay.types.js";
 
-export function DrawerOverlay({
+export function DrawerOverlay<T extends TBaseTagMap = "div">({
   ...props
-}: IDrawerOverlay): HTMLDivElement {
+}: TDrawerOverlay<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "transition-opacity",
     "ease-in-out",
@@ -20,12 +21,12 @@ export function DrawerOverlay({
 
   const drawerToggle = useDrawer({ for: props.for });
 
-  return BaseElement<IDrawerOverlay>({
+  return Base({
     ...props,
     className,
     dataset: {
       drawerFor: props.for
     },
     onclick: drawerToggle
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

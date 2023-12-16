@@ -1,19 +1,20 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IRadialProgress } from "./RadialProgress.types.js";
+import { TRadialProgress } from "./RadialProgress.types.js";
 
-export function RadialProgress({
+export function RadialProgress<T extends TBaseTagMap = "div">({
   value = 0,
   size,
   thickness,
   ...props
-}: IRadialProgress = {}): HTMLDivElement {
+}: TRadialProgress<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "radial-progress", 
     props.className
   ]);
 
-  const element = BaseElement({
+  const element = Base({
     ...props,
     className,
     role: "progressbar",
@@ -34,5 +35,5 @@ export function RadialProgress({
     element.setAttribute("style", `${currentStyle} --thickness: ${thickness};`);
   }
   
-  return element;
+  return element as HTMLElementTagNameMap[T];
 }

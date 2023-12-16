@@ -1,6 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IIcon extends IBaseElement {
+export type TIcon<T extends TBaseTagMap> = {
   icon?: string;
   type?: string;
-}
+} & TBase<T>;

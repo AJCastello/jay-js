@@ -1,7 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ISwapItemExt extends IBaseElement {
+export type TSwapItem<T extends TBaseTagMap> = {
   state?: "swap-on" | "swap-off";
-}
-
-export type ISwapItem = ISwapItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

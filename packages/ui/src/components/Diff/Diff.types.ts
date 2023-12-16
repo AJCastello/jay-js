@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IDiff = IBaseElement & Partial<Omit<HTMLDivElement, "style" | "children">>;
+export type TDiff<T extends TBaseTagMap> = TBase<T>;

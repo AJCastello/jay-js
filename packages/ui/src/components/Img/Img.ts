@@ -1,9 +1,12 @@
-import { IImg } from "./Img.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TImg } from "./Img.types.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Img({ ...props }: IImg = {}): HTMLImageElement {
-  return BaseElement<IImg>({
+export function Img<T extends TBaseTagMap = "img">({
+  ...props
+}: TImg<T> = { tag: "img" }): HTMLElementTagNameMap[T] {
+  return Base({
     ...props,
     tag: "img",
-  }) as HTMLImageElement;
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,11 +1,12 @@
 import { ListItem } from "../ListItem/ListItem.js";
-import { IStepItem } from "./StepItem.types.js";
+import { TStepItem } from "./StepItem.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function StepItem({
+export function StepItem<T extends TBaseTagMap = "li">({
   color,
   ...props
-}: IStepItem = {}): HTMLElement {
+}: TStepItem<T> = { tag: "li"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "step",
     color,
@@ -15,5 +16,5 @@ export function StepItem({
   return ListItem({
     ...props,
     className
-  });
+  }) as HTMLElementTagNameMap[T];
 }

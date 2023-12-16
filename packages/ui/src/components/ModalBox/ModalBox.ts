@@ -1,17 +1,18 @@
-import { IModalBox } from "./ModalBox.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { Base } from "../Base/Base.js";
+import { TModalBox } from "./ModalBox.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function ModalBox({
+export function ModalBox<T extends TBaseTagMap = "div">({
   ...props
-}: IModalBox = {}): HTMLDivElement {
+}: TModalBox<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "modal-box",
-    props.className
+    props.className,
   ]);
 
-  return BaseElement<IModalBox>({
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

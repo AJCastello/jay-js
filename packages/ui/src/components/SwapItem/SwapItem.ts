@@ -1,11 +1,12 @@
-import { mergeClasses } from "../../utils/mergeClasses.js";
 import { Box } from "../Box/index.js";
-import { ISwapItem } from "./SwapItem.types.js";
+import { TSwapItem } from "./SwapItem.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
+import { mergeClasses } from "../../utils/mergeClasses.js";
 
-export function SwapItem({
+export function SwapItem<T extends TBaseTagMap = "div">({
   state,
   ...props
-}: ISwapItem = {}): HTMLDivElement {
+}: TSwapItem<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     state,
     props.className
@@ -13,6 +14,6 @@ export function SwapItem({
 
   return Box({
     ...props,
-    className
-  });
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

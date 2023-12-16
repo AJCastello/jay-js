@@ -1,20 +1,21 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 import { ITimelineItem } from "./TimelineItem.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function TimelineItem({
+export function TimelineItem<T extends TBaseTagMap = "div">({
   component,
   boxed,
   ...props
-}: ITimelineItem = {}): HTMLDivElement {
+}: ITimelineItem<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     component,
     boxed ? "timeline-box" : "",
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
     className,
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

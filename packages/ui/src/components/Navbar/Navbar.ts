@@ -1,17 +1,18 @@
-import { INavbar } from "./Navbar.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TNavbar } from "./Navbar.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 
-export function Navbar({
+export function Navbar<T extends TBaseTagMap = "nav">({
   ...props
-}: INavbar = {}): HTMLDivElement {
+}: TNavbar<T> = { tag: "nav"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "navbar",
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type ICardBody = IBaseElement;
+export type TCardBody<T extends TBaseTagMap> = TBase<T>;
