@@ -7,3 +7,5 @@ dist
 .nx/
 .nx/cache
 pnpm-lock.yaml
+builder
+firebase.json
