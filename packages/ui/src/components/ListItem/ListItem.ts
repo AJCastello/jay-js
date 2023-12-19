@@ -1,11 +1,12 @@
-import { IListItem } from "./ListItem.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TListItem } from "./ListItem.types.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function ListItem({
+export function ListItem<T extends TBaseTagMap = "li">({
   ...props
-}: IListItem = {}): HTMLLIElement {
-  return BaseElement<IListItem>({
+}: TListItem<T> = { tag: "li" }): HTMLElementTagNameMap[T] {
+  return Base({
     tag: "li",
-    ...props
-  }) as HTMLLIElement;
+    ...props,
+  }) as HTMLElementTagNameMap[T];
 }

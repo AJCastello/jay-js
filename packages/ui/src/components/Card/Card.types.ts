@@ -1,9 +1,9 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ICard extends IBaseElement {
+export type TCard<T extends TBaseTagMap> = {
   imagePosition?: "left" | "right";
   imageFull?: boolean;
   variant?: "card-bordered";
   format?: "card-compact" | "card-normal";
   ripple?: boolean;
-}
+} & TBase<T>;

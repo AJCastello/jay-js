@@ -1,3 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IDropdownContent = IBaseElement & Partial<Omit<HTMLDivElement, "style">>;
+export type TDropdownContent<T extends TBaseTagMap> = {
+  orientation?: "divider-vertical" | "divider-horizontal";
+} & TBase<T>;

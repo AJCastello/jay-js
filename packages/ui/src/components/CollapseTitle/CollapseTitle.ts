@@ -1,19 +1,18 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { ICollapseTitle } from "./CollapseTitle.types.js";
+import { Base } from "../Base/Base.js";
+import { TCollapseTitle } from "./CollapseTitle.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function CollapseTitle({
-  summary,
+export function CollapseTitle<T extends TBaseTagMap = "div">({
   ...props
-}: ICollapseTitle = {}): HTMLDivElement {
+}: TCollapseTitle<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "collapse-title",
-    props.className
+    props.className,
   ]);
 
-  return BaseElement({
-    tag: summary ? "details" : "div",
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

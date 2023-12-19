@@ -1,13 +1,13 @@
-import { IDrawer } from "./Drawer.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TDrawer } from "./Drawer.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Drawer({
+export function Drawer<T extends TBaseTagMap = "div">({
   asChild = false,
   position = "left",
   ...props
-}: IDrawer = {}): HTMLDivElement {
-
+}: TDrawer<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const positionClass = {
     left: "justify-start",
     right: "justify-end",
@@ -25,17 +25,17 @@ export function Drawer({
     props.className
   ]);
 
-  const drawer = BaseElement({
+  const drawer = Base({
     ...props,
     className
-  }) as HTMLDivElement;
+  });
 
   const drawerId = drawer.id;
 
   if (document.querySelector(`#${drawerId}`)) {
-    const drawerElement = document.querySelector(`#${drawerId}`) as HTMLDivElement;
-    return drawerElement;
+    const drawerElement = document.querySelector(`#${drawerId}`);
+    return drawerElement as HTMLElementTagNameMap[T];
   }
 
-  return drawer;
+  return drawer as HTMLElementTagNameMap[T];
 }

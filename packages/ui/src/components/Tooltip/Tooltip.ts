@@ -1,14 +1,15 @@
-import { ITooltip } from "./Tooltip.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TTooltip } from "./Tooltip.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Tooltip({
+export function Tooltip<T extends TBaseTagMap = "div">({
   tip,
   color,
   position = "tooltip-top",
   forceOpen = false,
   ...props
-}: ITooltip = {}) {
+}: TTooltip<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "tooltip",
     position,
@@ -17,11 +18,10 @@ export function Tooltip({
     props.className,
   ]);
 
-  const tooltipContainer = BaseElement({
-    tag: "div",
+  const tooltipContainer = Base({
     ...props,
     className,
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 
   tooltipContainer.setAttribute("data-tip", tip || "");
 

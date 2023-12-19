@@ -1,16 +1,19 @@
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IDropdownContent } from "./DropdownContent.types.js";
+import { TDropdownContent } from "./DropdownContent.types.js";
 
-export function DropdownContent({ ...props }: IDropdownContent): HTMLDivElement {
+export function DropdownContent<T extends TBaseTagMap = "div">({
+  ...props 
+}: TDropdownContent<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "dropdown-content",
     props.className
   ]);
   
-  return BaseElement({
+  return Base({
     ...props,
     className,
     tabIndex: 0
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

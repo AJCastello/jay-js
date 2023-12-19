@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IForm = IBaseElement & Partial<Omit<HTMLFormElement, "style" | "children">>;
+export type TForm<T extends TBaseTagMap> = TBase<T>;

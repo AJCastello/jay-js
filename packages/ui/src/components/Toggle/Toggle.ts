@@ -1,17 +1,18 @@
+import { Base } from "../Base/Base.js";
 import { Input } from "../Input/Input.js";
-import { IToggle } from "./Toggle.types.js";
+import { TToggle } from "./Toggle.types.js";
 import { Typography } from "../Typography/Typography.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Toggle({
+export function Toggle<T extends TBaseTagMap = "div" | "input">({
   label,
   color,
   size,
   position = "toggle-after",
   formControl,
   ...props
-}: IToggle = {}): HTMLDivElement | HTMLInputElement {
+}: TToggle<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "toggle",
     color,
@@ -19,20 +20,21 @@ export function Toggle({
     props.className,
   ]);
 
-  const toggleElement = Input<IToggle>({
+  const toggleElement = Input({
     ...props,
+    tag: "input",
     type: "checkbox",
     className,
   }) as HTMLInputElement;
 
   if (label) {
-    const labelElement = BaseElement({
+    const labelElement = Base({
       tag: "label",
       className: "label cursor-pointer justify-start gap-2",
     });
 
     const labelText = Typography({
-      variant: "span",
+      tag: "span",
       className: "label-text",
       children: label,
     });
@@ -45,14 +47,14 @@ export function Toggle({
       labelElement.prepend(toggleElement);
     }
 
-    const formControlContainer = BaseElement({
+    const formControlContainer = Base({
       ...formControl,
       className: mergeClasses(["form-control", formControl?.className]),
       children: labelElement,
     }) as HTMLDivElement;
     
-    return formControlContainer;
+    return formControlContainer as HTMLElementTagNameMap[T];
   }
 
-  return toggleElement;
+  return toggleElement as HTMLElementTagNameMap[T];
 }

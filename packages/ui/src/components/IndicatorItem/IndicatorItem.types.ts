@@ -1,8 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IIndicatorItemExt extends IBaseElement {
+export type TIndicatorItem<T extends TBaseTagMap> = {
   vertical?: "indicator-top" | "indicator-middle" | "indicator-bottom";
   horizontal?: "indicator-start" | "indicator-center" | "indicator-end";
-}
-
-export type IIndicatorItem = IIndicatorItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

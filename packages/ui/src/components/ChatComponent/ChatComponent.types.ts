@@ -1,8 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IChatComponentExt extends IBaseElement {
+export type TChatComponent<T extends TBaseTagMap> = {
   component?: "chat-bubble" | "chat-image" | "chat-header" | "chat-footer";
   color?: "chat-bubble-primary" | "chat-bubble-secondary" | "chat-bubble-accent" | "chat-bubble-info" | "chat-bubble-success" | "chat-bubble-warning" | "chat-bubble-error";
-}
-
-export type IChatComponent = IChatComponentExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

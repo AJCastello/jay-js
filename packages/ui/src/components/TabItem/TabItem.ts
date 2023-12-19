@@ -1,15 +1,14 @@
-import { Link } from "../Link/Link.js";
-import { Input } from "../Input/Input.js";
-import { ITabItem } from "./TabItem.types.js";
+import { TTabItem } from "./TabItem.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
+import { Base } from "../Base/Base.js";
 
-export function TabItem({
+export function TabItem<T extends TBaseTagMap = "input">({
   size,
   active,
-  type,
   disabled,
   ...props
-}: ITabItem = {}): HTMLAnchorElement | HTMLInputElement {
+}: TTabItem<T> = { tag: "a" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "tab",
     active ? "tab-active" : "",
@@ -18,19 +17,9 @@ export function TabItem({
     props.className,
   ]);
 
-  if(type === "input") {
-    return Input({
-      className,
-      type: "radio",
-      name: (props as Partial<HTMLInputElement>).name,
-      role: "tab",
-      ariaLabel: props.children?.toString() ?? "",
-    });
-  }
-
-  return Link({
+  return Base({
     ...props,
     role: "tab",
     className,
-  });
+  }) as HTMLElementTagNameMap[T];
 }

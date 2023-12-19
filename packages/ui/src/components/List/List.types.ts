@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/index.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IList = IBaseElement & Partial<Omit<HTMLUListElement, "style" | "children">>;
+export type TList<T extends TBaseTagMap> = TBase<T>;

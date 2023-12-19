@@ -1,14 +1,15 @@
-import { ISpace } from "./Space.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TSpace } from "./Space.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Space({ 
-  height = "1rem", 
-  ...props 
-}: ISpace = {}): HTMLElement {
-  return BaseElement({
+export function Space<T extends TBaseTagMap = "div">({
+  h = "1rem",
+  ...props
+}: TSpace<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
+  return Base({
     style: {
-      height: height,
+      height: h,
     },
     ...props
-  });
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,11 +1,11 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 import { IResizableSplitter } from "./ResizableSplitter.types.js";
 
 export function ResizableSplitter({
   direction = "vertical",
   ...props
-}: IResizableSplitter = {}) : HTMLDivElement {
-  const splitter = BaseElement({
+}: IResizableSplitter = {}): HTMLDivElement {
+  const splitter = Base({
     className: "bg-base-300 flex flex-shrink-0",
     style: {
       cursor: direction === "horizontal" ? "row-resize" : "col-resize",
@@ -43,7 +43,8 @@ function bindColumnResizeHandler(
     if (direction === "horizontal") {
       const parent = handle.parentElement;
       const mousePosition = e.clientY;
-      const newSizePrevious = Math.max((mousePosition - parent?.offsetTop! || 0) - (previousElement?.offsetTop || 0), minColumnSize);
+
+      const newSizePrevious = Math.max((mousePosition - (parent?.offsetTop ?? 0)) - (previousElement?.offsetTop ?? 0), minColumnSize);
       const newSizeNext = Math.max((nextElement?.offsetTop || 0) + (nextElement?.clientHeight || 0) - mousePosition, minColumnSize);
       previousElement?.style.setProperty("height", `${newSizePrevious}px`);
       nextElement?.style.setProperty("height", `${newSizeNext}px`);

@@ -1,15 +1,18 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IDiffResizer } from "./DiffResizer.types.js";
+import { Base } from "../Base/Base.js";
+import { TDiffResizer } from "./DiffResizer.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function DiffResizer({ ...props }: IDiffResizer = {}): HTMLDivElement {
+export function DiffResizer<T extends TBaseTagMap = "div">({
+  ...props
+}: TDiffResizer<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "diff-resizer",
-    props.className
+    props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
     className,
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

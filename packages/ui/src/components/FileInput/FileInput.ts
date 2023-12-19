@@ -1,13 +1,13 @@
 import { Box } from "../Box/Box.js";
 import { Input } from "../Input/Input.js";
-import { IFileInput } from "./FileInput.types.js";
-import { BaseElement } from "../BaseElement/index.js";
+import { TFileInput } from "./FileInput.types.js";
+import { Base, TBaseTagMap } from "../Base/index.js";
 import { Typography } from "../Typography/Typography.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 
 import "./FileInput.style.css";
 
-export function FileInput({
+export function FileInput<T extends TBaseTagMap = "div">({
   label,
   labelAlt,
   helpers,
@@ -16,7 +16,8 @@ export function FileInput({
   color,
   inputSize,
   ...props
-}: IFileInput): HTMLDivElement {
+}: TFileInput<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
+  
   const className = mergeClasses([
     "file-input",
     bordered ? "file-input-bordered" : "",
@@ -27,8 +28,9 @@ export function FileInput({
     "file-input-placeholder",
   ]);
 
-  const inputElement = Input<IFileInput>({
+  const inputElement = Input({
     ...props,
+    tag: "input",
     type: "file",
     placeholder: " ",
     className,
@@ -41,13 +43,13 @@ export function FileInput({
   });
 
   if (label) {
-    const labelElement = BaseElement({
+    const labelElement = Base({
       tag: "label",
       className: "label",
     });
 
     const labelText = Typography({
-      variant: "span",
+      tag: "span",
       className: "label-text",
       children: label,
     });
@@ -56,7 +58,7 @@ export function FileInput({
 
     if (labelAlt) {
       const labelTextAlt = Typography({
-        variant: "span",
+        tag: "span",
         className: "label-text-alt",
         children: labelAlt,
       });
@@ -68,7 +70,7 @@ export function FileInput({
   formControl.append(inputElement);
 
   if (helpers) {
-    const helperElement = BaseElement({
+    const helperElement = Base({
       tag: "label",
       className: "label",
       dataset: {
@@ -79,5 +81,5 @@ export function FileInput({
     formControl.append(helperElement);
   }
 
-  return formControl;
+  return formControl as HTMLElementTagNameMap[T];
 }

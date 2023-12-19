@@ -1,11 +1,12 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IDrawerContent } from "./DrawerContent.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TDrawerContent } from "./DrawerContent.types.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function DrawerContent({
+export function DrawerContent<T extends TBaseTagMap = "div">({
   position = "left",
   ...props
-}: IDrawerContent = {}): HTMLDivElement {
+}: TDrawerContent<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const translateClass = {
     left: "-translate-x-full",
     right: "translate-x-full",
@@ -27,8 +28,8 @@ export function DrawerContent({
     props.className
   ]);
 
-  return BaseElement<IDrawerContent>({
+  return Base({
     ...props,
     className
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

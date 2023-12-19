@@ -1,14 +1,20 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IDivider } from "./Divider.types.js";
+import { Base } from "../Base/Base.js";
+import { TDivider } from "./Divider.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Divider({ orientation, ...props }: IDivider = {}): HTMLDivElement {
-  return BaseElement<IDivider>({
+export function Divider<T extends TBaseTagMap = "div">({
+  orientation,
+  ...props
+}: TDivider<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
+  const className = mergeClasses([
+    "divider",
+    orientation,
+    props.className,
+  ]);
+
+  return Base({
     ...props,
-    className: mergeClasses([
-      "divider",
-      orientation,
-      props.className
-    ])
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

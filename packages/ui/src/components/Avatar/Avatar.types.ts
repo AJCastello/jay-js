@@ -1,7 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IAvatarExt extends IBaseElement {
+export type IAvatar<T extends TBaseTagMap> = {
   state?: "online" | "offline";
-}
-
-export type IAvatar = IAvatarExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

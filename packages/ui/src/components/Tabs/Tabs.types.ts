@@ -1,5 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ITabs extends IBaseElement {
+export type TTabs<T extends TBaseTagMap> = {
   variant?: "tabs-boxed" | "tabs-bordered" | "tabs-lifted";
-}
+} & TBase<T>;

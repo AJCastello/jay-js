@@ -1,19 +1,20 @@
-import { IFooter } from "./Footer.types.js";
+import { TFooter } from "./Footer.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Footer({
+export function Footer<T extends TBaseTagMap = "footer">({
   position,
   ...props
-}: IFooter = {}): HTMLElement {
+}: TFooter<T> = { tag: "footer"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "footer",
     position,
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
     className
-  }) as HTMLElement;
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,13 +1,14 @@
-import { IRating } from "./Rating.types.js";
+import { Base } from "../Base/Base.js";
+import { TRating } from "./Rating.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
 
-export function Rating({
+export function Rating<T extends TBaseTagMap = "div">({
   size,
   half,
   hidden,
   ...props
-}: IRating = {}): HTMLDivElement {
+}: TRating<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "rating",
     size,
@@ -16,8 +17,8 @@ export function Rating({
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
     className
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

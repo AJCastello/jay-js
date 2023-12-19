@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type ISelectItem = IBaseElement & Partial<Omit<HTMLOptionElement, "style" | "children">>
+export type TSelectItem<T extends TBaseTagMap> = TBase<T>;

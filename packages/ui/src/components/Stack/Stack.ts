@@ -1,17 +1,18 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IStack } from "./Stack.types.js";
+import { Base } from "../Base/Base.js";
+import { TStack } from "./Stack.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Stack({
+export function Stack<T extends TBaseTagMap = "div">({
   ...props
-}: IStack = {}): HTMLDivElement {
+}: TStack<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "stack",
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
     className
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

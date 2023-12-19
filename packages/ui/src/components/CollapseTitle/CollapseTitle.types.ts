@@ -1,7 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ICollapseTitleExt extends IBaseElement {
-  summary?: boolean;
-}
-
-export type ICollapseTitle = ICollapseTitleExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+export type TCollapseTitle<T extends TBaseTagMap> = TBase<T>;

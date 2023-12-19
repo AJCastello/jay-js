@@ -1,12 +1,11 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { ITypography, TTypographyMap, TTypographyVariants } from "./Typography.types.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
+import { TTypography } from "./Typography.types.js";
 
-export function Typography<T extends TTypographyVariants = "p">({
-  variant,
+export function Typography<T extends TBaseTagMap = "p">({
   ...props
-}: ITypography<T> = {}): TTypographyMap[T] {
-  return BaseElement({
-    tag: variant || "p",
+}: TTypography<T> = { tag: "p" }): HTMLElementTagNameMap[T] {
+  return Base({
     ...props
-  }) as TTypographyMap[T]
+  }) as HTMLElementTagNameMap[T];
 }

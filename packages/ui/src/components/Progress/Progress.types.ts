@@ -1,4 +1,4 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
 type ProgressColor =
   | "progress-primary"
@@ -9,8 +9,6 @@ type ProgressColor =
   | "progress-warning"
   | "progress-error";
 
-export interface IProgressExt extends IBaseElement {
+export type TProgress<T extends TBaseTagMap> = {
   color?: ProgressColor;
-}
-
-export type IProgress = IProgressExt & Partial<Omit<HTMLProgressElement, "style" | "children">>
+} & TBase<T>;

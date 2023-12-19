@@ -1,7 +1,7 @@
 export * from "./Alert/index.js";
 export * from "./Avatar/index.js";
 export * from "./Badge/index.js";
-export * from "./BaseElement/index.js";
+export * from "./Base/index.js";
 export * from "./BottomNavigation/index.js";
 export * from "./BottomNavigationItem/index.js";
 export * from "./Box/index.js";
@@ -34,7 +34,6 @@ export * from "./Footer/index.js";
 export * from "./Form/index.js";
 export * from "./Fragment/index.js";
 export * from "./Icon/index.js";
-export * from "./IconButton/index.js";
 export * from "./Img/index.js";
 export * from "./Indicator/index.js";
 export * from "./IndicatorItem/index.js";

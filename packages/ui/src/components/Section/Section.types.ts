@@ -1,12 +1,3 @@
-import { ISection } from "./Section.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export function Section({
-  variant = "section",
-  ...props
-}: ISection = {}): HTMLDivElement {
-   return BaseElement({
-    tag: variant,
-    ...props
-  }) as HTMLDivElement;
-}
+export type TSection<T extends TBaseTagMap> = TBase<T>;

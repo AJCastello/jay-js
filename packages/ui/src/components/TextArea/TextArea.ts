@@ -1,13 +1,13 @@
 import "./TextArea.style.css";
 
 import { Box } from "../Box/Box.js";
-import { ITextarea } from "./TextArea.types.js";
+import { TTextarea } from "./TextArea.types.js";
 import { Typography } from "../Typography/Typography.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base";
 
-export function TextArea({
-  value,
+export function TextArea<T extends TBaseTagMap = "div">({
   label,
   labelAlt,
   helpers,
@@ -17,7 +17,7 @@ export function TextArea({
   color,
   size,
   ...props
-}: ITextarea = {}): HTMLDivElement {
+}: TTextarea<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
 
   const className = mergeClasses([
     "textarea",
@@ -29,7 +29,7 @@ export function TextArea({
     "textarea-placeholder",
   ]);
 
-  const textareaElement = BaseElement<ITextarea>({
+  const textareaElement = Base({
     ...props,
     tag: "textarea",
     placeholder: " ",
@@ -43,13 +43,13 @@ export function TextArea({
   });
 
   if (label) {
-    const labelElement = BaseElement({
+    const labelElement = Base({
       tag: "label",
       className: "label",
     });
 
     const labelText = Typography({
-      variant: "span",
+      tag: "span",
       className: "label-text",
       children: label,
     });
@@ -58,7 +58,7 @@ export function TextArea({
 
     if (labelAlt) {
       const labelTextAlt = Typography({
-        variant: "span",
+        tag: "span",
         className: "label-text-alt",
         children: labelAlt,
       });
@@ -69,7 +69,7 @@ export function TextArea({
 
   if (placeholder) {
     const placeholderElement = Typography({
-      variant: "label",
+      tag: "label",
       className: "textarea-placeholder-label bg-base-100 rounded px-2",
       children: placeholder,
     });
@@ -85,7 +85,7 @@ export function TextArea({
   }
 
   if (helpers) {
-    const helperElement = BaseElement({
+    const helperElement = Base({
       tag: "label",
       className: "label",
       dataset: {
@@ -96,5 +96,5 @@ export function TextArea({
     formControl.append(helperElement);
   }
 
-  return formControl;
+  return formControl as HTMLElementTagNameMap[T];
 }

@@ -1,8 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ITimelineExt extends IBaseElement {
+export type TTimeline<T extends TBaseTagMap> = {
   direction?: "timeline-vertical" | "timeline-horizontal";
   compact?: boolean;
-}
-
-export type ITimeline = ITimelineExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

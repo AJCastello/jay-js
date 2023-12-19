@@ -1,6 +1,6 @@
-import { IBaseElement } from "../BaseElement";
+import { TBase, TBaseTagMap } from "../Base";
 
-export interface IFileInputExt extends IBaseElement {
+export type TFileInput<T extends TBaseTagMap> = {
   label?: string;
   labelAlt?: string;
   helpers?: Array<HTMLElement>;
@@ -8,6 +8,4 @@ export interface IFileInputExt extends IBaseElement {
   ghost?: boolean;
   color?: "file-input-primary" | "file-input-secondary" | "file-input-accent" | "file-input-success" | "file-input-warning" | "file-input-info" | "file-input-error";
   inputSize?: "file-input-lg" | "file-input-md" | "file-input-sm" | "file-input-xs";
-}
-
-export type IFileInput = IFileInputExt & Partial<Omit<HTMLInputElement, "style" | "size" | "label">>;
+} & TBase<T>;

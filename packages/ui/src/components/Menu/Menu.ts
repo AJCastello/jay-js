@@ -1,12 +1,13 @@
+import { TMenu } from "./Menu.types.js";
 import { List } from "../List/List.js";
-import { IMenu } from "./Menu.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Menu({
+export function Menu<T extends TBaseTagMap = "ul">({
   size,
   position,
   ...props
-}: IMenu = {}): HTMLUListElement {
+}: TMenu<T> = { tag: "ul"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "menu",
     size,
@@ -17,5 +18,5 @@ export function Menu({
   return List({
     ...props,
     className,
-  });
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,8 +1,7 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ICollapse extends IBaseElement {
-  details?: boolean;
+export type TCollapse<T extends TBaseTagMap> = {
   variant?: "collapse-arrow" | "collapse-plus";
   forceOpen?: boolean;
   forceClose?: boolean;
-}
+} & TBase<T>;

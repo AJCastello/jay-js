@@ -1,19 +1,21 @@
-import { IModal } from "./Modal.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TModal } from "./Modal.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Modal({
+export function Modal<T extends TBaseTagMap = "dialog">({
   position,
   ...props
-}: IModal = {}): HTMLDialogElement {
+}: TModal<T> = { tag: "dialog"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "modal",
+    position,
     props.className
   ]);
 
-  return BaseElement<IModal>({
+  return Base({
     ...props,
     tag: "dialog",
-    className
-  }) as HTMLDialogElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

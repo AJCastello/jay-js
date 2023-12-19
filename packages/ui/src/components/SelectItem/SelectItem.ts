@@ -1,13 +1,12 @@
-import { ISelectItem } from "./SelectItem.types.js";
-import { BaseElement } from "../BaseElement/index.js";
+import { Base } from "../Base/index.js";
+import { TSelectItem } from "./SelectItem.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function SelectItem({
+export function SelectItem<T extends TBaseTagMap = "option">({
   ...props
-}: ISelectItem = {}): HTMLOptionElement {
-  const SelectItem = BaseElement<ISelectItem>({
+}: TSelectItem<T> = { tag: "option"}): HTMLElementTagNameMap[T] {
+  return Base({
     tag: "option",
     ...props
-  }) as HTMLOptionElement;
-
-  return SelectItem;
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,15 +1,18 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { Typography } from "../Typography/index.js";
-import { ICardDescription } from "./CardDescription.types.js";
+import { Base } from "../Base/Base.js";
+import { TCardDescription } from "./CardDescription.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function CardDescription({ ...props }: ICardDescription): HTMLElement {
+export function CardDescription<T extends TBaseTagMap = "p">({
+  ...props
+}: TCardDescription<T> = { tag: "p"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "card-description",
-    props.className
+    props.className,
   ]);
-  
-  return Typography({
+
+  return Base({
     ...props,
-    className
-  });
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,7 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IChatExt extends IBaseElement {
+export type TChat<T extends TBaseTagMap> = {
   position?: "chat-start" | "chat-end";
-}
-
-export type IChat = IChatExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

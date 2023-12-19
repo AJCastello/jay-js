@@ -1,12 +1,13 @@
 import "./TextInput.style.css";
+
 import { Box } from "../Box/Box.js";
 import { Input } from "../Input/Input.js";
-import { ITextInput } from "./TextInput.types.js";
+import { TTextInput } from "./TextInput.types.js";
 import { Typography } from "../Typography/Typography.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { Base, TBaseTagMap } from "../Base";
 
-export function TextInput({
+export function TextInput<T extends TBaseTagMap = "div">({
   label,
   labelAlt,
   helpers,
@@ -18,7 +19,7 @@ export function TextInput({
   startAdornment,
   endAdornment,
   ...props
-}: ITextInput = {}): HTMLDivElement {
+}: TTextInput<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
 
   const className = mergeClasses([
     "input",
@@ -30,8 +31,9 @@ export function TextInput({
     "input-placeholder"
   ]);
 
-  const inputElement = Input<ITextInput>({
+  const inputElement = Input({
     ...props,
+    tag: "input",
     placeholder: " ",
     className
   }) as HTMLInputElement;
@@ -43,13 +45,13 @@ export function TextInput({
   });
 
   if (label) {
-    const labelElement = BaseElement({
+    const labelElement = Base({
       tag: "label",
       className: "label",
     });
 
     const labelText = Typography({
-      variant: "span",
+      tag: "span",
       className: "label-text",
       children: label,
     });
@@ -58,7 +60,7 @@ export function TextInput({
 
     if (labelAlt) {
       const labelTextAlt = Typography({
-        variant: "span",
+        tag: "span",
         className: "label-text-alt",
         children: labelAlt,
       });
@@ -89,7 +91,7 @@ export function TextInput({
 
   if (placeholder) {
     const placeholderElement = Typography({
-      variant: "label",
+      tag: "label",
       className: "input-placeholder-label bg-base-100 rounded px-2",
       children: placeholder
     });
@@ -112,7 +114,7 @@ export function TextInput({
   }
 
   if (helpers) {
-    const helperElement = BaseElement({
+    const helperElement = Base({
       tag: "label",
       className: "label",
       dataset: {
@@ -123,6 +125,6 @@ export function TextInput({
     formControl.append(helperElement);
   }
 
-  return formControl;
+  return formControl as HTMLElementTagNameMap[T];
 }
 

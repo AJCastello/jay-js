@@ -1,17 +1,18 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IBreadcrumbs } from "./Breadcrumbs.types.js";
+import { Base } from "../Base/Base.js";
+import { TBreadcrumbs } from "./Breadcrumbs.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Breadcrumbs({
+export function Breadcrumbs<T extends TBaseTagMap = "div">({
   ...props
-}: IBreadcrumbs = {}): HTMLDivElement {
+}: TBreadcrumbs<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "breadcrumbs",
     props.className,
   ]);
 
-  return BaseElement<IBreadcrumbs>({
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }
