@@ -1,10 +1,10 @@
 import { IPackageVersion, ITsConfigFile } from "../types/index.js";
 
 export const packageVersion: IPackageVersion = {
-  "@jay-js/static": "^1.0.1",
-  "@jay-js/system": "^2.4.4",
-  "@jay-js/ui": "^2.5.3",
-  "@jay-js/jsx": "^1.0.1",
+  "@jay-js/static": "latest",
+  "@jay-js/system": "latest",
+  "@jay-js/ui": "latest",
+  "@jay-js/jsx": "latest",
   "vite": "^4.5.0",
   "tailwindcss": "^3.3.5",
   "postcss": "^8.4.31",
