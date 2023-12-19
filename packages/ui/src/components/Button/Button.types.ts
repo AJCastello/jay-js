@@ -1,7 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IButtonExt extends IBaseElement {
-  type?: "button" | "submit" | "reset";
+export type TButton<T extends TBaseTagMap> = {
   size?: "btn-lg" | "btn-md" | "btn-sm" | "btn-xs";
   format?: "btn-circle" | "btn-square";
   color?: "btn-primary" | "btn-secondary" | "btn-accent" | "btn-info" | "btn-success" | "btn-warning" | "btn-error";
@@ -11,6 +10,4 @@ export interface IButtonExt extends IBaseElement {
   ripple?: boolean;
   fullWidth?: boolean;
   animation?: boolean;
-}
-
-export type IButton = IButtonExt & Partial<Omit<HTMLButtonElement, "style" | "children">>;
+} & TBase<T>;

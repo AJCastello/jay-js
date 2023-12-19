@@ -1,12 +1,13 @@
-import { IIndicatorItem } from "./IndicatorItem.types.js";
+import { TIndicatorItem } from "./IndicatorItem.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function IndicatorItem({
+export function IndicatorItem<T extends TBaseTagMap = "span">({
   horizontal,
   vertical,
   ...props
-}: IIndicatorItem = {}): HTMLSpanElement {
+}: TIndicatorItem<T> = { tag: "span"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "indicator-item",
     horizontal,
@@ -14,9 +15,9 @@ export function IndicatorItem({
     props.className,
   ]);
 
-  return BaseElement({
-    tag: "span",
+  return Base({
     ...props,
+    tag: "span",
     className
-  }) as HTMLSpanElement;
+  }) as HTMLElementTagNameMap[T];
 }

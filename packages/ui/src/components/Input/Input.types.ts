@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type IInput = IBaseElement & Partial<Omit<HTMLInputElement, "style" | "size" | "label">>
+export type TInput<T extends TBaseTagMap> = TBase<T>;

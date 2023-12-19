@@ -1,21 +1,21 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IBottomNavigationItem } from "./BottomNavigationItem.types.js";
+import { Base } from "../Base/Base.js";
+import { TBottomNavigationItem } from "./BottomNavigationItem.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function BottomNavigationItem({
+export function BottomNavigationItem<T extends TBaseTagMap = "div">({  
   active,
   disabled,
   ...props
-}: IBottomNavigationItem = {}): HTMLDivElement {
+}: TBottomNavigationItem<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
-    "btm-nav-item",
     active ? "active" : "",
-    disabled ? "disabled" : "",    
-    props.className
+    disabled ? "disabled" : "",
+    props.className,
   ]);
 
-  return BaseElement<IBottomNavigationItem>({
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

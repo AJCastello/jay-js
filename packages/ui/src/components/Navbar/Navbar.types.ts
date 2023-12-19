@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type INavbar = IBaseElement;
+export type TNavbar<T extends TBaseTagMap> = TBase<T>;

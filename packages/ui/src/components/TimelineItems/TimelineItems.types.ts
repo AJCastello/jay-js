@@ -1,4 +1,3 @@
-import { IListItem } from "../ListItem/ListItem.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type ITimelineItems = IListItem;
-
+export type TTimelineItems<T extends TBaseTagMap> = TBase<T>;

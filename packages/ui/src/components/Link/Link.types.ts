@@ -1,3 +1,3 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type ILink = IBaseElement & Partial<Omit<HTMLAnchorElement, "style" | "children">>;
+export type TLink<T extends TBaseTagMap> = TBase<T>;

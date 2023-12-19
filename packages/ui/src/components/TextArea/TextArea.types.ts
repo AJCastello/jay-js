@@ -1,6 +1,6 @@
-import { IBaseElement } from "../BaseElement/index.js";
+import { TBase, TBaseTagMap } from "../Base/index.js";
 
-export interface ITextareaExt extends IBaseElement {
+export type TTextarea<T extends TBaseTagMap> = {
   label?: string;
   labelAlt?: string;
   helpers?: Array<HTMLElement>;
@@ -9,6 +9,5 @@ export interface ITextareaExt extends IBaseElement {
   ghost?: boolean;
   color?: "textarea-primary" | "textarea-secondary" | "textarea-accent" | "textarea-success" | "textarea-warning" | "textarea-info" | "textarea-error";
   size?: "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
-}
+} & TBase<T>;
 
-export type ITextarea = ITextareaExt & Partial<Omit<HTMLTextAreaElement, "style" | "children">>;

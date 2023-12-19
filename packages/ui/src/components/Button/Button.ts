@@ -1,10 +1,10 @@
-import { IButton } from "./Button.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
+import { TButton } from "./Button.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 import { RippleEffect } from "../RippleEffect/index.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 
-export function Button({
-  type = "button",
+export function Button<T extends TBaseTagMap = "button">({
   size,
   format,
   color,
@@ -15,7 +15,7 @@ export function Button({
   animation,
   ripple = true,
   ...props
-}: IButton = {}): HTMLButtonElement {
+}: TButton<T> = { tag: "button" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "btn",
     size,
@@ -30,17 +30,16 @@ export function Button({
     props.className,
   ]);
 
-  const objButton = BaseElement<IButton>({
+  const objButton = Base({
     ...props,
-    type,
     tag: "button",
     className,
-  }) as HTMLButtonElement;
+  });
 
   ripple && objButton.addEventListener("click", (event) => {
     const ripple = RippleEffect(event);
     objButton.append(ripple);
   });
 
-  return objButton;
+  return objButton as HTMLElementTagNameMap[T];
 }

@@ -1,7 +1,7 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IRadialProgress extends IBaseElement {
+export type TRadialProgress<T extends TBaseTagMap> = {
   value?: number;
   size?: string;
   thickness?: string;
-}
+} & TBase<T>;

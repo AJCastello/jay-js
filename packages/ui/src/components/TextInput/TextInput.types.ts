@@ -1,6 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types";
+import { TBase, TBaseTagMap } from "../Base/index.js";
 
-export interface ITextInputExt extends IBaseElement {
+export type TTextInput<T extends TBaseTagMap> = {
   label?: string;
   labelAlt?: string;
   helpers?: Array<HTMLElement>;
@@ -11,6 +11,4 @@ export interface ITextInputExt extends IBaseElement {
   inputSize?: "input-lg" | "input-md" | "input-sm" | "input-xs";
   startAdornment?: HTMLElement | ((inputElement: HTMLInputElement) => HTMLElement);
   endAdornment?: HTMLElement | ((inputElement: HTMLInputElement) => HTMLElement);
-}
-
-export type ITextInput = ITextInputExt & Partial<Omit<HTMLInputElement, "style" | "size" | "label">>;
+} & TBase<T>;

@@ -1,10 +1,11 @@
 import { ListItem } from "../ListItem/ListItem.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { ITimelineItems } from "./TimelineItems.types.js";
+import { TTimelineItems } from "./TimelineItems.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function TimelineItems({
+export function TimelineItems<T extends TBaseTagMap = "li">({
   ...props
-}: ITimelineItems = {}): HTMLLIElement {
+}: TTimelineItems<T> = { tag: "li" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     props.className
   ]);
@@ -12,5 +13,5 @@ export function TimelineItems({
   return ListItem({
     ...props,
     className,
-  });
+  }) as HTMLElementTagNameMap[T];
 }

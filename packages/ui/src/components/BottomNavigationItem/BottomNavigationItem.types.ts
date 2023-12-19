@@ -1,8 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IBottomNavigationItemExt extends IBaseElement {
+export type TBottomNavigationItem<T extends TBaseTagMap> = {
   active?: boolean;
   disabled?: boolean;
-}
-
-export type IBottomNavigationItem = IBottomNavigationItemExt & Partial<Omit<HTMLDivElement, "style" | "children">>;
+} & TBase<T>;

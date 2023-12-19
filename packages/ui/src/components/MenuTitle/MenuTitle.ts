@@ -1,19 +1,20 @@
+import { TMenuTitle } from "./MenuTitle.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IMenuTitle } from "./MenuTitle.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function MenuTitle({
+export function MenuTitle<T extends TBaseTagMap = "li">({
   tag = "li",
   ...props
-}: IMenuTitle = {}): HTMLElement {
+}: TMenuTitle<T> = { tag: "li"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "menu-title",
     props.className
   ]);
 
-  return BaseElement({
+  return Base({
     tag,
     ...props,
     className,
-  });
+  }) as HTMLElementTagNameMap[T];
 }

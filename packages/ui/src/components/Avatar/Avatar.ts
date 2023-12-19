@@ -1,19 +1,20 @@
 import { IAvatar } from "./Avatar.types.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Avatar({
+export function Avatar<T extends TBaseTagMap = "div">({
   state,
   ...props
-}: IAvatar = {}): HTMLDivElement {
+}: IAvatar<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "avatar",
     state,
     props.className,
   ]);
 
-  return BaseElement<IAvatar>({
+  return Base({
     ...props,
     className
-  }) as HTMLDivElement;
+  }) as HTMLElementTagNameMap[T];
 }

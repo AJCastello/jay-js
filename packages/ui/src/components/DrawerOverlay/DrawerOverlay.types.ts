@@ -1,5 +1,5 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface IDrawerOverlay extends IBaseElement {
-  for: string;
-}
+export type TDrawerOverlay<T extends TBaseTagMap> = {
+  for?: string;
+} & TBase<T>;

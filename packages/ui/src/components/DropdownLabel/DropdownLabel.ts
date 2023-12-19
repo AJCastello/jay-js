@@ -1,9 +1,12 @@
-import { ITypography, Typography } from "../Typography/index.js";
+import { Base } from "../Base/Base.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export function DropdownLabel({ ...props }: ITypography<"label">): HTMLLabelElement {
-  return Typography({
+export function DropdownLabel<T extends TBaseTagMap = "label">({
+  ...props
+}: TBase<T> = { tag: "label" }): HTMLElementTagNameMap[T] {
+  return Base({
     ...props,
     tabIndex: 0,
-    variant: "label"
-  }) as HTMLLabelElement;
+    tag: "label"
+  }) as HTMLElementTagNameMap[T];
 }

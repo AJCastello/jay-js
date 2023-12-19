@@ -1,19 +1,21 @@
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
-import { IChatComponent } from "./ChatComponent.types.js";
+import { Base } from "../Base/Base.js";
+import { TChatComponent } from "./ChatComponent.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function ChatComponent({
-  color,
+export function ChatComponent<T extends TBaseTagMap = "div">({
   component = "chat-bubble",
+  color,
   ...props
-}: IChatComponent = {}): HTMLDivElement {
+}: TChatComponent<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     component,
+    color,
     props.className,
   ]);
 
-  return BaseElement({
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }

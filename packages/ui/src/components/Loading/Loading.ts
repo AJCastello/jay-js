@@ -1,12 +1,13 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TLoading } from "./Loading.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { ILoading } from "./Loading.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Loading({
+export function Loading<T extends TBaseTagMap = "span">({
   type = "loading-spinner",
   size = "loading-md",
   ...props
-}: ILoading = {}): HTMLSpanElement {
+}: TLoading<T> = { tag: "span"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "loading",
     type,
@@ -14,9 +15,9 @@ export function Loading({
     props.className
   ]);
 
-  return BaseElement<ILoading>({
+  return Base({
     tag: "span",
     ...props,
     className,
-  }) as HTMLSpanElement;
+  }) as HTMLElementTagNameMap[T];
 }

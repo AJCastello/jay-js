@@ -1,9 +1,10 @@
-import { ISelect } from "./Select.types.js";
+import { TSelect } from "./Select.types.js";
 import { Typography } from "../Typography/index.js";
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Select({
+export function Select<T extends TBaseTagMap = "select">({
   bordered,
   ghost,
   size,
@@ -11,9 +12,8 @@ export function Select({
   label,
   labelAlt,
   helpers,
-  value,
   ...props
-}: ISelect = {}) {
+}: TSelect<T> = { tag: "select"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "select",
     bordered ? "select-bordered" : "",
@@ -23,7 +23,7 @@ export function Select({
     props.className,
   ]);
 
-  const selectElement = BaseElement<ISelect>({
+  const selectElement = Base({
     ...props,
     tag: "select",
     className
@@ -32,18 +32,18 @@ export function Select({
   const selectId = selectElement.id;
 
   if (label || helpers) {
-    const formControl = BaseElement({
+    const formControl = Base({
       className: "form-control"
     });
 
     if (label) {
-      const labelElement = BaseElement({
+      const labelElement = Base({
         tag: "label",
         className: "label",
       });
 
       const labelText = Typography({
-        variant: "span",
+        tag: "span",
         className: "label-text",
         children: label,
       });
@@ -52,7 +52,7 @@ export function Select({
 
       if (labelAlt) {
         const labelTextAlt = Typography({
-          variant: "span",
+          tag: "span",
           className: "label-text-alt",
           children: labelAlt,
         });
@@ -64,7 +64,7 @@ export function Select({
     formControl.append(selectElement);
 
     if (helpers) {
-      const helperElement = BaseElement({
+      const helperElement = Base({
         tag: "label",
         className: "label",
         dataset: {
@@ -75,7 +75,7 @@ export function Select({
       formControl.append(helperElement);
     }
 
-    return formControl;
+    return formControl as HTMLElementTagNameMap[T];
   }
-  return selectElement;
+  return selectElement as HTMLElementTagNameMap[T];
 }

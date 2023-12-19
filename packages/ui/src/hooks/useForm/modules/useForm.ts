@@ -14,7 +14,7 @@ export function useForm<T>({
 
   if (options) {
     useFormDefineOptions(options);
-  };
+  }
 
   function onValidateError(error: yup.ValidationError) {
     if (onError) {

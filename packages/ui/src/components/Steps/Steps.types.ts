@@ -1,5 +1,5 @@
-import { IList } from "../List/List.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export interface ISteps extends IList {
+export type TSteps<T extends TBaseTagMap> = {
   orientation?: "steps-vertical" | "steps-horizontal";
-}
+} & TBase<T>;

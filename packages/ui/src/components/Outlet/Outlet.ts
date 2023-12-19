@@ -1,7 +1,7 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { Base } from "../Base/Base.js";
 
 export function Outlet(): HTMLDivElement {
-  return BaseElement({
+  return Base({
     style: {
       display: "contents"
     },

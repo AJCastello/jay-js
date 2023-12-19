@@ -1,3 +1,3 @@
-import { ITypography } from "../Typography/Typography.types.js";
+import { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
-export type ICardTitle = ITypography<"h1">;
+export type TCardTitle<T extends TBaseTagMap> = TBase<T>;

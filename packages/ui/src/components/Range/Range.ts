@@ -1,12 +1,13 @@
 import { Input } from "../Input/Input.js";
-import { IRange } from "./Range.types.js";
+import { TRange } from "./Range.types.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function Range({
+export function Range<T extends TBaseTagMap = "input">({
   size,
   color,
   ...props
-}: IRange = {}): HTMLInputElement {
+}: TRange<T> = { tag: "input"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "range",
     size,
@@ -15,8 +16,9 @@ export function Range({
   ]);
 
   return Input({
-    type: "range",
     ...props,
+    tag: "input",
+    type: "range",
     className
-  });
+  }) as HTMLElementTagNameMap[T];
 }

@@ -1,17 +1,19 @@
-import { BaseElement } from "../BaseElement/BaseElement.js";
+import { TModalAction } from "./ModalAction.types.js";
+import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
-import { IModalAction } from "./ModalAction.types.js";
+import { TBaseTagMap } from "../Base/Base.types.js";
 
-export function ModalAction({
-  ...props
-}: IModalAction = {}): HTMLDivElement {
+export function ModalAction<T extends TBaseTagMap = "div">(
+  { ...props }: TModalAction<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "modal-action",
     props.className
   ]);
 
-  return BaseElement<IModalAction>({
+  return Base({
     ...props,
-    className
-  }) as HTMLDivElement;
+    className,
+  }) as HTMLElementTagNameMap[T];
 }
+
+

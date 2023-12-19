@@ -1,6 +1,6 @@
-import { IBaseElement } from "../BaseElement/BaseElement.types.js";
+import { TBase, TBaseTagMap } from "../Base";
 
-export interface ISelectExt extends IBaseElement {
+export type TSelect<T extends TBaseTagMap> = {
   bordered?: boolean;
   ghost?: boolean;
   color?: "select-primary" | "select-secondary" | "select-accent" | "select-success" | "select-warning" | "select-info" | "select-error";
@@ -8,6 +8,4 @@ export interface ISelectExt extends IBaseElement {
   label?: string;
   labelAlt?: string;
   helpers?: Array<HTMLElement>;
-}
-
-export type ISelect = ISelectExt & Partial<Omit<HTMLSelectElement, "style" | "children" | "size">>;
+} & TBase<T>;
