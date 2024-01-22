@@ -19,7 +19,7 @@ export async function getRoute() {
       return;
     }
     return;
-  };
+  }
 
   if (match.route.layout) {
     const matchLayoutIndex = getPotentialMatchIndex();

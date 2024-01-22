@@ -27,5 +27,5 @@ export function useI18n<T>(){
       }
     }
     return result as any;
-  }
+  };
 }

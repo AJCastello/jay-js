@@ -4,7 +4,7 @@ export interface IRoute {
   target?: HTMLElement;
   layout?: boolean;
   children?: Array<IRoute>;
-};
+}
 
 export interface IRouteInstance extends IRoute {
   id: string;

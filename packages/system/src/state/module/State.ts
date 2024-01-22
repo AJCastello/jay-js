@@ -43,7 +43,7 @@ export const State = <T>(data: T): StateType<T> => {
       }
       return data;
     },
-    sub: (id: string, effect: (data: T) => void, run: boolean = false) => {
+    sub: (id: string, effect: (data: T) => void, run = false) => {
       state.effect.set(id, effect);
       if (run) {
         effect(data);

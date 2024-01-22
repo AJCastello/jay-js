@@ -17,7 +17,7 @@ export function i18nProvider(onLoad: (i18n: Ii18nLanguages) => void, options?: P
         const language = await i18n.import();
         i18n.data = language;
       }
-    };
+    }
     onLoad(i18n);
   }, true);
 }
