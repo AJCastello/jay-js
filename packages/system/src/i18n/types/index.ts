@@ -32,4 +32,5 @@ export interface Ii18nOptions {
   languages: Array<Ii18nLanguages>;
   defaultLocale: string;
   saveToLocalStorage: boolean;
+  nestedKeys: boolean;
 }
