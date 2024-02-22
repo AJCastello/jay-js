@@ -6,7 +6,7 @@ export function getPotentialMatches(): Array<IPotentialMatch> {
   let pathName = location.pathname;
 
   if (pathName.substring(pathName.length - 1) === "/") {
-    pathName = pathName.substring(0, pathName.length - 1)
+    pathName = pathName.substring(0, pathName.length - 1);
   }
 
   const potentialMatches: Array<IPotentialMatch> = [];

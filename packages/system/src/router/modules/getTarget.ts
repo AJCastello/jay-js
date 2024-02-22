@@ -7,7 +7,7 @@ export async function getTarget(route: IRouteInstance) {
     const parentLayout = document.querySelector(`[data-layout-id="${route.parentLayoutId}"]`);
 
     if (parentLayout) {
-      const outlet = parentLayout.querySelector(`[data-router="outlet"]`);
+      const outlet = parentLayout.querySelector("[data-router=\"outlet\"]");
       if (outlet) {
         return outlet;
       }
@@ -18,7 +18,7 @@ export async function getTarget(route: IRouteInstance) {
       if (parentLayoutRoute) {
         const parentLayoutRouteRendered = await renderRoute(parentLayoutRoute);
         if (parentLayoutRouteRendered) {
-          const outlet = parentLayoutRouteRendered.querySelector(`[data-router="outlet"]`);
+          const outlet = parentLayoutRouteRendered.querySelector("[data-router=\"outlet\"]");
           if (outlet) {
             return outlet;
           }

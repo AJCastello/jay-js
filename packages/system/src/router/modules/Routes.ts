@@ -5,8 +5,8 @@ export function Routes(inputRoutes: Array<IRoute>, target?: HTMLElement, prefix 
   const outputRoutes: Array<IRouteInstance> = [];
 
   function buildRoutes(routes: Array<IRoute>, prefix: string, parentLayoutId?: string) {
-    for (let route of routes) {
-      let newPath = [prefix, route.path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
+    for (const route of routes) {
+      const newPath = [prefix, route.path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
       const routeId = uniKey();
 
       if (route.element) {
