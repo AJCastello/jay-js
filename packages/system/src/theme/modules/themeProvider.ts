@@ -5,6 +5,6 @@ import { themeDefineOptions } from "./themeDefineOptions.js";
 export function themeProvider(options: Partial<IThemeOptions> = {}) {
   if (options) {
     themeDefineOptions(options);
-  };
+  }
   initTheme();
 }

@@ -7,20 +7,24 @@ export function getPotentialMatch(): IPotentialMatch {
 
   const firstRoute = resolvedRoutes.values().next().value as IRouteInstance;
 
-  const resultMatch = potentialMatches.reduce<IPotentialMatch>((acc, curr) => {
-    if (curr.result !== null) {
-      if (acc.result === null) {
-        return curr;
+  const resultMatch = potentialMatches.reduce<IPotentialMatch>(
+    (acc, curr) => {
+      if (curr.result !== null) {
+        if (acc.result === null) {
+          return curr;
+        }
+        // TODO (Fix Routing System <-)
+        /* if (curr.result.length > acc.result.length) {
+          return curr;
+        } */
       }
-      if (curr.result.length > acc.result.length) {
-        return curr;
-      }
+      return acc;
+    },
+    {
+      route: firstRoute,
+      result: null,
     }
-    return acc;
-  }, {
-    route: firstRoute,
-    result: null
-  });
+  );
 
   if (resultMatch) {
     return resultMatch;
