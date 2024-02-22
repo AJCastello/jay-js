@@ -7,7 +7,7 @@ export let themeOptions: IThemeOptions = {
   defaultDarkTheme: "dark",
   useAsDataset: true,
   useAsClass: false
-}
+};
 
 export function themeDefineOptions(options: Partial<IThemeOptions>) {
   themeOptions = { ...themeOptions, ...options };
