@@ -21,7 +21,12 @@ export function useI18n<T>(){
     }
 
     if (!i18nOptions.nestedKeys) {
-      const translation = (result as any)[path] || options?.default || path;
+      let translation = (result as any)[path] || options?.default || path;
+      if (data) {
+        translation = String(translation).replace(/{{(.*?)}}/g, (match, p1) => {
+          return data[p1.trim()] || match;
+        }) as unknown as T;
+      }
       return translation;
     }
      
