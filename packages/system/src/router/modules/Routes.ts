@@ -1,12 +1,20 @@
 import { uniKey } from "../../utils/uniKey.js";
 import { IRoute, IRouteInstance } from "../types/index.js";
+import { routerOptions } from "./routerDefineOptions.js";
 
 export function Routes(inputRoutes: Array<IRoute>, target?: HTMLElement, prefix = ""): Array<IRouteInstance> {
   const outputRoutes: Array<IRouteInstance> = [];
 
+  const prefixOptions = routerOptions.prefix || "";
+
   function buildRoutes(routes: Array<IRoute>, prefix: string, parentLayoutId?: string) {
+
+    if (prefixOptions && prefix.includes(prefixOptions)) {
+      prefix = prefix.replace(prefixOptions, "");
+    }
+
     for (const route of routes) {
-      const newPath = [prefix, route.path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
+      const newPath = [prefixOptions, prefix, route.path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
       const routeId = uniKey();
 
       if (route.element) {

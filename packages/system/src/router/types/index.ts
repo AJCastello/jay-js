@@ -12,6 +12,7 @@ export interface IRouteInstance extends IRoute {
 }
 
 export interface IRouterOptions {
+  prefix?: string;
   target?: HTMLElement;
   onError?: (error: Error) => void;
   beforeResolve?: (route: IRouteInstance) => boolean;
