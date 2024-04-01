@@ -13,8 +13,9 @@ export function Progress<T extends TBaseTagMap = "progress">({
     props.className,
   ]);
 
-  return Base({
+  return Base<"base">({
     ...props,
+    tag: "progress",
     className,
   }) as HTMLElementTagNameMap[T];
 }
