@@ -1,25 +1,23 @@
 type Join<K, P> = K extends string | number
   ? P extends string | number
-  ? `${K}${"" extends P ? "" : "."}${P}`
-  : never
+    ? `${K}${"" extends P ? "" : "."}${P}`
+    : never
   : never;
 
-export type AllPaths<T> = T extends object
+export type AllPaths<T, Prefix extends string = ""> = T extends object
   ? {
-    [K in keyof T]: K extends string
-    ? `${K}` | Join<K, AllPaths<T[K]>>
-    : never;
-  }[keyof T]
+      [K in keyof T]-?: Join<Prefix, K> | AllPaths<T[K], Join<Prefix, K>>;
+    }[keyof T]
   : "";
 
-export type GetTypeAtPath<T, Path extends string> =
-  Path extends `${infer Start}.${infer Rest}`
-  ? Start extends keyof T
-  ? GetTypeAtPath<T[Start], Rest>
-  : never
-  : Path extends keyof T
+export type GetTypeAtPath<T, Path extends string> = Path extends keyof T
   ? T[Path]
+  : Path extends `${infer Key}.${infer Rest}`
+  ? Key extends keyof T
+    ? GetTypeAtPath<T[Key], Rest>
+    : never
   : never;
+
 
 
 export interface Ii18nLanguages {

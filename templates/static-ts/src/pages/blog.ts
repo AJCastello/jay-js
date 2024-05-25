@@ -11,7 +11,7 @@ export async function Blog() {
   const data = await Blog.useCollection.get<Array<ICollectionArticle>>("blog");
 
   return Section({
-    variant: "main",
+    tag: "main",
     className: "grid grid-cols-3 gap-6",
     children: data.map((item) => {
       return Link({

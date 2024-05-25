@@ -10,7 +10,7 @@ export function Home() {
   }
 
   return Section({
-    variant: "section",
+    tag: "section",
     className: "flex flex-col justify-center items-center",
     children: [
       Button({

@@ -5,28 +5,25 @@
   "version": "1.0.0",
   "repository": "https://github.com/AJCastello/jay-js.git",
   "scripts": {
+    "reset": "nx reset",
     "build": "nx run-many -t build",
     "build:ui": "nx build @jay-js/ui",
-    "build:system": "nx build @jay-js/system", 
+    "build:system": "nx build @jay-js/system",
     "build:cli": "nx build @jay-js/cli",
     "build:jsx": "nx build @jay-js/jsx",
     "build:static": "nx build @jay-js/static",
-        
     "pub:all": "pnpm run pub:cli && pnpm run pub:system && pnpm run pub:ui && pnpm run pub:jsx && pnpm run pub:static",
     "pub:cli": "(cd packages/cli/dist && npm publish --access public)",
     "pub:system": "(cd packages/system/dist && npm publish --access public)",
     "pub:ui": "(cd packages/ui/dist && npm publish --access public)",
     "pub:jsx": "(cd packages/jsx/dist && npm publish --access public)",
     "pub:static": "(cd packages/static/dist && npm publish --access public)",
-    
     "link:all": "pnpm run link:cli && pnpm run link:system && pnpm run link:ui && pnpm run link:jsx && pnpm run link:static",
     "link:cli": "(cd packages/cli/dist && pnpm link --global)",
     "link:system": "(cd packages/system/dist && pnpm link --global)",
     "link:ui": "(cd packages/ui/dist && pnpm link --global)",
     "link:jsx": "(cd packages/jsx/dist && pnpm link --global)",
     "link:static": "(cd packages/static/dist && pnpm link --global)",
-
-
     "unlink:all": "pnpm run unlink:static && pnpm run unlink:jsx && pnpm run unlink:ui && pnpm run unlink:system && pnpm run unlink:cli",
     "unlink:cli": "npm unlink --global @jay-js/cli",
     "unlink:system": "npm unlink --global @jay-js/system",
@@ -40,13 +37,13 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@swc/cli": "^0.1.62",
-    "@swc/core": "^1.3.56",
+    "@swc/cli": "^0.3.12",
+    "@swc/core": "^1.5.7",
     "clean-package": "^2.2.0",
-    "cpy-cli": "^4.2.0",
-    "rimraf": "^5.0.0",
-    "turbo": "^1.10.16",
-    "nx": "17.0.3"
+    "cpy-cli": "^5.0.0",
+    "nx": "19.1.0",
+    "rimraf": "^5.0.7",
+    "turbo": "^1.13.3"
   },
   "packageManager": "pnpm@8.10.2"
 }
