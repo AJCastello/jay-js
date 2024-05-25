@@ -9,7 +9,7 @@ export function NavBar() {
   }
 
   return Section({
-    variant: "nav",
+    tag: "nav",
     className: "mb-4 flex gap-2",
     children: [
       Link({

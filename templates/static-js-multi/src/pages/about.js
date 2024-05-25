@@ -3,7 +3,7 @@ import { i18n } from "../locales/i18n";
 
 export function About() {
   return Section({
-    variant: "section",
+    tag: "section",
     children: i18n("about.content"),
   })
 }

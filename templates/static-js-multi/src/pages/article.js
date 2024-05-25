@@ -10,19 +10,19 @@ export async function Article(slug) {
 
   return Section({
     id: "article",
-    variant: "article",
+    tag: "article",
     className: "container mx-auto",
     children: [
       Box({
         className: "flex flex-col",
         children: [
           Typography({
-            variant: "h1",
+            tag: "h1",
             className: "text-4xl font-bold",
             children: articleData.title
           }),
           Typography({
-            variant: "p",
+            tag: "p",
             className: "mt-5 text-sm",
             children: articleData.description
           }),
