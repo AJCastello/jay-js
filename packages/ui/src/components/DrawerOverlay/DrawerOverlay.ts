@@ -27,6 +27,6 @@ export function DrawerOverlay<T extends TBaseTagMap = "div">({
     dataset: {
       drawerFor: props.for
     },
-    onclick: drawerToggle
+    onclick: props.onclick || drawerToggle
   }) as HTMLElementTagNameMap[T];
 }

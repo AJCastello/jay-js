@@ -2,7 +2,7 @@ justify-start
 justify-end
 items-start
 absolute
-items-en
+items-end
 fixed
 inset-0
 flex

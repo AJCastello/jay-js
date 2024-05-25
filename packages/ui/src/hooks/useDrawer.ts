@@ -1,5 +1,7 @@
 interface IUseDrawer {
   for?: string;
+  onClose?: () => void;
+  onOpen?: () => void;
 }
 
 export function useDrawer({
@@ -14,9 +16,15 @@ export function useDrawer({
 
       if (drawer.classList.contains("hidden")) {
         drawer.classList.remove("hidden");
+        if (props.onOpen) {
+          props.onOpen();
+        }
       } else {
         setTimeout(() => {
           drawer.classList.add("hidden");
+          if (props.onClose) {
+            props.onClose();
+          }
         }, 300);
       }
 
