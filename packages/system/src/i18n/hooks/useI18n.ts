@@ -6,16 +6,16 @@ interface Ii18nContext {
   emptyValue: "string"
 }
 
-export function useI18n<T>(){
- 
-  return function i18n<Path extends AllPaths<Ii18nContext & T>>(
-    path: Path,
-    data?: Record<string, any>,
-    options?: {
-      default?: string
-    }): GetTypeAtPath<T, Path> {
+export function useI18n<T>(): <
+  Path extends AllPaths<Ii18nContext & T>
+>(
+  path: Path,
+  data?: Record<string, any>,
+  options?: { default?: string }
+) => GetTypeAtPath<Ii18nContext & T, Path> {
+  return (path, data, options) => {
     let result = i18nContext.get().data;
-      
+
     if (!result) {
       return options?.default || path as any;
     }
@@ -29,9 +29,9 @@ export function useI18n<T>(){
       }
       return translation;
     }
-     
+
     const pathArray = (path as unknown as string).split(".");
-    
+
     for (const key of pathArray) {
       result = (result as any)[key] || options?.default || key;
       if (data) {
