@@ -48,13 +48,13 @@
   },
   "homepage": "https://github.com/AJCastello/jay-js#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.59.2",
-    "@typescript-eslint/parser": "^5.59.2",
-    "eslint": "^8.39.0",
-    "typescript": "^5.0.4"
+    "@typescript-eslint/eslint-plugin": "^7.10.0",
+    "@typescript-eslint/parser": "^7.10.0",
+    "eslint": "^9.3.0",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "tailwind-merge": "^1.14.0",
-    "yup": "^1.3.2"
+    "tailwind-merge": "^2.3.0",
+    "yup": "^1.4.0"
   }
 }
