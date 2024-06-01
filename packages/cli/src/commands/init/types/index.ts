@@ -11,7 +11,7 @@ export interface IJayJSCLIInitOptions {
   cssLibrary?: "daisyui" | "none";
   useThemeProvider: boolean;
   useJSX: boolean;
-  installDependencies: boolean;
+  installDependencies: "npm" | "yarn" | "pnpm" | "none";
 }
 
 export interface IPackageVersion {
