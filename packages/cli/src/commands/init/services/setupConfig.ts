@@ -5,12 +5,12 @@ export const packageVersion: IPackageVersion = {
   "@jay-js/system": "latest",
   "@jay-js/ui": "latest",
   "@jay-js/jsx": "latest",
-  "vite": "^4.5.0",
-  "tailwindcss": "^3.3.5",
-  "postcss": "^8.4.31",
-  "autoprefixer": "^10.4.16",
-  "typescript": "^5.2.2",
-  "daisyui": "^3.9.4"
+  "vite": "latest",
+  "tailwindcss": "latest",
+  "postcss": "latest",
+  "autoprefixer": "latest",
+  "typescript": "latest",
+  "daisyui": "latest"
 }
 
 export const tsConfigFile: ITsConfigFile = {
