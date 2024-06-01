@@ -2,6 +2,8 @@ import { useI18n } from "@jay-js/system";
 
 export const i18nConfig = {
   defaultLocale: "en-US",
+  nestedKeys: false,
+  saveToLocalStorage: true,
   languages: [
     {
       code: "en-US",

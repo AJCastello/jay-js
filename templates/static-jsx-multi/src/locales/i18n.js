@@ -5,6 +5,8 @@ import i18nEnUs from "./en-us";
 
 export const i18nConfig = {
   defaultLocale: "en-US",
+  nestedKeys: false,
+  saveToLocalStorage: true,
   languages: [
     {
       code: "en-US",
