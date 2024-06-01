@@ -1,3 +1,5 @@
+import chalk from "chalk";
+
 export class Face {
   private frames: string[] = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
   private currentMessage: string = "";
@@ -5,9 +7,9 @@ export class Face {
   private progressInterval?: NodeJS.Timeout;
 
   startProgress(message?: string): void {
-    //this.currentMessage = message;
+    this.currentMessage = message || "";
     this.progressInterval = setInterval(() => {
-      this.updateLine(`${this.frames[this.currentFrame]} ${this.currentMessage}`);
+      this.updateLine(`${chalk.yellow(`${this.frames[this.currentFrame]}`)} ${this.currentMessage}`);
       this.currentFrame = (this.currentFrame + 1) % this.frames.length;
     }, 80);
   }
@@ -20,6 +22,8 @@ export class Face {
 
   endProgress(): void {
     if (this.progressInterval) {
+      process.stdout.clearLine(0);
+      process.stdout.cursorTo(0);
       clearInterval(this.progressInterval);
     }
   }
@@ -35,3 +39,5 @@ export class Face {
     process.stdout.write(message);
   }
 }
+
+export const face = new Face();
