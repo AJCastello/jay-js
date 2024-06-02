@@ -1,13 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
   "module": {
-    "type": "es6"
+    "type": "es6",
+    "resolveFully": true
   },
   "jsc": {
     "parser": {
       "syntax": "typescript",
       "dynamicImport": true,
       "decorators": true
+    },
+    "baseUrl": "./src",
+    "paths": {
+      "src/*": ["./src/*"]
     },
     "transform": {},
     "target": "es2015",
