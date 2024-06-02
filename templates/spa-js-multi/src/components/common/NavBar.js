@@ -14,12 +14,12 @@ export function NavBar() {
     children: [
       Link({
         href: "/",
-        children: i18n("navbar.home"),
+        children: i18n("Home"),
         onclick: (ev) => handleNavigate(ev, "/")
       }),
       Link({
         href: "/about",
-        children: i18n("navbar.about"),
+        children: i18n("About"),
         onclick: (ev) => handleNavigate(ev, "/about")
       })
     ]

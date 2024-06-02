@@ -10,10 +10,10 @@ export function NavBar() {
   return (
     <nav className="mb-4 flex gap-2">
       <a href="/" onclick={(ev: MouseEvent) => handleNavigate(ev, "/")}>
-        {i18n("navbar.home")}
+        {i18n("Home")}
       </a>
       <a href="/about" onclick={(ev: MouseEvent) => handleNavigate(ev, "/about")}>
-        {i18n("navbar.about")}
+        {i18n("About")}
       </a>
     </nav>
   )

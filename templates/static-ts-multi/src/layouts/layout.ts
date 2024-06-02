@@ -22,7 +22,7 @@ export function Layout() {
       Typography({
         tag: "h1",
         className: "text-4xl mb-4 font-bold",
-        children: i18n("welcomeMessage")
+        children: i18n("Welcome do Jay JS!")
       }),
       NavBar(),
       Divider(),
