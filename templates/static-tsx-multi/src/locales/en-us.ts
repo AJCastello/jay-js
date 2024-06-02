@@ -1,4 +1,4 @@
-import { Ii18nBase } from "../i18n.types";
+import { Ii18nBase } from "./i18n.types";
 
 const enUS: Ii18nBase = {
   "Welcome do Jay JS!": "Welcome do Jay JS!",
