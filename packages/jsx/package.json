@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/jsx",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A JSX library for Jay JS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -53,6 +53,6 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@jay-js/ui": "latest"
+    "@jay-js/ui": "^3.1.1"
   }
 }

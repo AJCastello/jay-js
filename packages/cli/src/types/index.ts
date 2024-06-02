@@ -20,11 +20,15 @@ interface ElementFunction {
   (props?: any): Promise<any>;
 }
 
+export interface ICreateContext {
+  contextName: string;
+}
+
 export interface IJayJsOptions{
-  build?: {
-    srcDir?: string;
-    outDir?: string;
-    transformedDir?: string;
+  build: {
+    srcDir: string;
+    outDir: string;
+    transformedDir: string;
     contentDir: string;
     contentTransformedDir: string;
   }

@@ -1,8 +1,6 @@
 // node 
-//import fs from 'node:fs';
-import fs from 'fs-extra';
-
-import path from 'node:path';
+import fs from "fs-extra";
+import path from "node:path";
 
 // parsers
 import matter from "gray-matter";
@@ -12,7 +10,7 @@ import { marked } from "marked";
 import { jayJsOptions } from "../../options/jayJsDefineOptions.js";
 
 // output
-import { Face } from '../../utils/terminal.js';
+import { Face } from "../../utils/terminal.js";
 const face = new Face();
 
 let proccessedFiles = 0;
@@ -29,10 +27,10 @@ function parseMarkdown(src: string): any {
 }
 
 async function transformMarkdownFile(filePath: string) {
-  const markdownContent = fs.readFileSync(filePath, 'utf8');
+  const markdownContent = fs.readFileSync(filePath, "utf8");
   const transformedContent = parseMarkdown(markdownContent);
   const transformedJsContent = `export default ${JSON.stringify(transformedContent, null, 2)};`;
-  const newFilePath = filePath.replace(/\.mdx?$/, '.js');
+  const newFilePath = filePath.replace(/\.mdx?$/, ".js");
   fs.writeFileSync(newFilePath, transformedJsContent);
   proccessedFiles++;
   face.setMessage(`Transforming: ${path.basename(filePath)} (${proccessedFiles})`);

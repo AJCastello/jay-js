@@ -9,4 +9,3 @@ export async function setupCloneTemplate(options: IJayJSCLIInitOptions) {
   await createDirectory(projectRoot);
   await downloadTemplateFiles(templateId, projectName);
 }
-

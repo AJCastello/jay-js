@@ -1,4 +1,4 @@
-import { useI18n } from "@jay-js/system";
+import { Ii18nOptions, useI18n } from "@jay-js/system";
 
 // types
 import { Ii18nBase } from "./i18n.types";
@@ -6,8 +6,10 @@ import { Ii18nBase } from "./i18n.types";
 // locales
 import i18nEnUs from "./en-us";
 
-export const i18nConfig = {
+export const i18nConfig: Ii18nOptions = {
   defaultLocale: "en-US",
+  nestedKeys: false,
+  saveToLocalStorage: true,
   languages: [
     {
       code: "en-US",

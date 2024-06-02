@@ -42,24 +42,7 @@ export default {
   },
   plugins: [${plugin === "daisyui" ? 'require("daisyui")' : ""}],
   ${plugin === "daisyui" ? `daisyui: {
-    themes: [
-      {
-        light: {
-          ...require("daisyui/src/theming/themes")["[data-theme=light]"],
-          "primary": "#05B48A",
-          "primary-focus": "#02CC9A",
-          "primary-content": "#ffffff",
-        },
-      },
-      {
-        dark: {
-          ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
-          "primary": "#05B48A",
-          "primary-focus": "#02CC9A",
-          "primary-content": "#ffffff"
-        }
-      }
-    ]
+    themes: ["light", "dark"]
   }` : ""}
 }`;
 }

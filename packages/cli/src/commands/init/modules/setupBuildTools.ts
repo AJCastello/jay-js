@@ -5,7 +5,6 @@ import { generateViteTypesFileContent } from "../utils/generate.js";
 
 export async function setupBuildTools(options: IJayJSCLIInitOptions) {
   const projectRoot = `./${options.projectName}`;
-
   if (options.buildTool === "vite") {
     packageFile.devDependencies = {
       "vite": packageVersion.vite,
@@ -20,7 +19,6 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
       }
     }
     packageFile.scripts.build = buildCommand;
-
     if(options.projectType === "static"){
       packageFile.scripts.prebuild = "jayjs prepare --static";
       if(options.installUIPackage) {
@@ -29,14 +27,9 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
       }
       packageFile.scripts.postbuild = "jayjs build --static";
     }
-
     packageFile.scripts.preview = "vite preview";
-  }
-
-  if (options.buildTool === "vite") {
     await createFile(`${projectRoot}/src/vite-env.d.ts`, generateViteTypesFileContent());
   }
-
 
   // else if (options.buildTool === "bun") {
   //   packageFile.devDependencies = {
