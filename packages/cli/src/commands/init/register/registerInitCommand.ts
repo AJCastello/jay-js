@@ -2,7 +2,6 @@ import chalk from "chalk";
 import { Command } from "commander";
 import inquirer, { QuestionCollection } from "inquirer";
 import { init } from "../index.js";
-// import { face } from "../../../utils/terminal.js";
 
 export function registerInitCommand(program: Command) {
   program
@@ -113,10 +112,7 @@ export function registerInitCommand(program: Command) {
       inquirer
         .prompt(questions)
         .then(async (options) => {
-          //const { init } = await import("../index.js");
           await init(options);
-          // face.endProgress();
-          // console.log(chalk.greenBright.bold(`✔ Project ${options.projectName} has been successfully set up!`));
         });
     });
 }
