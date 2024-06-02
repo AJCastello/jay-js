@@ -18,7 +18,7 @@ export async function downloadTemplateFiles(templateId: string, projectName: str
     face.setMessage(`Cloning template (${templateId})...`);
 
     const emitter = degit(`AJCastello/jay-js/${templatePath}`, {
-      cache: true,
+      cache: false,
       force: true,
       verbose: true,
     });
