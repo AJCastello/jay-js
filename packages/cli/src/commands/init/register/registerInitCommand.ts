@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { Command } from "commander";
 import inquirer, { QuestionCollection } from "inquirer";
-import { init } from "../index.js";
+import { init } from "../action/initAction.js";
 
 export function registerInitCommand(program: Command) {
   program
