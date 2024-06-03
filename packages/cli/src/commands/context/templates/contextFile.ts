@@ -1,9 +1,8 @@
-import { pascalCase } from "../utils";
+import { toPascalCase } from "../../../utils/case";
 
 export function contextFileTemplate(contextName: string){
-  const formattedName = pascalCase(contextName);
-  return `// jay-js
-import { State } from "@jay-js/system";
+  const formattedName = toPascalCase(contextName);
+  return `import { State } from "@jay-js/system";
 
 // interfaces
 import {
@@ -12,7 +11,6 @@ import {
   I${formattedName}ContextPrivateStorage,
   I${formattedName}ContextStates,
   I${formattedName}ContextActions,
-  /** jayjs:interfaces */
 } from "./${contextName}.interfaces";
 
 // dependencies
@@ -28,11 +26,9 @@ class ${formattedName}Context implements I${formattedName}Context {
 
   constructor() {
     this.contextStates = {
-      /** jayjs:contextStates */
     };
     
     this.storage = {
-      /** jayjs:storage */
     };
 
     this.states = new ${formattedName}States(this.contextStates);

@@ -1,10 +1,8 @@
-import { pascalCase } from "../utils";
+import { toPascalCase } from "../../../utils/case";
 
 export function actionsFileTemplate(contextName: string) {
-  const formattedName = pascalCase(contextName);
-  return `
-// context interface
-import { I${formattedName}ContextStates, I${formattedName}ContextActions, I${formattedName}ContextPrivateStorage } from "./${contextName}.interfaces";
+  const formattedName = toPascalCase(contextName);
+  return `import { I${formattedName}ContextStates, I${formattedName}ContextActions, I${formattedName}ContextPrivateStorage } from "./${contextName}.interfaces";
 
 export class ${formattedName}Actions implements I${formattedName}ContextActions {
   states: I${formattedName}ContextStates;
