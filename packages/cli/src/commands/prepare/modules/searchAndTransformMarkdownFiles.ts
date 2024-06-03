@@ -1,0 +1,24 @@
+// node
+import fs from "fs/promises";
+import path from "node:path";
+
+// modules
+import { transformMarkdownFile } from "./transformMarkdownFile";
+
+async function removeMarkdownFile(filePath: string) {
+  await fs.unlink(filePath);
+}
+
+export async function searchAndTransformMarkdownFiles(dir: string) {
+  const files = await fs.readdir(dir);
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    const stats = await fs.stat(filePath);
+    if (stats.isDirectory()) {
+      searchAndTransformMarkdownFiles(filePath);
+    } else if (/\.(md|mdx)$/.test(filePath)) {
+      transformMarkdownFile(filePath);
+      removeMarkdownFile(filePath);
+    }
+  }
+}
