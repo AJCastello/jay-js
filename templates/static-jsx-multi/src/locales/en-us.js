@@ -1,4 +1,4 @@
-const enUS = {
+const enUs = {
   "Welcome do Jay JS!": "Welcome do Jay JS!",
   "Home": "Home",
   "About": "About",
@@ -6,4 +6,4 @@ const enUS = {
   "This is your lazy loaded About page.": "This is your lazy loaded About page."
 }
 
-export default enUS;
+export default enUs;
