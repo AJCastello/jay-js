@@ -1,31 +1,28 @@
 // node 
-import fs from "fs-extra";
+import fs from "fs/promises";
 import path from "node:path";
 
 // options
 import { jayJsOptions } from "../../../options/jayJsDefineOptions";
+import { toPascalCase } from "../../../utils/case";
 
-export function addActionMethod({ contextName, action }: { contextName: string; action: string }) {
+export async function addActionMethod({ contextName, action }: { contextName: string; action: string }) {
   const projectPath = path.join(process.cwd(), jayJsOptions.build.srcDir, "contexts", contextName);
-
   const interfacesFile = path.join(projectPath, `${contextName}.interfaces.ts`);
   const actionsFile = path.join(projectPath, `${contextName}.actions.ts`);
-
-  const interfaceContent = fs.readFileSync(interfacesFile, "utf8");
-  const actionContent = fs.readFileSync(actionsFile, "utf8");
+  const interfaceContent = await fs.readFile(interfacesFile, "utf8");
+  const actionContent = await fs.readFile(actionsFile, "utf8");
 
   const interfacesContentUpdated = interfaceContent.replace(
-    "/** jayjs:actions */",
-    `${action}: () => void;\n  /** jayjs:actions */`
+    `I${toPascalCase(contextName)}ContextActions {`,
+    `I${toPascalCase(contextName)}ContextActions {\n  ${action}: () => void;`
   );
-
   const actionContentUpdated = actionContent.replace(
     "/** jayjs:actions */",
-    `${action}() {\n    // apply the logic here\n  }\n\n  /** jayjs:actions */`
+    `/** jayjs:actions */\n\n  ${action}() {}`
   );
 
-  fs.writeFileSync(interfacesFile, interfacesContentUpdated);
-  fs.writeFileSync(actionsFile, actionContentUpdated);
-
-  return;
+  await fs.writeFile(interfacesFile, interfacesContentUpdated);
+  await fs.writeFile(actionsFile, actionContentUpdated);
+  console.log(`✔ "${action}" action method added to context "${contextName}"!`);
 }
