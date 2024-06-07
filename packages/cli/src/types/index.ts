@@ -24,6 +24,10 @@ export interface ICreateContext {
   contextName: string;
 }
 
+export interface ICreateModule {
+  moduleName: string;
+}
+
 export interface IJayJsOptions{
   build: {
     srcDir: string;
