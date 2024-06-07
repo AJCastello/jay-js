@@ -1,0 +1,28 @@
+init:
+  projectName: Jay JS Todo List
+  javascriptVariant: ts
+  buildTool: vite
+  type: spa
+  language: multi
+  uiPackage: true
+  cssPlugin: daisyui
+  useJSX: true
+  installDependencies: none
+
+ctx:
+  name: todoContext
+  resources: 
+    actions:
+      - name: init
+        commit: "Loads data from localStorage, updates state with received data, registers a listener for state changes"
+      - name: save
+        commit: "Retrieve state data and save to localStorage"
+    states:
+      - name: addItem
+        commit: "Add a new item to the list"
+      - name: removeItem
+        commit: "Remove an item from the list"
+      - name: setItemDone
+        commit: "Set an item as done"
+      - name: onChange
+        commit: "Subscribe a on change listener to the state"
