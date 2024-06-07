@@ -4,11 +4,11 @@ export interface IJayJSCLIInitOptions {
   projectName: string;
   javascriptVariant: "ts" | "js";
   buildTool: TBuildTool;
-  projectType: "static" | "spa";
-  languageType: "single" | "multi";
+  type: "static" | "spa";
+  language: "single" | "multi";
   defaultLanguage?: string;
-  installUIPackage: boolean;
-  cssLibrary?: "daisyui" | "none";
+  uiPackage: boolean;
+  cssPlugin?: "daisyui" | "none";
   useThemeProvider: boolean;
   useJSX: boolean;
   installDependencies: "npm" | "yarn" | "pnpm" | "none";

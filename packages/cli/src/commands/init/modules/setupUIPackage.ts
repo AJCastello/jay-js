@@ -6,18 +6,18 @@ import { generatePostCSSFileContent, generateStyleFileContent, generateTailwindC
 export async function setupUIPackage(options: IJayJSCLIInitOptions) {
   const projectRoot = `./${options.projectName}`;
   await createDirectory(`${projectRoot}/src/styles`);
-  if (options.installUIPackage) {
+  if (options.uiPackage) {
     await createFile(`${projectRoot}/src/styles/globals.css`, generateStyleFileContent());
     packageFile.devDependencies.tailwindcss = packageVersion.tailwindcss;
     packageFile.devDependencies.postcss = packageVersion.postcss;
     packageFile.devDependencies.autoprefixer = packageVersion.autoprefixer;
     packageFile.dependencies["@jay-js/ui"] = packageVersion["@jay-js/ui"];
   
-    if (options.cssLibrary === "daisyui") {
+    if (options.cssPlugin === "daisyui") {
       packageFile.devDependencies.daisyui = packageVersion.daisyui;
     }
 
-    await createFile(`${projectRoot}/tailwind.config.js`, generateTailwindConfigFileContent(options.installUIPackage, options.cssLibrary));
+    await createFile(`${projectRoot}/tailwind.config.js`, generateTailwindConfigFileContent(options.uiPackage, options.cssPlugin));
     await createFile(`${projectRoot}/postcss.config.js`, generatePostCSSFileContent());
     return;
   }

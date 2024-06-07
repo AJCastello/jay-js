@@ -5,7 +5,7 @@ import { generateViteConfigFileContent } from "../utils/generate.js";
 
 export async function setupProjectType(options: IJayJSCLIInitOptions) {
   const projectRoot = `./${options.projectName}`;
-  if (options.projectType === "static") {
+  if (options.type === "static") {
     packageFile.dependencies["@jay-js/static"] = packageVersion["@jay-js/static"];
     if (options.buildTool === "vite") {
       await createFile(`${projectRoot}/vite.config.js`, generateViteConfigFileContent());

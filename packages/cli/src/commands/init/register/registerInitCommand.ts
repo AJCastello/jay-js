@@ -39,7 +39,7 @@ export function registerInitCommand(program: Command) {
         },
         {
           type: "list",
-          name: "projectType",
+          name: "type",
           message: "What is the project type?",
           choices: [
             { name: `${chalk.greenBright("SPA/PWA")} ${chalk.italic.gray("Single page app/Web app")}`, value: "spa" },
@@ -49,7 +49,7 @@ export function registerInitCommand(program: Command) {
         },
         {
           type: "list",
-          name: "languageType",
+          name: "language",
           message: "Is the project single or multi-language?",
           choices: [
             { name: chalk.yellow("Single language"), value: "single" },
@@ -58,7 +58,7 @@ export function registerInitCommand(program: Command) {
           loop: false,
         },
         // {
-        //   when: (answers) => answers.languageType === "multi",
+        //   when: (answers) => answers.language === "multi",
         //   type: "input",
         //   name: "defaultLanguage",
         //   message: chalk.bold("Enter the default language code (e.g., en-us):\n") +
@@ -67,14 +67,14 @@ export function registerInitCommand(program: Command) {
         // },
         {
           type: "confirm",
-          name: "installUIPackage",
+          name: "uiPackage",
           message: `${chalk.bold("Install the @jay-js/ui package?")} ${chalk.italic.gray("(Recommended)")}`,
           default: true,
         },
         {
-          when: (answers) => answers.installUIPackage,
+          when: (answers) => answers.uiPackage,
           type: "list",
-          name: "cssLibrary",
+          name: "cssPlugin",
           message: chalk.bold("Tailwind CSS component plugin:"),
           choices: [
             new inquirer.Separator("It integrate seamlessly with @jay-js/ui leveraging its class names for styling."),
@@ -112,7 +112,8 @@ export function registerInitCommand(program: Command) {
       inquirer
         .prompt(questions)
         .then(async (options) => {
-          await init(options);
+          console.log(options)
+          /// await init(options);
         });
     });
 }
