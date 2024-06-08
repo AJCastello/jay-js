@@ -2,9 +2,10 @@ import { IJayJSCLIInitOptions } from "../types/index.js";
 import { packageFile, packageVersion } from "../services/setupConfig.js";
 import { createFile } from "../utils/filesystem.js";
 import { generateViteTypesFileContent } from "../utils/generate.js";
+import { toKebabCase } from "../../../utils/case.js";
 
 export async function setupBuildTools(options: IJayJSCLIInitOptions) {
-  const projectRoot = `./${options.projectName}`;
+  const projectRoot = `./${toKebabCase(options.projectName)}`;
   if (options.buildTool === "vite") {
     packageFile.devDependencies = {
       "vite": packageVersion.vite,

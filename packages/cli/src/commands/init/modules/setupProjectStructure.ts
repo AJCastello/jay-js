@@ -16,8 +16,10 @@ import {
   packageFile
 } from "../services/setupConfig.js";
 
+import { toKebabCase } from "../../../utils/case.js";
+
 export async function setupProjectStructure(options: IJayJSCLIInitOptions): Promise<void> {
-  const projectRoot = `./${options.projectName}`;
+  const projectRoot = `./${toKebabCase(options.projectName)}`;
   packageFile.name = options.projectName;
 
   await createDirectory(`${projectRoot}/public`);
