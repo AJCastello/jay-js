@@ -1,8 +1,8 @@
 import { IJayJSCLIInitOptions } from "../types/index.js";
 import { packageFile, packageVersion } from "../services/setupConfig.js";
 import { createFile } from "../utils/filesystem.js";
-import { generateViteTypesFileContent } from "../utils/generate.js";
 import { toKebabCase } from "../../../utils/case.js";
+import { viteTypesFile } from "../templates/configFiles.js";
 
 export async function setupBuildTools(options: IJayJSCLIInitOptions) {
   const projectRoot = `./${toKebabCase(options.projectName)}`;
@@ -29,7 +29,7 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
       packageFile.scripts.postbuild = "jayjs build --static";
     }
     packageFile.scripts.preview = "vite preview";
-    await createFile(`${projectRoot}/src/vite-env.d.ts`, generateViteTypesFileContent());
+    await createFile(`${projectRoot}/src/vite-env.d.ts`, viteTypesFile());
   }
 
   // else if (options.buildTool === "bun") {
