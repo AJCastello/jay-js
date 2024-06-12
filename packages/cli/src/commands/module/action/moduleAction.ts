@@ -7,6 +7,7 @@ import { addRepository } from "../modules/addRepository";
 
 // types
 import { TArgument, TOptions } from "../types";
+import { log } from "../../../utils/terminal";
 
 export function moduleAction(argument: TArgument, options: TOptions) {
   const [resource, moduleName] = argument.split(":");
@@ -23,7 +24,7 @@ export function moduleAction(argument: TArgument, options: TOptions) {
       options.repository && addRepository({ moduleName, repository: options.repository });
       break;
     default:
-      console.error(`Error: Invalid resource "${resource}".`);
+      log`Error: Invalid resource "${resource}".`;
       break;
   }
 }
