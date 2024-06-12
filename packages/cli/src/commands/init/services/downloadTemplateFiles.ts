@@ -1,8 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
-import chalk from "chalk";
 import os from "os";
-import { face } from "../../../utils/terminal";
+import { face, log } from "../../../utils/terminal";
 import degit from "degit";
 import { toKebabCase } from "../../../utils/case";
 
@@ -33,7 +32,7 @@ export async function downloadTemplateFiles(templateId: string, projectName: str
 
     fs.removeSync(tempDir);
   } catch (err) {
-    console.error(chalk.red(`Error setting up the project: ${err}`));
+    log`{red Error setting up the project: ${err}}`;
   }
 }
 
@@ -76,6 +75,6 @@ export async function downloadTemplateFiles(templateId: string, projectName: str
 //     const targetDir = path.join(process.cwd(), projectName);
 //     await downloadRepository(templateId, targetDir);
 //   } catch (err) {
-//     console.error(chalk.red(`Error setting up the project: ${err}`));
+//     console.error(`Error setting up the project: ${err}`);
 //   }
 // }
