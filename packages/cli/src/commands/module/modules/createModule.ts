@@ -6,8 +6,7 @@ import path from "node:path";
 import { jayJsOptions } from "../../../options/jayJsDefineOptions.js";
 
 // interfaces
-import { ICreateModule } from "../../../types/index.js";
-
+import { ICreateModule, ITemplateFiles } from "../types/index.js";
 import { serviceFileTemplate } from "../templates/serviceFile.js";
 import { httpFileTemplate } from "../templates/httpFile.js";
 import { modelsFileTemplate } from "../templates/modelsFile.js";
@@ -15,9 +14,8 @@ import { repositoryFileTemplate } from "../templates/repositoryFile.js";
 import { interfacesFileTemplate } from "../templates/interfacesFile.js";
 
 // templates
-import chalk from "chalk";
 import inquirer, { QuestionCollection } from "inquirer";
-import { ITemplateFiles } from "../types/index.js";
+import { faceChalk, log } from "../../../utils/terminal.js";
 
 export async function createModule({ moduleName }: ICreateModule): Promise<void> {
   const questions: QuestionCollection<any> = [
@@ -26,10 +24,10 @@ export async function createModule({ moduleName }: ICreateModule): Promise<void>
       name: "features",
       message: "Choose the features/layers you want to add:",
       choices: [
-        { name: chalk.greenBright(" Service"), value: "service" },
-        { name: chalk.yellow(" Models"), value: "models" },
-        { name: chalk.blueBright(" Repository"), value: "repository" },
-        { name: chalk.redBright(" HTTP"), value: "http" }
+        { name: faceChalk`{greenBright Service}`, value: "service" },
+        { name: faceChalk`{blueBright HTTP}`, value: "http" },
+        { name: faceChalk`{yellow Models}`, value: "models" },
+        { name: faceChalk`{redBright Repository}`, value: "repository" }
       ],
       loop: false,
     }
@@ -58,6 +56,6 @@ export async function createModule({ moduleName }: ICreateModule): Promise<void>
 
       const interfacesFile = interfacesFileTemplate(moduleName, features);
       await fs.writeFile(path.join(modulePath, `${moduleName}.interfaces.ts`), interfacesFile);
-      console.log(`✔ Module "${moduleName}" has been successfully created!`);
+      log`{gray {green ✔}  Module "{yellow ${moduleName}}" has been successfully created!}`
     });
 }
