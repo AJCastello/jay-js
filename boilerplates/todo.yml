@@ -1,28 +1,43 @@
 init:
-  projectName: Jay JS Todo List
+  projectName: Todo List
   javascriptVariant: ts
   buildTool: vite
   type: spa
-  language: multi
+  language: single
   uiPackage: true
   cssPlugin: daisyui
   useJSX: true
-  installDependencies: none
+  useTests: true
+  testLibrary: "vitest"
+  installDependencies: pnpm
 
 ctx:
-  name: todoContext
+  name: todoList
   resources: 
     actions:
       - name: init
-        commit: "Loads data from localStorage, updates state with received data, registers a listener for state changes"
+        description: "Loads data from localStorage, updates state with received data, registers a listener for state changes"
       - name: save
-        commit: "Retrieve state data and save to localStorage"
+        description: "Retrieve state data and save to localStorage"
     states:
-      - name: addItem
-        commit: "Add a new item to the list"
-      - name: removeItem
-        commit: "Remove an item from the list"
-      - name: setItemDone
-        commit: "Set an item as done"
-      - name: onChange
-        commit: "Subscribe a on change listener to the state"
+      - name": "setList"
+        description": "Set full to-do list to state"
+      - name": "getList"
+        description": "Get full to-do list from state"
+      - name": "addItem"
+        description": "Add new item to to-do list"
+      - name": "removeItem"
+        description": "Remove item from to-do list"
+      - name": "setDone"
+        description": "Set item as done"
+      - name": "onChange"
+        description": "Subscribe a listener for changes in to-do list"
+      - name": "saveOnChange"
+        description": "Save to-do list to a repository on change"
+
+module:
+  name: TodoItem
+  resources:
+    http:
+      - name: getTodoList
+      - name: setTodoList
