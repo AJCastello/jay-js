@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 // External libraries
 import fs from "fs-extra";
-import { JSDOM } from "jsdom";
+import jsdom, { JSDOM } from "jsdom";
 
 // register loader
 import "./register-loader.js";
@@ -16,7 +16,7 @@ import { jayJsOptions } from "../../options/jayJsDefineOptions.js";
 import { findScriptAndSrc } from "./utils/findScriptAndSrc.js";
 
 // output
-import { Face } from '../../utils/terminal.js';
+import { Face, log } from '../../utils/terminal.js';
 const face = new Face();
 
 export async function renderHTMLFiles(): Promise<void> {
@@ -33,7 +33,19 @@ export async function renderHTMLFiles(): Promise<void> {
 
   const { script, src } = scriptAndSrc;
   const index: string = indexRef.replace(script, "");
-  const indexDom = new JSDOM(index, { url: "http://localhost/" });
+  const indexDom = new JSDOM(index, {
+    url: "http://localhost/",
+    runScripts: "dangerously",
+    virtualConsole: new jsdom.VirtualConsole().sendTo(console)
+  });
+
+  // TODO: Intercept fetch requests to add extensions
+
+  indexDom.window.fetch = async function (resource, options) {
+    console.log(`Intercepted request to: ${resource}`);
+    // You can modify the request here or handle it differently
+    return fetch(resource, options);
+  };
 
   // const configPath = path.resolve(process.cwd(), "jayjs.config.js");
   // const configURL = pathToFileURL(configPath);
@@ -205,7 +217,7 @@ async function manageDirectories() {
       }
     );
   } catch (error) {
-    console.error("Failed to manage directories:", error);
+    log`Failed to manage directories: ${error}`;
   }
 }
 
@@ -245,7 +257,7 @@ async function finalizeOutDirectory() {
       )
     );
   } catch (error) {
-    console.error("Failed to finalize out directory:", error);
+    log`Failed to finalize out directory: ${error}`;
   }
 }
 
@@ -254,10 +266,10 @@ export async function render() {
     await manageDirectories();
     await renderHTMLFiles();
     await finalizeOutDirectory();
-    console.log("Static files rendered successfully!");
+    log`{gray {green ✔}  Static files rendered successfully!}`;
     process.exit(0);
   } catch (error) {
-    console.error("Failed to render static files:", error);
+    log`{red Error rendering static files: ${error}}`;
     process.exit(1);
   }
 }
