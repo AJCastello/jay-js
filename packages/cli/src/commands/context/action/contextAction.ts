@@ -1,20 +1,21 @@
-// modules
-import { addStorage } from "../modules/addStorage";
+import { log } from "../../../utils/terminal";
 import { createContext } from "../modules/createContext";
-import { addStateMethod } from "../modules/addStateMethod";
-import { addPrivateState } from "../modules/addPrivateState";
-import { addActionMethod } from "../modules/addActionMethod";
+import { TContextCommandArgument, TContextCommandOptions } from "../types";
+import { addHandler } from "./addHandler";
 
-// types
-import { TArgument, TOptions } from "../types";
-
-export function contextAction(argument: TArgument, options: TOptions) {
+export function contextAction(argument: TContextCommandArgument, options: TContextCommandOptions) {
   const [resource, contextName] = argument.split(":");
+  const { state, action, storage, privateState, description } = options;
 
   if (resource === "add") {
-    const optionCount = [options.state, options.action, options.storage, options.private].filter(Boolean).length;
+    const optionCount = [
+      state,
+      action,
+      storage,
+      privateState
+    ].filter(Boolean).length;
     if (optionCount > 1) {
-      console.error("Error: Exactly one of --state, --action, or --storage is required for the 'add' action.");
+      log`Error: Exactly one of --state, --action, or --storage is required for the 'add' action.`
       process.exit(1);
     }
   }
@@ -22,16 +23,13 @@ export function contextAction(argument: TArgument, options: TOptions) {
   switch (resource) {
     case "c":
     case "create":
-      createContext({ contextName });
+      createContext(contextName);
       break;
     case "add":
-      options.state && addStateMethod({ contextName, state: options.state });
-      options.private && addPrivateState({ contextName, contextState: options.private })
-      options.action && addActionMethod({ contextName, action: options.action });
-      options.storage && addStorage({ contextName, storage: options.storage });
+      addHandler(contextName, options);
       break;
     default:
-      console.error(`Error: Invalid resource "${resource}".`);
+      log`Error: Invalid resource "${resource}".`
       break;
   }
 }
