@@ -10,3 +10,7 @@ export type TOptions = {
 export interface ITemplateFiles {
   [key: string]: (moduleName: string, features: Array<string>) => string;
 }
+
+export type ICreateModule = {
+  moduleName: string;
+}
