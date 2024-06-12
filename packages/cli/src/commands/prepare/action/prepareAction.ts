@@ -6,30 +6,31 @@ import path from "node:path";
 import { jayJsOptions } from "../../../options/jayJsDefineOptions.js";
 
 // terminal
-import { face } from "../../../utils/terminal.js";
+import { log } from "../../../utils/terminal.js";
 import { searchAndTransformMarkdownFiles } from "../modules/searchAndTransformMarkdownFiles.js";
 
 export async function prepareAction() {
-  face.write("Cloning public and content folders...\n");
-  face.startProgress();
-  
+  const cwd = process.cwd();
+  log`Cloning public and content folders...`;
+  const {
+    srcDir,
+    contentDir,
+    contentTransformedDir,
+    outDir,
+    transformedDir
+  } = jayJsOptions.build;
   fs.copySync(
-    path.join(process.cwd(), jayJsOptions.build?.srcDir as string, jayJsOptions.build?.contentDir as string),
-    path.join(process.cwd(), jayJsOptions.build?.srcDir as string, jayJsOptions.build?.contentTransformedDir as string)
+    path.join(cwd, srcDir, contentDir),
+    path.join(cwd, srcDir, contentTransformedDir)
   );
-
   fs.copySync(
-    path.join(process.cwd(), "public" as string),
-    path.join(process.cwd(), jayJsOptions.build?.outDir as string, jayJsOptions.build?.transformedDir as string)
+    path.join(cwd, "public"),
+    path.join(cwd, outDir, transformedDir)
   );
-
-  face.endProgress();
-  face.write("\n   ✅ Folders cloned successfully!\n");
-  face.write("\nTransforming markdown/content files...\n");
-  face.startProgress();
-  
-  const pathToContentTransformed = path.join(process.cwd(), jayJsOptions.build?.srcDir as string, jayJsOptions.build?.contentTransformedDir as string);
+  log`{green ✔}  Folders cloned successfully!\n`;
+  log`Transforming {italic markdown/content} files...`;
+  const pathToContentTransformed = path.join(cwd, srcDir, contentTransformedDir);
   await searchAndTransformMarkdownFiles(pathToContentTransformed);
-
-  face.write(`\n   ✅ Files transformed successfully!\n\n`);
+  log`{green ✔}  Files transformed successfully!\n`;
+  process.exit(0);
 }
