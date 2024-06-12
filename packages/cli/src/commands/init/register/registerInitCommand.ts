@@ -1,15 +1,15 @@
-import chalk from "chalk";
 import { Command } from "commander";
 import inquirer, { QuestionCollection } from "inquirer";
 import { init } from "../action/initAction.js";
+import { faceChalk, log } from "../../../utils/terminal.js";
 
 export function registerInitCommand(program: Command) {
   program
     .command("init")
     .description("Starts the project setup")
     .action(() => {
-      console.log(chalk.bold("Welcome to the Jay JS CLI setup"));
-      console.log(chalk.gray.italic("You can abort the installation at any time by pressing Ctrl+C.\n"));
+      log`{bold Welcome to the {green Jay JS} CLI setup}`
+      log`{gray You can abort the installation at any time by pressing Ctrl+C.}\n`;
 
       const questions: QuestionCollection<any> = [
         {
@@ -23,8 +23,8 @@ export function registerInitCommand(program: Command) {
           name: "javascriptVariant",
           message: "Select a variant:",
           choices: [
-            { name: chalk.blueBright("TypeScript"), value: "ts" },
-            { name: chalk.yellow("JavaScript"), value: "js" },
+            { name: faceChalk`{blueBright TypeScript}`, value: "ts" },
+            { name: faceChalk`{yellow JavaScript}`, value: "js" },
           ],
           loop: false,
         },
@@ -33,7 +33,7 @@ export function registerInitCommand(program: Command) {
           name: "buildTool",
           message: "What build tool do you want to use?",
           choices: [
-            { name: chalk.greenBright("Vite"), value: "vite" }
+            { name: faceChalk`{greenBright Vite}`, value: "vite" }
           ],
           loop: false,
         },
@@ -42,8 +42,8 @@ export function registerInitCommand(program: Command) {
           name: "type",
           message: "What is the project type?",
           choices: [
-            { name: `${chalk.greenBright("SPA/PWA")} ${chalk.italic.gray("Single page app/Web app")}`, value: "spa" },
-            { name: `${chalk.blueBright("Content/Static site")} ${chalk.italic.gray("Compiles to static files")}`, value: "static" },
+            { name: faceChalk`{greenBright SPA/PWA} {italic.gray Single page app/Web app}`, value: "spa" },
+            { name: faceChalk`{blueBright Content/Static site} {italic.gray Compiles to static files}`, value: "static" }
           ],
           loop: false,
         },
@@ -52,8 +52,8 @@ export function registerInitCommand(program: Command) {
           name: "language",
           message: "Is the project single or multi-language?",
           choices: [
-            { name: chalk.yellow("Single language"), value: "single" },
-            { name: chalk.blueBright("Multi-language"), value: "multi" },
+            { name: faceChalk`{yellow Single language}`, value: "single" },
+            { name: faceChalk`{blueBright Multi-language}`, value: "multi" }
           ],
           loop: false,
         },
@@ -61,31 +61,31 @@ export function registerInitCommand(program: Command) {
         //   when: (answers) => answers.language === "multi",
         //   type: "input",
         //   name: "defaultLanguage",
-        //   message: chalk.bold("Enter the default language code (e.g., en-us):\n") +
+        //   message: "Enter the default language code (e.g., en-us):\n" +
         //     new inquirer.Separator("Other languages can be added later using the i18n command of the Jay JS CLI"),
         //   default: "en-us",
         // },
         {
           type: "confirm",
           name: "uiPackage",
-          message: `${chalk.bold("Install the @jay-js/ui package?")} ${chalk.italic.gray("(Recommended)")}`,
+          message: faceChalk`{bold Install the {green.italic @jay-js/ui} package?} {italic.gray (Recommended)}`,
           default: true,
         },
         {
           when: (answers) => answers.uiPackage,
           type: "list",
           name: "cssPlugin",
-          message: chalk.bold("Tailwind CSS component plugin:"),
+          message: faceChalk`{bold Tailwind CSS component plugin:}`,
           choices: [
-            new inquirer.Separator("It integrate seamlessly with @jay-js/ui leveraging its class names for styling."),
-            { name: chalk.blueBright("daisyUI"), value: "daisyui" },
+            new inquirer.Separator(faceChalk`It integrate seamlessly with {italic @jay-js/ui} leveraging its class names for styling.`),
+            { name: faceChalk`{blueBright daisyUI}`, value: "daisyui" },
           ],
           loop: false,
         },
         // {
         //   type: "confirm",
         //   name: "useThemeProvider",
-        //   message: chalk.bold("Do you want to use the theme provider utility? (recommended)\n") +
+        //   message: "Do you want to use the theme provider utility? (recommended)\n" +
         //     new inquirer.Separator("useThemeProvider from @jay-js/ui utility to handle dark mode and other theme settings.\n"),
         //   default: true,
         // },
@@ -96,24 +96,41 @@ export function registerInitCommand(program: Command) {
           default: true,
         },
         {
+          type: "confirm",
+          name: "useTests",
+          message: faceChalk`{bold Would you like to set up tests?} {italic.gray (Recommended)}`,
+          default: true,
+        },
+        {
+          when: (answers) => answers.useTests,
+          type: "list",
+          name: "testLibrary",
+          message: faceChalk`{bold Test library}`,
+          choices: [
+            new inquirer.Separator("Choose a testing library to set up tests."),
+            { name: faceChalk`{greenBright Vitest}`, value: "vitest" },
+          ],
+          loop: false,
+        },
+        {
           type: "list",
           name: "installDependencies",
           message: "Install dependencies?",
           choices: [
-            { name: chalk.red.italic("No, I will install them myself"), value: "none" },
-            { name: `${chalk.blueBright("PNPM")} ${chalk.gray.italic("(Recommended)")}`, value: "pnpm" },
-            { name: chalk.yellow("NPM"), value: "npm" },
-            { name: chalk.greenBright("Yarn"), value: "yarn" },
+            { name: faceChalk`{red.italic No, I will install them myself}`, value: "none" },
+            { name: faceChalk`{green PNPM} {italic.gray (Recommended)}`, value: "pnpm" },
+            { name: faceChalk`{yellow NPM}`, value: "npm" },
+            { name: faceChalk`{blueBright Yarn}`, value: "yarn" },
           ],
           loop: false
         },
+        // open with the code
       ];
 
       inquirer
         .prompt(questions)
         .then(async (options) => {
-          console.log(options)
-          /// await init(options);
+          await init(options);
         });
     });
 }
