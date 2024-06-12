@@ -15,10 +15,10 @@ export async function searchAndTransformMarkdownFiles(dir: string) {
     const filePath = path.join(dir, file);
     const stats = await fs.stat(filePath);
     if (stats.isDirectory()) {
-      searchAndTransformMarkdownFiles(filePath);
+      await searchAndTransformMarkdownFiles(filePath);
     } else if (/\.(md|mdx)$/.test(filePath)) {
-      transformMarkdownFile(filePath);
-      removeMarkdownFile(filePath);
+      await transformMarkdownFile(filePath);
+      await removeMarkdownFile(filePath);
     }
   }
 }
