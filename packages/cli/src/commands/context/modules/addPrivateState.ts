@@ -1,33 +1,40 @@
-// node 
-import fs from "fs/promises";
-import path from "node:path";
-
-// options
-import { jayJsOptions } from "../../../options/jayJsDefineOptions";
 import { toPascalCase } from "../../../utils/case";
+import { getFileContent, writeFile } from "../utils";
 
-export async function addPrivateState({ contextName, contextState }: { contextName: string; contextState: string }) {
-  const projectPath = path.join(process.cwd(), jayJsOptions.build.srcDir, "contexts", contextName);
+export async function addPrivateState(
+  contextName: string,
+  contextState: string
+): Promise<void> {
+  await addPrivateStateOnContext(contextName, contextState);
+  await addPrivateStateOnStates(contextName, contextState);
+}
 
-  const interfacesFile = path.join(projectPath, `${contextName}.interfaces.ts`);
-  const statesFile = path.join(projectPath, `${contextName}.states.ts`);
-  const contextFile = path.join(projectPath, `${contextName}.context.ts`);
+async function addPrivateStateOnContext(
+  contextName: string,
+  contextState: string
+): Promise<void> {
+  const [contextFile, contextContent] = await getFileContent(contextName, "context");
+  const contextContentUpdated = contextContent.replace(
+    "this.privateStates = {",
+    `this.privateStates = {\n      ${contextState}: State<I${toPascalCase(contextState)}>({}),`
+  ).replace(
+    `} from "./${contextName}.interfaces";`,
+    `  I${toPascalCase(contextState)},\n} from "./${contextName}.interfaces";`
+  );
+  await writeFile(contextFile, contextContentUpdated);
+}
 
-  const interfaceContent = await fs.readFile(interfacesFile, "utf8");
-  const statesContent = await fs.readFile(statesFile, "utf8");
-  const contextContent = await fs.readFile(contextFile, "utf8");
-
-  const interfacesContentUpdated = `export interface I${toPascalCase(contextState)} {};\n${interfaceContent.replace(
-    `I${toPascalCase(contextName)}ContextPrivateStates {`,
-    `I${toPascalCase(contextName)}ContextPrivateStates {\n  ${contextState}: StateType<I${toPascalCase(contextState)}>;`
-  )}`
-
+async function addPrivateStateOnStates(
+  contextName: string,
+  contextState: string
+): Promise<void> {
+  const [statesFile, statesContent] = await getFileContent(contextName, "states");
   const statesContentUpdated = statesContent.replace(
     `implements I${toPascalCase(contextName)}ContextStates {`,
     `implements I${toPascalCase(contextName)}ContextStates {\n  private ${contextState}: StateType<I${toPascalCase(contextState)}>;`
   ).replace(
     `I${toPascalCase(contextName)}ContextPrivateStates) {`,
-    `I${toPascalCase(contextName)}ContextPrivateStates) {\n    this.${contextState} = contextStates.${contextState};`
+    `I${toPascalCase(contextName)}ContextPrivateStates) {\n    this.${contextState} = privateStates.${contextState};`
   ).replace(
     "clear() {",
     `clear() {\n    this.${contextState}.clear({});`
@@ -35,18 +42,5 @@ export async function addPrivateState({ contextName, contextState }: { contextNa
     `} from "./${contextName}.interfaces";`,
     `  I${toPascalCase(contextState)},\n} from "./${contextName}.interfaces";`
   );
-
-  const contextContentUpdated = contextContent.replace(
-    "this.contextStates = {",
-    `this.contextStates = {\n      ${contextState}: State<I${toPascalCase(contextState)}>({}),`
-  ).replace(
-    `} from "./${contextName}.interfaces";`,
-    `  I${toPascalCase(contextState)},\n} from "./${contextName}.interfaces";`
-  );
-
-  await fs.writeFile(interfacesFile, interfacesContentUpdated);
-  await fs.writeFile(statesFile, statesContentUpdated);
-  await fs.writeFile(contextFile, contextContentUpdated);
-
-  console.log(`✔ "${contextState}" private state added to context "${contextName}"!`);
+  await writeFile(statesFile, statesContentUpdated);
 }
