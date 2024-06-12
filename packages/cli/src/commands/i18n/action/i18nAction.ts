@@ -4,6 +4,7 @@ import { addText } from "../modules/addText";
 
 // types
 import { TArgument, TOptions } from "../types";
+import { log } from "../../../utils/terminal";
 
 export function i18nAction(argument: TArgument, options: TOptions) {
   const [resource, value] = argument.split(":");
@@ -18,7 +19,7 @@ export function i18nAction(argument: TArgument, options: TOptions) {
       addText({ value, translate });
       break;
     default:
-      console.error(`Error: Invalid resource "${resource}".`);
+      log`Error: Invalid resource "${resource}".`
       break;
   }
 }
