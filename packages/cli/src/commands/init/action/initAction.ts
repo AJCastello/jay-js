@@ -9,11 +9,11 @@ import { finalizeInitialization } from "../modules/finalizeInitialization.js";
 import { installDependencies } from "../modules/installDependencies.js";
 
 // terminal
-import { face } from "../../../utils/terminal.js";
-import chalk from "chalk";
+import { face, log } from "../../../utils/terminal.js";
 
 // types
 import { IJayJSCLIInitOptions } from "../types/index.js";
+import { setupTestTools } from "../modules/setupTestTools.js";
 
 export async function init(options: IJayJSCLIInitOptions) {
   face.startProgress(`Starting "${options.projectName}" project setup...`);
@@ -22,9 +22,11 @@ export async function init(options: IJayJSCLIInitOptions) {
   await setupBuildTools(options);
   await setupUIPackage(options);
   await setupProjectType(options);
+  await setupTestTools(options);
   setupJSXConfig(options);
   await finalizeInitialization(options);
   face.endProgress();
-  console.log(chalk.green(`✔ Project "${options.projectName}" has been successfully set up!`));
+  log`{gray {green ✔}  Project "{green ${options.projectName}}" has been successfully set up!}`;
   installDependencies(options);
 }
+
