@@ -9,5 +9,11 @@ export async function finalizeInitialization(options: IJayJSCLIInitOptions) {
     packageFile.devDependencies.typescript = packageVersion.typescript;
     await createFile(`${projectRoot}/tsconfig.json`, JSON.stringify(tsConfigFile, null, 2));
   }
+
+  if(options.installDependencies !== "none"){
+    // Expected a semver version: enforceExactVersion
+    // packageFile.packageManager = options.installDependencies;
+  }
+
   await createFile(`${projectRoot}/package.json`, JSON.stringify(packageFile, null, 2));
 }
