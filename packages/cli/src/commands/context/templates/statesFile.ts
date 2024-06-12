@@ -12,7 +12,7 @@ import {
 
 export class ${formattedName}States implements I${formattedName}ContextStates {
 
-  constructor(contextStates: I${formattedName}ContextPrivateStates) {
+  constructor(privateStates: I${formattedName}ContextPrivateStates) {
   }
 
   /** jayjs:states */
