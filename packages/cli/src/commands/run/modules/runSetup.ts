@@ -5,6 +5,7 @@ import path from "node:path";
 // yaml
 import yaml from "yaml";
 import { cliRunner } from "./cliRunner";
+import { log } from "../../../utils/terminal";
 
 async function checkFileExists(filePath: string) {
   try {
@@ -34,6 +35,6 @@ export async function runSetup(fileName: string) {
     return;
   }
 
-  console.error("Error: File not found.");
+  log`Error: File not found.`;
   process.exit(1);
 }
