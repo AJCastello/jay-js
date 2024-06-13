@@ -1,22 +1,26 @@
 // types
 import { TBuildCommandOptions } from "../types";
-import { faceChalk, log } from "../../../utils/terminal";
+import { face, faceChalk, log } from "../../../utils/terminal";
 import inquirer, { QuestionCollection } from "inquirer";
+import { initPrepare } from "../modules/prepare/initPrepare";
+import { initStatic } from "../modules/static/initStatic";
 
-export function buildAction(options: TBuildCommandOptions) {
-  function handleBuildCommand(options: TBuildCommandOptions) {
-    if (options.prepare) {
-      log`Preparing {italic.yellow content}...`;
-      return;
-    }
-    if (options.static) {
-      log`Building {italic.blue static} content...`;
-      return;
-    }
+export async function buildAction(options: TBuildCommandOptions) {
+  if (options.prepare) {
+    await initPrepare()
+    return;
   }
 
-  handleBuildCommand(options);
+  if (options.static) {
+    await initStatic()
+    return;
+  }
 
+  handleInquirer()
+}
+
+
+async function handleInquirer() {
   const questions: QuestionCollection<{ features: string }> = [
     {
       type: "list",
@@ -34,11 +38,10 @@ export function buildAction(options: TBuildCommandOptions) {
     .prompt(questions)
     .then(async (options) => {
       const { features } = options;
-      const featureBoolean = {
+      const featuresOptions = {
         prepare: features === "prepare",
         static: features === "static"
-      }
-      handleBuildCommand(featureBoolean);
-      log`{gray {green ✔}  Project has been successfully built!}`;
+      };
+      buildAction(featuresOptions)
     });
 }
