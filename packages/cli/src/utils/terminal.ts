@@ -29,7 +29,7 @@ export class Face {
   }
 
   setMessage(message: string): void {
-    this.currentMessage = message;
+    this.currentMessage = faceChalk`${message}`;
   }
 
   write(message: string): void {
