@@ -6,15 +6,7 @@ import path from "node:path";
 import yaml from "yaml";
 import { cliRunner } from "./cliRunner";
 import { log } from "../../../utils/terminal";
-
-async function checkFileExists(filePath: string) {
-  try {
-    await fs.access(filePath);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
+import { checkFileExists } from "../../../utils/filesystem";
 
 export async function runSetup(fileName: string) {
   const filePath = path.join(process.cwd(), fileName);
