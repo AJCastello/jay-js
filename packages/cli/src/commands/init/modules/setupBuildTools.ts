@@ -1,10 +1,11 @@
 import { IJayJSCLIInitOptions } from "../types/index.js";
 import { packageFile, packageVersion } from "../services/setupConfig.js";
 import { createFile } from "../utils/filesystem.js";
-import { generateViteTypesFileContent } from "../utils/generate.js";
+import { toKebabCase } from "../../../utils/case.js";
+import { viteTypesFile } from "../templates/configFiles.js";
 
 export async function setupBuildTools(options: IJayJSCLIInitOptions) {
-  const projectRoot = `./${options.projectName}`;
+  const projectRoot = `./${toKebabCase(options.projectName)}`;
   if (options.buildTool === "vite") {
     packageFile.devDependencies = {
       "vite": packageVersion.vite,
@@ -12,23 +13,23 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
     packageFile.scripts.dev = "vite";
     let buildCommand = "vite build";
     if (options.javascriptVariant === "ts") {
-      if(options.projectType === "static"){
+      if(options.type === "static"){
         buildCommand = "tsc";
       }else{
         buildCommand = "tsc && vite build";
       }
     }
     packageFile.scripts.build = buildCommand;
-    if(options.projectType === "static"){
-      packageFile.scripts.prebuild = "jayjs prepare --static";
-      if(options.installUIPackage) {
-        packageFile.scripts.prebuild = "jayjs prepare --static && pnpm run build:css";
+    if(options.type === "static"){
+      packageFile.scripts.prebuild = "jayjs build --prepare";
+      if(options.uiPackage) {
+        packageFile.scripts.prebuild = "jayjs build --prepare && pnpm run build:css";
         packageFile.scripts["build:css"] = "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";      
       }
       packageFile.scripts.postbuild = "jayjs build --static";
     }
     packageFile.scripts.preview = "vite preview";
-    await createFile(`${projectRoot}/src/vite-env.d.ts`, generateViteTypesFileContent());
+    await createFile(`${projectRoot}/src/vite-env.d.ts`, viteTypesFile());
   }
 
   // else if (options.buildTool === "bun") {

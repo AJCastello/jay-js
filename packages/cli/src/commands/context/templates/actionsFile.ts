@@ -1,18 +1,40 @@
-import { pascalCase } from "../utils";
+import { toPascalCase } from "../../../utils/case";
+import { filterFormat } from "../utils";
 
-export function actionsFileTemplate(contextName: string) {
-  const formattedName = pascalCase(contextName);
-  return `
-// context interface
-import { I${formattedName}ContextStates, I${formattedName}ContextActions, I${formattedName}ContextPrivateStorage } from "./${contextName}.interfaces";
+export function actionsFileTemplate(contextName: string, storage: boolean) {
+  const formattedName = toPascalCase(contextName);
+
+  const imports = filterFormat(
+    `I${formattedName}ContextStates`,
+    `I${formattedName}ContextActions`,
+    storage && `I${formattedName}ContextPrivateStorage`
+  ).join(",\n  ");
+
+  const constructorParams = filterFormat(
+    `states: I${formattedName}ContextStates`,
+    storage && `storage: I${formattedName}ContextPrivateStorage`
+  ).join(",\n    ");
+
+  const constructor = filterFormat(
+    `this.states = states`,
+    storage && `this.storage = storage`
+  ).join(";\n    ");
+
+  const properties = filterFormat(
+    `states: I${formattedName}ContextStates`,
+    storage && `private storage: I${formattedName}ContextPrivateStorage`
+  ).join(";\n  ");
+  
+
+  return `import {\n  ${imports}\n} from "./${contextName}.interfaces";
 
 export class ${formattedName}Actions implements I${formattedName}ContextActions {
-  states: I${formattedName}ContextStates;
-  private storage: I${formattedName}ContextPrivateStorage;
+  ${properties}
 
-  constructor(states: I${formattedName}ContextStates, storage: I${formattedName}ContextPrivateStorage) {
-    this.states = states;
-    this.storage = storage;
+  constructor(
+    ${constructorParams}
+    ) {
+    ${constructor}
   }
 
   /** jayjs:actions */

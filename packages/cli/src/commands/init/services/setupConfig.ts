@@ -1,4 +1,4 @@
-import { IPackageVersion, ITsConfigFile } from "../types/index.js";
+import { IPackageFile, IPackageVersion, ITsConfigFile } from "../types/index.js";
 
 export const packageVersion: IPackageVersion = {
   "@jay-js/static": "latest",
@@ -10,7 +10,8 @@ export const packageVersion: IPackageVersion = {
   "postcss": "latest",
   "autoprefixer": "latest",
   "typescript": "latest",
-  "daisyui": "latest"
+  "daisyui": "latest",
+  "vitest": "latest",
 }
 
 export const tsConfigFile: ITsConfigFile = {
@@ -28,7 +29,7 @@ export const tsConfigFile: ITsConfigFile = {
   include: ["src"]
 }
 
-export const packageFile: any = {
+export const packageFile: IPackageFile = {
   name: "",
   private: true,
   version: "1.0.0",

@@ -20,10 +20,6 @@ interface ElementFunction {
   (props?: any): Promise<any>;
 }
 
-export interface ICreateContext {
-  contextName: string;
-}
-
 export interface IJayJsOptions{
   build: {
     srcDir: string;

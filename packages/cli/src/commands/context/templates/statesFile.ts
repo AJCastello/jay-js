@@ -1,28 +1,23 @@
-import { pascalCase } from "../utils";
+import { toPascalCase } from "../../../utils/case";
 
 export function statesFileTemplate(contextName: string) {
-  const formattedName = pascalCase(contextName);
-  return `/** jayjs:imports */
-import { StateType } from "@jay-js/system";
+  const formattedName = toPascalCase(contextName);
+  return `import { StateType } from "@jay-js/system";
 
 // interfaces
 import { 
   I${formattedName}ContextPrivateStates, 
   I${formattedName}ContextStates,
-  /** jayjs:interfaces */
 } from "./${contextName}.interfaces";
 
 export class ${formattedName}States implements I${formattedName}ContextStates {
-  /** jayjs:contextState */
 
-  constructor(contextStates: I${formattedName}ContextPrivateStates) {
-    /** jayjs:constructState */
+  constructor(privateStates: I${formattedName}ContextPrivateStates) {
   }
 
   /** jayjs:states */
 
   clear() {
-    /** jayjs:clearStates */
   }
 }
 `;

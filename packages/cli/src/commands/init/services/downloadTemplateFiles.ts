@@ -1,20 +1,20 @@
 import fs from "fs-extra";
 import path from "path";
-import chalk from "chalk";
 import os from "os";
-import { face } from "../../../utils/terminal";
+import { face, log } from "../../../utils/terminal";
 import degit from "degit";
+import { toKebabCase } from "../../../utils/case";
 
 export async function downloadTemplateFiles(templateId: string, projectName: string) {
   const templatePath = `templates/${templateId}`;
-  const tempDir = path.join(os.tmpdir(), projectName);
+  const tempDir = path.join(os.tmpdir(), toKebabCase(projectName));
 
   if (fs.existsSync(tempDir)) {
     fs.removeSync(tempDir);
   }
 
   try {
-    fs.ensureDirSync(projectName);
+    fs.ensureDirSync(toKebabCase(projectName));
     face.setMessage(`Cloning template (${templateId})...`);
 
     const emitter = degit(`AJCastello/jay-js/${templatePath}`, {
@@ -27,12 +27,12 @@ export async function downloadTemplateFiles(templateId: string, projectName: str
       face.setMessage(info.message.substring(0, 50) + "...");      
     });
 
-    const projectPath = path.join(process.cwd(), projectName)
+    const projectPath = path.join(process.cwd(), toKebabCase(projectName))
     await emitter.clone(projectPath);
 
     fs.removeSync(tempDir);
   } catch (err) {
-    console.error(chalk.red(`Error setting up the project: ${err}`));
+    log`{red Error setting up the project: ${err}}`;
   }
 }
 
@@ -75,6 +75,6 @@ export async function downloadTemplateFiles(templateId: string, projectName: str
 //     const targetDir = path.join(process.cwd(), projectName);
 //     await downloadRepository(templateId, targetDir);
 //   } catch (err) {
-//     console.error(chalk.red(`Error setting up the project: ${err}`));
+//     console.error(`Error setting up the project: ${err}`);
 //   }
 // }

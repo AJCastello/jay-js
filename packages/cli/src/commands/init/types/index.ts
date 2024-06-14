@@ -4,13 +4,15 @@ export interface IJayJSCLIInitOptions {
   projectName: string;
   javascriptVariant: "ts" | "js";
   buildTool: TBuildTool;
-  projectType: "static" | "spa";
-  languageType: "single" | "multi";
+  type: "static" | "spa";
+  language: "single" | "multi";
   defaultLanguage?: string;
-  installUIPackage: boolean;
-  cssLibrary?: "daisyui" | "none";
+  uiPackage: boolean;
+  cssPlugin?: "daisyui" | "none";
   useThemeProvider: boolean;
   useJSX: boolean;
+  useTests: boolean;
+  testLibrary?: "vitest" | "none";
   installDependencies: "npm" | "yarn" | "pnpm" | "none";
 }
 
@@ -25,6 +27,7 @@ export interface IPackageVersion {
   "autoprefixer": string;
   "typescript": string;
   "daisyui": string;
+  "vitest": string;
   // EXPERIMENTAL
   // "babel/preset-react": string;
   // webpack: string;
@@ -65,33 +68,48 @@ export interface ITsConfigFile {
   include: ["src"];
 }
 
+
+interface IDevScripts {
+  dev: string;
+  build: string;
+  preview: string;
+  prebuild: string;
+  postbuild: string;
+  test: string;
+  "build:css": string;
+}
+
+interface IDevDependencies {
+  "@jay-js/static": string;
+  "@jay-js/ui": string;
+  "@jay-js/jsx": string;
+  "vite": string;
+  "tailwindcss": string;
+  "postcss": string;
+  "autoprefixer": string;
+  "typescript": string;
+  "daisyui": string;
+  "vitest": string;
+  "@babel/preset-react": string;
+}
+
+interface IDependencies {
+  "@jay-js/system": string;
+  "@jay-js/ui": string;
+  "@jay-js/jsx": string;
+  "@jay-js/static": string;
+}
+
 export interface IPackageFile {
   name: string;
   private: boolean;
   version: string;
   type: string;
-  scripts: {
-    dev?: string;
-    build?: string;
-    preview?: string;
-    prebuild?: string;
-    postbuild?: string;
-  };
-  dependencies: {
-    "@jay-js/system": string;
-  };
-  devDependencies?: {
-    "@jay-js/static"?: string;
-    "@jay-js/ui"?: string;
-    "@jay-js/jsx"?: string;
-    "vite"?: string;
-    "tailwindcss"?: string;
-    "postcss"?: string;
-    "autoprefixer"?: string;
-    "typescript"?: string;
-    "daisyui"?: string;
-  };
+  scripts: Partial<IDevScripts>;
+  dependencies: Partial<IDependencies>;
+  devDependencies: Partial<IDevDependencies>;
   babel?: {
     presets: Array<string>;
   };
+  packageManager?: string;
 }

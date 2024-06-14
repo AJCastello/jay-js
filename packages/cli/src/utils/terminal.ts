@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalkTemplate from "chalk-template";
 
 export class Face {
   private frames: string[] = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
@@ -9,7 +9,7 @@ export class Face {
   startProgress(message?: string): void {
     this.currentMessage = message || "";
     this.progressInterval = setInterval(() => {
-      this.updateLine(`${chalk.yellow(`${this.frames[this.currentFrame]}`)} ${this.currentMessage}`);
+      this.updateLine(faceChalk`{yellow ${this.frames[this.currentFrame]}} ${this.currentMessage}`);
       this.currentFrame = (this.currentFrame + 1) % this.frames.length;
     }, 80);
   }
@@ -29,7 +29,7 @@ export class Face {
   }
 
   setMessage(message: string): void {
-    this.currentMessage = message;
+    this.currentMessage = faceChalk`${message}`;
   }
 
   write(message: string): void {
@@ -41,3 +41,11 @@ export class Face {
 }
 
 export const face = new Face();
+
+export function log(strings: TemplateStringsArray, ...values: any[]) {
+  console.log(chalkTemplate(strings, ...values));
+};
+
+export function faceChalk(strings: TemplateStringsArray, ...values: any[]) {
+  return chalkTemplate(strings, ...values);
+};
