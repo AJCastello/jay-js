@@ -43,10 +43,10 @@ export const State = <T>(data: T): StateType<T> => {
       }
       return data;
     },
-    sub: (id: string, effect: (data: T) => void, run = false) => {
+    sub: (id: string, effect: (data: T) => any, run = false): any => {
       state.effect.set(id, effect);
       if (run) {
-        effect(data);
+        return effect(data);
       }
     },
     unsub: (id: string) => {
@@ -58,11 +58,13 @@ export const State = <T>(data: T): StateType<T> => {
       }
       state.effect.forEach((item: (arg0: T) => any) => item(data));
     },
-    clear: (newData: T | ((currentState: T) => T)): void => {
+    clear: (newData?: T | ((currentState: T) => T)): void => {
       if (typeof newData === "function") {
         data = (newData as (currentState: T) => T)(data);
-      } else {
+      } else if (newData) {
         data = newData;
+      } else {
+        data = undefined as unknown as T;
       }
       state.effect.clear();
     },
