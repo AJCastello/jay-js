@@ -11,6 +11,6 @@ export function ErrorImport() {
 }
 
 export function ModuleWrapper() {
-  const element = document.createElement("div");
+  const element = document.createElement("jayjs-lazy-slot");
   return element;
 }
