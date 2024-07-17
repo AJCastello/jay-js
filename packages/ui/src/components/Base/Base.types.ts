@@ -37,6 +37,12 @@ export type TBaseTagMap = keyof TBaseTagNameMap;
 
 export type TStyle = Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
 
+export type TChildren = (string | Node) |
+  (string | Node)[] |
+  Promise<string | Node> |
+  Promise<string | Node>[] |
+  (string | Node | Promise<string | Node>)[];
+
 export type TBaseElement<T extends TBaseTagMap> = {
   tag?: T;
   className?: string;
@@ -44,7 +50,7 @@ export type TBaseElement<T extends TBaseTagMap> = {
   ref?: IRefObject<HTMLElement>;
   dataset?: Partial<DOMStringMap>;
   style?: TStyle;
-  children?: (string | Node) | (string | Node)[]
+  children?: TChildren
 } & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style">;
 
 export type IBaseDiv = TBaseElement<TBaseTagMap> & {
