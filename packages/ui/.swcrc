@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/swcrc",
   "module": {
     "type": "es6",
     "resolveFully": true
@@ -19,6 +18,9 @@
     "loose": false,
     "externalHelpers": false,
     "keepClassNames": false,
+    "experimental": {
+      "emitIsolatedDts": true
+    }
   },
   "minify": false
 }
