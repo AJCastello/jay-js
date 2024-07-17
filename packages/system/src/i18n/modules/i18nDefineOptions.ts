@@ -2,7 +2,7 @@ import { Ii18nOptions } from "../types/index.js";
 
 export let i18nOptions: Ii18nOptions = {
   languages: [],
-  defaultLocale: "en-US",
+  defaultLocale: "en-Us",
   saveToLocalStorage: true,
   nestedKeys: false,
 };
