@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/system",
-  "version": "2.5.9",
+  "version": "2.5.10",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -15,7 +15,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "swc src -d dist && pnpm run build:types && cpy \"dist/src/**/*\" dist && rimraf ./dist/src",
+    "build": "swc src -d dist  --strip-leading-paths && pnpm run build:types",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
