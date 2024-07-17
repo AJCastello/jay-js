@@ -24,13 +24,13 @@ export function LazyModule(module: ILazyModule, loader?: HTMLElement) {
 
   module
     .import()
-    .then((moduleImported) => {
+    .then(async (moduleImported) => {
       ImportedModules[module.module] = {
         module: moduleImported[module.module],
         lastUsed: 0,
         collect: module.collect ?? true
       };
-      moduleSection.replaceWith(ImportedModules[module.module].module({ ...module.props }));
+      moduleSection.replaceWith(await ImportedModules[module.module].module({ ...module.props }));
     })
     .catch((_error) => {
       moduleSection.replaceWith(ErrorImport());
