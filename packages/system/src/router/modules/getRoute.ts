@@ -27,6 +27,10 @@ export async function getRoute() {
     return;
   }
 
+  if(routerOptions.onNavigate){
+    routerOptions.onNavigate(match.route);
+  }
+
   await renderRoute(match.route);
   return;
 }

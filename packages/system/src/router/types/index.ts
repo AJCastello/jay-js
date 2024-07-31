@@ -15,6 +15,7 @@ export interface IRouterOptions {
   prefix?: string;
   target?: HTMLElement;
   onError?: (error: Error) => void;
+  onNavigate?: (route: IRouteInstance) => void;
   beforeResolve?: (route: IRouteInstance) => boolean;
 }
 
