@@ -9,7 +9,8 @@ declare global {
 
 export function initLanguage() {
   if (navigator && (navigator.language || navigator.userLanguage)) {
-    i18nOptions.defaultLocale = navigator.language || navigator.userLanguage || i18nOptions.defaultLocale;
+    const locale = navigator.language || navigator.userLanguage || i18nOptions.defaultLocale;
+    i18nOptions.defaultLocale = locale.toLowerCase();
   }
 
   const defaultLocaleStored = localStorage.getItem("default-locale");
@@ -21,5 +22,7 @@ export function initLanguage() {
   if (!defaultI18n) {
     throw new Error("@jay-js/system: Failed to load default language");
   }
+
+  localStorage.setItem("default-locale", defaultI18n.code);
   i18nContext.set(defaultI18n, { silent: true });
 }
