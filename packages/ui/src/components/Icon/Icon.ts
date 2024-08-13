@@ -1,7 +1,7 @@
-import { TIcon } from "./Icon.types.js";
 import { Base } from "../Base/Base.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 import { TBaseTagMap } from "../Base/Base.types.js";
+import { TIcon } from "./Icon.types.js";
 
 export function Icon<T extends TBaseTagMap = "i">({
   icon,
