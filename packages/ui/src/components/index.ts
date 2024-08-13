@@ -73,6 +73,7 @@ export * from "./TabItem/index.js";
 export * from "./Tabs/index.js";
 export * from "./TextArea/index.js";
 export * from "./TextInput/index.js";
+export * from "./TextInput/index.js";
 export * from "./Timeline/index.js";
 export * from "./TimelineItem/index.js";
 export * from "./TimelineItems/index.js";

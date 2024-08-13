@@ -51,7 +51,7 @@ export type TBaseElement<T extends TBaseTagMap> = {
   dataset?: Partial<DOMStringMap>;
   style?: TStyle;
   children?: TChildren
-} & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style">;
+} & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style" | "size">;
 
 export type IBaseDiv = TBaseElement<TBaseTagMap> & {
   tag: TBaseTagMap
