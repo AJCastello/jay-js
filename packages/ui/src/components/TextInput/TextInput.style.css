@@ -1,16 +1,12 @@
-.input-placeholder-label {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0.5rem;
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  pointer-events: none;
+.input-form-control input:focus~fieldset legend,
+.input-form-control input:not(:placeholder-shown)~fieldset legend {
+  visibility: visible;
+  max-width: 1000px;
 }
 
-.input-placeholder:focus + .input-placeholder-label,
-.input-placeholder:not(:placeholder-shown) + .input-placeholder-label {
-  transform: scale(0.8);
-  top: -1rem;
-  left: 0.05rem;
+.input-form-control input:focus+label,
+.input-form-control input:not(:placeholder-shown)+label {
+  top: 0;
+  left: 0.5rem;
+  font-size: 0.75rem;
 }

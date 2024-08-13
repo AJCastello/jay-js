@@ -21,3 +21,47 @@ flex
 flex-col
 form-control
 relative
+border-none
+outline-none
+focus:outline-none
+
+// FIELDSET
+-top-1
+left-0
+right-0
+bottom-0
+absolute
+margin-0
+pointer-events-none
+overflow-hidden
+min-w-[0%]
+rounded-lg
+
+// LEGEND
+ml-2
+float-none
+w-auto
+block
+h-2
+text-xs
+invisible
+max-w-[0.01px]
+p-0
+whitespace-nowrap
+
+// SPAN
+opacity-0
+px-1
+text-xs
+
+// LABEL
+absolute
+top-[50%]
+left-3
+transform
+translate-y-[-50%]
+pointer-events-none
+transition-all
+duration-200
+ease-out
+px-1

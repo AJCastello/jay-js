@@ -7,7 +7,7 @@ import { Typography } from "../Typography/Typography.js";
 import { mergeClasses } from "../../utils/mergeClasses.js";
 import { Base, TBaseTagMap } from "../Base";
 
-export function TextInput<T extends TBaseTagMap = "div">({
+export function TextInput<T extends TBaseTagMap = "input">({
   label,
   labelAlt,
   helpers,
@@ -19,54 +19,103 @@ export function TextInput<T extends TBaseTagMap = "div">({
   startAdornment,
   endAdornment,
   ...props
-}: TTextInput<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
+}: TTextInput<T> = { tag: "input" }): HTMLElementTagNameMap[T] { // 
 
   const className = mergeClasses([
     "input",
-    bordered ? "input-bordered" : "",
     ghost ? "input-ghost" : "",
     color,
     inputSize,
     props.className,
-    "input-placeholder"
+    "w-full",
+    "border-none",
+    "outline-none",
+    "focus:outline-none"
+  ]);
+
+  const fieldsetClassName = mergeClasses([
+    "-top-1",
+    "left-0",
+    "right-0",
+    "bottom-0",
+    "absolute",
+    "margin-0",
+    "pointer-events-none",
+    "overflow-hidden",
+    "min-w-[0%]",
+    "rounded-lg",
+    color,
+    bordered ? "input-bordered border border-1" : "",
+  ]);
+
+  const legendClassName = mergeClasses([
+    "ml-2",
+    "float-none",
+    "w-auto",
+    "block",
+    "h-2",
+    "text-xs",
+    "invisible",
+    "max-w-[0.01px]",
+    "p-0",
+    "whitespace-nowrap"
+  ]);
+
+  const legendSpanClassName = mergeClasses([
+    "opacity-0",
+    placeholder ? "px-1" : "",
+    "text-xs"
+  ]);
+
+  const labelClassName = mergeClasses([
+    "absolute",
+    "top-[50%]",
+    "left-3",
+    "transform",
+    "translate-y-[-50%]",
+    "pointer-events-none",
+    "transition-all",
+    "duration-200",
+    "ease-out",
+    placeholder ? "px-1" : "" 
   ]);
 
   const inputElement = Input({
     ...props,
+    className,
     tag: "input",
-    placeholder: " ",
-    className
-  }) as HTMLInputElement;
-
-  const inputId = inputElement.id;
-
-  const formControl = Box({
-    className: "form-control relative"
+    placeholder: " "
   });
 
-  if (label) {
-    const labelElement = Base({
-      tag: "label",
-      className: "label",
-    });
-
-    const labelText = Typography({
-      tag: "span",
-      className: "label-text",
-      children: label,
-    });
-
-    labelElement.append(labelText);
-
-    if (labelAlt) {
-      const labelTextAlt = Typography({
-        tag: "span",
-        className: "label-text-alt",
-        children: labelAlt,
+  function getLabels() {
+    if (label || labelAlt) {
+      return Box({
+        className: "label",
+        children: [
+          label ? Typography({
+            tag: "span",
+            className: "label-text",
+            children: label
+          }) : "",
+          labelAlt ? Typography({
+            tag: "span",
+            className: "label-text-alt",
+            children: labelAlt
+          }) : ""
+        ]
       });
-      labelElement.append(labelTextAlt);
     }
-    formControl.append(labelElement);
+    return "";
+  }
+
+  function getHelpers() {
+    if (helpers) {
+      return Box({
+        className: "label",
+        children: helpers
+      });
+    }
+    return "";
   }
 
   function getStartAdornment() {
@@ -89,42 +138,41 @@ export function TextInput<T extends TBaseTagMap = "div">({
     return "";
   }
 
-  if (placeholder) {
-    const placeholderElement = Typography({
-      tag: "label",
-      className: "input-placeholder-label bg-base-100 rounded px-2",
-      children: placeholder
-    });
+  return Box({
+    tag: "div",
+    className: "form-control  relative",
+    children: [
+      getLabels(),
+      Box({
+        className: "input-form-control relative",
+        children: [
+          getStartAdornment(),
+          inputElement,
+          placeholder ? Typography({
+            tag: "label",
+            className: labelClassName,
+            children: placeholder
+          }) : "",
+          Base({
+            tag: "fieldset",
+            className: fieldsetClassName,
+            children: [
+              Base({
+                tag: "legend",
+                className: legendClassName,
+                children: Typography({
+                  tag: "span",
+                  className: legendSpanClassName,
+                  children: placeholder
+                })
+              })
+            ]
+          }),
+          getEndAdornment(),
+        ]
+      }),
+      getHelpers()
+    ]
+  }) as HTMLElementTagNameMap[T];
 
-    formControl.append(Box({
-      className: "relative w-full flex flex-col",
-      children: [
-        getStartAdornment(),
-        inputElement,
-        placeholderElement,
-        getEndAdornment()
-      ]
-    }));
-  } else {
-    formControl.append(
-      getStartAdornment(),
-      inputElement,
-      getEndAdornment()
-    );
-  }
-
-  if (helpers) {
-    const helperElement = Base({
-      tag: "label",
-      className: "label",
-      dataset: {
-        helper: inputId
-      }
-    });
-    helperElement.append(...helpers);
-    formControl.append(helperElement);
-  }
-
-  return formControl as HTMLElementTagNameMap[T];
 }
-
