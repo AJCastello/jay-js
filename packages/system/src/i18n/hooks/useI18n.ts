@@ -2,17 +2,13 @@ import { i18nOptions } from "../modules/i18nDefineOptions.js";
 import { i18nContext } from "../modules/i18nContext.js";
 import { AllPaths, GetTypeAtPath } from "../types/index.js";
 
-interface Ii18nContext {
-  emptyValue: "string"
-}
-
 export function useI18n<T>(): <
-  Path extends AllPaths<Ii18nContext & T>
+  Path extends AllPaths<T>
 >(
   path: Path,
   data?: Record<string, any>,
   options?: { default?: string }
-) => GetTypeAtPath<Ii18nContext & T, Path> {
+) => GetTypeAtPath<T, Path> {
   return (path, data, options) => {
     let result = i18nContext.get().data;
 
