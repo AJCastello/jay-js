@@ -21,7 +21,7 @@ export function DrawerContent<T extends TBaseTagMap = "div">({
     "duration-300",
     "ease-in-out",
     "relative",
-    "flex-1",
+    // "flex-1",
     "flex",
     "z-20",
     translateClass[position],
