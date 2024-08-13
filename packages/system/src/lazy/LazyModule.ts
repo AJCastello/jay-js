@@ -33,6 +33,7 @@ export function LazyModule(module: ILazyModule, loader?: HTMLElement) {
       moduleSection.replaceWith(await ImportedModules[module.module].module({ ...module.props }));
     })
     .catch((_error) => {
+      console.error(`Error importing module ${module.module}:`, _error);
       moduleSection.replaceWith(ErrorImport());
     });
 
