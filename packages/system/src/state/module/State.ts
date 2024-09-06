@@ -52,8 +52,15 @@ export const State = <T>(data: T): StateType<T> => {
     unsub: (id: string) => {
       state.effect.delete(id);
     },
-    trigger: () => {
+    trigger: (id?: string): void => {
       if (state.effect.size === 0) {
+        return;
+      }      
+      if (id) {
+        const effect = state.effect.get(id);
+        if (effect) {
+          effect(data);
+        }
         return;
       }
       state.effect.forEach((item: (arg0: T) => any) => item(data));

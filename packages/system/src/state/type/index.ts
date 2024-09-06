@@ -8,8 +8,8 @@ export type StateType<T> = {
   get: (callback?: (data: T) => void) => T;
   sub: (id: string, effect: (data: T) => void, run?: boolean) => void;
   unsub: (id: string) => void;
-  trigger: () => void;
-  clear: (newData: T | ((currentState: T) => T)) => void;
+  trigger: (id?: string) => void;
+  clear: (newData?: T | ((currentState: T) => T)) => void;
   effect: Map<string, (data: T) => void>;
   data: T;
 };
