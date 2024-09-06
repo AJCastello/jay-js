@@ -10,6 +10,7 @@ export function Base<T extends TBaseTagMap = "div">({
   dataset,
   className,
   listeners,
+  onmount,
   ...props
 }: TBase<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const base = document.createElement(tag || "div");
@@ -28,6 +29,8 @@ export function Base<T extends TBaseTagMap = "div">({
   dataset && Object.entries(dataset).forEach(([key, value]) => {
     base.dataset[key] = value as string;
   });
+
+  onmount && setTimeout(() => onmount(base));
 
   if (children) {
     if (children instanceof Promise) {
