@@ -126,7 +126,7 @@ export async function renderHTMLFiles(): Promise<void> {
 
   if (dynamicRoutes.size > 0) {
     for (const [key, value] of dynamicRoutes.entries()) {
-      const useContent = value.element.useContent;
+      const useContent = value.element.content;
       useContent.fileExt = "js";
       const contentPath = path.join(CWD, outDir as string, contentDir, useContent.dir);
       const contentFiles = await fs.readdir(contentPath);
