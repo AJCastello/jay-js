@@ -15,7 +15,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "swc src -d dist && pnpm run build:types && cpy \"dist/src/**/*\" dist && rimraf ./dist/src",
+    "build": "swc src -d dist --strip-leading-paths && pnpm run build:types",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
