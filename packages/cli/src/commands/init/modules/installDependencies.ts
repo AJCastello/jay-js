@@ -24,4 +24,5 @@ export function installDependencies(options: IJayJSCLIInitOptions) {
     }
     process.chdir("..");
   };
+  process.exit(0);
 }
