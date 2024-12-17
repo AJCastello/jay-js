@@ -28,7 +28,8 @@ export function TextInput<T extends TBaseTagMap = "input">({
     inputSize,
     props.className,
     "w-full",
-    "border-none",
+    bordered ? "" : "border-none",
+    placeholder ? "border-none" : "",
     "outline-none",
     "focus:outline-none"
   ]);
