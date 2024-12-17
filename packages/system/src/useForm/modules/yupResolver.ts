@@ -1,7 +1,8 @@
-import * as yup from "yup";
+
+import type { ObjectSchema } from "yup";
 import { TResolver } from "../types";
 
-export function yupResolver<T>(schema: yup.ObjectSchema<any>): TResolver<T> {
+export function yupResolver<T>(schema: ObjectSchema<any>): TResolver<T> {
 	return async (values: T, fieldName?: string) => {
 		try {
 			if (fieldName) {
@@ -10,11 +11,11 @@ export function yupResolver<T>(schema: yup.ObjectSchema<any>): TResolver<T> {
 				await schema.validate(values, { abortEarly: false });
 			}
 			return { errors: [] };
-		} catch (error) {
-			if (error instanceof yup.ValidationError) {
+		} catch (error: any) {
+			if (error && error.inner) {
 				const formattedErrors = error.inner.length > 0 ? error.inner : [error];
 				return {
-					errors: formattedErrors.map((err) => ({
+					errors: formattedErrors.map((err: any) => ({
 						path: err.path || "unknown",
 						message: err.message,
 					})),
