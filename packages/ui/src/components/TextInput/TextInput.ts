@@ -45,7 +45,7 @@ export function TextInput<T extends TBaseTagMap = "input">({
     "min-w-[0%]",
     "rounded-lg",
     color,
-    bordered ? "input-bordered border border-1" : "",
+    bordered ? "input-bordered border" : "",
   ]);
 
   const legendClassName = mergeClasses([
