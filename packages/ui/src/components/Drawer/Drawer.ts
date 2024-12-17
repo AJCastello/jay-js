@@ -19,7 +19,6 @@ export function Drawer<T extends TBaseTagMap = "div">({
     asChild ? "absolute" : "fixed",
     "inset-0",
     "flex",
-    "hidden",
     "z-30",
     positionClass[position],
     props.className
@@ -27,7 +26,7 @@ export function Drawer<T extends TBaseTagMap = "div">({
 
   const drawer = Base({
     ...props,
-    className
+    className: `${className} hidden`,
   });
 
   const drawerId = drawer.id;

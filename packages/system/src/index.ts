@@ -6,4 +6,5 @@ export * from "./i18n/index.js";
 export * from "./theme/index.js";
 export { render } from "./utils/render.js";
 export * from "./utils/query.js";
+export * from "./useForm/index.js";
 
