@@ -18,7 +18,7 @@ export function Drawer<T extends TBaseTagMap = "div">({
   const className = mergeClasses([
     asChild ? "absolute" : "fixed",
     "inset-0",
-    "flex",
+    "hidden",
     "z-30",
     positionClass[position],
     props.className
@@ -26,7 +26,7 @@ export function Drawer<T extends TBaseTagMap = "div">({
 
   const drawer = Base({
     ...props,
-    className: `${className} hidden`,
+    className,
   });
 
   const drawerId = drawer.id;
