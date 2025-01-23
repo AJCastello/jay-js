@@ -16,7 +16,7 @@ export interface IRouterOptions {
   target?: HTMLElement;
   onError?: (error: Error) => void;
   onNavigate?: (route: IRouteInstance) => void;
-  beforeResolve?: (route: IRouteInstance) => boolean;
+  beforeResolve?: (route: IRouteInstance) => boolean | Promise<boolean>;
 }
 
 export interface IPotentialMatch {

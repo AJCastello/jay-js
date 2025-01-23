@@ -5,11 +5,18 @@ export type setOptions = {
 
 export type StateType<T> = {
   set: (newData: T | ((currentState: T) => T), options?: setOptions) => void;
-  get: (callback?: (data: T) => void) => T;
-  sub: (id: string, effect: (data: T) => void, run?: boolean) => void;
+  get: (callback?: (value: T) => void) => T;
+  sub: (id: string, effect: (value: T) => void, run?: boolean) => void;
   unsub: (id: string) => void;
   trigger: (id?: string) => void;
   clear: (newData?: T | ((currentState: T) => T)) => void;
-  effect: Map<string, (data: T) => void>;
-  data: T;
+  effects: Map<string, (value: T) => void>;
+  value: T;
 };
+
+export interface ISetValue extends Function {
+  (): Promise<void>;
+  _object: any;
+  _path: string[];
+  _fn: () => any;
+}

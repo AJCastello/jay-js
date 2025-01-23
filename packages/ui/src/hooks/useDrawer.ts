@@ -16,11 +16,13 @@ export function useDrawer({
 
       if (drawer.classList.contains("hidden")) {
         drawer.classList.remove("hidden");
+        drawer.classList.add("flex");
         if (props.onOpen) {
           props.onOpen();
         }
       } else {
         setTimeout(() => {
+          drawer.classList.remove("flex");
           drawer.classList.add("hidden");
           if (props.onClose) {
             props.onClose();

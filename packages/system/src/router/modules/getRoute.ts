@@ -7,7 +7,7 @@ export async function getRoute() {
   const match = getPotentialMatch();
 
   if (routerOptions.beforeResolve) {
-    const beforeResolve = routerOptions.beforeResolve(match.route);
+    const beforeResolve = await routerOptions.beforeResolve(match.route);
     if (!beforeResolve) {
       return;
     }
@@ -23,6 +23,13 @@ export async function getRoute() {
 
   if (match.route.layout) {
     const matchLayoutIndex = getPotentialMatchIndex();
+    if (!matchLayoutIndex.route) {
+      if (routerOptions.onError) {
+        routerOptions.onError(new Error("No layout match found", { cause: "no-layout-match" }));
+        return;
+      }
+      return;
+    }
     await renderRoute(matchLayoutIndex.route);
     return;
   }
