@@ -1,3 +1,4 @@
+import { mergeClasses } from "../../utils/mergeClasses.js";
 import { uniKey } from "../../utils/uniKey.js";
 import { TBase, TBaseTagMap, TStyle } from "./Base.types.js";
 
@@ -15,8 +16,16 @@ export function Base<T extends TBaseTagMap = "div">({
 }: TBase<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
   const base = document.createElement(tag || "div");
   ref && (ref.current = base);
-  className && (base.className = className);
   id ? base.id = id : base.id = uniKey();
+
+  if (className) {
+    if (typeof className === "function" && (className as Function).name.includes("_set_value_effect")) {
+      (className as Function)(base, "className");
+    } else {
+      base.className = mergeClasses([className])
+    }
+  };
+
   listeners && Object.entries(listeners).forEach(([key, value]) => {
     base.addEventListener(key, value as EventListener);
   });
