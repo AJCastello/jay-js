@@ -1,4 +1,18 @@
-import { StateType, setOptions } from "../type/index.js";
+import { ISetValue, StateType, setOptions } from "../type/index.js";
+
+let _subscriber: ((args?: any) => (void | Promise<void>)) | null = null;
+
+function fn_hash(func: Function): string {
+  const funcString = func.toString();
+  let hash = 0;
+  for (let i = 0; i < funcString.length; i++) {
+    const char = funcString.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(16);
+}
+
 
 export const State = <T>(data: T): StateType<T> => {
   const state: StateType<T> = {
@@ -13,14 +27,14 @@ export const State = <T>(data: T): StateType<T> => {
         return;
       }
 
-      if (state.effect.size === 0) {
+      if (state.effects.size === 0) {
         return;
       }
 
       if (options?.target) {
         if (Array.isArray(options.target)) {
           options.target.forEach((item: string) => {
-            const effect = state.effect.get(item);
+            const effect = state.effects.get(item);
             if (effect) {
               effect(data);
             }
@@ -28,14 +42,14 @@ export const State = <T>(data: T): StateType<T> => {
           return;
         }
 
-        const effect = state.effect.get(options.target);
+        const effect = state.effects.get(options.target);
         if (effect) {
           effect(data);
         }
         return;
       }
 
-      state.effect.forEach((item: (arg0: T) => any) => item(data));
+      state.effects.forEach((item: (arg0: T) => any) => item(data));
     },
     get: (callback?: (data: T) => void): T => {
       if (callback) {
@@ -44,26 +58,26 @@ export const State = <T>(data: T): StateType<T> => {
       return data;
     },
     sub: (id: string, effect: (data: T) => any, run = false): any => {
-      state.effect.set(id, effect);
+      state.effects.set(id, effect);
       if (run) {
         return effect(data);
       }
     },
     unsub: (id: string) => {
-      state.effect.delete(id);
+      state.effects.delete(id);
     },
     trigger: (id?: string): void => {
-      if (state.effect.size === 0) {
+      if (state.effects.size === 0) {
         return;
-      }      
+      }
       if (id) {
-        const effect = state.effect.get(id);
+        const effect = state.effects.get(id);
         if (effect) {
           effect(data);
         }
         return;
       }
-      state.effect.forEach((item: (arg0: T) => any) => item(data));
+      state.effects.forEach((item: (arg0: T) => any) => item(data));
     },
     clear: (newData?: T | ((currentState: T) => T)): void => {
       if (typeof newData === "function") {
@@ -73,11 +87,58 @@ export const State = <T>(data: T): StateType<T> => {
       } else {
         data = undefined as unknown as T;
       }
-      state.effect.clear();
+      state.effects.clear();
     },
-    effect: new Map(),
-    data,
+    effects: new Map(),
+    get value() {
+      if (_subscriber) {
+        let hash = fn_hash(_subscriber);
+        if (_subscriber.name.includes("_setValue") && (_subscriber as any)._fn) {
+          hash = fn_hash((_subscriber as any)._fn);
+        }
+        state.sub(hash, _subscriber);
+      }
+      return this.get();
+    },
+    set value(newData: T) {
+      this.set(newData);
+    }
   };
 
   return state;
 };
+
+export function Effect(fn: () => void) {
+  _subscriber = fn;
+  fn();
+  _subscriber = null;
+}
+
+export function Values(fn: () => any): any {
+  const _setValue = async function () {
+    if (_setValue._path.length > 0) {
+      let target = _setValue._object;
+      for (let i = 0; i < _setValue._path.length - 1; i++) {
+        target = target[_setValue._path[i]];
+      }
+      const lastKey = _setValue._path[_setValue._path.length - 1];
+      target[lastKey] = await _setValue._fn();
+      return;
+    }
+    _setValue._object = await _setValue._fn();
+  } as ISetValue;
+
+  _setValue._object = undefined;
+  _setValue._path = [];
+  _setValue._fn = fn;
+
+  async function _set_value_effect(object: any, ...path: string[]) {
+    _setValue._object = object;
+    _setValue._path = path;
+    _subscriber = _setValue;
+    await _setValue();
+    _subscriber = null;
+  }
+
+  return _set_value_effect;
+}
