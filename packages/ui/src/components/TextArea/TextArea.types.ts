@@ -8,6 +8,6 @@ export type TTextarea<T extends TBaseTagMap> = {
   bordered?: boolean;
   ghost?: boolean;
   color?: "textarea-primary" | "textarea-secondary" | "textarea-accent" | "textarea-success" | "textarea-warning" | "textarea-info" | "textarea-error";
-  size?: "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
+  size?: "textarea-xl" | "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
 } & TBase<T>;
 

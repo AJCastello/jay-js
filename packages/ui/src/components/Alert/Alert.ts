@@ -5,11 +5,15 @@ import { TBaseTagMap } from "../Base/Base.types.js";
 
 export function Alert<T extends TBaseTagMap = "div">({
   severity = "alert-info",
+  direction,
+  variation,
   ...props
 }: TAlert<T> = { tag: "div"}): HTMLElementTagNameMap[T] {
   const className = mergeClasses([
     "alert",
     severity,
+    direction,
+    variation,
     props.className,
   ]);
 

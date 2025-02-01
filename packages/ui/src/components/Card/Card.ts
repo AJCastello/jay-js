@@ -8,7 +8,7 @@ export function Card<T extends TBaseTagMap = "div">({
   imagePosition,
   imageFull,
   variant,
-  format,
+  size,
   ripple = true,
   ...props
 }: TCard<T> = { tag: "div" }): HTMLElementTagNameMap[T] {
@@ -16,7 +16,7 @@ export function Card<T extends TBaseTagMap = "div">({
     "card shadow-md hover:shadow-xl transition-all duration-500 ease-in-out",
     ripple ? "relative overflow-hidden" : "",
     variant,
-    format,
+    size,
     imagePosition == "left" || imagePosition == "right" ? "card-side" : "",
     imageFull ? "image-full" : "",
     props.className
