@@ -8,7 +8,7 @@ export type TTextInput<T extends TBaseTagMap> = {
   bordered?: boolean;
   ghost?: boolean;
   color?: "input-primary" | "input-secondary" | "input-accent" | "input-success" | "input-warning" | "input-info" | "input-error";
-  inputSize?: "input-lg" | "input-md" | "input-sm" | "input-xs";
+  inputSize?: "input-xl" | "input-lg" | "input-md" | "input-sm" | "input-xs";
   startAdornment?: HTMLElement | ((inputElement: HTMLInputElement) => HTMLElement);
   endAdornment?: HTMLElement | ((inputElement: HTMLInputElement) => HTMLElement);
 } & TBase<T>;
