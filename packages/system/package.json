@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/system",
-  "version": "2.9.4",
+  "version": "2.9.5",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -53,11 +53,11 @@
     "@typescript-eslint/parser": "^7.10.0",
     "eslint": "^9.3.0",
     "typescript": "^5.4.5",
-    "yup": "^1.4.0",
+    "yup": "^1.6.1",
     "zod": "^3.24.1"
   },
   "peerDependencies": {
-    "yup": "^1.4.0",
+    "yup": "^1.6.1",
     "zod": "^3.24.1"
   },
   "peerDependenciesMeta": {
