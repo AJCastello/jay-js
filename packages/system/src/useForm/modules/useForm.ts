@@ -53,6 +53,9 @@ export function useForm<T>({
 		},
 		isValid: async (path?: keyof T) => {
 			try {
+				if (!resolver) {
+					return true;
+				}
 				const formValuesData = formValues.get();
 				const result = await resolver(
 					formValuesData,
@@ -115,6 +118,9 @@ export function useForm<T>({
 			element.value = value;
 			privateSetValue(field, value);
 			try {
+				if (!resolver) {
+					return;
+				}
 				const formValuesData = formValues.get();
 				const result = await resolver(formValuesData, field);
 				validateResult(result);
@@ -160,6 +166,10 @@ export function useForm<T>({
 			ev.preventDefault();
 			const formValuesData = formValues.get();
 			try {
+				if (!resolver) {
+					callback(ev, formValuesData);
+					return;
+				}
 				const result = await resolver(formValuesData);
 				const validated = validateResult(result);
 				if (validated) {
