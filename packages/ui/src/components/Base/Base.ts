@@ -47,7 +47,9 @@ export function Base<T extends TBaseTagMap = "div">({
       base.appendChild(elementSlot);
       children
         .then(resolvedChild => {
-          elementSlot.replaceWith(resolvedChild);
+          if (resolvedChild && typeof resolvedChild !== "boolean") {
+            elementSlot.replaceWith(resolvedChild);
+          }
         })
         .catch(error => {
           console.error("Failed to resolve child promise:", error)
@@ -55,10 +57,16 @@ export function Base<T extends TBaseTagMap = "div">({
     } else {
       if (Array.isArray(children)) {
         children.forEach((child) => {
-          appendChildToBase(base, child);
+          if (child) {
+            if (typeof child !== "boolean") {
+              appendChildToBase(base, child);
+            }
+          }
         });
       } else {
-        appendChildToBase(base, children);
+        if (typeof children !== "boolean") {
+          appendChildToBase(base, children);
+        }
       }
     }
   }
@@ -76,12 +84,14 @@ export function Base<T extends TBaseTagMap = "div">({
   return base as HTMLElementTagNameMap[T];
 }
 
-function appendChildToBase(base: HTMLElement, child: string | Node | Promise<string | Node>): void {
+function appendChildToBase(base: HTMLElement, child: string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>): void {
   if (child instanceof Promise) {
     const elementSlot = document.createElement("jayjs-lazy-slot");
     base.appendChild(elementSlot);
     child.then((resolvedChild) => {
-      elementSlot.replaceWith(resolvedChild);
+      if (resolvedChild && typeof resolvedChild !== "boolean") {
+        elementSlot.replaceWith(resolvedChild);
+      }
     });
     return;
   }
@@ -89,5 +99,7 @@ function appendChildToBase(base: HTMLElement, child: string | Node | Promise<str
     base.appendChild(document.createTextNode(child));
     return;
   }
-  base.appendChild(child);
+  if (child && typeof child !== "boolean") {
+    base.appendChild(child);
+  }
 }
