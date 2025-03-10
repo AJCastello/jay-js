@@ -37,11 +37,12 @@ export type TBaseTagMap = keyof TBaseTagNameMap;
 
 export type TStyle = Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
 
-export type TChildren = (string | Node) |
-  (string | Node)[] |
-  Promise<string | Node> |
-  Promise<string | Node>[] |
-  (string | Node | Promise<string | Node>)[];
+export type TChildren = 
+  (string | Node | boolean | null | undefined) |
+  (string | Node | boolean | null | undefined)[] |
+  Promise<string | Node | boolean | null | undefined> |
+  Promise<string | Node | boolean | null | undefined>[] |
+  (string | Node | Promise<string | Node> | boolean | null | undefined)[] ;
 
 export type TBaseElement<T extends TBaseTagMap> = {
   tag?: T;
