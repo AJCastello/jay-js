@@ -5,7 +5,7 @@ export type TResolver<T> = (
 
 export interface IUseFormProps<T> {
   defaultValues: T;
-  resolver: TResolver<T>;
+  resolver?: TResolver<T>;
 }
 
 export interface IRegister {
