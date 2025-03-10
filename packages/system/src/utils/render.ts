@@ -15,11 +15,13 @@
  */
 export function render(
   target: HTMLElement | string | null,
-  data: Node | string | (Node | string)[],
+  data: Node | string | HTMLElement | (Node | string | HTMLElement)[] | null | undefined,
   options: {
     insert?: "append" | "prepend";
   } = {}
 ) {
+  if (!target || !data) return;
+  
   const currentTarget = typeof target === "string" ? document.querySelector(target) : target;
   if (!currentTarget) return;
 
