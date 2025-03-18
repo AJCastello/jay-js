@@ -12,8 +12,13 @@
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": true,
+    "types": ["jest", "node"]
   },
-  "include": ["./src/**/*","./src/index.ts"],
+  "include": [
+    "./src/**/*",
+    "./src/index.ts",
+    "./tests/**/*"
+  ],
   "exclude": [
     "./node_modules",
     "./dist"
