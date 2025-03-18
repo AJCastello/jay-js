@@ -9,7 +9,7 @@ export function useForm<T>({
 	const formValues = State<T>(defaultValues);
 
 	const formState: IFormState<T> = {
-		errors: (path: keyof T, container?: HTMLElement) => {
+		errors: (path: keyof T) => {
 			const errorText = document.createTextNode("");
 			formErrors.sub(path as string, (error) => {
 				const errorFound = error.errors.find((err) => err.path === path);
@@ -20,23 +20,28 @@ export function useForm<T>({
 			});
 			return errorText;
 		},
-		setValue: (field: string, value: string) => {
+		setValue: <K extends keyof T>(path: K, value: T[K]) => {
 			formValues.set((prev) => {
 				return {
 					...prev,
-					[field]: value,
+					[path]: value,
 				};
 			});
-			const fieldElement = document.querySelector(`[name="${field}"]`);
+			const fieldElement = document.querySelector(`[name="${String(path)}"]`);
 			if (
 				(fieldElement && fieldElement instanceof HTMLInputElement) ||
 				fieldElement instanceof HTMLTextAreaElement
 			) {
-				fieldElement.value = value;
+				fieldElement.value = value as string;
 			}
 		},
-		setValues: (values: T) => {
-			formValues.set(values);
+		setValues: (values: Partial<T>) => {
+			formValues.set((prev) => {
+				return {
+					...prev,
+					...values,
+				};
+			});
 			for (const field in values) {
 				const fieldElement = document.querySelector(`[name="${field}"]`);
 				if (
@@ -47,9 +52,9 @@ export function useForm<T>({
 				}
 			}
 		},
-		getValue: (field: keyof T) => {
+		getValue: <K extends keyof T>(path: K) => {
 			const values = formValues.get();
-			return values[field] as string;
+			return values[path] as T[K];
 		},
 		isValid: async (path?: keyof T) => {
 			try {
@@ -145,6 +150,7 @@ export function useForm<T>({
 		}
 		return true;
 	}
+
 
 	function register(path: keyof T, options: IRegisterOptions = {}): IRegister {
 		return {

@@ -30,10 +30,10 @@ export interface IUseForm<T> {
 }
 
 export interface IFormState<T> {
-  errors: (path: keyof T, container?: HTMLElement) => HTMLElement | Text;
-  setValue: (path: string, value: string) => void;
-  setValues: (values: any) => void;
-  getValue: (path: keyof T) => string;
+  errors: (path: keyof T) => HTMLElement | Text;
+  setValue: <K extends keyof T>(path: K, value: T[K]) => void;
+  setValues: (values: Partial<T>) => void;
+  getValue: <K extends keyof T>(path: K) => T[K];
   isValid: (path?: keyof T) => Promise<boolean>;
   getErrors: () => IFormValidateResult;
   setError: (field: keyof T, message: string) => void;
