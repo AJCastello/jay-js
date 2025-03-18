@@ -1,4 +1,4 @@
-import { ISetValue, StateType, setOptions } from "../type/index.js";
+import { ISetValue, StateType, setOptions } from "../types.js";
 
 let _subscriber: ((args?: any) => (void | Promise<void>)) | null = null;
 
@@ -13,7 +13,6 @@ function fn_hash(func: Function): string {
   return Math.abs(hash).toString(16);
 }
 
-
 export const State = <T>(data: T): StateType<T> => {
   const state: StateType<T> = {
     set: (newData: T | ((currentState: T) => T), options?: setOptions): void => {
@@ -22,15 +21,12 @@ export const State = <T>(data: T): StateType<T> => {
       } else {
         data = newData;
       }
-
       if (options?.silent) {
         return;
       }
-
       if (state.effects.size === 0) {
         return;
       }
-
       if (options?.target) {
         if (Array.isArray(options.target)) {
           options.target.forEach((item: string) => {
@@ -41,14 +37,12 @@ export const State = <T>(data: T): StateType<T> => {
           });
           return;
         }
-
         const effect = state.effects.get(options.target);
         if (effect) {
           effect(data);
         }
         return;
       }
-
       state.effects.forEach((item: (arg0: T) => any) => item(data));
     },
     get: (callback?: (data: T) => void): T => {
@@ -104,7 +98,6 @@ export const State = <T>(data: T): StateType<T> => {
       this.set(newData);
     }
   };
-
   return state;
 };
 
@@ -127,11 +120,9 @@ export function Values(fn: () => any): any {
     }
     _setValue._object = await _setValue._fn();
   } as ISetValue;
-
   _setValue._object = undefined;
   _setValue._path = [];
   _setValue._fn = fn;
-
   async function _set_value_effect(object: any, ...path: string[]) {
     _setValue._object = object;
     _setValue._path = path;
@@ -139,6 +130,5 @@ export function Values(fn: () => any): any {
     await _setValue();
     _subscriber = null;
   }
-
   return _set_value_effect;
 }
