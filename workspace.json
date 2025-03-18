@@ -1,0 +1,16 @@
+{
+	"projects": {
+		"@jay-js/system": {
+			"targets": {
+				"test": {
+					"executor": "@nx/jest:jest",
+					"options": {
+						"jestConfig": "packages/system/jest.config.js",
+						"tsConfig": "packages/system/tsconfig.json",
+						"passWithNoTests": true
+					}
+				}
+			}
+		}
+	}
+}
