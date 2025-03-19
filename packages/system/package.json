@@ -20,7 +20,8 @@
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ./src/**/*.{js,ts}",
-    "test": "jest",
+    "test": "jest --verbose",
+    "test:cover": "jest --verbose --coverage --coverageReporters=html --coverageReporters=text --collectCoverageFrom='src/**/*.{js,ts}'",
     "test:watch": "jest --watch"
   },
   "publishConfig": {
