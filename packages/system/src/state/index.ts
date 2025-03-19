@@ -1,11 +1,5 @@
-// Exporta a API principal do state
-export { State, Effect, Values } from "./core/state.js";
-
-// Exporta utilitários
-export * from "./utils/helpers.js";
-
-// Exporta todos os tipos
+export { State } from "./core/state.js";
+export { subscriberManager } from "./core/subscriber.js";
+export { Effect, Values, PersistentState, CombineStates, DerivedState, Derived } from "./utils/helpers.js";
+export { isEqual } from "./utils/compare.js";
 export * from "./types.js";
-
-// README para o módulo state
-// Para documentação e exemplos, veja o arquivo README.md nesta pasta
