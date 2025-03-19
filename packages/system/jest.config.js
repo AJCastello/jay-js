@@ -11,6 +11,9 @@ export default {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
+  setupFilesAfterEnv: [
+    '<rootDir>/src/draggable/__tests__/setup.ts'
+  ],
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.json',

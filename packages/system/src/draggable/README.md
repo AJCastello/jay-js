@@ -1,7 +1,6 @@
+# Draggable Utilities - @jay-js/system
 
-# Draggable - @jay-js/system
-
-A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.
+A set of utilities for creating draggable and droppable elements in modern web applications. These utilities are part of the `@jay-js/system` package and provide flexible APIs for implementing drag-and-drop functionality.
 
 ## Table of Contents
 
@@ -9,13 +8,24 @@ A powerful and flexible TypeScript library for UI, state management, lazy loadin
 - [Installation](#installation)
 - [Usage](#usage)
   - [Draggable](#draggable)
+  - [Droppable](#droppable)
+- [Helpers](#helpers)
+  - [createSortableList](#createsortablelist)
+  - [createFileDropZone](#createfiledropzone)
+  - [createDragGroup](#createdraggroup)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Features
 
-- Draggable: Easily create draggable elements with customizable event callbacks.
-- (Other features like lazy loading, routing, and state management can be added here as well.)
+- **Draggable**: Make an HTML element draggable.
+- **Droppable**: Make an HTML element a droppable area where draggable elements 
+
+**Helpers:**
+- **createSortableList**: Easily create sortable lists with drag-and-drop functionality.
+- **createFileDropZone**: Create drop zones for file uploads via drag-and-drop.
+- **createDragGroup**: Enable dragging items between multiple containers.
+can be dropped.
 
 ## Installation
 
@@ -23,51 +33,111 @@ To install the library, you can use npm or yarn:
 
 With npm:
 
-```
+```bash
 npm i @jay-js/system
 ```
 
 With yarn:
 
-```
+```bash
 yarn add @jay-js/system
 ```
 
 ## Usage
 
-After installation, you can import the library into your project and start using its features. Here's an example of how to use the `Draggable` feature:
-
 ### Draggable
 
-1. Import the `Draggable` function from the library:
+Makes an HTML element draggable.
+
+#### Example:
 
 ```typescript
-import { Draggable } from "@jay-js/system";
-```
+import { Draggable, selector } from "@jay-js/system";
 
-2. Create an HTMLElement that you want to make draggable:
+const draggableElement = selector("#draggable") as HTMLElement;
 
-```html
-<div id="myElement" draggable="true">Drag me!</div>
-```
-
-3. In your TypeScript/JavaScript code, use the `Draggable` function to add event listeners and optional callbacks:
-
-```typescript
-const myElement = document.getElementById("myElement") as HTMLElement;
-
-Draggable(myElement, {
+Draggable(draggableElement, {
   onDragStart: (event) => {
-    console.log("Drag started");
+    console.log("Drag started", event);
   },
   onDragEnd: (event) => {
-    console.log("Drag ended");
-  },
-  // ... other event callbacks
+    console.log("Drag ended", event);
+  }
 });
 ```
 
-For more examples and advanced use cases, please check the [documentation](link-to-documentation).
+### Droppable
+
+Makes an HTML element a droppable area where draggable elements can be dropped.
+
+#### Example:
+
+```typescript
+import { Droppable, selector } from "@jay-js/system";
+
+const droppableElement = selector("#droppable") as HTMLElement;
+
+Droppable(droppableElement, {
+  dragOverClass: "drag-over",
+  onDragOver: (event) => {
+    console.log("Dragging over", event);
+  },
+  onDrop: (event, draggedItem) => {
+    console.log("Dropped item", draggedItem);
+  }
+});
+```
+
+## Helpers
+
+### createSortableList
+
+Creates a sortable list with drag-and-drop functionality.
+
+#### Example:
+
+```typescript
+import { createSortableList, selector } from "@jay-js/system";
+
+const container = selector("#sortable-list") as HTMLElement;
+
+createSortableList(container, ".sortable-item", (items) => {
+  console.log("Sorted items:", items);
+});
+```
+
+### createFileDropZone
+
+Creates a drop zone that accepts file drag-and-drop.
+
+#### Example:
+
+```typescript
+import { createFileDropZone, selector } from "@jay-js/system";
+
+const dropZone = selector("#file-drop-zone") as HTMLElement;
+
+createFileDropZone(dropZone, (files) => {
+  console.log("Dropped files:", files);
+});
+```
+
+### createDragGroup
+
+Creates a group of elements that can be dragged between containers.
+
+#### Example:
+
+```typescript
+import { createDragGroup, selectors } from "@jay-js/system";
+
+const containers = Array.from(selectors(".drag-container")) as HTMLElement[];
+
+createDragGroup(containers, ".draggable-item", (source, target, item) => {
+  console.log("Item moved from", source, "to", target, "Item:", item);
+});
+```
+
 
 ## Contributing
 
@@ -78,11 +148,3 @@ We welcome contributions to the project! Please follow these steps to contribute
 3. Submit a pull request to the main branch.
 
 Before submitting a pull request, please make sure your code follows our coding standards and passes all tests.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
----
-
-Este é apenas um exemplo básico de arquivo README.md para o seu projeto. Você pode adicionar mais informações, exemplos e detalhes conforme necessário. Lembre-se de adicionar informações sobre os outros recursos do seu projeto e criar a documentação correspondente quando estiver pronto.

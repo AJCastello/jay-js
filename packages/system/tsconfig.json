@@ -12,7 +12,8 @@
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": true,
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*",
