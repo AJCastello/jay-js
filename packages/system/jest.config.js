@@ -9,7 +9,8 @@ export default {
     }]
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^(.+)\\.js$': '$1'
   },
   setupFilesAfterEnv: [
     '<rootDir>/src/draggable/__tests__/setup.ts'
