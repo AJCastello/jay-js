@@ -52,7 +52,7 @@ export function CombineStates<T extends Record<string, any>>(
     (acc, [key, state]) => {
       acc[key] = state.get();
       return acc;
-    }, 
+    },
     {} as Record<string, any>
   ) as T;
 
@@ -72,30 +72,6 @@ export function CombineStates<T extends Record<string, any>>(
 }
 
 /**
- * Creates a derived state that depends on another state
- * 
- * @template T Type of source state
- * @template U Type of derived state
- * @param sourceState Source state
- * @param transform Function that transforms source state value
- * @returns A derived state that updates when source state changes
- */
-export function DerivedState<T, U>(
-  sourceState: StateType<T>,
-  transform: (value: T) => U
-): StateType<U> {
-  // Create derived state with initial transformed value
-  const derivedState = State<U>(transform(sourceState.get()));
-  
-  // Subscribe to source state to update the derived state
-  sourceState.sub("derived_state", (value) => {
-    derivedState.set(transform(value));
-  });
-  
-  return derivedState;
-}
-
-/**
  * Creates a derived state that automatically recalculates whenever states 
  * accessed within the function change
  * 
@@ -104,11 +80,11 @@ export function DerivedState<T, U>(
  * @returns A state that updates when any dependency changes
  */
 export function Derived<T>(fn: () => T): StateType<T> {
-  const value = State(fn());
+  const derivedState = State(fn());
   Effect(() => {
-    value.set(fn());
+    derivedState.set(fn());
   });
-  return value;
+  return derivedState;
 }
 
 /**
@@ -124,6 +100,7 @@ export function Effect(fn: () => void) {
   subscriberManager.clearSubscriber();
 }
 
+
 /**
  * Creates a helper for setting values in objects reactively.
  * When a state is accessed within the function, a subscription is automatically
@@ -133,27 +110,26 @@ export function Effect(fn: () => void) {
  * @returns Function for setting values in objects
  */
 export function Values(fn: () => any): any {
-  const _setValue = async function () {
+  const _setValue: ISetValue = function () {
     if (_setValue._path.length > 0) {
       let target = _setValue._object;
       for (let i = 0; i < _setValue._path.length - 1; i++) {
         target = target[_setValue._path[i]];
       }
       const lastKey = _setValue._path[_setValue._path.length - 1];
-      target[lastKey] = await _setValue._fn();
+      target[lastKey] = _setValue._fn();
       return;
     }
-    _setValue._object = await _setValue._fn();
-  } as ISetValue;
+    _setValue._object = _setValue._fn();
+  };
   _setValue._object = undefined;
   _setValue._path = [];
   _setValue._fn = fn;
-  async function _set_value_effect(object: any, ...path: string[]) {
+
+  function _set_value_effect(object: any, ...path: string[]) {
     _setValue._object = object;
     _setValue._path = path;
-    subscriberManager.setSubscriber(_setValue);
-    await _setValue();
-    subscriberManager.clearSubscriber();
+    Effect(_setValue);
   }
   return _set_value_effect;
 }

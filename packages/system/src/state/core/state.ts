@@ -11,7 +11,7 @@ import { isEqual } from "../utils/compare.js";
  */
 export const State = <T>(data: T): StateType<T> => {
   let currentData = data; // Store the current data separately for comparison
-  
+
   const state: StateType<T> = {
     /**
      * Sets a new value for the state and notifies subscribers
@@ -21,48 +21,50 @@ export const State = <T>(data: T): StateType<T> => {
      */
     set: (newData: T | ((currentState: T) => T), options?: setOptions): void => {
       let newValue: T;
-      
+
       if (typeof newData === "function") {
         newValue = (newData as (currentState: T) => T)(currentData);
       } else {
         newValue = newData;
       }
-      
+
       // Compare the new value with the current value to avoid unnecessary updates
       if (!options?.force && isEqual(currentData, newValue)) {
         return; // Skip update if values are equal and not forced
       }
-      
+
       // Update the current data
       currentData = newValue;
-      
+
       if (options?.silent) {
         return;
       }
-      
+
       if (state.effects.size === 0) {
         return;
       }
-      
+
       if (options?.target) {
         if (Array.isArray(options.target)) {
-          options.target.forEach((item: string) => {
+          for (const item of options.target) {
             const effect = state.effects.get(item);
             if (effect) {
               effect(currentData);
             }
-          });
+          }
           return;
         }
-        
+
         const effect = state.effects.get(options.target);
         if (effect) {
           effect(currentData);
         }
         return;
       }
-      
-      state.effects.forEach((item: (arg0: T) => any) => item(currentData));
+
+      for (const [_, effect] of state.effects) {
+        effect(currentData);
+      }
     },
 
     /**
@@ -105,22 +107,26 @@ export const State = <T>(data: T): StateType<T> => {
     /**
      * Manually triggers notifications to subscribers
      * 
-     * @param id Optional specific subscriber ID to trigger, if none provided all subscribers will be notified
+     * @param ids Specific subscriber IDs to trigger, if none provided all subscribers will be notified
      */
-    trigger: (id?: string): void => {
+    trigger: (...ids: string[]): void => {
       if (state.effects.size === 0) {
         return;
       }
-      
-      if (id) {
-        const effect = state.effects.get(id);
-        if (effect) {
-          effect(currentData);
+
+      if (ids.length > 0) {
+        for (let i = 0; i < ids.length; i++) {
+          const effect = state.effects.get(ids[i]);
+          if (effect) {
+            effect(currentData);
+          }
         }
         return;
       }
-      
-      state.effects.forEach((item: (arg0: T) => any) => item(currentData));
+
+      for (const [, item] of state.effects) {
+        item(currentData);
+      }
     },
 
     /**
@@ -136,7 +142,7 @@ export const State = <T>(data: T): StateType<T> => {
       } else {
         currentData = undefined as unknown as T;
       }
-      
+
       state.effects.clear();
     },
 
@@ -144,7 +150,7 @@ export const State = <T>(data: T): StateType<T> => {
      * Map of all registered effect callbacks
      */
     effects: new Map(),
-    
+
     /**
      * Getter for state value that automatically registers the current subscriber
      */
@@ -152,20 +158,20 @@ export const State = <T>(data: T): StateType<T> => {
       const currentSubscriber = subscriberManager.getSubscriber();
       if (currentSubscriber) {
         let hash: string;
-        
+
         // Check if it's a setValue (from Values function)
         if (currentSubscriber.name.includes("_setValue") && (currentSubscriber as any)._fn) {
           hash = subscriberManager.generateFunctionHash((currentSubscriber as any)._fn);
         } else {
           hash = subscriberManager.generateFunctionHash(currentSubscriber);
         }
-        
+
         state.sub(hash, currentSubscriber);
       }
-      
+
       return this.get();
     },
-    
+
     /**
      * Setter for state value
      */
@@ -173,6 +179,6 @@ export const State = <T>(data: T): StateType<T> => {
       this.set(newData);
     }
   };
-  
+
   return state;
 };

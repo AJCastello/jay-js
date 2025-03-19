@@ -52,9 +52,9 @@ export type StateType<T> = {
   
   /**
    * Manually triggers subscribers
-   * @param id Optional specific subscriber ID to trigger
+   * @param ids Specific subscriber IDs to trigger, if none provided all subscribers will be notified
    */
-  trigger: (id?: string) => void;
+  trigger: (...ids: string[]) => void;
   
   /**
    * Clears all subscriptions and optionally sets new value
@@ -77,7 +77,7 @@ export type StateType<T> = {
  * Interface for setValue function used by Values helper
  */
 export interface ISetValue extends Function {
-  (): Promise<void>;
+  (): void;  
   _object: any;
   _path: string[];
   _fn: () => any;
