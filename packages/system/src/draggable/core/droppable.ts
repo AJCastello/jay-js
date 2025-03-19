@@ -41,12 +41,8 @@ export function Droppable(
 		dragOverCount++;
 
 		if (dragOverCount === 1) {
-			const draggedType = event.dataTransfer?.getData("text/plain");
-
-			if (acceptTypes.length === 0 || (draggedType && acceptTypes.includes(draggedType))) {
-				element.classList.add(dragOverClass);
-				dragOptions.onDragEnter?.(event);
-			}
+			element.classList.add(dragOverClass);
+			dragOptions.onDragEnter?.(event);
 		}
 	});
 
