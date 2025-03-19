@@ -1,134 +1,178 @@
-import { ISetValue, StateType, setOptions } from "../types.js";
+import { StateType, setOptions } from "../types.js";
+import { subscriberManager } from "./subscriber.js";
+import { isEqual } from "../utils/compare.js";
 
-let _subscriber: ((args?: any) => (void | Promise<void>)) | null = null;
-
-function fn_hash(func: Function): string {
-  const funcString = func.toString();
-  let hash = 0;
-  for (let i = 0; i < funcString.length; i++) {
-    const char = funcString.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  return Math.abs(hash).toString(16);
-}
-
+/**
+ * Creates a reactive state container that can be subscribed to for changes
+ * 
+ * @template T Type of the state data
+ * @param data Initial value of the state
+ * @returns A state object with methods to manage the state
+ */
 export const State = <T>(data: T): StateType<T> => {
+  let currentData = data; // Store the current data separately for comparison
+  
   const state: StateType<T> = {
+    /**
+     * Sets a new value for the state and notifies subscribers
+     * 
+     * @param newData New data value or function that receives the current state and returns new state
+     * @param options Configuration options for the update operation
+     */
     set: (newData: T | ((currentState: T) => T), options?: setOptions): void => {
+      let newValue: T;
+      
       if (typeof newData === "function") {
-        data = (newData as (currentState: T) => T)(data);
+        newValue = (newData as (currentState: T) => T)(currentData);
       } else {
-        data = newData;
+        newValue = newData;
       }
+      
+      // Compare the new value with the current value to avoid unnecessary updates
+      if (!options?.force && isEqual(currentData, newValue)) {
+        return; // Skip update if values are equal and not forced
+      }
+      
+      // Update the current data
+      currentData = newValue;
+      
       if (options?.silent) {
         return;
       }
+      
       if (state.effects.size === 0) {
         return;
       }
+      
       if (options?.target) {
         if (Array.isArray(options.target)) {
           options.target.forEach((item: string) => {
             const effect = state.effects.get(item);
             if (effect) {
-              effect(data);
+              effect(currentData);
             }
           });
           return;
         }
+        
         const effect = state.effects.get(options.target);
         if (effect) {
-          effect(data);
+          effect(currentData);
         }
         return;
       }
-      state.effects.forEach((item: (arg0: T) => any) => item(data));
+      
+      state.effects.forEach((item: (arg0: T) => any) => item(currentData));
     },
+
+    /**
+     * Gets the current value of the state
+     * 
+     * @param callback Optional callback function that receives the current state value
+     * @returns The current state value
+     */
     get: (callback?: (data: T) => void): T => {
       if (callback) {
-        callback(data);
+        callback(currentData);
       }
-      return data;
+      return currentData;
     },
+
+    /**
+     * Subscribes to state changes with a specific ID
+     * 
+     * @param id Unique identifier for this subscription
+     * @param effect Callback function to be called when state changes
+     * @param run Whether to immediately run the effect with current state
+     * @returns Result of the effect if run is true
+     */
     sub: (id: string, effect: (data: T) => any, run = false): any => {
       state.effects.set(id, effect);
       if (run) {
-        return effect(data);
+        return effect(currentData);
       }
     },
+
+    /**
+     * Unsubscribes from state changes by ID
+     * 
+     * @param id ID of the subscription to remove
+     */
     unsub: (id: string) => {
       state.effects.delete(id);
     },
+
+    /**
+     * Manually triggers notifications to subscribers
+     * 
+     * @param id Optional specific subscriber ID to trigger, if none provided all subscribers will be notified
+     */
     trigger: (id?: string): void => {
       if (state.effects.size === 0) {
         return;
       }
+      
       if (id) {
         const effect = state.effects.get(id);
         if (effect) {
-          effect(data);
+          effect(currentData);
         }
         return;
       }
-      state.effects.forEach((item: (arg0: T) => any) => item(data));
+      
+      state.effects.forEach((item: (arg0: T) => any) => item(currentData));
     },
+
+    /**
+     * Clears all subscriptions and optionally sets a new value
+     * 
+     * @param newData Optional new value for the state
+     */
     clear: (newData?: T | ((currentState: T) => T)): void => {
       if (typeof newData === "function") {
-        data = (newData as (currentState: T) => T)(data);
-      } else if (newData) {
-        data = newData;
+        currentData = (newData as (currentState: T) => T)(currentData);
+      } else if (newData !== undefined) {
+        currentData = newData;
       } else {
-        data = undefined as unknown as T;
+        currentData = undefined as unknown as T;
       }
+      
       state.effects.clear();
     },
+
+    /**
+     * Map of all registered effect callbacks
+     */
     effects: new Map(),
+    
+    /**
+     * Getter for state value that automatically registers the current subscriber
+     */
     get value() {
-      if (_subscriber) {
-        let hash = fn_hash(_subscriber);
-        if (_subscriber.name.includes("_setValue") && (_subscriber as any)._fn) {
-          hash = fn_hash((_subscriber as any)._fn);
+      const currentSubscriber = subscriberManager.getSubscriber();
+      if (currentSubscriber) {
+        let hash: string;
+        
+        // Check if it's a setValue (from Values function)
+        if (currentSubscriber.name.includes("_setValue") && (currentSubscriber as any)._fn) {
+          hash = subscriberManager.generateFunctionHash((currentSubscriber as any)._fn);
+        } else {
+          hash = subscriberManager.generateFunctionHash(currentSubscriber);
         }
-        state.sub(hash, _subscriber);
+        
+        state.sub(hash, currentSubscriber);
       }
+      
       return this.get();
     },
+    
+    /**
+     * Setter for state value
+     */
     set value(newData: T) {
       this.set(newData);
     }
   };
+  
   return state;
 };
-
-export function Effect(fn: () => void) {
-  _subscriber = fn;
-  fn();
-  _subscriber = null;
-}
-
-export function Values(fn: () => any): any {
-  const _setValue = async function () {
-    if (_setValue._path.length > 0) {
-      let target = _setValue._object;
-      for (let i = 0; i < _setValue._path.length - 1; i++) {
-        target = target[_setValue._path[i]];
-      }
-      const lastKey = _setValue._path[_setValue._path.length - 1];
-      target[lastKey] = await _setValue._fn();
-      return;
-    }
-    _setValue._object = await _setValue._fn();
-  } as ISetValue;
-  _setValue._object = undefined;
-  _setValue._path = [];
-  _setValue._fn = fn;
-  async function _set_value_effect(object: any, ...path: string[]) {
-    _setValue._object = object;
-    _setValue._path = path;
-    _subscriber = _setValue;
-    await _setValue();
-    _subscriber = null;
-  }
-  return _set_value_effect;
-}
