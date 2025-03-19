@@ -15,8 +15,7 @@
 - [Advanced Utilities](#advanced-utilities)
   - [Persistent State (`PersistentState`)](#persistent-state-persistentstate)
   - [Combined States (`CombineStates`)](#combined-states-combinestates)
-  - [Derived State (`DerivedState`)](#derived-state-derivedstate)
-  - [Derived State with Automatic Dependencies (`Derived`)](#derived-state-with-automatic-dependencies-derived)
+  - [Derived State (`Derived`)](#derived-state-derived)
   - [Reactive Effects (`Effect`)](#reactive-effects-effect)
   - [Reactive Values (`Values`)](#reactive-values-values)
 - [Usage Examples](#usage-examples)
@@ -99,6 +98,7 @@ The update can include additional options:
 person.set({ name: 'Jane', age: 25 }, {
   silent: true, // Does not notify subscribers
   target: 'specificSubscriber', // Notifies only a specific subscriber
+  target: ['subscriber1', 'subscriber2'], // Notifies multiple specific subscribers
   force: true // Forces the update even if the value is the same
 });
 ```
@@ -142,6 +142,9 @@ person.trigger();
 
 // Notifies only a specific subscriber
 person.trigger('mySubscription');
+
+// Notifies multiple specific subscribers
+person.trigger('subscriber1', 'subscriber2', 'subscriber3');
 ```
 
 ### Clearing Subscriptions
@@ -205,22 +208,7 @@ firstName.set('Jane');
 // Now person.value contains { firstName: 'Jane', lastName: 'Doe', age: 30 }
 ```
 
-### Derived State (`DerivedState`)
-
-Creates a state that depends on another state:
-
-```typescript
-import { State, DerivedState } from '@jay-js/system';
-
-const count = State(10);
-const doubled = DerivedState(count, value => value * 2);
-
-console.log(doubled.value); // 20
-count.set(15);
-console.log(doubled.value); // 30
-```
-
-### Derived State with Automatic Dependencies (`Derived`)
+### Derived State (`Derived`)
 
 Creates a derived state that automatically recalculates when any state accessed within the function changes:
 
@@ -236,6 +224,19 @@ count.set(15);
 console.log(result.value); // 30
 factor.set(3);
 console.log(result.value); // 45
+```
+
+You can also use it to derive from a single state:
+
+```typescript
+import { State, Derived } from '@jay-js/system';
+
+const count = State(10);
+const doubled = Derived(() => count.value * 2);
+
+console.log(doubled.value); // 20
+count.set(15);
+console.log(doubled.value); // 30
 ```
 
 ### Reactive Effects (`Effect`)
