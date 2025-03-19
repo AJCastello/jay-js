@@ -114,6 +114,9 @@ export function Values(fn: () => any): any {
     if (_setValue._path.length > 0) {
       let target = _setValue._object;
       for (let i = 0; i < _setValue._path.length - 1; i++) {
+        if (!target[_setValue._path[i]]) {
+          target[_setValue._path[i]] = {};
+        }
         target = target[_setValue._path[i]];
       }
       const lastKey = _setValue._path[_setValue._path.length - 1];
