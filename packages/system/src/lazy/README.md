@@ -1,74 +1,319 @@
-# Jay JS - Lazy LoadingModule
+# Lazy Loading Module System
 
-The `LazyModule` component is a utility for loading and rendering components or modules asynchronously in your web application. It efficiently manages the lifecycle of imported modules by collecting unused modules and unmounting them from memory. This helps optimize the performance of your application by reducing memory consumption and improving load times.
+## Table of Contents
+- [Introduction](#introduction)
+- [Key Features](#key-features)
+- [Architecture](#architecture)
+- [LazyModule Usage](#lazymodule-usage)
+  - [Basic Usage](#basic-usage)
+  - [Custom Loaders](#custom-loaders)
+  - [Advanced Configurations](#advanced-configurations)
+  - [Prefetching](#prefetching)
+- [Module Collector](#module-collector)
+  - [How It Works](#how-it-works)
+  - [Garbage Collection](#garbage-collection)
+  - [Idle Detection](#idle-detection)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [Performance Considerations](#performance-considerations)
+- [Troubleshooting](#troubleshooting)
 
-## Features
+## Introduction
 
-- Dynamically imports and renders modules.
-- Efficient module lifecycle management.
-- Graceful error handling for failed imports.
-- Memory optimization by unmounting unused modules.
-- Idle time reset to manage module lifecycle based on user activity.
+The Lazy Loading Module System is a sophisticated utility designed to optimize application performance by dynamically loading JavaScript/TypeScript modules only when needed. This approach significantly reduces initial load times and memory usage by deferring the loading of non-critical resources until they are required.
 
-## How it works
+## Key Features
 
-The `LazyModule` component takes a module object as its parameter. This object contains properties such as the module name, import function, and any additional properties required by the module. When the `LazyModule` component is called, it checks if the module has already been imported. If it has, the module is rendered immediately. If not, the import function is called to load the module dynamically. 
+- **On-demand Module Loading**: Imports modules only when they are explicitly requested
+- **Intelligent Caching**: Maintains a cache of imported modules to prevent redundant loading
+- **Automatic Garbage Collection**: Periodically removes unused modules to free up memory
+- **Idle Detection**: Optimizes garbage collection based on user activity
+- **Configurable Behavior**: Adjustable thresholds and intervals for fine-tuning performance
 
-While the module is being imported, a loader component is displayed. Once the import is complete, the loader component is replaced with the imported module's content. If the import fails, an error message is displayed.
+## Architecture
 
-The `LazyModule` component also manages the module lifecycle by periodically checking for modules that have not been used recently and unmounting them from memory.
+The system consists of several components working together:
 
-## Usage
+1. **Core Configuration**: Maintains global settings and module cache
+2. **Module Collector**: Manages the lifecycle of imported modules
+3. **Type Definitions**: Provides TypeScript interfaces for system components
 
-To use the `LazyModule` component, first import it into your project:
+## LazyModule Usage
 
-```typescript
+The `LazyModule` function is the primary API for lazy loading modules in your application. It provides a simple way to defer loading of modules until they are needed.
+
+### Basic Usage
+
+Here's a simple example of using `LazyModule` to load a component:
+
+```javascript
 import { LazyModule } from "@jay-js/system";
+
+// Function to create a lazy-loaded component
+function createLazyComponent() {
+  return LazyModule({
+    module: "MyComponent", // Name of the exported module
+    import: () => import("./components/MyComponent.js")
+  });
+}
+
+// Use the lazy component
+const container = document.getElementById("app");
+container.appendChild(createLazyComponent());
 ```
 
-Next, create a module object containing the module's name, import function, and any additional properties required by the module. Here's an example:
+### Custom Loaders
 
-```typescript
-const module = {
-  module: "ForgotPassword",
-  import: () => import("../modules/ForgotPassword"),
+You can provide a custom loader element that will be displayed while the module is loading:
+
+```javascript
+import { LazyModule } from "@jay-js/system";
+
+// Create a custom loader
+const createLoader = () => {
+  const loader = document.createElement("div");
+  loader.className = "spinner";
+  loader.innerHTML = `
+    <div class="loading-spinner">
+      <div class="spinner-circle"></div>
+      <p>Loading component...</p>
+    </div>
+  `;
+  return loader;
 };
+
+// Use the custom loader with LazyModule
+function LazyUserProfile() {
+  return LazyModule({
+    module: "UserProfile",
+    import: () => import("./components/UserProfile.js")
+  }, createLoader());
+}
+
+// Render in the DOM
+document.getElementById("profile-container").appendChild(LazyUserProfile());
 ```
 
-Finally, pass the module object to the `LazyModule` component:
+### Advanced Configurations
 
-```typescript
-export function MyComponent() {
-  return LazyModule(module);
+You can pass additional options to the `LazyModule` function:
+
+```javascript
+import { LazyModule, setLazyOptions } from "@jay-js/system";
+
+// Configure global lazy loading options
+setLazyOptions({
+  gcThreshold: 300000, // 5 minutes in milliseconds
+  gcInterval: 60000,   // 1 minute in milliseconds
+  enablePrefetch: true // Enable module prefetching
+});
+
+// Create a lazy-loaded module with props and disable garbage collection
+function LazyDataTable() {
+  return LazyModule({
+    module: "DataTable",
+    import: () => import("./components/DataTable.js"),
+    props: {
+      data: fetchData(),
+      pageSize: 10,
+      sortable: true
+    },
+    collect: false // Prevent this module from being garbage-collected
+  });
+}
+
+// Use the component
+const tableContainer = document.querySelector(".table-container");
+tableContainer.appendChild(LazyDataTable());
+```
+
+### Prefetching
+
+You can prefetch modules before they're actually needed:
+
+```javascript
+import { LazyModule, prefetchModules, setLazyOptions } from "@jay-js/system";
+
+// Enable prefetching
+setLazyOptions({
+  enablePrefetch: true
+});
+
+// Define your lazy module configurations
+const lazyModules = [
+  {
+    module: "HomeView",
+    import: () => import("./views/HomeView.js")
+  },
+  {
+    module: "ProfileView",
+    import: () => import("./views/ProfileView.js")
+  },
+  {
+    module: "SettingsView",
+    import: () => import("./views/SettingsView.js")
+  }
+];
+
+// Prefetch modules during idle time
+document.addEventListener("DOMContentLoaded", () => {
+  // Wait for initial render to complete
+  setTimeout(() => {
+    prefetchModules(lazyModules);
+  }, 3000);
+});
+
+// Create view factory
+function createView(viewName) {
+  const config = lazyModules.find(m => m.module === viewName);
+  if (!config) return null;
+  
+  return LazyModule(config, createViewLoader());
+}
+
+// Usage
+function navigateTo(route) {
+  const viewContainer = document.getElementById("view-container");
+  viewContainer.innerHTML = "";
+  
+  switch(route) {
+    case "home":
+      viewContainer.appendChild(createView("HomeView"));
+      break;
+    case "profile":
+      viewContainer.appendChild(createView("ProfileView"));
+      break;
+    case "settings":
+      viewContainer.appendChild(createView("SettingsView"));
+      break;
+  }
 }
 ```
 
-The `LazyModule` component will take care of importing and rendering the module as needed, optimizing the performance of your application.
+## Module Collector
 
-## API
+The `ModuleCollector` is a singleton class that handles the management of imported modules. It implements a garbage collection mechanism to free up memory by removing modules that haven't been used for a specified period.
+
+### How It Works
+
+The collector runs at regular intervals (configurable via `gcInterval` setting) to check for unused modules. It tracks each module's usage and marks those that haven't been accessed recently for removal from the cache.
+
+Key implementation details:
+- Uses the Singleton pattern to ensure only one collector instance exists
+- Responds to configuration changes dynamically
+- Monitors user activity to optimize collection behavior
+
+### Garbage Collection
+
+The garbage collection process:
+
+1. Iterates through all cached modules
+2. Increments the "last used" counter for each module
+3. Identifies modules that exceed the threshold for removal
+4. Removes identified modules from the cache
+5. Logs removal actions when modules are collected
+
+The threshold for removal is determined by the `gcThreshold` configuration value, which represents the number of minutes since a module was last used.
+
+### Idle Detection
+
+The system includes an idle detection mechanism that:
+
+1. Monitors user interactions (mouse movements and keypresses)
+2. Resets idle timers when activity is detected
+3. Pauses the collector when the application is idle for an extended period
+4. Resets module usage counters during prolonged idle periods to prevent aggressive collection
+
+## Configuration
+
+The collector behavior can be customized through the following configuration options:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `gcInterval` | Time between collection cycles (in milliseconds) | 60000 (1 minute) |
+| `gcThreshold` | Time threshold for marking a module as unused (in milliseconds) | 300000 (5 minutes) |
+| `enablePrefetch` | Whether to enable module prefetching | false |
+
+Configuration changes are applied dynamically without requiring application restart.
+
+## API Reference
 
 ### LazyModule
 
-Function that returns an HTMLElement with the loaded module.
-
-#### Props
-
-- `module`: Required. The module's name.
-- `import`: Required. A function that returns a Promise for importing the module.
-- `collect`: Optional. A boolean that indicates whether the module should be collected when it's not in use (default: true).
-
-### Example
-
 ```typescript
-import { LazyModule } from "@jay-js/system";
+function LazyModule(lazy: ILazyModule, loader?: HTMLElement): HTMLElement
 
-export function MyComponent() {
-  const module = {
-    module: "ForgotPassword",
-    import: () => import("../modules/ForgotPassword"),
-  };
-  return LazyModule(module);
+interface ILazyModule {
+  module: string;        // Name of the exported module
+  import: () => Promise<any>; // Dynamic import function
+  props?: Record<string, any>; // Props to pass to the module
+  collect?: boolean;     // Whether the module can be garbage collected
 }
 ```
 
-That's it! Now you can use the `LazyModule` component to efficiently manage and render components in your web application.
+### ModuleCollector
+
+```typescript
+// Get the singleton instance
+const collector = ModuleCollector.getInstance();
+
+// Manually dispose of the collector (rarely needed)
+collector.dispose();
+```
+
+### Configuration API
+
+```typescript
+import { setLazyOptions } from '@jay-js/system';
+
+// Configure the lazy loading system
+setLazyOptions({
+  gcThreshold: 300000, // 5 minutes
+  gcInterval: 60000,   // 1 minute
+  enablePrefetch: true // Enable prefetching
+});
+```
+
+## Performance Considerations
+
+- The garbage collection process is designed to have minimal impact on application performance
+- Collection intervals are automatically adjusted based on user activity
+- During periods of inactivity, the system conserves resources by pausing collection
+- Use the `collect: false` option for modules that should always stay in memory
+
+## Troubleshooting
+
+**Issue**: Modules are being collected too frequently
+
+**Solution**: Increase the `gcThreshold` value in the configuration:
+
+```typescript
+import { setLazyOptions } from '@jay-js/system';
+
+setLazyOptions({
+  gcThreshold: 600000 // 10 minutes
+});
+```
+
+**Issue**: Memory usage continues to grow
+
+**Solution**: Decrease the `gcThreshold` or `gcInterval` to collect unused modules more aggressively:
+
+```typescript
+setLazyOptions({
+  gcThreshold: 180000, // 3 minutes
+  gcInterval: 30000    // 30 seconds
+});
+```
+
+**Issue**: Module disappears unexpectedly
+
+**Solution**: Set the `collect` option to `false` to prevent garbage collection:
+
+```typescript
+LazyModule({
+  module: "CriticalComponent",
+  import: () => import("./components/CriticalComponent.js"),
+  collect: false // Prevents garbage collection
+});
+```
