@@ -1,17 +1,9 @@
 import { ILazyModule } from "../types.js";
-import { 
-  moduleCache, 
-  lazyOptions 
+import {
+  moduleCache,
+  lazyOptions
 } from "./configuration.js";
 
-export function prefetchModule(config: ILazyModule): void {
-  if (!lazyOptions.enablePrefetch) return;
-  
-  const prefetchLink = document.createElement("link");
-  prefetchLink.rel = "prefetch";
-  prefetchLink.href = config.module || '';
-  document.head.appendChild(prefetchLink);
-}
 
 export function loadFromCache(lazy: ILazyModule): HTMLElement {
   const cached = moduleCache.get(lazy.module!);
@@ -26,14 +18,12 @@ export function loadFromCache(lazy: ILazyModule): HTMLElement {
 export async function loadModule(lazy: ILazyModule, moduleSection: HTMLElement) {
   try {
     const moduleImported = await lazy.import();
-    
-    // Check if we should use default export or named export
-    const moduleToUse = isDefaultExportModule(lazy) 
+
+    const moduleToUse = isDefaultExportModule(lazy)
       ? moduleImported.default
       : moduleImported[lazy.module!];
-    
+
     if (!moduleToUse) {
-      // If not found, try default export as fallback
       if (moduleImported.default && !isDefaultExportModule(lazy)) {
         console.warn(`Named export '${lazy.module}' not found, using default export instead.`);
         moduleCache.set(lazy.module!, {
@@ -64,7 +54,6 @@ export async function loadModule(lazy: ILazyModule, moduleSection: HTMLElement) 
   }
 }
 
-// Helper function to determine if we're dealing with a default export module
 function isDefaultExportModule(lazy: ILazyModule): boolean {
   return lazy.module?.startsWith('default_') || false;
 }

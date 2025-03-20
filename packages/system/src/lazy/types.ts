@@ -1,3 +1,5 @@
+export type ConfigChangeCallback = (options: ILazyOptions) => void;
+
 export interface IImportedModule {
   module: any;
   lastUsed: number;
@@ -16,5 +18,4 @@ export interface ILazyOptions {
   gcThreshold?: number;
   gcInterval?: number;
   defaultLoader?: HTMLElement | DocumentFragment;
-  enablePrefetch?: boolean;
 }

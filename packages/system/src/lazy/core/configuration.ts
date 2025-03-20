@@ -1,14 +1,12 @@
-import { IImportedModule, ILazyOptions } from "../types.js";
+import { ConfigChangeCallback, IImportedModule, ILazyOptions } from "../types.js";
 
 export const lazyOptions: ILazyOptions = {
-  gcThreshold: 5 * 60 * 1000, // 5 min
-  gcInterval: 60 * 1000,      // 1 min
-  enablePrefetch: false
+  gcThreshold: 300000,       // 5 minutes in milliseconds
+  gcInterval: 60000,         // 1 minute in milliseconds
 };
 
 export const moduleCache = new Map<string, IImportedModule>();
 
-type ConfigChangeCallback = (options: ILazyOptions) => void;
 const configChangeListeners: Set<ConfigChangeCallback> = new Set();
 
 export function addConfigChangeListener(callback: ConfigChangeCallback): void {
@@ -20,7 +18,12 @@ export function removeConfigChangeListener(callback: ConfigChangeCallback): void
 }
 
 export function setLazyOptions(options: Partial<ILazyOptions>): void {
+  Object.keys(options).forEach((key) => {
+    const typedKey = key as keyof ILazyOptions;
+    if (options[typedKey] === undefined) {
+      delete options[typedKey];
+    }
+  });
   Object.assign(lazyOptions, options);
-  // Notify all listeners of the configuration change
   configChangeListeners.forEach(listener => listener(lazyOptions));
 }
