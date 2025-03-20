@@ -6,16 +6,16 @@ export type TDragLeaveEvent = (event: DragEvent) => void;
 export type TDropEvent = (event: DragEvent, draggedItem: HTMLElement | null) => void;
 
 export type TDraggableOptions = {
-  onDragStart?: TDragStartEvent;
-  onDragEnd?: TDragEndEvent;
-  onDragOver?: TDragOverEvent;
-  onDragEnter?: TDragEnterEvent;
-  onDragLeave?: TDragLeaveEvent;
-  onDrop?: TDropEvent;
-}
+	onDragStart?: TDragStartEvent;
+	onDragEnd?: TDragEndEvent;
+	onDragOver?: TDragOverEvent;
+	onDragEnter?: TDragEnterEvent;
+	onDragLeave?: TDragLeaveEvent;
+	onDrop?: TDropEvent;
+};
 
 export type TDroppableOptions = {
-  accept?: boolean;
-  acceptTypes?: string[];
-  dragOverClass?: string;
-}
+	accept?: boolean;
+	acceptTypes?: string[];
+	dragOverClass?: string;
+};

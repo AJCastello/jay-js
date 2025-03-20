@@ -19,7 +19,7 @@
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check ./src",
+    "lint": "biome check --write ./src",
     "test": "jest --verbose",
     "test:full": "jest --verbose --coverage --coverageReporters=html --coverageReporters=text --collectCoverageFrom='src/**/*.{js,ts}'",
     "test:cover": "jest --coverage --coverageReporters=html",

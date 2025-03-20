@@ -1,4 +1,4 @@
-import { TDraggableOptions } from "../types.js";
+import type { TDraggableOptions } from "../types.js";
 
 /**
  * Makes an HTML element draggable.
@@ -12,46 +12,43 @@ import { TDraggableOptions } from "../types.js";
  * @param {Function} [options.onDragLeave] - Callback triggered when a draggable element leaves the target.
  * @param {Function} [options.onDrop] - Callback triggered when a draggable element is dropped on the target.
  */
-export function Draggable(
-    element: HTMLElement,
-    options: TDraggableOptions = {}
-): void {
-    let draggedItem: HTMLElement | null = null;
+export function Draggable(element: HTMLElement, options: TDraggableOptions = {}): void {
+	let draggedItem: HTMLElement | null = null;
 
-    element.setAttribute("draggable", "true");
+	element.setAttribute("draggable", "true");
 
-    element.addEventListener("dragstart", (event) => {
-        draggedItem = event.target as HTMLElement;
-        element.classList.add("dragging");
+	element.addEventListener("dragstart", (event) => {
+		draggedItem = event.target as HTMLElement;
+		element.classList.add("dragging");
 
-        if (event.dataTransfer) {
-            event.dataTransfer.effectAllowed = "move";
-            event.dataTransfer.setData("text/plain", element.id || "draggable");
-        }
+		if (event.dataTransfer) {
+			event.dataTransfer.effectAllowed = "move";
+			event.dataTransfer.setData("text/plain", element.id || "draggable");
+		}
 
-        options.onDragStart?.(event);
-    });
+		options.onDragStart?.(event);
+	});
 
-    element.addEventListener("dragend", (event) => {
-        element.classList.remove("dragging");
-        draggedItem = null;
-        options.onDragEnd?.(event);
-    });
+	element.addEventListener("dragend", (event) => {
+		element.classList.remove("dragging");
+		draggedItem = null;
+		options.onDragEnd?.(event);
+	});
 
-    element.addEventListener("dragover", (event) => {
-        options.onDragOver?.(event);
-    });
+	element.addEventListener("dragover", (event) => {
+		options.onDragOver?.(event);
+	});
 
-    element.addEventListener("dragenter", (event) => {
-        options.onDragEnter?.(event);
-    });
+	element.addEventListener("dragenter", (event) => {
+		options.onDragEnter?.(event);
+	});
 
-    element.addEventListener("dragleave", (event) => {
-        options.onDragLeave?.(event);
-    });
+	element.addEventListener("dragleave", (event) => {
+		options.onDragLeave?.(event);
+	});
 
-    element.addEventListener("drop", (event) => {
-        event.preventDefault();
-        options.onDrop?.(event, draggedItem);
-    });
+	element.addEventListener("drop", (event) => {
+		event.preventDefault();
+		options.onDrop?.(event, draggedItem);
+	});
 }

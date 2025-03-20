@@ -5,7 +5,7 @@
 
 /**
  * Configuration options for the theme system.
- * 
+ *
  * @typedef {Object} TThemeOptions
  * @property {HTMLElement} target - The HTML element to apply the theme to (usually document.documentElement)
  * @property {boolean} saveToLocalStorage - Whether to save theme preferences to localStorage
@@ -17,12 +17,12 @@
  * @property {Array<string>} [themeList] - List of available themes for class removal when switching
  */
 export type TThemeOptions = {
-  target: HTMLElement;
-  saveToLocalStorage: boolean;
-  defaultTheme: string;
-  defaultDarkTheme: string;
-  localStorageKey: string;
-  useAsDataset?: boolean;
-  useAsClass?: boolean;
-  themeList?: Array<string>;
-}
+	target: HTMLElement;
+	saveToLocalStorage: boolean;
+	defaultTheme: string;
+	defaultDarkTheme: string;
+	localStorageKey: string;
+	useAsDataset?: boolean;
+	useAsClass?: boolean;
+	themeList?: Array<string>;
+};

@@ -1,6 +1,6 @@
 export {
-  selector,
-  selectors,
+	selector,
+	selectors,
 } from "./dom/query.js";
 
 export { render } from "./dom/render.js";

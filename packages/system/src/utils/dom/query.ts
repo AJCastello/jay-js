@@ -1,4 +1,4 @@
-import { TQueryOptions } from "../types.js";
+import type { TQueryOptions } from "../types.js";
 
 /**
  * Selects all elements that match the CSS selector
@@ -9,33 +9,31 @@ import { TQueryOptions } from "../types.js";
  * @throws {Error} If target is invalid or selector is not a string
  */
 export function selectors<T extends NodeListOf<Element>>(
-  selector: string,
-  target: HTMLElement | Document = document,
-  options: TQueryOptions = {}
+	selector: string,
+	target: HTMLElement | Document = document,
+	options: TQueryOptions = {},
 ): T {
-  if (!target || typeof selector !== "string") {
-    throw new Error("Invalid parameters");
-  }
+	if (!target || typeof selector !== "string") {
+		throw new Error("Invalid parameters");
+	}
 
-  let elements = target.querySelectorAll(selector) as T;
+	let elements = target.querySelectorAll(selector) as T;
 
-  if (options.onlyVisible) {
-    elements = Array.from(elements)
-      .filter(el => {
-        const style = window.getComputedStyle(el);
-        return style.display !== "none" && style.visibility !== "hidden";
-      }) as unknown as T;
-  }
+	if (options.onlyVisible) {
+		elements = Array.from(elements).filter((el) => {
+			const style = window.getComputedStyle(el);
+			return style.display !== "none" && style.visibility !== "hidden";
+		}) as unknown as T;
+	}
 
-  if (options.includeNested === false) {
-    elements = Array.from(elements)
-      .filter(el => {
-        const parent = el.parentElement?.closest(selector);
-        return !parent;
-      }) as unknown as T;
-  }
+	if (options.includeNested === false) {
+		elements = Array.from(elements).filter((el) => {
+			const parent = el.parentElement?.closest(selector);
+			return !parent;
+		}) as unknown as T;
+	}
 
-  return elements;
+	return elements;
 }
 
 /**
@@ -47,18 +45,18 @@ export function selectors<T extends NodeListOf<Element>>(
  * @throws {Error} If target is invalid or selector is not a string
  */
 export function selector<T extends HTMLElement>(
-  selector: string,
-  target: HTMLElement | Document = document,
-  options: TQueryOptions = {}
+	selector: string,
+	target: HTMLElement | Document = document,
+	options: TQueryOptions = {},
 ): T | null {
-  if (!target || typeof selector !== "string") {
-    throw new Error("Invalid parameters");
-  }
+	if (!target || typeof selector !== "string") {
+		throw new Error("Invalid parameters");
+	}
 
-  if (options.onlyVisible) {
-    const elements = selectors(selector, target, options);
-    return elements[0] as T || null;
-  }
+	if (options.onlyVisible) {
+		const elements = selectors(selector, target, options);
+		return (elements[0] as T) || null;
+	}
 
-  return target.querySelector(selector) as T | null;
+	return target.querySelector(selector) as T | null;
 }

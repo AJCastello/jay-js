@@ -3,42 +3,42 @@ import { getPotentialMatch, getPotentialMatchIndex } from "../matching/get-poten
 import { renderRoute } from "../rendering/render-route";
 
 export async function getRoute() {
-  const match = getPotentialMatch();
+	const match = getPotentialMatch();
 
-  if (routerOptions.beforeResolve) {
-    const beforeResolve = await routerOptions.beforeResolve(match.route);
-    if (!beforeResolve) {
-      return;
-    }
-  }
+	if (routerOptions.beforeResolve) {
+		const beforeResolve = await routerOptions.beforeResolve(match.route);
+		if (!beforeResolve) {
+			return;
+		}
+	}
 
-  if (!match.result) {
-    if (routerOptions.onError) {
-      routerOptions.onError(new Error("No match found", { cause: "no-match" }));
-      return;
-    }
-    return;
-  }
+	if (!match.result) {
+		if (routerOptions.onError) {
+			routerOptions.onError(new Error("No match found", { cause: "no-match" }));
+			return;
+		}
+		return;
+	}
 
-  if (match.route.layout) {
-    const matchLayoutIndex = getPotentialMatchIndex();
-    if (!matchLayoutIndex.route) {
-      if (routerOptions.onError) {
-        routerOptions.onError(new Error("No layout match found", { cause: "no-layout-match" }));
-        return;
-      }
-      return;
-    }
-    await renderRoute(matchLayoutIndex.route);
-    return;
-  }
+	if (match.route.layout) {
+		const matchLayoutIndex = getPotentialMatchIndex();
+		if (!matchLayoutIndex.route) {
+			if (routerOptions.onError) {
+				routerOptions.onError(new Error("No layout match found", { cause: "no-layout-match" }));
+				return;
+			}
+			return;
+		}
+		await renderRoute(matchLayoutIndex.route);
+		return;
+	}
 
-  if(routerOptions.onNavigate){
-    routerOptions.onNavigate(match.route);
-  }
+	if (routerOptions.onNavigate) {
+		routerOptions.onNavigate(match.route);
+	}
 
-  await renderRoute(match.route);
-  return;
+	await renderRoute(match.route);
+	return;
 }
 
 window.addEventListener("popstate", getRoute);

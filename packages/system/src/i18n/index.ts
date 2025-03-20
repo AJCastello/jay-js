@@ -1,9 +1,9 @@
 /**
  * JAY-JS Internationalization Module
- * 
+ *
  * A lightweight, type-safe internationalization system for JavaScript and TypeScript applications.
  * This module provides tools for managing translations, language switching, and localization.
- * 
+ *
  * @module @jay-js/system/i18n
  */
 

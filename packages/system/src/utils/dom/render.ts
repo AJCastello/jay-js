@@ -1,4 +1,4 @@
-import { TRenderContent, TRenderOptions, TRenderTarget } from "../types.js";
+import type { TRenderContent, TRenderOptions, TRenderTarget } from "../types.js";
 import { selector } from "./query.js";
 
 /**
@@ -6,7 +6,7 @@ import { selector } from "./query.js";
  * @param target - Element or selector to render content into
  * @param content - Content to render (can be Node, string, HTMLElement, or array)
  * @param options - Optional rendering configuration
- * 
+ *
  * @example
  * ```ts
  * render('#app', 'Hello'); // Replaces content
@@ -14,32 +14,28 @@ import { selector } from "./query.js";
  * render('#app', [el1, el2], { insert: 'prepend' }); // Prepends multiple elements
  * ```
  */
-export function render(
-  target: TRenderTarget,
-  content: TRenderContent,
-  options: TRenderOptions = {}
-): void {
-  if (!target || !content) return;
-  
-  const element = typeof target === "string" ? selector(target) : target;
-  if (!element) return;
+export function render(target: TRenderTarget, content: TRenderContent, options: TRenderOptions = {}): void {
+	if (!target || !content) return;
 
-  if (!options.insert) {
-    element.innerHTML = "";
-  }
-  
-  if (Array.isArray(content)) {
-    if (options.insert === "prepend") {
-      element.prepend(...content);
-    } else {
-      element.append(...content);
-    }
-    return;
-  }
+	const element = typeof target === "string" ? selector(target) : target;
+	if (!element) return;
 
-  if (options.insert === "prepend") {
-    element.prepend(content);
-  } else {
-    element.append(content);
-  }
+	if (!options.insert) {
+		element.innerHTML = "";
+	}
+
+	if (Array.isArray(content)) {
+		if (options.insert === "prepend") {
+			element.prepend(...content);
+		} else {
+			element.append(...content);
+		}
+		return;
+	}
+
+	if (options.insert === "prepend") {
+		element.prepend(content);
+	} else {
+		element.append(content);
+	}
 }

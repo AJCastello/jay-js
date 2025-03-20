@@ -4,10 +4,10 @@
  * @template P - Property to join with the key
  */
 type Join<K, P> = K extends string | null
-  ? P extends string | number
-  ? `${K extends string ? `${K}.` : ""}${P}`
-  : never
-  : never;
+	? P extends string | number
+		? `${K extends string ? `${K}.` : ""}${P}`
+		: never
+	: never;
 
 /**
  * Generates all possible path strings for a nested object using dot notation
@@ -16,10 +16,12 @@ type Join<K, P> = K extends string | null
  * @returns All possible paths in the object as string literals
  */
 export type AllPaths<T, Prefix extends string | null = null> = T extends object
-  ? {
-    [K in keyof T]-?: Join<Prefix, K> | AllPaths<T[K], Join<Prefix, K>>;
-  }[keyof T]
-  : T extends string ? "" : any;
+	? {
+			[K in keyof T]-?: Join<Prefix, K> | AllPaths<T[K], Join<Prefix, K>>;
+		}[keyof T]
+	: T extends string
+		? ""
+		: any;
 
 /**
  * Gets the type at a specific path in a nested object
@@ -28,29 +30,28 @@ export type AllPaths<T, Prefix extends string | null = null> = T extends object
  * @returns The type at the specified path
  */
 export type GetTypeAtPath<T, Path extends string> = Path extends keyof T
-  ? T[Path]
-  : Path extends `${infer Key}.${infer Rest}`
-  ? Key extends keyof T
-  ? GetTypeAtPath<T[Key], Rest>
-  : never
-  : never;
+	? T[Path]
+	: Path extends `${infer Key}.${infer Rest}`
+		? Key extends keyof T
+			? GetTypeAtPath<T[Key], Rest>
+			: never
+		: never;
 
 export type Ti18nLanguages = {
-  code: string;
-  data?: any;
-  import?: () => Promise<any>;
-}
+	code: string;
+	data?: any;
+	import?: () => Promise<any>;
+};
 
 export type Ti18nOptions = {
-  languages: Array<Ti18nLanguages>;
-  defaultLocale: string;
-  saveToLocalStorage: boolean;
-  localStorageKey: string;
-  nestedKeys: boolean;
-}
-
+	languages: Array<Ti18nLanguages>;
+	defaultLocale: string;
+	saveToLocalStorage: boolean;
+	localStorageKey: string;
+	nestedKeys: boolean;
+};
 
 export interface Ti18nState {
-  currentLocale: string;
-  language: Ti18nLanguages;
+	currentLocale: string;
+	language: Ti18nLanguages;
 }

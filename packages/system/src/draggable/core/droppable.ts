@@ -1,4 +1,4 @@
-import { TDroppableOptions, TDraggableOptions } from "../types.js";
+import type { TDraggableOptions, TDroppableOptions } from "../types.js";
 
 /**
  * Makes an HTML element a droppable area where draggable elements can be dropped.
@@ -13,16 +13,8 @@ import { TDroppableOptions, TDraggableOptions } from "../types.js";
  * @param {Function} [options.onDragLeave] - Callback triggered when a draggable item leaves the element.
  * @param {Function} [options.onDrop] - Callback triggered when a draggable item is dropped on the element.
  */
-export function Droppable(
-	element: HTMLElement,
-	options: TDroppableOptions & TDraggableOptions = {}
-): void {
-	const {
-		accept = true,
-		acceptTypes = [],
-		dragOverClass = "drag-over",
-		...dragOptions
-	} = options;
+export function Droppable(element: HTMLElement, options: TDroppableOptions & TDraggableOptions = {}): void {
+	const { accept = true, acceptTypes = [], dragOverClass = "drag-over", ...dragOptions } = options;
 
 	let dragOverCount = 0;
 
