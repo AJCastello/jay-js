@@ -1,27 +1,30 @@
 /**
- * Opções para renderização de conteúdo
+ * Options for controlling how content is rendered
+ * @property insert - Determines content insertion mode
  */
-export interface RenderOptions {
-  /** Como inserir o conteúdo: append ou prepend */
+export interface IRenderOptions {
+  /** Content insertion method: 'append' adds at end, 'prepend' adds at beginning */
   insert?: "append" | "prepend";
 }
 
 /**
- * Tipos suportados para renderização
+ * Valid content types that can be rendered
+ * Includes DOM nodes, strings, HTML elements, arrays, or null/undefined
  */
-export type RenderContent = Node | string | HTMLElement | (Node | string | HTMLElement)[] | null | undefined;
+export type TRenderContent = Node | string | HTMLElement | (Node | string | HTMLElement)[] | null | undefined;
 
 /**
- * Tipos de alvo aceitos para renderização
+ * Valid target types where content can be rendered
+ * Can be an element reference, selector string, or null
  */
-export type RenderTarget = HTMLElement | string | null;
+export type TRenderTarget = HTMLElement | string | null;
 
 /**
- * Opções para queries no DOM
+ * Configuration options for DOM query operations
  */
-export interface QueryOptions {
-  /** Se deve retornar apenas elementos ativos/visíveis */
+export interface IQueryOptions {
+  /** Filter for visible/active elements only */
   onlyVisible?: boolean;
-  /** Se deve incluir elementos aninhados */
+  /** Include elements within other matched elements */
   includeNested?: boolean;
 }
