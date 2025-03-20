@@ -8,6 +8,19 @@ export const lazyOptions: ILazyOptions = {
 
 export const moduleCache = new Map<string, IImportedModule>();
 
+type ConfigChangeCallback = (options: ILazyOptions) => void;
+const configChangeListeners: Set<ConfigChangeCallback> = new Set();
+
+export function addConfigChangeListener(callback: ConfigChangeCallback): void {
+  configChangeListeners.add(callback);
+}
+
+export function removeConfigChangeListener(callback: ConfigChangeCallback): void {
+  configChangeListeners.delete(callback);
+}
+
 export function setLazyOptions(options: Partial<ILazyOptions>): void {
   Object.assign(lazyOptions, options);
+  // Notify all listeners of the configuration change
+  configChangeListeners.forEach(listener => listener(lazyOptions));
 }
