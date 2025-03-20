@@ -1,3 +1,4 @@
+import { uniKey } from "../../utils/index.js";
 import { ILazyModule } from "../types.js";
 
 import { moduleCache } from "./configuration.js";
@@ -8,9 +9,14 @@ export function LazyModule(lazy: ILazyModule, loader?: HTMLElement) {
     throw new Error("Module is undefined");
   }
 
+  if (!lazy.module) {
+    const moduleId = `default_${uniKey(20)}`;
+    lazy = { ...lazy, module: moduleId };
+  }
+
   let moduleSection: HTMLElement;
 
-  if (moduleCache.has(lazy.module)) {
+  if (lazy.module && moduleCache.has(lazy.module)) {
     return loadFromCache(lazy);
   };
 

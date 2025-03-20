@@ -9,12 +9,12 @@ export function prefetchModule(config: ILazyModule): void {
   
   const prefetchLink = document.createElement("link");
   prefetchLink.rel = "prefetch";
-  prefetchLink.href = config.module;
+  prefetchLink.href = config.module || '';
   document.head.appendChild(prefetchLink);
 }
 
 export function loadFromCache(lazy: ILazyModule): HTMLElement {
-  const cached = moduleCache.get(lazy.module);
+  const cached = moduleCache.get(lazy.module!);
   if (!cached) {
     throw new Error(`Module ${lazy.module} not found in cache`);
   }
@@ -26,13 +26,33 @@ export function loadFromCache(lazy: ILazyModule): HTMLElement {
 export async function loadModule(lazy: ILazyModule, moduleSection: HTMLElement) {
   try {
     const moduleImported = await lazy.import();
-    moduleCache.set(lazy.module, {
-      module: moduleImported[lazy.module],
-      lastUsed: 0,
-      collect: lazy.collect ?? true
-    });
+    
+    // Check if we should use default export or named export
+    const moduleToUse = isDefaultExportModule(lazy) 
+      ? moduleImported.default
+      : moduleImported[lazy.module!];
+    
+    if (!moduleToUse) {
+      // If not found, try default export as fallback
+      if (moduleImported.default && !isDefaultExportModule(lazy)) {
+        console.warn(`Named export '${lazy.module}' not found, using default export instead.`);
+        moduleCache.set(lazy.module!, {
+          module: moduleImported.default,
+          lastUsed: 0,
+          collect: lazy.collect ?? true
+        });
+      } else {
+        throw new Error(`Module ${lazy.module} not found in the imported file.`);
+      }
+    } else {
+      moduleCache.set(lazy.module!, {
+        module: moduleToUse,
+        lastUsed: 0,
+        collect: lazy.collect ?? true
+      });
+    }
 
-    const cached = moduleCache.get(lazy.module);
+    const cached = moduleCache.get(lazy.module!);
     if (!cached) {
       throw new Error(`Module ${lazy.module} not found in cache`);
     }
@@ -42,4 +62,9 @@ export async function loadModule(lazy: ILazyModule, moduleSection: HTMLElement) 
   } catch (error) {
     console.error(`Error importing module ${lazy.module}:`, error);
   }
+}
+
+// Helper function to determine if we're dealing with a default export module
+function isDefaultExportModule(lazy: ILazyModule): boolean {
+  return lazy.module?.startsWith('default_') || false;
 }

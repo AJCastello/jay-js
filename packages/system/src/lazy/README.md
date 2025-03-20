@@ -49,7 +49,7 @@ Here's a simple example of using `LazyModule` to load a component:
 ```javascript
 import { LazyModule } from "@jay-js/system";
 
-// Function to create a lazy-loaded component
+// Function to create a lazy-loaded component with named export
 function createLazyComponent() {
   return LazyModule({
     module: "MyComponent", // Name of the exported module
@@ -57,9 +57,18 @@ function createLazyComponent() {
   });
 }
 
-// Use the lazy component
+// Function to create a lazy-loaded component with default export
+function createLazyDefaultComponent() {
+  return LazyModule({
+    // No need to specify module name for default exports
+    import: () => import("./components/DefaultComponent.js")
+  });
+}
+
+// Use the lazy components
 const container = document.getElementById("app");
 container.appendChild(createLazyComponent());
+container.appendChild(createLazyDefaultComponent());
 ```
 
 ### Custom Loaders
@@ -244,7 +253,7 @@ Configuration changes are applied dynamically without requiring application rest
 function LazyModule(lazy: ILazyModule, loader?: HTMLElement): HTMLElement
 
 interface ILazyModule {
-  module: string;        // Name of the exported module
+  module?: string;        // Name of the exported module (optional for default exports)
   import: () => Promise<any>; // Dynamic import function
   props?: Record<string, any>; // Props to pass to the module
   collect?: boolean;     // Whether the module can be garbage collected

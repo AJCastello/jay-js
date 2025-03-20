@@ -5,7 +5,7 @@ export interface IImportedModule {
 }
 
 export interface ILazyModule {
-  module: string;
+  module?: string;  // Agora é opcional para permitir export default
   import: () => Promise<any>;
   props?: Record<string, any>;
   collect?: boolean;
