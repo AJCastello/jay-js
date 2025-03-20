@@ -1,30 +1,40 @@
-import { IUseI18n } from "../types.js";
-import { i18nOptions, i18nState, getNestedTranslation, interpolateParams } from "../core/configuration.js";
-import { setLanguage } from "../core/language-manager.js";
-import { Effect } from "../../state/index.js";
+import { AllPaths, GetTypeAtPath } from "../types.js";
+import { i18nOptions, i18nState } from "../core/configuration.js";
 
-/**
- * Hook para usar funcionalidades de internacionalização
- */
-export function useI18n(): IUseI18n {
-  let state = i18nState.get();
+export function useI18n<T>(): <
+  Path extends AllPaths<T>
+>(
+  path: Path,
+  data?: Record<string, any>,
+  options?: { default?: string }
+) => GetTypeAtPath<T, Path> {
+  return (path, data, options) => {
+    let result = i18nState.get().language.data;
 
-  // Observa mudanças no estado do i18n
-  Effect(() => {
-    state = i18nState.value;
-  });
+    if (!result) {
+      return options?.default || path as any;
+    }
 
-  return {
-    t: (key: string, params?: Record<string, any>): string => {
-      const translations = state.translations;
-      const value = i18nOptions.nestedKeys
-        ? getNestedTranslation(translations, key)
-        : translations[key];
+    if (!i18nOptions.nestedKeys) {
+      let translation = (result as any)[path] || options?.default || path;
+      if (data) {
+        translation = String(translation).replace(/{{(.*?)}}/g, (match, p1) => {
+          return data[p1.trim()] || match;
+        }) as unknown as T;
+      }
+      return translation;
+    }
 
-      return interpolateParams(value || key, params);
-    },
-    locale: state.currentLocale,
-    setLocale: setLanguage,
-    translations: state.translations
+    const pathArray = (path as unknown as string).split(".");
+
+    for (const key of pathArray) {
+      result = (result as any)[key] || options?.default || key;
+      if (data) {
+        result = String(result).replace(/{{(.*?)}}/g, (match, p1) => {
+          return data[p1.trim()] || match;
+        }) as unknown as T;
+      }
+    }
+    return result as any;
   };
 }
