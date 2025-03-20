@@ -21,7 +21,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint ./src/**/*.{js,ts}",
     "test": "jest --verbose",
-    "test:cover": "jest --verbose --coverage --coverageReporters=html --coverageReporters=text --collectCoverageFrom='src/**/*.{js,ts}'",
+    "test:full": "jest --verbose --coverage --coverageReporters=html --coverageReporters=text --collectCoverageFrom='src/**/*.{js,ts}'",
+    "test:cover": "jest --coverage --coverageReporters=html",
     "test:watch": "jest --watch"
   },
   "publishConfig": {
