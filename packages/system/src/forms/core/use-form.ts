@@ -8,6 +8,35 @@ import {
   IUseFormProps
 } from "../types.js";
 
+/**
+ * Creates a form management system with validation, state tracking, and DOM integration.
+ * 
+ * @template T - The type of form values being managed
+ * @param {IUseFormProps<T>} props - Form configuration options
+ * @param {T} props.defaultValues - Initial values for the form fields
+ * @param {TResolver<T>} [props.resolver] - Optional validation resolver function
+ * @returns {IUseForm<T>} Form management interface with methods for registration, state access, and event handling
+ * 
+ * @example
+ * // Basic form with Zod validation
+ * const form = useForm({
+ *   defaultValues: { email: '', password: '' },
+ *   resolver: zodResolver(loginSchema)
+ * });
+ * 
+ * // Register an input element
+ * const emailInput = document.querySelector('#email');
+ * Object.assign(emailInput, form.register('email'));
+ * 
+ * // Show validation errors
+ * const errorElement = document.querySelector('#email-error');
+ * errorElement.appendChild(form.formState.errors('email'));
+ * 
+ * // Handle form submission
+ * form.onSubmit((event, data) => {
+ *   console.log('Form submitted:', data);
+ * });
+ */
 export function useForm<T>({
   defaultValues,
   resolver,
@@ -96,6 +125,13 @@ export function useForm<T>({
     },
   };
 
+  /**
+   * Updates a form field value in the internal state
+   * 
+   * @param {string} field - The field name to update
+   * @param {string} value - The new value for the field
+   * @private
+   */
   function privateSetValue(field: string, value: string) {
     formValues.set((prev) => {
       return {
@@ -105,10 +141,22 @@ export function useForm<T>({
     });
   }
 
+  /**
+   * Subscribes to error state changes
+   * 
+   * @param {Function} callback - Function called when validation errors change
+   */
   function onErrors(callback: (errors: IFormValidateResult) => void) {
     formErrors.sub("onErrors", callback);
   }
 
+  /**
+   * Handles input/change events from form elements
+   * 
+   * @param {Event} ev - The DOM event
+   * @param {IRegisterOptions} options - Optional processing options
+   * @private
+   */
   async function onChangeValue(ev: Event, options: IRegisterOptions = {}) {
     const element = ev.target as HTMLElement;
     if (
@@ -141,6 +189,13 @@ export function useForm<T>({
     }
   }
 
+  /**
+   * Process validation results and update error state
+   * 
+   * @param {IFormValidateResult} result - The validation result
+   * @returns {boolean} True if validation passed, false otherwise
+   * @private
+   */
   function validateResult(result: IFormValidateResult) {
     if (result.errors && result.errors.length > 0) {
       formErrors.set({ errors: result.errors });
@@ -150,6 +205,13 @@ export function useForm<T>({
     return true;
   }
 
+  /**
+   * Checks if a validation result contains errors
+   * 
+   * @param {IFormValidateResult} result - The validation result to check
+   * @returns {boolean} True if no errors, false otherwise
+   * @private
+   */
   function checkValidate(result: IFormValidateResult) {
     if (result.errors && result.errors.length > 0) {
       return false;
@@ -157,6 +219,13 @@ export function useForm<T>({
     return true;
   }
 
+  /**
+   * Registers a form field to connect it with the form management system
+   * 
+   * @param {keyof T} path - The field name/path in the form values object
+   * @param {IRegisterOptions} options - Optional field registration options
+   * @returns {IRegister} Props to apply to the HTML element
+   */
   function register(path: keyof T, options: IRegisterOptions = {}): IRegister {
     return {
       name: path as string,
@@ -166,12 +235,23 @@ export function useForm<T>({
     };
   }
 
+  /**
+   * Subscribes to form value changes
+   * 
+   * @param {Function} callback - Function called when form values change
+   */
   function onChange(callback: (data: T, errors?: IFormValidateResult) => void) {
     formValues.sub("onChange", (data) => {
       callback(data, formErrors.get());
     });
   }
 
+  /**
+   * Creates a form submission handler that validates before calling the callback
+   * 
+   * @param {Function} callback - Function called on successful form submission
+   * @returns {Function} Event handler for the form's submit event
+   */
   function onSubmit(callback: (ev: Event, data: T) => void) {
     return async (ev: SubmitEvent) => {
       ev.preventDefault();

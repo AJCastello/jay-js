@@ -5,6 +5,13 @@ import { IFormValidateResult } from "../types";
  * 
  * @param {IFormValidateResult} result - The validation result to check.
  * @returns {boolean} True if the result has no errors, otherwise false.
+ * 
+ * @example
+ * const validationResult = await formResolver(formData);
+ * if (isValidResult(validationResult)) {
+ *   // Form is valid, proceed with submission
+ *   submitForm(formData);
+ * }
  */
 export function isValidResult(result: IFormValidateResult): boolean {
   return !result.errors || result.errors.length === 0;
@@ -13,9 +20,14 @@ export function isValidResult(result: IFormValidateResult): boolean {
 /**
  * Formats a simple error into the form error format.
  * 
- * @param {string} path - The path where the error occurred.
- * @param {string} message - The error message.
- * @returns {IFormValidateResult} The formatted error result.
+ * @param {string} path - The path where the error occurred (usually the field name).
+ * @param {string} message - The error message to display to the user.
+ * @returns {IFormValidateResult} The formatted error result ready to be used with form state.
+ * 
+ * @example
+ * // Create a validation error for the email field
+ * const emailError = formatError('email', 'Please enter a valid email address');
+ * formState.setErrors(emailError);
  */
 export function formatError(path: string, message: string): IFormValidateResult {
   return {
@@ -25,9 +37,30 @@ export function formatError(path: string, message: string): IFormValidateResult 
 
 /**
  * Combines multiple validation results into a single result.
+ * Useful when validating multiple form sections independently.
  * 
  * @param {...IFormValidateResult[]} results - The validation results to combine.
  * @returns {IFormValidateResult} A single validation result containing all errors.
+ * 
+ * @example
+ * // Combine validation results from different form sections
+ * const personalInfoValidation = validatePersonalInfo(formData);
+ * const addressValidation = validateAddress(formData);
+ * const paymentValidation = validatePayment(formData);
+ * 
+ * const combinedValidation = combineValidationResults(
+ *   personalInfoValidation,
+ *   addressValidation,
+ *   paymentValidation
+ * );
+ * 
+ * if (isValidResult(combinedValidation)) {
+ *   // All sections are valid
+ *   submitForm(formData);
+ * } else {
+ *   // Display errors
+ *   formState.setErrors(combinedValidation);
+ * }
  */
 export function combineValidationResults(...results: IFormValidateResult[]): IFormValidateResult {
   const combinedErrors: IFormValidateResult["errors"] = [];
