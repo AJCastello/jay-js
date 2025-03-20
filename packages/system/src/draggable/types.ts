@@ -14,7 +14,7 @@ export type TDraggableOptions = {
   onDrop?: TDropEvent;
 }
 
-export type TDroppableOptions {
+export type TDroppableOptions = {
   accept?: boolean;
   acceptTypes?: string[];
   dragOverClass?: string;
