@@ -1,24 +1,12 @@
-/**
- * Callback function type for configuration change events.
- * Called when lazy loading options are updated.
- */
-export type ConfigChangeCallback = (options: ILazyOptions) => void;
+export type ConfigChangeCallback = (options: TLazyOptions) => void;
 
-/**
- * Represents a module stored in the cache.
- * @interface IImportedModule
- */
-export interface IImportedModule {
+export type TImportedModule = {
   module: any;
   lastUsed: number;
   collect: boolean;
 }
 
-/**
- * Configuration for a lazy loadable module.
- * @interface ILazyModule
- */
-export interface ILazyModule {
+export type TLazyModule = {
   module?: string;
   import: () => Promise<any>;
   props?: Record<string, any>;
@@ -26,11 +14,7 @@ export interface ILazyModule {
   loader?: HTMLElement | DocumentFragment;
 }
 
-/**
- * Global configuration options for the lazy loading system.
- * @interface ILazyOptions
- */
-export interface ILazyOptions {
+export type TLazyOptions = {
   gcThreshold?: number;
   gcInterval?: number;
   defaultLoader?: HTMLElement | DocumentFragment;

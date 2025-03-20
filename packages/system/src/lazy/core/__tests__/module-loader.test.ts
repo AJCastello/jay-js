@@ -1,6 +1,6 @@
 import { loadFromCache, loadModule } from "../module-loader.js";
 import { moduleCache, lazyOptions } from "../configuration.js";
-import { ILazyModule } from "../../types.js";
+import { TLazyModule } from "../../types.js";
 
 const mockReplaceWith = jest.fn();
 
@@ -24,7 +24,7 @@ describe("Module Loader", () => {
         collect: true
       });
 
-      const config: ILazyModule = {
+      const config: TLazyModule = {
         module: "TestModule",
         import: jest.fn(),
         props: { test: "value" }
@@ -38,7 +38,7 @@ describe("Module Loader", () => {
     });
 
     it("should throw an error when module is not found in cache", () => {
-      const config: ILazyModule = {
+      const config: TLazyModule = {
         module: "NonExistentModule",
         import: jest.fn()
       };
@@ -58,7 +58,7 @@ describe("Module Loader", () => {
         TestModule: mockModuleFn
       }));
 
-      const config: ILazyModule = {
+      const config: TLazyModule = {
         module: "TestModule",
         import: mockImportFn,
         props: { test: "value" }
@@ -82,7 +82,7 @@ describe("Module Loader", () => {
         default: mockDefaultFn
       }));
 
-      const config: ILazyModule = {
+      const config: TLazyModule = {
         module: "TestModule",
         import: mockImportFn
       };
@@ -107,7 +107,7 @@ describe("Module Loader", () => {
         TestModule: mockModuleFn
       }));
 
-      const config: ILazyModule = {
+      const config: TLazyModule = {
         module: "TestModule",
         import: mockImportFn,
         collect: false
@@ -124,7 +124,7 @@ describe("Module Loader", () => {
       const mockError = new Error("Import failed");
       const mockImportFn = jest.fn(() => Promise.reject(mockError));
 
-      const config: ILazyModule = {
+      const config: TLazyModule = {
         module: "TestModule",
         import: mockImportFn
       };

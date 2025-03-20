@@ -35,43 +35,22 @@ export type GetTypeAtPath<T, Path extends string> = Path extends keyof T
   : never
   : never;
 
-/**
- * Interface defining a language configuration
- * @interface Ii18nLanguages
- */
-export interface Ii18nLanguages {
-  /** The language code (e.g., 'en', 'fr', 'es') */
+export type Ti18nLanguages = {
   code: string;
-  /** Optional pre-loaded translation data */
   data?: any;
-  /** Optional function to dynamically import translation data */
   import?: () => Promise<any>;
 }
 
-/**
- * Interface for the internationalization options
- * @interface Ii18nOptions
- */
-export interface Ii18nOptions {
-  /** Array of available languages */
-  languages: Array<Ii18nLanguages>;
-  /** The default locale to use if no preference is found */
+export type Ti18nOptions = {
+  languages: Array<Ti18nLanguages>;
   defaultLocale: string;
-  /** Whether to save the user's language preference to localStorage */
   saveToLocalStorage: boolean;
-  /** The key to use when storing the language preference in localStorage */
   localStorageKey: string;
-  /** Whether to support nested translation keys using dot notation */
   nestedKeys: boolean;
 }
 
-/**
- * Interface for the internationalization state
- * @interface Ii18nState
- */
-export interface Ii18nState {
-  /** The current active locale code */
+
+export interface Ti18nState {
   currentLocale: string;
-  /** The currently loaded language configuration */
-  language: Ii18nLanguages;
+  language: Ti18nLanguages;
 }

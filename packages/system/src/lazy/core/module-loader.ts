@@ -1,4 +1,4 @@
-import { ILazyModule } from "../types.js";
+import { TLazyModule } from "../types.js";
 import {
   moduleCache,
   lazyOptions
@@ -7,11 +7,11 @@ import {
 /**
  * Loads a module from the cache and resets its usage counter.
  * 
- * @param {ILazyModule} lazy - Configuration object for the lazy module
+ * @param {TLazyModule} lazy - Configuration object for the lazy module
  * @returns {HTMLElement} The instantiated module element
  * @throws {Error} When the module is not found in cache
  */
-export function loadFromCache(lazy: ILazyModule): HTMLElement {
+export function loadFromCache(lazy: TLazyModule): HTMLElement {
   const cached = moduleCache.get(lazy.module!);
   if (!cached) {
     throw new Error(`Module ${lazy.module} not found in cache`);
@@ -25,11 +25,11 @@ export function loadFromCache(lazy: ILazyModule): HTMLElement {
  * Loads a module by dynamically importing it and caching the result.
  * Handles both named exports and default exports automatically.
  * 
- * @param {ILazyModule} lazy - Configuration object for the lazy module
+ * @param {TLazyModule} lazy - Configuration object for the lazy module
  * @param {HTMLElement} moduleSection - Element to replace with the loaded module
  * @returns {Promise<HTMLElement|undefined>} The loaded module element or undefined if loading fails
  */
-export async function loadModule(lazy: ILazyModule, moduleSection: HTMLElement) {
+export async function loadModule(lazy: TLazyModule, moduleSection: HTMLElement) {
   try {
     const moduleImported = await lazy.import();
 
@@ -71,10 +71,10 @@ export async function loadModule(lazy: ILazyModule, moduleSection: HTMLElement) 
 /**
  * Checks if the module uses default export based on its name.
  * 
- * @param {ILazyModule} lazy - Configuration object for the lazy module
+ * @param {TLazyModule} lazy - Configuration object for the lazy module
  * @returns {boolean} True if the module uses default export
  * @private
  */
-function isDefaultExportModule(lazy: ILazyModule): boolean {
+function isDefaultExportModule(lazy: TLazyModule): boolean {
   return lazy.module?.startsWith('default_') || false;
 }

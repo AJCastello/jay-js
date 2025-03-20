@@ -1,4 +1,4 @@
-import { IDraggableOptions, IDroppableOptions } from "../types.js";
+import { TDraggableOptions, TDroppableOptions } from "../types.js";
 import { Draggable } from "../core/draggable";
 import { Droppable } from "../core/droppable";
 
@@ -51,12 +51,12 @@ export function createSortableList(
  * 
  * @param {HTMLElement} element - The element that acts as the drop zone.
  * @param {(files: FileList) => void} onFiles - Callback invoked with the dropped files.
- * @param {Partial<IDroppableOptions>} [options] - Additional options for the drop zone.
+ * @param {Partial<TDroppableOptions>} [options] - Additional options for the drop zone.
  */
 export function createFileDropZone(
   element: HTMLElement,
   onFiles: (files: FileList) => void,
-  options: Partial<IDroppableOptions> = {}
+  options: Partial<TDroppableOptions> = {}
 ): void {
   Droppable(element, {
     ...options,

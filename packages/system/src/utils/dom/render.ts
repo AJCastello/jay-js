@@ -1,4 +1,4 @@
-import { TRenderContent, IRenderOptions, TRenderTarget } from "../types.js";
+import { TRenderContent, TRenderOptions, TRenderTarget } from "../types.js";
 import { selector } from "./query.js";
 
 /**
@@ -17,7 +17,7 @@ import { selector } from "./query.js";
 export function render(
   target: TRenderTarget,
   content: TRenderContent,
-  options: IRenderOptions = {}
+  options: TRenderOptions = {}
 ): void {
   if (!target || !content) return;
   

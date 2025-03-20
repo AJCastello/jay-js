@@ -1,4 +1,4 @@
-import { ConfigChangeCallback, IImportedModule, ILazyOptions } from "../types.js";
+import { ConfigChangeCallback, TImportedModule, TLazyOptions } from "../types.js";
 
 /**
  * Global configuration options for the lazy loading system.
@@ -6,7 +6,7 @@ import { ConfigChangeCallback, IImportedModule, ILazyOptions } from "../types.js
  * - gcThreshold: 300000 (5 minutes)
  * - gcInterval: 60000 (1 minute)
  */
-export const lazyOptions: ILazyOptions = {
+export const lazyOptions: TLazyOptions = {
   gcThreshold: 300000,       // 5 minutes in milliseconds
   gcInterval: 60000,         // 1 minute in milliseconds
 };
@@ -18,7 +18,7 @@ export const lazyOptions: ILazyOptions = {
  * - lastUsed: Counter for tracking module usage
  * - collect: Whether the module can be garbage collected
  */
-export const moduleCache = new Map<string, IImportedModule>();
+export const moduleCache = new Map<string, TImportedModule>();
 
 /**
  * Set of callbacks to be called when configuration changes.
@@ -49,11 +49,11 @@ export function removeConfigChangeListener(callback: ConfigChangeCallback): void
  * Undefined values are removed from the update to preserve existing values.
  * Triggers all registered configuration change listeners.
  * 
- * @param {Partial<ILazyOptions>} options - Partial configuration object
+ * @param {Partial<TLazyOptions>} options - Partial configuration object
  */
-export function setLazyOptions(options: Partial<ILazyOptions>): void {
+export function setLazyOptions(options: Partial<TLazyOptions>): void {
   Object.keys(options).forEach((key) => {
-    const typedKey = key as keyof ILazyOptions;
+    const typedKey = key as keyof TLazyOptions;
     if (options[typedKey] === undefined) {
       delete options[typedKey];
     }

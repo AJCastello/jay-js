@@ -5,7 +5,7 @@ export type TDragEnterEvent = (event: DragEvent) => void;
 export type TDragLeaveEvent = (event: DragEvent) => void;
 export type TDropEvent = (event: DragEvent, draggedItem: HTMLElement | null) => void;
 
-export interface IDraggableOptions {
+export type TDraggableOptions = {
   onDragStart?: TDragStartEvent;
   onDragEnd?: TDragEndEvent;
   onDragOver?: TDragOverEvent;
@@ -14,7 +14,7 @@ export interface IDraggableOptions {
   onDrop?: TDropEvent;
 }
 
-export interface IDroppableOptions {
+export type TDroppableOptions {
   accept?: boolean;
   acceptTypes?: string[];
   dragOverClass?: string;

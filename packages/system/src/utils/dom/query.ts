@@ -1,4 +1,4 @@
-import { IQueryOptions } from "../types.js";
+import { TQueryOptions } from "../types.js";
 
 /**
  * Selects all elements that match the CSS selector
@@ -11,7 +11,7 @@ import { IQueryOptions } from "../types.js";
 export function selectors<T extends NodeListOf<Element>>(
   selector: string,
   target: HTMLElement | Document = document,
-  options: IQueryOptions = {}
+  options: TQueryOptions = {}
 ): T {
   if (!target || typeof selector !== "string") {
     throw new Error("Invalid parameters");
@@ -49,7 +49,7 @@ export function selectors<T extends NodeListOf<Element>>(
 export function selector<T extends HTMLElement>(
   selector: string,
   target: HTMLElement | Document = document,
-  options: IQueryOptions = {}
+  options: TQueryOptions = {}
 ): T | null {
   if (!target || typeof selector !== "string") {
     throw new Error("Invalid parameters");

@@ -1,11 +1,11 @@
 import { State } from "../../state/index.js";
-import { Ii18nLanguages, Ii18nOptions, Ii18nState } from "../types.js";
+import { Ti18nLanguages, Ti18nOptions, Ti18nState } from "../types.js";
 
 /**
  * Default internationalization options
- * @type {Ii18nOptions}
+ * @type {Ti18nOptions}
  */
-export const i18nOptions: Ii18nOptions = {
+export const i18nOptions: Ti18nOptions = {
   languages: [],
   defaultLocale: "en",
   saveToLocalStorage: true,
@@ -16,17 +16,17 @@ export const i18nOptions: Ii18nOptions = {
 /**
  * State management for internationalization
  * Tracks the current locale and loaded language data
- * @type {State<Ii18nState>}
+ * @type {State<Ti18nState>}
  */
-export const i18nState = State<Ii18nState>({
+export const i18nState = State<Ti18nState>({
   currentLocale: i18nOptions.defaultLocale,
-  language: {} as Ii18nLanguages
+  language: {} as Ti18nLanguages
 });
 
 /**
  * Defines or updates internationalization options
- * @param {Partial<Ii18nOptions>} options - The i18n options to set or update
+ * @param {Partial<Ti18nOptions>} options - The i18n options to set or update
  */
-export function i18nDefineOptions(options: Partial<Ii18nOptions>): void {
+export function i18nDefineOptions(options: Partial<Ti18nOptions>): void {
   Object.assign(i18nOptions, options);
 }

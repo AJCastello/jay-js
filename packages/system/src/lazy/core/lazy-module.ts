@@ -1,5 +1,5 @@
 import { uniKey } from "../../utils/index.js";
-import { ILazyModule } from "../types.js";
+import { TLazyModule } from "../types.js";
 
 import { moduleCache } from "./configuration.js";
 import { loadFromCache, loadModule } from "./module-loader.js";
@@ -7,7 +7,7 @@ import { loadFromCache, loadModule } from "./module-loader.js";
 /**
  * Creates a lazily loaded module that will be dynamically imported when needed.
  * 
- * @param {ILazyModule} lazy - Configuration object for the lazy module
+ * @param {TLazyModule} lazy - Configuration object for the lazy module
  * @param {string} [lazy.module] - Name of the module to import. If not provided, a unique default name will be generated
  * @param {() => Promise<any>} lazy.import - Function that returns a promise resolving to the module
  * @param {Record<string, any>} [lazy.props] - Props to pass to the module when instantiated
@@ -17,7 +17,7 @@ import { loadFromCache, loadModule } from "./module-loader.js";
  * @returns {HTMLElement} Element that will be replaced with the loaded module
  * @throws {Error} When module configuration is undefined
  */
-export function LazyModule(lazy: ILazyModule, loader?: HTMLElement) {
+export function LazyModule(lazy: TLazyModule, loader?: HTMLElement) {
   if (!lazy) {
     throw new Error("Module is undefined");
   }

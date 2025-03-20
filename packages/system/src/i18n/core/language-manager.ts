@@ -1,4 +1,4 @@
-import { Ii18nLanguages, Ii18nOptions } from "../types.js";
+import { Ti18nLanguages, Ti18nOptions } from "../types.js";
 import { i18nDefineOptions, i18nOptions, i18nState } from "./configuration.js";
 
 /**
@@ -62,10 +62,10 @@ export function setLanguage(code: string) {
  * Provides internationalization support and handles language loading
  * 
  * @param {function} onLoad - Callback function that receives the language data when loaded
- * @param {Partial<Ii18nOptions>} [options] - Optional configuration options for i18n
+ * @param {Partial<Ti18nOptions>} [options] - Optional configuration options for i18n
  * @throws Error if no languages are defined in the options
  */
-export function i18nProvider(onLoad: (i18n: Ii18nLanguages) => void, options?: Partial<Ii18nOptions>) {
+export function i18nProvider(onLoad: (i18n: Ti18nLanguages) => void, options?: Partial<Ti18nOptions>) {
   if (options) {
     i18nDefineOptions(options);
   }

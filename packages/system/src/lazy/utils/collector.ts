@@ -1,4 +1,4 @@
-import { IImportedModule, ILazyOptions } from "../types.js";
+import { TImportedModule, TLazyOptions } from "../types.js";
 import { moduleCache, lazyOptions, addConfigChangeListener, removeConfigChangeListener } from "../core/configuration.js";
 
 /**
@@ -43,10 +43,10 @@ export class ModuleCollector {
    * Handles changes in lazy loading configuration.
    * Restarts the collector with new settings if running.
    * 
-   * @param {ILazyOptions} options - New configuration options
+   * @param {TLazyOptions} options - New configuration options
    * @private
    */
-  private handleConfigChange(options: ILazyOptions): void {
+  private handleConfigChange(options: TLazyOptions): void {
     if (this.collectorInterval) {
       clearInterval(this.collectorInterval);
       this.startCollector();
