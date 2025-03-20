@@ -1,45 +1,28 @@
 /**
- * Opções de configuração do sistema de temas
+ * @file Theme Types
+ * @description Type definitions for the theme management system.
  */
-export interface IThemeOptions {
-  /** Elemento alvo para aplicação do tema */
+
+/**
+ * Configuration options for the theme system.
+ * 
+ * @typedef {Object} TThemeOptions
+ * @property {HTMLElement} target - The HTML element to apply the theme to (usually document.documentElement)
+ * @property {boolean} saveToLocalStorage - Whether to save theme preferences to localStorage
+ * @property {string} defaultTheme - The default theme to use when no preference is saved
+ * @property {string} defaultDarkTheme - The default dark theme to use when system prefers dark mode
+ * @property {string} localStorageKey - The key to use for saving theme preference in localStorage
+ * @property {boolean} [useAsDataset=true] - Whether to apply the theme as a data-theme attribute
+ * @property {boolean} [useAsClass=false] - Whether to apply the theme as a CSS class
+ * @property {Array<string>} [themeList] - List of available themes for class removal when switching
+ */
+export type TThemeOptions = {
   target: HTMLElement;
-  /** Se deve salvar o tema no localStorage */
   saveToLocalStorage: boolean;
-  /** Tema padrão */
   defaultTheme: string;
-  /** Tema escuro padrão */
   defaultDarkTheme: string;
-  /** Se deve aplicar o tema como dataset */
+  localStorageKey: string;
   useAsDataset?: boolean;
-  /** Se deve aplicar o tema como classe CSS */
   useAsClass?: boolean;
-  /** Lista de temas disponíveis */
   themeList?: Array<string>;
-}
-
-/**
- * Estado do sistema de temas
- */
-export interface IThemeState {
-  /** Tema atual */
-  currentTheme: string;
-  /** Se está usando o tema escuro */
-  isDark: boolean;
-}
-
-/**
- * Hook do sistema de temas
- */
-export interface IUseTheme {
-  /** Tema atual */
-  theme: string;
-  /** Se está usando o tema escuro */
-  isDark: boolean;
-  /** Alterna entre tema claro e escuro */
-  toggleDark: () => void;
-  /** Define um novo tema */
-  setTheme: (theme: string) => void;
-  /** Lista de temas disponíveis */
-  themeList: string[];
 }

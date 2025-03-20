@@ -1,67 +1,51 @@
-import { State } from "../../state/index.js";
-import { IThemeOptions, IThemeState } from "../types.js";
+/**
+ * @file Theme Configuration
+ * @description Configuration options and setup for the theme management system.
+ */
+
+import { TThemeOptions } from "../types.js";
+import { initTheme } from "./theme-manager.js";
 
 /**
- * Configuração padrão do sistema de temas
+ * Default theme configuration options.
+ * 
+ * @type {TThemeOptions}
  */
-export const themeOptions: IThemeOptions = {
-  target: document.body,
+export const themeOptions: TThemeOptions = {
+  target: document.documentElement,
   saveToLocalStorage: true,
   defaultTheme: "light",
   defaultDarkTheme: "dark",
+  localStorageKey: "jayjs-churrent-theme",
   useAsDataset: true,
   useAsClass: false,
-  themeList: ["light", "dark"]
+  themeList: ["light", "dark"],
 };
 
 /**
- * Estado global do sistema de temas
+ * Configures the theme system with custom options and initializes the theme.
+ * 
+ * This function allows overriding default theme options and automatically calls
+ * initTheme() to apply the theme based on the new configuration.
+ * 
+ * @param {Partial<TThemeOptions>} options - Custom theme options to merge with defaults
+ * 
+ * @example
+ * // Configure theme with custom options
+ * themeDefineOptions({
+ *   defaultTheme: 'light-blue',
+ *   defaultDarkTheme: 'dark-blue',
+ *   themeList: ['light-blue', 'dark-blue', 'high-contrast']
+ * });
+ * 
+ * @example
+ * // Configure theme to use classes instead of dataset attributes
+ * themeDefineOptions({
+ *   useAsDataset: false,
+ *   useAsClass: true,
+ * });
  */
-export const themeState = State<IThemeState>({
-  currentTheme: themeOptions.defaultTheme,
-  isDark: false
-});
-
-/**
- * Define ou atualiza as opções do sistema de temas
- */
-export function themeDefineOptions(options: Partial<IThemeOptions>): void {
+export function themeDefineOptions(options: Partial<TThemeOptions>): void {
   Object.assign(themeOptions, options);
-}
-
-/**
- * Aplica um tema ao elemento alvo
- */
-export function applyTheme(theme: string): void {
-  const target = themeOptions.target;
-
-  if (themeOptions.useAsDataset) {
-    target.dataset.theme = theme;
-  }
-
-  if (themeOptions.useAsClass) {
-    // Remove temas anteriores
-    themeOptions.themeList?.forEach(t => target.classList.remove(t));
-    // Adiciona novo tema
-    target.classList.add(theme);
-  }
-
-  // Atualiza estado
-  themeState.set(current => ({
-    ...current,
-    currentTheme: theme
-  }));
-
-  // Salva no localStorage se configurado
-  if (themeOptions.saveToLocalStorage) {
-    localStorage.setItem("theme", theme);
-    localStorage.setItem("isDark", String(themeState.get().isDark));
-  }
-}
-
-/**
- * Verifica se o sistema prefere tema escuro
- */
-export function prefersColorSchemeDark(): boolean {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  initTheme();
 }
