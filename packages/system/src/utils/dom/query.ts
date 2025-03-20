@@ -1,15 +1,20 @@
-import { QueryOptions } from "../types.js";
+import { IQueryOptions } from "../types.js";
 
 /**
- * Seleciona todos os elementos que correspondem ao seletor CSS
+ * Selects all elements that match the CSS selector
+ * @param selector CSS selector string to match elements against
+ * @param target The root element or document to search within (default: document)
+ * @param options Additional query configuration options
+ * @returns NodeList of elements matching the selector
+ * @throws {Error} If target is invalid or selector is not a string
  */
 export function selectors<T extends NodeListOf<Element>>(
   selector: string,
   target: HTMLElement | Document = document,
-  options: QueryOptions = {}
+  options: IQueryOptions = {}
 ): T {
-  if (!target || typeof selector !== 'string') {
-    throw new Error('Invalid parameters');
+  if (!target || typeof selector !== "string") {
+    throw new Error("Invalid parameters");
   }
 
   let elements = target.querySelectorAll(selector) as T;
@@ -18,15 +23,15 @@ export function selectors<T extends NodeListOf<Element>>(
     elements = Array.from(elements)
       .filter(el => {
         const style = window.getComputedStyle(el);
-        return style.display !== 'none' && style.visibility !== 'hidden';
+        return style.display !== "none" && style.visibility !== "hidden";
       }) as unknown as T;
   }
 
-  if (!options.includeNested) {
+  if (options.includeNested === false) {
     elements = Array.from(elements)
       .filter(el => {
-        const parent = el.parentElement;
-        return !parent || !parent.matches(selector);
+        const parent = el.parentElement?.closest(selector);
+        return !parent;
       }) as unknown as T;
   }
 
@@ -34,15 +39,20 @@ export function selectors<T extends NodeListOf<Element>>(
 }
 
 /**
- * Seleciona o primeiro elemento que corresponde ao seletor CSS
+ * Selects the first element that matches the CSS selector
+ * @param selector CSS selector string to match elements against
+ * @param target The root element or document to search within (default: document)
+ * @param options Additional query configuration options
+ * @returns The first matching element or null if none found
+ * @throws {Error} If target is invalid or selector is not a string
  */
 export function selector<T extends HTMLElement>(
   selector: string,
   target: HTMLElement | Document = document,
-  options: QueryOptions = {}
+  options: IQueryOptions = {}
 ): T | null {
-  if (!target || typeof selector !== 'string') {
-    throw new Error('Invalid parameters');
+  if (!target || typeof selector !== "string") {
+    throw new Error("Invalid parameters");
   }
 
   if (options.onlyVisible) {
@@ -51,24 +61,4 @@ export function selector<T extends HTMLElement>(
   }
 
   return target.querySelector(selector) as T | null;
-}
-
-/**
- * Encontra o elemento pai mais próximo que corresponde ao seletor
- */
-export function closest<T extends HTMLElement>(
-  element: HTMLElement,
-  selector: string
-): T | null {
-  return element.closest(selector) as T | null;
-}
-
-/**
- * Verifica se um elemento corresponde a um seletor
- */
-export function matches(
-  element: HTMLElement,
-  selector: string
-): boolean {
-  return element.matches(selector);
 }

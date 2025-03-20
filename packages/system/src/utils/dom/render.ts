@@ -1,13 +1,23 @@
-import { RenderContent, RenderOptions, RenderTarget } from "../types.js";
+import { TRenderContent, IRenderOptions, TRenderTarget } from "../types.js";
 import { selector } from "./query.js";
 
 /**
- * Renderiza conteúdo em um elemento alvo
+ * Renders content into a target element in the DOM
+ * @param target - Element or selector to render content into
+ * @param content - Content to render (can be Node, string, HTMLElement, or array)
+ * @param options - Optional rendering configuration
+ * 
+ * @example
+ * ```ts
+ * render('#app', 'Hello'); // Replaces content
+ * render(element, 'World', { insert: 'append' }); // Appends content
+ * render('#app', [el1, el2], { insert: 'prepend' }); // Prepends multiple elements
+ * ```
  */
 export function render(
-  target: RenderTarget,
-  content: RenderContent,
-  options: RenderOptions = {}
+  target: TRenderTarget,
+  content: TRenderContent,
+  options: IRenderOptions = {}
 ): void {
   if (!target || !content) return;
   
@@ -32,45 +42,4 @@ export function render(
   } else {
     element.append(content);
   }
-}
-
-/**
- * Cria um elemento HTML com atributos e conteúdo
- */
-export function createElement<K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  attributes: Record<string, string> = {},
-  content?: RenderContent
-): HTMLElementTagNameMap[K] {
-  const element = document.createElement(tag);
-  
-  Object.entries(attributes).forEach(([key, value]) => {
-    element.setAttribute(key, value);
-  });
-
-  if (content) {
-    render(element, content);
-  }
-
-  return element;
-}
-
-/**
- * Remove todos os filhos de um elemento
- */
-export function clearElement(element: HTMLElement): void {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
-}
-
-/**
- * Substitui um elemento por outro
- */
-export function replaceElement(
-  oldElement: HTMLElement,
-  newElement: HTMLElement | DocumentFragment
-): void {
-  if (!oldElement.parentNode) return;
-  oldElement.parentNode.replaceChild(newElement, oldElement);
 }
