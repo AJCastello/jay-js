@@ -8,7 +8,6 @@
   - [Basic Usage](#basic-usage)
   - [Custom Loaders](#custom-loaders)
   - [Advanced Configurations](#advanced-configurations)
-  - [Prefetching](#prefetching)
 - [Module Collector](#module-collector)
   - [How It Works](#how-it-works)
   - [Garbage Collection](#garbage-collection)
@@ -113,8 +112,7 @@ import { LazyModule, setLazyOptions } from "@jay-js/system";
 // Configure global lazy loading options
 setLazyOptions({
   gcThreshold: 300000, // 5 minutes in milliseconds
-  gcInterval: 60000,   // 1 minute in milliseconds
-  enablePrefetch: true // Enable module prefetching
+  gcInterval: 60000    // 1 minute in milliseconds
 });
 
 // Create a lazy-loaded module with props and disable garbage collection
@@ -134,69 +132,6 @@ function LazyDataTable() {
 // Use the component
 const tableContainer = document.querySelector(".table-container");
 tableContainer.appendChild(LazyDataTable());
-```
-
-### Prefetching
-
-You can prefetch modules before they're actually needed:
-
-```javascript
-import { LazyModule, prefetchModules, setLazyOptions } from "@jay-js/system";
-
-// Enable prefetching
-setLazyOptions({
-  enablePrefetch: true
-});
-
-// Define your lazy module configurations
-const lazyModules = [
-  {
-    module: "HomeView",
-    import: () => import("./views/HomeView.js")
-  },
-  {
-    module: "ProfileView",
-    import: () => import("./views/ProfileView.js")
-  },
-  {
-    module: "SettingsView",
-    import: () => import("./views/SettingsView.js")
-  }
-];
-
-// Prefetch modules during idle time
-document.addEventListener("DOMContentLoaded", () => {
-  // Wait for initial render to complete
-  setTimeout(() => {
-    prefetchModules(lazyModules);
-  }, 3000);
-});
-
-// Create view factory
-function createView(viewName) {
-  const config = lazyModules.find(m => m.module === viewName);
-  if (!config) return null;
-  
-  return LazyModule(config, createViewLoader());
-}
-
-// Usage
-function navigateTo(route) {
-  const viewContainer = document.getElementById("view-container");
-  viewContainer.innerHTML = "";
-  
-  switch(route) {
-    case "home":
-      viewContainer.appendChild(createView("HomeView"));
-      break;
-    case "profile":
-      viewContainer.appendChild(createView("ProfileView"));
-      break;
-    case "settings":
-      viewContainer.appendChild(createView("SettingsView"));
-      break;
-  }
-}
 ```
 
 ## Module Collector
@@ -231,7 +166,7 @@ The system includes an idle detection mechanism that:
 1. Monitors user interactions (mouse movements and keypresses)
 2. Resets idle timers when activity is detected
 3. Pauses the collector when the application is idle for an extended period
-4. Resets module usage counters during prolonged idle periods to prevent aggressive collection
+4. Resets module usage counters during prolonged idle periods
 
 ## Configuration
 
@@ -241,7 +176,6 @@ The collector behavior can be customized through the following configuration opt
 |--------|-------------|---------|
 | `gcInterval` | Time between collection cycles (in milliseconds) | 60000 (1 minute) |
 | `gcThreshold` | Time threshold for marking a module as unused (in milliseconds) | 300000 (5 minutes) |
-| `enablePrefetch` | Whether to enable module prefetching | false |
 
 Configuration changes are applied dynamically without requiring application restart.
 
@@ -278,8 +212,7 @@ import { setLazyOptions } from '@jay-js/system';
 // Configure the lazy loading system
 setLazyOptions({
   gcThreshold: 300000, // 5 minutes
-  gcInterval: 60000,   // 1 minute
-  enablePrefetch: true // Enable prefetching
+  gcInterval: 60000    // 1 minute
 });
 ```
 
@@ -325,4 +258,3 @@ LazyModule({
   import: () => import("./components/CriticalComponent.js"),
   collect: false // Prevents garbage collection
 });
-```

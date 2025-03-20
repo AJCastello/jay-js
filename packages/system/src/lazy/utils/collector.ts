@@ -1,6 +1,15 @@
 import { IImportedModule, ILazyOptions } from "../types.js";
 import { moduleCache, lazyOptions, addConfigChangeListener, removeConfigChangeListener } from "../core/configuration.js";
 
+/**
+ * Singleton class responsible for managing the lifecycle of lazy-loaded modules.
+ * Implements garbage collection and idle detection to optimize memory usage.
+ * 
+ * Features:
+ * - Automatic garbage collection of unused modules
+ * - Idle detection to pause collection when app is inactive
+ * - Dynamic configuration through lazyOptions
+ */
 export class ModuleCollector {
   private static instance: ModuleCollector | null = null;
   private collectorInterval: ReturnType<typeof setInterval> | null = null;
@@ -17,6 +26,12 @@ export class ModuleCollector {
     addConfigChangeListener(this.handleConfigChange.bind(this));
   }
 
+  /**
+   * Returns the singleton instance of ModuleCollector.
+   * Creates a new instance if one doesn't exist.
+   * 
+   * @returns {ModuleCollector} The singleton collector instance
+   */
   public static getInstance(): ModuleCollector {
     if (!ModuleCollector.instance) {
       ModuleCollector.instance = new ModuleCollector();
@@ -24,6 +39,13 @@ export class ModuleCollector {
     return ModuleCollector.instance;
   }
 
+  /**
+   * Handles changes in lazy loading configuration.
+   * Restarts the collector with new settings if running.
+   * 
+   * @param {ILazyOptions} options - New configuration options
+   * @private
+   */
   private handleConfigChange(options: ILazyOptions): void {
     if (this.collectorInterval) {
       clearInterval(this.collectorInterval);
@@ -31,11 +53,23 @@ export class ModuleCollector {
     }
   }
 
+  /**
+   * Sets up event listeners for mousemove and keypress events
+   * to detect user activity.
+   * 
+   * @private
+   */
   private setupEventListeners(): void {
     window.addEventListener("mousemove", this.resetIdle.bind(this), this.idleOptions);
     window.addEventListener("keypress", this.resetIdle.bind(this), this.idleOptions);
   }
 
+  /**
+   * Resets the idle timer and restarts collection if stopped.
+   * Called when user activity is detected.
+   * 
+   * @private
+   */
   private resetIdle(): void {
     this.idleTime = 0;
     if (!this.collectorInterval) {
@@ -43,6 +77,12 @@ export class ModuleCollector {
     }
   }
 
+  /**
+   * Starts the garbage collection interval.
+   * Uses gcInterval from lazyOptions for timing.
+   * 
+   * @private
+   */
   private startCollector(): void {
     this.collectorInterval = setInterval(
       this.runCollector.bind(this),
@@ -50,6 +90,14 @@ export class ModuleCollector {
     );
   }
 
+  /**
+   * Runs a garbage collection cycle.
+   * - Increments usage counters for all modules
+   * - Removes modules that exceed gcThreshold
+   * - Manages collection pausing during idle periods
+   * 
+   * @private
+   */
   private runCollector(): void {
     const toRemove = [];
     const gcThreshold = lazyOptions.gcThreshold ? lazyOptions.gcThreshold / 60000 : 5;
@@ -85,6 +133,12 @@ export class ModuleCollector {
     }
   }
 
+  /**
+   * Sets up the idle monitoring interval.
+   * Resets module usage counters during extended idle periods.
+   * 
+   * @private
+   */
   private setupIdleMonitor(): void {
     setInterval(() => {
       this.idleTime++;
@@ -96,6 +150,10 @@ export class ModuleCollector {
     }, 60000);
   }
 
+  /**
+   * Disposes of the collector instance.
+   * Cleans up event listeners and intervals.
+   */
   public dispose(): void {
     if (this.collectorInterval) {
       clearInterval(this.collectorInterval);

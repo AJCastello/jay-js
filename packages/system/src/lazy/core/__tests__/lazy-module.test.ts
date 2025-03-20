@@ -5,8 +5,7 @@ import * as moduleLoader from "../module-loader.js";
 // Mock the moduleLoader functions
 jest.mock("../module-loader.js", () => ({
   loadFromCache: jest.fn(),
-  loadModule: jest.fn(),
-  prefetchModule: jest.fn()
+  loadModule: jest.fn()
 }));
 
 // Mock the uniKey function
