@@ -1,22 +1,13 @@
-import { routerOptions } from "../configuration.js";
-import { getRoute } from "./get-route.js";
+import { routerOptions } from "../configuration";
+import { getRoute } from "./get-route";
 
-/**
- * Navega para o caminho especificado
- * @param path Caminho para o qual navegar
- */
-export function Navigate(path: string): void {
+export function Navigate(path: string) {
   const prefixOptions = routerOptions.prefix || "";
-  
-  // Adiciona o prefixo ao caminho, se configurado
+
   if(prefixOptions){
-    path = [prefixOptions, path]
-      .join("/")
-      .replace(/\/+$/, "")    // Remove barras finais extras
-      .replace(/\/{2,}/g, "/"); // Remove barras duplas
+    path = [prefixOptions, path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
   }
-  
-  // Atualiza o histórico do navegador e aciona a navegação
+
   history.pushState(null, "", path);
   getRoute();
 }

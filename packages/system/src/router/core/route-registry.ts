@@ -1,34 +1,41 @@
-import { IRoute, IRouteInstance } from "../types.js";
+import { uniKey } from "../../utils";
+import { TRoute, TRouteInstance } from "../types";
+import { routerOptions } from "./configuration";
 
-/**
- * Processa uma lista de rotas e gera instâncias de rota com IDs únicos
- * @param routes Lista de rotas a serem processadas
- * @param defaultTarget Elemento padrão para renderização
- * @param parentLayoutId ID do layout pai (usado internamente para rotas aninhadas)
- */
-export function* Routes(
-  routes: Array<IRoute>,
-  defaultTarget?: HTMLElement,
-  parentLayoutId?: string
-): Generator<IRouteInstance> {
-  for (const route of routes) {
-    // Gera um ID único para a rota
-    const id = Math.random().toString(36).substring(2);
-    
-    // Cria a instância da rota
-    const routeInstance: IRouteInstance = {
-      ...route,
-      id,
-      parentLayoutId,
-      target: route.target || defaultTarget
-    };
+export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement, prefix = ""): Array<TRouteInstance> {
+  const outputRoutes: Array<TRouteInstance> = [];
 
-    // Se for um layout e tiver filhos, processa as rotas filhas
-    if (route.layout && route.children) {
-      yield routeInstance;
-      yield* Routes(route.children, routeInstance.target, routeInstance.id);
-    } else {
-      yield routeInstance;
+  const prefixOptions = routerOptions.prefix || "";
+
+  function buildRoutes(routes: Array<TRoute>, prefix: string, parentLayoutId?: string) {
+
+    if (prefixOptions && prefix.includes(prefixOptions)) {
+      prefix = prefix.replace(prefixOptions, "");
+    }
+
+    for (const route of routes) {
+      const newPath = [prefixOptions, prefix, route.path].join("/").replace(/\/+$/, "").replace(/\/{2,}/g, "/");
+      const routeId = uniKey();
+
+      if (route.element) {
+        const routeBuild: TRouteInstance = {
+          id: routeId,
+          path: newPath,
+          element: route.element,
+          target: route.target || target || document.body,
+        };
+
+        route.layout && (routeBuild.layout = route.layout);
+        parentLayoutId && (routeBuild.parentLayoutId = parentLayoutId);
+        outputRoutes.push(routeBuild);
+      }
+
+      if (route.children) {
+        buildRoutes(route.children, newPath, (route.layout ? routeId : parentLayoutId));
+      }
     }
   }
+
+  buildRoutes(inputRoutes, prefix);
+  return outputRoutes;
 }
