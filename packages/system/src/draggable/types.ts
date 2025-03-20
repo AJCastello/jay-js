@@ -1,20 +1,20 @@
-export type DragStartEvent = (event: DragEvent) => void;
-export type DragEndEvent = (event: DragEvent) => void;
-export type DragOverEvent = (event: DragEvent) => void;
-export type DragEnterEvent = (event: DragEvent) => void;
-export type DragLeaveEvent = (event: DragEvent) => void;
-export type DropEvent = (event: DragEvent, draggedItem: HTMLElement | null) => void;
+export type TDragStartEvent = (event: DragEvent) => void;
+export type TDragEndEvent = (event: DragEvent) => void;
+export type TDragOverEvent = (event: DragEvent) => void;
+export type TDragEnterEvent = (event: DragEvent) => void;
+export type TDragLeaveEvent = (event: DragEvent) => void;
+export type TDropEvent = (event: DragEvent, draggedItem: HTMLElement | null) => void;
 
-export interface DraggableOptions {
-  onDragStart?: DragStartEvent;
-  onDragEnd?: DragEndEvent;
-  onDragOver?: DragOverEvent;
-  onDragEnter?: DragEnterEvent;
-  onDragLeave?: DragLeaveEvent;
-  onDrop?: DropEvent;
+export interface IDraggableOptions {
+  onDragStart?: TDragStartEvent;
+  onDragEnd?: TDragEndEvent;
+  onDragOver?: TDragOverEvent;
+  onDragEnter?: TDragEnterEvent;
+  onDragLeave?: TDragLeaveEvent;
+  onDrop?: TDropEvent;
 }
 
-export interface DroppableOptions {
+export interface IDroppableOptions {
   accept?: boolean;
   acceptTypes?: string[];
   dragOverClass?: string;

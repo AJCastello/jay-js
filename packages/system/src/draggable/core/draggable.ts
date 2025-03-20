@@ -1,10 +1,10 @@
-import { DraggableOptions } from "../types.js";
+import { IDraggableOptions } from "../types.js";
 
 /**
  * Makes an HTML element draggable.
  *
  * @param {HTMLElement} element - The HTML element to make draggable.
- * @param {DraggableOptions} [options={}] - Configuration options for the draggable behavior.
+ * @param {IDraggableOptions} [options={}] - Configuration options for the draggable behavior.
  * @param {Function} [options.onDragStart] - Callback triggered when dragging starts.
  * @param {Function} [options.onDragEnd] - Callback triggered when dragging ends.
  * @param {Function} [options.onDragOver] - Callback triggered when an element is dragged over the target.
@@ -14,7 +14,7 @@ import { DraggableOptions } from "../types.js";
  */
 export function Draggable(
     element: HTMLElement,
-    options: DraggableOptions = {}
+    options: IDraggableOptions = {}
 ): void {
     let draggedItem: HTMLElement | null = null;
 

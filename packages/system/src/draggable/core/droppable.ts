@@ -1,10 +1,10 @@
-import { DroppableOptions, DraggableOptions } from "../types.js";
+import { IDroppableOptions, IDraggableOptions } from "../types.js";
 
 /**
  * Makes an HTML element a droppable area where draggable elements can be dropped.
  *
  * @param {HTMLElement} element - The HTML element to be made droppable.
- * @param {DroppableOptions & DraggableOptions} [options={}] - Configuration options for the droppable area.
+ * @param {IDroppableOptions & IDraggableOptions} [options={}] - Configuration options for the droppable area.
  * @param {boolean} [options.accept=true] - Whether the element accepts drops.
  * @param {string[]} [options.acceptTypes=[]] - List of accepted types for draggable items.
  * @param {string} [options.dragOverClass="drag-over"] - CSS class to apply when a draggable item is over the element.
@@ -15,7 +15,7 @@ import { DroppableOptions, DraggableOptions } from "../types.js";
  */
 export function Droppable(
 	element: HTMLElement,
-	options: DroppableOptions & DraggableOptions = {}
+	options: IDroppableOptions & IDraggableOptions = {}
 ): void {
 	const {
 		accept = true,
