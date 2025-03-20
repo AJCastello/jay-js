@@ -6,7 +6,7 @@ import {
   IRegisterOptions,
   IUseForm,
   IUseFormProps
-} from "../types";
+} from "../types.js";
 
 export function useForm<T>({
   defaultValues,
