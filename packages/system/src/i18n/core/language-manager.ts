@@ -1,7 +1,16 @@
-
 import { Ii18nLanguages, Ii18nOptions } from "../types.js";
 import { i18nDefineOptions, i18nOptions, i18nState } from "./configuration.js";
 
+/**
+ * Initializes the internationalization system with the appropriate language
+ * 
+ * This function:
+ * 1. Detects the browser language if available
+ * 2. Checks for saved language preference in localStorage
+ * 3. Sets the initial language
+ * 
+ * @throws Error if the default language cannot be loaded
+ */
 export function initLanguage() {
   if (navigator && navigator.language) {
     const locale = navigator.language || i18nOptions.defaultLocale;
@@ -25,6 +34,12 @@ export function initLanguage() {
   }, { silent: true });
 }
 
+/**
+ * Changes the active language
+ * 
+ * @param {string} code - The language code to switch to
+ * @throws Error if the specified language code is not found in the available languages
+ */
 export function setLanguage(code: string) {
   const language = i18nOptions.languages.find((lang) => lang.code === code);
   if (!language) {
@@ -43,6 +58,13 @@ export function setLanguage(code: string) {
   });
 }
 
+/**
+ * Provides internationalization support and handles language loading
+ * 
+ * @param {function} onLoad - Callback function that receives the language data when loaded
+ * @param {Partial<Ii18nOptions>} [options] - Optional configuration options for i18n
+ * @throws Error if no languages are defined in the options
+ */
 export function i18nProvider(onLoad: (i18n: Ii18nLanguages) => void, options?: Partial<Ii18nOptions>) {
   if (options) {
     i18nDefineOptions(options);
@@ -62,6 +84,11 @@ export function i18nProvider(onLoad: (i18n: Ii18nLanguages) => void, options?: P
   }, true);
 }
 
+/**
+ * Returns the current active locale code
+ * 
+ * @returns {string} The current locale code
+ */
 export function getCurrentLocale(): string {
   return i18nState.get().currentLocale;
 }
