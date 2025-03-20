@@ -45,7 +45,7 @@ export class ModuleCollector {
 
   private startCollector(): void {
     this.collectorInterval = setInterval(
-      this.runCollector.bind(this), 
+      this.runCollector.bind(this),
       lazyOptions.gcInterval || 60000
     );
   }
@@ -53,7 +53,7 @@ export class ModuleCollector {
   private runCollector(): void {
     const toRemove = [];
     const gcThreshold = lazyOptions.gcThreshold ? lazyOptions.gcThreshold / 60000 : 5;
-    
+
     for (const [key, module] of moduleCache) {
       if (module.lastUsed > gcThreshold && module.collect) {
         toRemove.push({ key, module });
@@ -61,13 +61,13 @@ export class ModuleCollector {
         module.lastUsed++;
       }
     }
-    
+
     for (const { key, module } of toRemove) {
       moduleCache.delete(key);
       module.lastUsed = 0;
       module.collect = false;
     }
-    
+
     if (toRemove.length > 0) {
       console.log("Garbage collector removed modules:", toRemove.map(item => item.key));
     }
@@ -78,7 +78,7 @@ export class ModuleCollector {
         clearInterval(this.collectorInterval);
         this.collectorInterval = null;
       }
-      
+
       for (const [_, module] of moduleCache) {
         module.lastUsed = 0;
       }
@@ -108,5 +108,4 @@ export class ModuleCollector {
   }
 }
 
-// Initialize the collector singleton
 ModuleCollector.getInstance();
