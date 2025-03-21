@@ -23,7 +23,7 @@ export { i18nDefineOptions } from "./core/configuration.js";
  * Functions for managing the active language
  * @see ./core/language-manager.js for detailed documentation
  */
-export { setLanguage, initLanguage } from "./core/language-manager.js";
+export { setLanguage, initLanguage, i18nProvider, getCurrentLocale } from "./core/language-manager.js";
 
 /**
  * Type definitions for the internationalization system

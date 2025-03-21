@@ -20,5 +20,6 @@
     "externalHelpers": false,
     "keepClassNames": false
   },
-  "minify": false
+  "minify": false,
+  "exclude": [".*\\.test\\.js$", ".*\\.spec\\.js$", "__tests__"]  
 }
