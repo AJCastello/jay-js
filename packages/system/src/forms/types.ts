@@ -9,7 +9,8 @@ export interface IRegister {
 	name: string;
 	onchange: (ev: Event) => void;
 	oninput: (ev: Event) => void;
-	value: string;
+	value?: string | boolean;
+	checked?: boolean;
 }
 
 export interface IRegisterOptions {
