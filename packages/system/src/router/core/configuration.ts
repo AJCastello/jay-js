@@ -1,5 +1,5 @@
-import type { TRouteInstance, TRouterOptions } from "../types";
 import { selector } from "../../utils/dom/query";
+import type { TRouteInstance, TRouterOptions } from "../types";
 
 export const routerOptions: TRouterOptions = {
 	prefix: "",
@@ -12,7 +12,7 @@ export const routerOptions: TRouterOptions = {
 export const resolvedRoutes = new Map<string, TRouteInstance>();
 
 export function routerDefineOptions(options: Partial<TRouterOptions>) {
-	if (typeof options.target === 'string') {
+	if (typeof options.target === "string") {
 		const targetElement = selector(options.target);
 		if (!targetElement) {
 			if (options.onError) {

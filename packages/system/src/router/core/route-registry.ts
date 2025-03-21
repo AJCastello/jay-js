@@ -21,7 +21,7 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string
 
 			if (route.element) {
 				let routeTarget = route.target || target || document.body;
-				if (typeof routeTarget === 'string') {
+				if (typeof routeTarget === "string") {
 					const targetElement = selector(routeTarget);
 					if (!targetElement && routerOptions.onError) {
 						routerOptions.onError(new Error(`Target element not found: ${routeTarget}`, { cause: "invalid-target" }));

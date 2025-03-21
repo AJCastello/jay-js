@@ -25,7 +25,7 @@ export const State = <T>(data: T): StateType<T> => {
 				newValue = newData;
 			}
 
-				// Update the current data
+			// Update the current data
 			data = newValue;
 
 			if (options?.silent) {
