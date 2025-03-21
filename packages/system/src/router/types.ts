@@ -5,7 +5,7 @@ export type TRoute = {
 		| ((props?: any) => HTMLElement | DocumentFragment)
 		| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
 		| undefined;
-	target?: HTMLElement;
+	target?: HTMLElement | string;
 	layout?: boolean;
 	children?: Array<TRoute>;
 };
@@ -17,7 +17,7 @@ export type TRouteInstance = {
 
 export type TRouterOptions = {
 	prefix?: string;
-	target?: HTMLElement;
+	target?: HTMLElement | string;
 	onError?: (error: Error) => void;
 	onNavigate?: (route: TRouteInstance) => void;
 	beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;

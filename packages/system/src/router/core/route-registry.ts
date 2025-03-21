@@ -1,10 +1,10 @@
 import { uniKey } from "../../utils";
+import { selector } from "../../utils/dom/query";
 import type { TRoute, TRouteInstance } from "../types";
 import { routerOptions } from "./configuration";
 
-export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement, prefix = ""): Array<TRouteInstance> {
+export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string, prefix = ""): Array<TRouteInstance> {
 	const outputRoutes: Array<TRouteInstance> = [];
-
 	const prefixOptions = routerOptions.prefix || "";
 
 	function buildRoutes(routes: Array<TRoute>, prefix: string, parentLayoutId?: string) {
@@ -20,11 +20,22 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement, prefix 
 			const routeId = uniKey();
 
 			if (route.element) {
+				let routeTarget = route.target || target || document.body;
+				if (typeof routeTarget === 'string') {
+					const targetElement = selector(routeTarget);
+					if (!targetElement && routerOptions.onError) {
+						routerOptions.onError(new Error(`Target element not found: ${routeTarget}`, { cause: "invalid-target" }));
+						routeTarget = document.body;
+					} else if (targetElement) {
+						routeTarget = targetElement;
+					}
+				}
+
 				const routeBuild: TRouteInstance = {
 					id: routeId,
 					path: newPath,
 					element: route.element,
-					target: route.target || target || document.body,
+					target: routeTarget as HTMLElement,
 				};
 
 				route.layout && (routeBuild.layout = route.layout);
