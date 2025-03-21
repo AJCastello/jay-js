@@ -1,4 +1,4 @@
-import type { ZodObject, ZodEffects } from "zod";
+import type { ZodEffects, ZodObject } from "zod";
 import type { TResolver } from "../types";
 
 /**
