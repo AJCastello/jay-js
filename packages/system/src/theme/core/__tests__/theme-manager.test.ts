@@ -92,7 +92,7 @@ describe("Theme Manager", () => {
 				saveToLocalStorage: true,
 				defaultTheme: "light",
 				defaultDarkTheme: "dark",
-				localStorageKey: "jayjs-churrent-theme",
+				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
 				themeList: ["light", "dark"],
@@ -118,7 +118,7 @@ describe("Theme Manager", () => {
 				saveToLocalStorage: true,
 				defaultTheme: "light",
 				defaultDarkTheme: "dark",
-				localStorageKey: "jayjs-churrent-theme",
+				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
 				themeList: ["light", "dark"],
@@ -142,7 +142,7 @@ describe("Theme Manager", () => {
 				saveToLocalStorage: true,
 				defaultTheme: "light",
 				defaultDarkTheme: "dark",
-				localStorageKey: "jayjs-churrent-theme",
+				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
 				themeList: ["light", "dark"],
@@ -169,7 +169,7 @@ describe("Theme Manager", () => {
 				saveToLocalStorage: true,
 				defaultTheme: "light",
 				defaultDarkTheme: "dark",
-				localStorageKey: "jayjs-churrent-theme",
+				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
 				themeList: ["light", "dark"],
@@ -183,7 +183,7 @@ describe("Theme Manager", () => {
 		});
 
 		it("should use stored theme from localStorage if available", () => {
-			localStorage.setItem("jayjs-churrent-theme", "dark");
+			localStorage.setItem("jayjs-current-theme", "dark");
 
 			initTheme();
 
@@ -200,7 +200,7 @@ describe("Theme Manager", () => {
 
 		it("should prioritize localStorage over system preference", () => {
 			windowMock._prefersColorSchemeDark = true;
-			localStorage.setItem("jayjs-churrent-theme", "light");
+			localStorage.setItem("jayjs-current-theme", "light");
 
 			initTheme();
 
@@ -216,7 +216,7 @@ describe("Theme Manager", () => {
 				saveToLocalStorage: true,
 				defaultTheme: "light",
 				defaultDarkTheme: "dark",
-				localStorageKey: "jayjs-churrent-theme",
+				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
 				themeList: ["light", "dark"],
@@ -271,7 +271,7 @@ describe("Theme Manager", () => {
 
 			setTheme("dark");
 
-			expect(localStorage.getItem("jayjs-churrent-theme")).toBe("dark");
+			expect(localStorage.getItem("jayjs-current-theme")).toBe("dark");
 		});
 
 		it("should not save theme to localStorage when saveToLocalStorage is false", () => {
@@ -280,11 +280,11 @@ describe("Theme Manager", () => {
 			});
 
 			// Clear localStorage first to ensure clean state
-			localStorage.removeItem("jayjs-churrent-theme");
+			localStorage.removeItem("jayjs-current-theme");
 
 			setTheme("dark");
 
-			expect(localStorage.getItem("jayjs-churrent-theme")).toBeNull();
+			expect(localStorage.getItem("jayjs-current-theme")).toBeNull();
 		});
 
 		it("should dispatch themeChanged event", () => {
@@ -339,7 +339,7 @@ describe("Theme Manager", () => {
 				saveToLocalStorage: true,
 				defaultTheme: "light",
 				defaultDarkTheme: "dark",
-				localStorageKey: "jayjs-churrent-theme",
+				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: true,
 				themeList: ["light", "dark", "sepia"],
@@ -361,7 +361,7 @@ describe("Theme Manager", () => {
 			expect(documentMock.documentElement._classes).not.toContain("light");
 
 			// Should save to localStorage
-			expect(localStorage.getItem("jayjs-churrent-theme")).toBe("dark");
+			expect(localStorage.getItem("jayjs-current-theme")).toBe("dark");
 
 			// Should dispatch event
 			expect(documentMock.dispatchEvent).toHaveBeenCalled();

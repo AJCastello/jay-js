@@ -58,7 +58,7 @@ themeDefineOptions({
 | `saveToLocalStorage` | boolean | true | Whether to save theme preferences to localStorage |
 | `defaultTheme` | string | "light" | The default theme to use when no preference is saved |
 | `defaultDarkTheme` | string | "dark" | The default dark theme to use when system prefers dark mode |
-| `localStorageKey` | string | "jayjs-churrent-theme" | The key to use for saving theme preference in localStorage |
+| `localStorageKey` | string | "jayjs-current-theme" | The key to use for saving theme preference in localStorage |
 | `useAsDataset` | boolean | true | Whether to apply the theme as a data-theme attribute |
 | `useAsClass` | boolean | false | Whether to apply the theme as a CSS class |
 | `themeList` | string[] | ["light", "dark"] | List of available themes for class removal when switching |

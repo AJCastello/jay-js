@@ -16,7 +16,7 @@ export const themeOptions: TThemeOptions = {
 	saveToLocalStorage: true,
 	defaultTheme: "light",
 	defaultDarkTheme: "dark",
-	localStorageKey: "jayjs-churrent-theme",
+	localStorageKey: "jayjs-current-theme",
 	useAsDataset: true,
 	useAsClass: false,
 	themeList: ["light", "dark"],
