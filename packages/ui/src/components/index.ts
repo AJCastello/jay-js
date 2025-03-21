@@ -55,6 +55,7 @@ export * from "./Navbar/index.js";
 export * from "./NavbarComponent/index.js";
 export * from "./Outlet/index.js";
 export * from "./Progress/index.js";
+export * from "./Radio/index.js";
 export * from "./RadialProgress/index.js";
 export * from "./Range/index.js";
 export * from "./Rating/index.js";
