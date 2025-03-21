@@ -1,7 +1,5 @@
-import { ZodEffects, type ZodObject, type ZodTypeAny } from "zod";
+import type { ZodObject, ZodEffects } from "zod";
 import type { TResolver } from "../types";
-
-type ValidZodSchema = ZodObject<any, any> | ZodEffects<ZodObject<any, any>>;
 
 /**
  * Creates a resolver function for validating form values using a Zod schema.
@@ -18,18 +16,13 @@ type ValidZodSchema = ZodObject<any, any> | ZodEffects<ZodObject<any, any>>;
  * - Accepts the form values and an optional field name.
  * - Returns an object containing an array of validation errors, or an empty array if validation passes.
  */
-export function zodResolver<T>(schema: ValidZodSchema): TResolver<T> {
+export function zodResolver<T>(schema: ZodObject<any, any> | ZodEffects<ZodObject<any, any>>): TResolver<T> {
 	return async (values: T, fieldName?: string) => {
 		try {
 			if (fieldName) {
 				const singleFieldObject = { [fieldName]: values[fieldName as keyof T] };
-				// For ZodEffects, we need to validate the whole object even for single field
-				if (schema instanceof ZodEffects) {
-					await schema.parseAsync(values);
-				} else {
-					const fieldSchema = schema.pick({ [fieldName]: true });
-					await fieldSchema.parseAsync(singleFieldObject);
-				}
+				const fieldSchema = (schema as ZodObject<any, any>).pick({ [fieldName]: true });
+				await fieldSchema.parseAsync(singleFieldObject);
 			} else {
 				await schema.parseAsync(values);
 			}
