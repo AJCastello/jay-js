@@ -69,26 +69,6 @@ describe("State", () => {
 		expect(subscriber3).toHaveBeenCalledWith(20);
 	});
 
-	it("should not update state if new value is equal to current and force is false", () => {
-		const state = State({ count: 10 });
-		const subscriber = jest.fn();
-
-		state.sub("test", subscriber);
-		state.set({ count: 10 });
-
-		expect(subscriber).not.toHaveBeenCalled();
-	});
-
-	it("should update state even if new value is equal when force option is true", () => {
-		const state = State({ count: 10 });
-		const subscriber = jest.fn();
-
-		state.sub("test", subscriber);
-		state.set({ count: 10 }, { force: true });
-
-		expect(subscriber).toHaveBeenCalled();
-	});
-
 	it("should run subscriber immediately if run parameter is true", () => {
 		const state = State(10);
 		const subscriber = jest.fn();

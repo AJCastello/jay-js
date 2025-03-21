@@ -99,7 +99,6 @@ person.set({ name: 'Jane', age: 25 }, {
   silent: true, // Does not notify subscribers
   target: 'specificSubscriber', // Notifies only a specific subscriber
   target: ['subscriber1', 'subscriber2'], // Notifies multiple specific subscribers
-  force: true // Forces the update even if the value is the same
 });
 ```
 

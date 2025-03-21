@@ -1,5 +1,4 @@
 import type { StateType, setOptions } from "../types.js";
-import { isEqual } from "../utils/compare.js";
 import { subscriberManager } from "./subscriber.js";
 
 /**
@@ -10,8 +9,6 @@ import { subscriberManager } from "./subscriber.js";
  * @returns A state object with methods to manage the state
  */
 export const State = <T>(data: T): StateType<T> => {
-	let currentData = data; // Store the current data separately for comparison
-
 	const state: StateType<T> = {
 		/**
 		 * Sets a new value for the state and notifies subscribers
@@ -23,18 +20,13 @@ export const State = <T>(data: T): StateType<T> => {
 			let newValue: T;
 
 			if (typeof newData === "function") {
-				newValue = (newData as (currentState: T) => T)(currentData);
+				newValue = (newData as (currentState: T) => T)(data);
 			} else {
 				newValue = newData;
 			}
 
-			// Compare the new value with the current value to avoid unnecessary updates
-			if (!options?.force && isEqual(currentData, newValue)) {
-				return; // Skip update if values are equal and not forced
-			}
-
-			// Update the current data
-			currentData = newValue;
+				// Update the current data
+			data = newValue;
 
 			if (options?.silent) {
 				return;
@@ -49,7 +41,7 @@ export const State = <T>(data: T): StateType<T> => {
 					for (const item of options.target) {
 						const effect = state.effects.get(item);
 						if (effect) {
-							effect(currentData);
+							effect(data);
 						}
 					}
 					return;
@@ -57,13 +49,13 @@ export const State = <T>(data: T): StateType<T> => {
 
 				const effect = state.effects.get(options.target);
 				if (effect) {
-					effect(currentData);
+					effect(data);
 				}
 				return;
 			}
 
 			for (const [_, effect] of state.effects) {
-				effect(currentData);
+				effect(data);
 			}
 		},
 
@@ -75,9 +67,9 @@ export const State = <T>(data: T): StateType<T> => {
 		 */
 		get: (callback?: (data: T) => void): T => {
 			if (callback) {
-				callback(currentData);
+				callback(data);
 			}
-			return currentData;
+			return data;
 		},
 
 		/**
@@ -91,7 +83,7 @@ export const State = <T>(data: T): StateType<T> => {
 		sub: (id: string, effect: (data: T) => any, run = false): any => {
 			state.effects.set(id, effect);
 			if (run) {
-				return effect(currentData);
+				return effect(data);
 			}
 		},
 
@@ -118,14 +110,14 @@ export const State = <T>(data: T): StateType<T> => {
 				for (let i = 0; i < ids.length; i++) {
 					const effect = state.effects.get(ids[i]);
 					if (effect) {
-						effect(currentData);
+						effect(data);
 					}
 				}
 				return;
 			}
 
 			for (const [, item] of state.effects) {
-				item(currentData);
+				item(data);
 			}
 		},
 
@@ -136,11 +128,11 @@ export const State = <T>(data: T): StateType<T> => {
 		 */
 		clear: (newData?: T | ((currentState: T) => T)): void => {
 			if (typeof newData === "function") {
-				currentData = (newData as (currentState: T) => T)(currentData);
+				data = (newData as (currentState: T) => T)(data);
 			} else if (newData !== undefined) {
-				currentData = newData;
+				data = newData;
 			} else {
-				currentData = undefined as unknown as T;
+				data = undefined as unknown as T;
 			}
 
 			state.effects.clear();

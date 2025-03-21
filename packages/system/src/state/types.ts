@@ -11,11 +11,6 @@ export type setOptions = {
 	 * Specific subscriber(s) to notify about the change
 	 */
 	target?: string | Array<string>;
-
-	/**
-	 * When true, update will proceed even if new value is equal to current value
-	 */
-	force?: boolean;
 };
 
 /**
