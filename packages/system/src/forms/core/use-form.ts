@@ -20,13 +20,17 @@ import type {
  * @example
  * // Basic form with Zod validation
  * const form = useForm({
- *   defaultValues: { email: '', password: '' },
+ *   defaultValues: { email: '', password: '', remember: false },
  *   resolver: zodResolver(loginSchema)
  * });
  *
  * // Register an input element
  * const emailInput = document.querySelector('#email');
  * Object.assign(emailInput, form.register('email'));
+ *
+ * // Register a checkbox element
+ * const rememberInput = document.querySelector('#remember');
+ * Object.assign(rememberInput, form.register('remember', { type: 'checkbox' }));
  *
  * // Show validation errors
  * const errorElement = document.querySelector('#email-error');
@@ -60,8 +64,33 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 				};
 			});
 			const fieldElement = document.querySelector(`[name="${String(path)}"]`);
-			if ((fieldElement && fieldElement instanceof HTMLInputElement) || fieldElement instanceof HTMLTextAreaElement) {
-				fieldElement.value = value as string;
+			if (!fieldElement) return;
+
+			if (fieldElement instanceof HTMLInputElement) {
+				if (fieldElement.type === "checkbox") {
+					fieldElement.checked = Boolean(value);
+				} else if (fieldElement.type === "radio") {
+					// Para radio buttons, precisamos selecionar o correto com base no valor
+					const radioGroup = document.querySelectorAll(`input[type="radio"][name="${String(path)}"]`);
+					radioGroup.forEach((radio) => {
+						if (radio instanceof HTMLInputElement) {
+							radio.checked = radio.value === String(value);
+						}
+					});
+				} else {
+					fieldElement.value = String(value);
+				}
+			} else if (fieldElement instanceof HTMLTextAreaElement) {
+				fieldElement.value = String(value);
+			} else if (fieldElement instanceof HTMLSelectElement) {
+				if (fieldElement.multiple && Array.isArray(value)) {
+					// Para select múltiplo com array de valores
+					Array.from(fieldElement.options).forEach((option) => {
+						option.selected = (value as unknown as string[]).includes(option.value);
+					});
+				} else {
+					fieldElement.value = String(value);
+				}
 			}
 		},
 		setValues: (values: Partial<T>) => {
@@ -71,11 +100,10 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 					...values,
 				};
 			});
+
+			// Atualiza os elementos DOM para cada campo alterado
 			for (const field in values) {
-				const fieldElement = document.querySelector(`[name="${field}"]`);
-				if ((fieldElement && fieldElement instanceof HTMLInputElement) || fieldElement instanceof HTMLTextAreaElement) {
-					fieldElement.value = values[field as keyof T] as string;
-				}
+				formState.setValue(field as keyof T, values[field as keyof T] as T[keyof T]);
 			}
 		},
 		getValue: <K extends keyof T>(path: K) => {
@@ -117,10 +145,10 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 * Updates a form field value in the internal state
 	 *
 	 * @param {string} field - The field name to update
-	 * @param {string} value - The new value for the field
+	 * @param {any} value - The new value for the field
 	 * @private
 	 */
-	function privateSetValue(field: string, value: string) {
+	function privateSetValue(field: string, value: any) {
 		formValues.set((prev) => {
 			return {
 				...prev,
@@ -139,6 +167,45 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	}
 
 	/**
+	 * Extracts value from form element based on its type
+	 *
+	 * @param {HTMLElement} element - The DOM element to extract value from
+	 * @returns {any} The value in the appropriate type for the element
+	 */
+	function getElementValue(element: HTMLElement): any {
+		if (element instanceof HTMLInputElement) {
+			// Checkboxes retornam booleanos
+			if (element.type === "checkbox") {
+				return element.checked;
+			}
+			// Radio buttons só são considerados se estiverem marcados
+			else if (element.type === "radio") {
+				if (element.checked) {
+					return element.value;
+				}
+				return undefined; // Ignorar radio buttons desmarcados
+			}
+			// Inputs de tipo file retornam o FileList
+			else if (element.type === "file") {
+				return element.files;
+			}
+			// Outros inputs retornam o valor como string
+			return element.value;
+		} else if (element instanceof HTMLSelectElement) {
+			// Select múltiplo retorna array de valores
+			if (element.multiple) {
+				return Array.from(element.selectedOptions).map((option) => option.value);
+			}
+			// Select normal retorna string
+			return element.value;
+		} else if (element instanceof HTMLTextAreaElement) {
+			return element.value;
+		}
+
+		return undefined;
+	}
+
+	/**
 	 * Handles input/change events from form elements
 	 *
 	 * @param {Event} ev - The DOM event
@@ -153,17 +220,31 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 			element instanceof HTMLSelectElement
 		) {
 			const field = element.getAttribute("name") as string;
-			let value: string | undefined = element.value;
-			if (options) {
-				if (options.beforeChange) {
-					value = options.beforeChange(ev, value);
-					if (value === undefined) {
-						return;
-					}
+
+			// Obtém o valor apropriado baseado no tipo de elemento
+			let value: any = getElementValue(element);
+
+			// Retorna undefined para radio buttons desmarcados
+			if (value === undefined) return;
+
+			if (options.beforeChange && typeof value === "string") {
+				value = options.beforeChange(ev, value);
+				if (value === undefined) {
+					return;
+				}
+
+				// Atualiza o elemento do DOM para refletir a alteração
+				if (element instanceof HTMLInputElement && element.type !== "checkbox" && element.type !== "radio") {
+					element.value = value;
+				} else if (element instanceof HTMLTextAreaElement) {
+					element.value = value;
 				}
 			}
-			element.value = value;
+
+			// Atualiza o estado interno
 			privateSetValue(field, value);
+
+			// Valida o campo se houver um resolver
 			try {
 				if (!resolver) {
 					return;
@@ -215,11 +296,23 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 * @returns {IRegister} Props to apply to the HTML element
 	 */
 	function register(path: keyof T, options: IRegisterOptions = {}): IRegister {
+		const value = defaultValues[path];
+
+		if (typeof value === "boolean") {
+			return {
+				name: path as string,
+				onchange: (ev) => onChangeValue(ev, options),
+				oninput: (ev) => onChangeValue(ev, options),
+				checked: Boolean(value),
+			};
+		}
+
+		// Entrada padrão para outros tipos
 		return {
 			name: path as string,
 			onchange: (ev) => onChangeValue(ev, options),
 			oninput: (ev) => onChangeValue(ev, options),
-			value: defaultValues[path] as string,
+			value: String(value),
 		};
 	}
 

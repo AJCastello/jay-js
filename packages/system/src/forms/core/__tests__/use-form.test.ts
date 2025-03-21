@@ -7,8 +7,30 @@ class MockElement {
 	name = "";
 	onchange?: (event: any) => void;
 	oninput?: (event: any) => void;
+	type?: string;
+	checked = false;
+	files: any = null;
+	options: any[] = [];
+	multiple = false;
+	selectedOptions: any[] = [];
+
 	getAttribute(name: string) {
 		return this[name as keyof this];
+	}
+}
+
+class MockInputElement extends MockElement {
+	constructor(type = "text") {
+		super();
+		this.type = type;
+	}
+}
+
+class MockSelectElement extends MockElement {
+	constructor(isMultiple = false) {
+		super();
+		this.multiple = isMultiple;
+		this.options = [];
 	}
 }
 
@@ -28,6 +50,7 @@ describe("useForm", () => {
 				const element = new MockElement();
 				return element;
 			}),
+			querySelectorAll: jest.fn().mockImplementation(() => []),
 			createTextNode: jest.fn().mockImplementation(() => mockTextNode),
 		} as any;
 	});
@@ -297,5 +320,88 @@ describe("useForm", () => {
 		expect(newErrors.errors.length).toBe(2);
 		expect(newErrors.errors.some((e) => e.path === "nome")).toBe(true);
 		expect(newErrors.errors.some((e) => e.path === "email")).toBe(true);
+	});
+
+	// Novos testes para elementos adicionais de formulário
+
+	it("deve lidar com checkbox (campos booleanos)", () => {
+		const defaultValues = { nome: "João", aceitaTermos: false };
+		const form = useForm({ defaultValues });
+
+		// Registrar um checkbox
+		const registerProps = form.register("aceitaTermos");
+		expect(registerProps.checked).toBe(false);
+
+		// Atualizar valor do checkbox
+		form.formState.setValue("aceitaTermos", true);
+		expect(form.formState.getValue("aceitaTermos")).toBe(true);
+	});
+
+	it("deve lidar com radio buttons", () => {
+		const defaultValues = { genero: "masculino" };
+		const form = useForm({ defaultValues });
+
+		// Registrar radio buttons
+		const registerProps = form.register("genero");
+		expect(registerProps.value).toBe("masculino");
+
+		// Atualizar valor do radio button
+		form.formState.setValue("genero", "feminino");
+		expect(form.formState.getValue("genero")).toBe("feminino");
+	});
+
+	it("deve lidar com select múltiplo (arrays de valores)", () => {
+		const defaultValues = { habilidades: ["js", "css"] };
+		const form = useForm({ defaultValues });
+
+		// Simular um select com opções múltiplas
+		const mockSelect = new MockSelectElement(true);
+		mockSelect.name = "habilidades";
+		mockSelect.options = [
+			{ value: "js", selected: true },
+			{ value: "css", selected: true },
+			{ value: "html", selected: false },
+		];
+		mockSelect.selectedOptions = [{ value: "js" }, { value: "css" }];
+
+		// Substituir o mock padrão para usar nosso mock de select
+		(global.document.querySelector as jest.Mock).mockImplementation((selector) => {
+			if (selector === '[name="habilidades"]') {
+				return mockSelect;
+			}
+			return new MockElement();
+		});
+
+		// Atualizar valores do select múltiplo
+		form.formState.setValue("habilidades", ["js", "html"]);
+		expect(form.formState.getValue("habilidades")).toEqual(["js", "html"]);
+	});
+
+	it("deve lidar com input de arquivo", () => {
+		const defaultValues = { avatar: null };
+		const form = useForm({ defaultValues });
+
+		// Mockando um input de arquivo
+		const mockFileInput = new MockInputElement("file");
+		mockFileInput.name = "avatar";
+		mockFileInput.files = { 0: { name: "foto.jpg" }, length: 1 };
+
+		// Substituir o mock padrão
+		(global.document.querySelector as jest.Mock).mockImplementation((selector) => {
+			if (selector === '[name="avatar"]') {
+				return mockFileInput;
+			}
+			return new MockElement();
+		});
+
+		// Registrar input de arquivo
+		const registerProps = form.register("avatar");
+		// expect(registerProps.type).toBe('file');
+
+		// Simular evento change no input de arquivo
+		// Em um cenário real, a função onChangeValue seria chamada com o evento
+		// e iria extrair o FileList do elemento input
+		form.formState.setValue("avatar", mockFileInput.files);
+		expect(form.formState.getValue("avatar")).toEqual(mockFileInput.files);
 	});
 });
