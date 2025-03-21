@@ -51,7 +51,7 @@ export function setLanguage(code: string) {
 	}
 	if (i18nOptions.saveToLocalStorage) {
 		try {
-			localStorage.setItem("default-locale", code);
+			localStorage.setItem(i18nOptions.localStorageKey, code);
 		} catch (e) {
 			console.warn("Failed to save theme to localStorage:", e);
 		}
