@@ -4,18 +4,18 @@ import { yupResolver, zodResolver } from "../index.js";
 
 describe("Form Resolvers", () => {
 	describe("zodResolver", () => {
-		it("deve validar esquemas do Zod corretamente", async () => {
-			// Definir o esquema de validação Zod
+		it("should correctly validate Zod schemas", async () => {
+			// Define the Zod validation schema
 			const schema = z.object({
-				nome: z.string().min(2, "Nome muito curto"),
-				email: z.string().email("Email inválido"),
-				idade: z.number().min(18, "Deve ser maior de idade"),
+				nome: z.string().min(2, "Name is too short"),
+				email: z.string().email("Invalid email"),
+				idade: z.number().min(18, "Must be of legal age"),
 			});
 
-			// Criar o resolver
+			// Create the resolver
 			const resolver = zodResolver(schema);
 
-			// Testar com dados válidos
+			// Test with valid data
 			const validData = {
 				nome: "João",
 				email: "joao@example.com",
@@ -25,66 +25,66 @@ describe("Form Resolvers", () => {
 			const validResult = await resolver(validData);
 			expect(validResult.errors).toHaveLength(0);
 
-			// Testar com dados inválidos
+			// Test with invalid data
 			const invalidData = {
-				nome: "J", // muito curto
-				email: "email-invalido", // formato de email inválido
-				idade: 16, // menor de idade
+				nome: "J", // too short
+				email: "invalid-email", // invalid email format
+				idade: 16, // underage
 			};
 
 			const invalidResult = await resolver(invalidData);
 			expect(invalidResult.errors).toHaveLength(3);
 
-			// Verificar mensagens de erro específicas
+			// Check specific error messages
 			expect(invalidResult.errors).toContainEqual({
 				path: "nome",
-				message: "Nome muito curto",
+				message: "Name is too short",
 			});
 
 			expect(invalidResult.errors).toContainEqual({
 				path: "email",
-				message: "Email inválido",
+				message: "Invalid email",
 			});
 
 			expect(invalidResult.errors).toContainEqual({
 				path: "idade",
-				message: "Deve ser maior de idade",
+				message: "Must be of legal age",
 			});
 		});
 
-		it("deve validar apenas um campo específico quando solicitado", async () => {
+		it("should validate only a specific field when requested", async () => {
 			const schema = z.object({
-				nome: z.string().min(3, "Nome muito curto"),
-				email: z.string().email("Email inválido"),
+				nome: z.string().min(3, "Name is too short"),
+				email: z.string().email("Invalid email"),
 			});
 
 			const resolver = zodResolver(schema);
 
 			const data = {
-				nome: "Jo", // inválido
-				email: "joao@example.com", // válido
+				nome: "Jo", // invalid
+				email: "joao@example.com", // valid
 			};
 
-			// Validar apenas o campo de email
+			// Validate only the email field
 			const emailResult = await resolver(data, "email");
-			expect(emailResult.errors).toHaveLength(0); // email é válido
+			expect(emailResult.errors).toHaveLength(0); // email is valid
 
-			// Validar apenas o campo de nome
+			// Validate only the name field
 			const nomeResult = await resolver(data, "nome");
 			expect(nomeResult.errors).toHaveLength(1);
 			expect(nomeResult.errors[0]).toEqual({
 				path: "nome",
-				message: "Nome muito curto",
+				message: "Name is too short",
 			});
 		});
 
-		it("deve lidar com esquemas com validação cruzada entre campos", async () => {
+		it("should handle schemas with cross-field validation", async () => {
 			const baseSchema = z.object({
-				senha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+				senha: z.string().min(6, "Password must be at least 6 characters"),
 				confirmarSenha: z.string(),
 			});
 
-			// Criar um wrapper para o schema refinado
+			// Create a wrapper for the refined schema
 			const schema = z
 				.object({
 					senha: baseSchema.shape.senha,
@@ -94,7 +94,7 @@ describe("Form Resolvers", () => {
 					if (data.senha !== data.confirmarSenha) {
 						ctx.addIssue({
 							code: "custom",
-							message: "As senhas não coincidem",
+							message: "Passwords do not match",
 							path: ["confirmarSenha"],
 						});
 					}
@@ -102,7 +102,7 @@ describe("Form Resolvers", () => {
 
 			const resolver = zodResolver(schema);
 
-			// Teste com senhas que coincidem
+			// Test with matching passwords
 			const validData = {
 				senha: "senha123",
 				confirmarSenha: "senha123",
@@ -111,7 +111,7 @@ describe("Form Resolvers", () => {
 			const validResult = await resolver(validData);
 			expect(validResult.errors).toHaveLength(0);
 
-			// Teste com senhas que não coincidem
+			// Test with non-matching passwords
 			const invalidData = {
 				senha: "senha123",
 				confirmarSenha: "senha456",
@@ -121,24 +121,24 @@ describe("Form Resolvers", () => {
 			expect(invalidResult.errors).toHaveLength(1);
 			expect(invalidResult.errors[0]).toEqual({
 				path: "confirmarSenha",
-				message: "As senhas não coincidem",
+				message: "Passwords do not match",
 			});
 		});
 	});
 
 	describe("yupResolver", () => {
-		it("deve validar esquemas do Yup corretamente", async () => {
-			// Definir o esquema de validação Yup
+		it("should correctly validate Yup schemas", async () => {
+			// Define the Yup validation schema
 			const schema = yup.object({
-				nome: yup.string().required("Nome é obrigatório").min(2, "Nome muito curto"),
-				email: yup.string().required("Email é obrigatório").email("Email inválido"),
-				idade: yup.number().required("Idade é obrigatória").min(18, "Deve ser maior de idade"),
+				nome: yup.string().required("Name is required").min(2, "Name is too short"),
+				email: yup.string().required("Email is required").email("Invalid email"),
+				idade: yup.number().required("Age is required").min(18, "Must be of legal age"),
 			});
 
-			// Criar o resolver
+			// Create the resolver
 			const resolver = yupResolver(schema);
 
-			// Testar com dados válidos
+			// Test with valid data
 			const validData = {
 				nome: "Maria",
 				email: "maria@example.com",
@@ -148,59 +148,59 @@ describe("Form Resolvers", () => {
 			const validResult = await resolver(validData);
 			expect(validResult.errors).toHaveLength(0);
 
-			// Testar com dados inválidos
+			// Test with invalid data
 			const invalidData = {
-				nome: "M", // muito curto
-				email: "email-invalido", // formato de email inválido
-				idade: 16, // menor de idade
+				nome: "M", // too short
+				email: "invalid-email", // invalid email format
+				idade: 16, // underage
 			};
 
 			const invalidResult = await resolver(invalidData);
 			expect(invalidResult.errors).toHaveLength(3);
 
-			// Verificar as mensagens de erro
+			// Check error messages
 			const errorMessages = invalidResult.errors.map((err) => err.message);
-			expect(errorMessages).toContain("Nome muito curto");
-			expect(errorMessages).toContain("Email inválido");
-			expect(errorMessages).toContain("Deve ser maior de idade");
+			expect(errorMessages).toContain("Name is too short");
+			expect(errorMessages).toContain("Invalid email");
+			expect(errorMessages).toContain("Must be of legal age");
 		});
 
-		it("deve validar apenas um campo específico quando solicitado", async () => {
+		it("should validate only a specific field when requested", async () => {
 			const schema = yup.object({
-				nome: yup.string().required("Nome é obrigatório").min(3, "Nome muito curto"),
-				email: yup.string().required("Email é obrigatório").email("Email inválido"),
+				nome: yup.string().required("Name is required").min(3, "Name is too short"),
+				email: yup.string().required("Email is required").email("Invalid email"),
 			});
 
 			const resolver = yupResolver(schema);
 
 			const data = {
-				nome: "Ju", // inválido
-				email: "julia@example.com", // válido
+				nome: "Ju", // invalid
+				email: "julia@example.com", // valid
 			};
 
-			// Validar apenas o campo de email
+			// Validate only the email field
 			const emailResult = await resolver(data, "email");
-			expect(emailResult.errors).toHaveLength(0); // email é válido
+			expect(emailResult.errors).toHaveLength(0); // email is valid
 
-			// Validar apenas o campo de nome
+			// Validate only the name field
 			const nomeResult = await resolver(data, "nome");
 			expect(nomeResult.errors).toHaveLength(1);
 			expect(nomeResult.errors[0].path).toBe("nome");
-			expect(nomeResult.errors[0].message).toBe("Nome muito curto");
+			expect(nomeResult.errors[0].message).toBe("Name is too short");
 		});
 
-		it("deve lidar com validação condicional do Yup", async () => {
+		it("should handle Yup conditional validation", async () => {
 			const schema = yup.object({
 				temCartaoCredito: yup.boolean(),
 				numeroCartao: yup.string().when("temCartaoCredito", {
 					is: true,
-					then: () => yup.string().required("Número do cartão é obrigatório quando tem cartão"),
+					then: () => yup.string().required("Card number is required when you have a card"),
 				}),
 			});
 
 			const resolver = yupResolver(schema);
 
-			// Caso onde não tem cartão (campo opcional)
+			// Case where there is no card (optional field)
 			const validData1 = {
 				temCartaoCredito: false,
 				numeroCartao: "",
@@ -209,10 +209,10 @@ describe("Form Resolvers", () => {
 			const result1 = await resolver(validData1);
 			expect(result1.errors).toHaveLength(0);
 
-			// Caso onde tem cartão (campo obrigatório)
+			// Case where there is a card (required field)
 			const invalidData = {
 				temCartaoCredito: true,
-				numeroCartao: "", // deveria ter um valor
+				numeroCartao: "", // should have a value
 			};
 
 			const result2 = await resolver(invalidData);
@@ -221,24 +221,24 @@ describe("Form Resolvers", () => {
 		});
 	});
 
-	describe("Casos de uso avançados", () => {
-		it("deve lidar com validação de arrays com Zod", async () => {
-			// Esquema para um array de telefones
+	describe("Advanced use cases", () => {
+		it("should handle array validation with Zod", async () => {
+			// Schema for an array of phones
 			const schema = z.object({
 				nome: z.string(),
 				telefones: z
 					.array(
 						z.object({
-							numero: z.string().min(8, "Número de telefone muito curto"),
+							numero: z.string().min(8, "Phone number is too short"),
 							tipo: z.enum(["casa", "trabalho", "celular"]),
 						}),
 					)
-					.min(1, "Pelo menos um telefone é necessário"),
+					.min(1, "At least one phone is required"),
 			});
 
 			const resolver = zodResolver(schema);
 
-			// Dados válidos
+			// Valid data
 			const validData = {
 				nome: "Carlos",
 				telefones: [
@@ -250,7 +250,7 @@ describe("Form Resolvers", () => {
 			const validResult = await resolver(validData);
 			expect(validResult.errors).toHaveLength(0);
 
-			// Dados inválidos: array vazio
+			// Invalid data: empty array
 			const invalidData1 = {
 				nome: "Carlos",
 				telefones: [],
@@ -260,7 +260,7 @@ describe("Form Resolvers", () => {
 			expect(invalidResult1.errors).toHaveLength(1);
 			expect(invalidResult1.errors[0].path).toBe("telefones");
 
-			// Dados inválidos: número de telefone curto
+			// Invalid data: short phone number
 			const invalidData2 = {
 				nome: "Carlos",
 				telefones: [{ numero: "123", tipo: "casa" }],
@@ -270,7 +270,7 @@ describe("Form Resolvers", () => {
 			expect(invalidResult2.errors).toHaveLength(1);
 			expect(invalidResult2.errors[0].path).toBe("telefones.0.numero");
 
-			// Dados inválidos: tipo de telefone inválido
+			// Invalid data: invalid phone type
 			const invalidData3 = {
 				nome: "Carlos",
 				telefones: [{ numero: "12345678", tipo: "outro" as any }],
@@ -281,21 +281,21 @@ describe("Form Resolvers", () => {
 			expect(invalidResult3.errors[0].path).toBe("telefones.0.tipo");
 		});
 
-		it("deve lidar com validação de objetos aninhados com Yup", async () => {
+		it("should handle nested object validation with Yup", async () => {
 			const schema = yup.object({
 				usuario: yup.object({
-					nome: yup.string().required("Nome é obrigatório"),
+					nome: yup.string().required("Name is required"),
 					endereco: yup.object({
-						rua: yup.string().required("Rua é obrigatória"),
-						numero: yup.number().required("Número é obrigatório"),
-						cidade: yup.string().required("Cidade é obrigatória"),
+						rua: yup.string().required("Street is required"),
+						numero: yup.number().required("Number is required"),
+						cidade: yup.string().required("City is required"),
 					}),
 				}),
 			});
 
 			const resolver = yupResolver(schema);
 
-			// Dados válidos
+			// Valid data
 			const validData = {
 				usuario: {
 					nome: "Ana",
@@ -310,14 +310,14 @@ describe("Form Resolvers", () => {
 			const validResult = await resolver(validData);
 			expect(validResult.errors).toHaveLength(0);
 
-			// Dados inválidos: campo aninhado faltando
+			// Invalid data: missing nested field
 			const invalidData = {
 				usuario: {
 					nome: "Ana",
 					endereco: {
 						rua: "Rua das Flores",
 						numero: 123,
-						cidade: "", // cidade vazia
+						cidade: "", // empty city
 					},
 				},
 			};

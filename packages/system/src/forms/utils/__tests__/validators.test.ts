@@ -3,7 +3,7 @@ import { combineValidationResults, formatError, isValidResult } from "../validat
 
 describe("Form Validators Utilities", () => {
 	describe("isValidResult", () => {
-		it("deve identificar corretamente resultados válidos (sem erros)", () => {
+		it("should correctly identify valid results (no errors)", () => {
 			const validResult: IFormValidateResult = { errors: [] };
 			expect(isValidResult(validResult)).toBe(true);
 
@@ -11,16 +11,16 @@ describe("Form Validators Utilities", () => {
 			expect(isValidResult(validResult2)).toBe(true);
 		});
 
-		it("deve identificar corretamente resultados inválidos (com erros)", () => {
+		it("should correctly identify invalid results (with errors)", () => {
 			const invalidResult: IFormValidateResult = {
-				errors: [{ path: "email", message: "Email inválido" }],
+				errors: [{ path: "email", message: "Invalid email" }],
 			};
 			expect(isValidResult(invalidResult)).toBe(false);
 
 			const multipleErrorsResult: IFormValidateResult = {
 				errors: [
-					{ path: "nome", message: "Nome é obrigatório" },
-					{ path: "email", message: "Email inválido" },
+					{ path: "nome", message: "Name is required" },
+					{ path: "email", message: "Invalid email" },
 				],
 			};
 			expect(isValidResult(multipleErrorsResult)).toBe(false);
@@ -28,17 +28,17 @@ describe("Form Validators Utilities", () => {
 	});
 
 	describe("formatError", () => {
-		it("deve formatar corretamente um erro simples", () => {
-			const error = formatError("email", "Email inválido");
+		it("should correctly format a single error", () => {
+			const error = formatError("email", "Invalid email");
 
 			expect(error).toEqual({
-				errors: [{ path: "email", message: "Email inválido" }],
+				errors: [{ path: "email", message: "Invalid email" }],
 			});
 		});
 
-		it("deve manter a estrutura IFormValidateResult", () => {
+		it("should maintain the IFormValidateResult structure", () => {
 			const field = "password";
-			const message = "Senha muito fraca";
+			const message = "Password is too weak";
 			const error = formatError(field, message);
 
 			expect(error.errors).toHaveLength(1);
@@ -48,35 +48,35 @@ describe("Form Validators Utilities", () => {
 	});
 
 	describe("combineValidationResults", () => {
-		it("deve combinar múltiplos resultados de validação", () => {
+		it("should combine multiple validation results", () => {
 			const result1: IFormValidateResult = {
-				errors: [{ path: "nome", message: "Nome é obrigatório" }],
+				errors: [{ path: "nome", message: "Name is required" }],
 			};
 
 			const result2: IFormValidateResult = {
-				errors: [{ path: "email", message: "Email inválido" }],
+				errors: [{ path: "email", message: "Invalid email" }],
 			};
 
 			const combinedResult = combineValidationResults(result1, result2);
 
 			expect(combinedResult.errors).toHaveLength(2);
-			expect(combinedResult.errors).toContainEqual({ path: "nome", message: "Nome é obrigatório" });
-			expect(combinedResult.errors).toContainEqual({ path: "email", message: "Email inválido" });
+			expect(combinedResult.errors).toContainEqual({ path: "nome", message: "Name is required" });
+			expect(combinedResult.errors).toContainEqual({ path: "email", message: "Invalid email" });
 		});
 
-		it("deve lidar com resultados vazios ou sem erros", () => {
+		it("should handle empty or error-free results", () => {
 			const result1: IFormValidateResult = { errors: [] };
 			const result2: IFormValidateResult = {
-				errors: [{ path: "email", message: "Email inválido" }],
+				errors: [{ path: "email", message: "Invalid email" }],
 			};
 
 			const combinedResult = combineValidationResults(result1, result2);
 
 			expect(combinedResult.errors).toHaveLength(1);
-			expect(combinedResult.errors[0]).toEqual({ path: "email", message: "Email inválido" });
+			expect(combinedResult.errors[0]).toEqual({ path: "email", message: "Invalid email" });
 		});
 
-		it("deve produzir um resultado válido quando todos os inputs são válidos", () => {
+		it("should produce a valid result when all inputs are valid", () => {
 			const result1: IFormValidateResult = { errors: [] };
 			const result2: IFormValidateResult = { errors: [] };
 
@@ -86,17 +86,17 @@ describe("Form Validators Utilities", () => {
 			expect(isValidResult(combinedResult)).toBe(true);
 		});
 
-		it("deve processar corretamente múltiplos resultados", () => {
+		it("should correctly process multiple results", () => {
 			const result1: IFormValidateResult = {
-				errors: [{ path: "nome", message: "Nome é obrigatório" }],
+				errors: [{ path: "nome", message: "Name is required" }],
 			};
 
 			const result2: IFormValidateResult = {
-				errors: [{ path: "email", message: "Email inválido" }],
+				errors: [{ path: "email", message: "Invalid email" }],
 			};
 
 			const result3: IFormValidateResult = {
-				errors: [{ path: "idade", message: "Idade deve ser maior que 18" }],
+				errors: [{ path: "idade", message: "Age must be greater than 18" }],
 			};
 
 			const result4: IFormValidateResult = { errors: [] };
@@ -104,23 +104,23 @@ describe("Form Validators Utilities", () => {
 			const combinedResult = combineValidationResults(result1, result2, result3, result4);
 
 			expect(combinedResult.errors).toHaveLength(3);
-			expect(combinedResult.errors).toContainEqual({ path: "nome", message: "Nome é obrigatório" });
-			expect(combinedResult.errors).toContainEqual({ path: "email", message: "Email inválido" });
-			expect(combinedResult.errors).toContainEqual({ path: "idade", message: "Idade deve ser maior que 18" });
+			expect(combinedResult.errors).toContainEqual({ path: "nome", message: "Name is required" });
+			expect(combinedResult.errors).toContainEqual({ path: "email", message: "Invalid email" });
+			expect(combinedResult.errors).toContainEqual({ path: "idade", message: "Age must be greater than 18" });
 		});
 
-		it("deve manter a ordem dos erros ao combinar resultados", () => {
+		it("should maintain the order of errors when combining results", () => {
 			const result1: IFormValidateResult = {
 				errors: [
-					{ path: "campo1", message: "Erro no campo 1" },
-					{ path: "campo2", message: "Erro no campo 2" },
+					{ path: "campo1", message: "Error in field 1" },
+					{ path: "campo2", message: "Error in field 2" },
 				],
 			};
 
 			const result2: IFormValidateResult = {
 				errors: [
-					{ path: "campo3", message: "Erro no campo 3" },
-					{ path: "campo4", message: "Erro no campo 4" },
+					{ path: "campo3", message: "Error in field 3" },
+					{ path: "campo4", message: "Error in field 4" },
 				],
 			};
 
@@ -133,43 +133,43 @@ describe("Form Validators Utilities", () => {
 		});
 	});
 
-	describe("Integração entre utilitários", () => {
-		it("deve funcionar corretamente ao integrar formatError com isValidResult", () => {
-			// Criar erro formatado
-			const error = formatError("email", "Email inválido");
+	describe("Integration between utilities", () => {
+		it("should work correctly when integrating formatError with isValidResult", () => {
+			// Create formatted error
+			const error = formatError("email", "Invalid email");
 
-			// Verificar que não é válido
+			// Verify that it is not valid
 			expect(isValidResult(error)).toBe(false);
 		});
 
-		it("deve funcionar corretamente ao integrar formatError com combineValidationResults", () => {
-			// Criar erros formatados
-			const error1 = formatError("email", "Email inválido");
-			const error2 = formatError("nome", "Nome é obrigatório");
+		it("should work correctly when integrating formatError with combineValidationResults", () => {
+			// Create formatted errors
+			const error1 = formatError("email", "Invalid email");
+			const error2 = formatError("nome", "Name is required");
 
-			// Combinar os erros
+			// Combine the errors
 			const combinedResult = combineValidationResults(error1, error2);
 
-			// Verificar resultado
+			// Verify result
 			expect(combinedResult.errors).toHaveLength(2);
-			expect(combinedResult.errors).toContainEqual({ path: "email", message: "Email inválido" });
-			expect(combinedResult.errors).toContainEqual({ path: "nome", message: "Nome é obrigatório" });
+			expect(combinedResult.errors).toContainEqual({ path: "email", message: "Invalid email" });
+			expect(combinedResult.errors).toContainEqual({ path: "nome", message: "Name is required" });
 
-			// Verificar que não é válido
+			// Verify that it is not valid
 			expect(isValidResult(combinedResult)).toBe(false);
 		});
 
-		it("deve poder criar um resultado válido após combinar com um resultado vazio", () => {
-			// Criar erro formatado
-			const error = formatError("email", "Email inválido");
+		it("should be able to create a valid result after combining with an empty result", () => {
+			// Create formatted error
+			const error = formatError("email", "Invalid email");
 
-			// Resultado válido vazio
+			// Valid empty result
 			const validResult: IFormValidateResult = { errors: [] };
 
-			// Combinação deve conter apenas o erro
+			// Combination should contain only the error
 			const combinedResult = combineValidationResults(error, validResult);
 			expect(combinedResult.errors).toHaveLength(1);
-			expect(combinedResult.errors[0]).toEqual({ path: "email", message: "Email inválido" });
+			expect(combinedResult.errors[0]).toEqual({ path: "email", message: "Invalid email" });
 		});
 	});
 });

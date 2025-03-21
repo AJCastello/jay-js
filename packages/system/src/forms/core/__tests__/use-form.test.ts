@@ -1,7 +1,7 @@
 import { formatError, isValidResult } from "../../utils/validators.js";
 import { useForm } from "../use-form.js";
 
-// Mock para o DOM já que estamos executando em um ambiente de teste
+// Mock for the DOM since we are running in a test environment
 class MockElement {
 	value = "";
 	name = "";
@@ -34,28 +34,31 @@ class MockSelectElement extends MockElement {
 	}
 }
 
-// Facilitador para a criação de eventos DOM
+// Helper for creating DOM events
 const createEvent = (target: any) => ({ target, preventDefault: jest.fn() });
 
 describe("useForm", () => {
+	let querySelectMock: jest.Mock;
+
 	beforeEach(() => {
-		// Limpar os mocks entre os testes
+		// Clear mocks between tests
 		jest.resetAllMocks();
 
-		// Configurações globais para o teste
+		// Global settings for the test
 		const mockTextNode = { textContent: "" };
+		querySelectMock = jest.fn().mockImplementation(() => {
+			return new MockElement();
+		});
+
 		global.document = {
 			...global.document,
-			querySelector: jest.fn().mockImplementation(() => {
-				const element = new MockElement();
-				return element;
-			}),
+			querySelector: querySelectMock,
 			querySelectorAll: jest.fn().mockImplementation(() => []),
 			createTextNode: jest.fn().mockImplementation(() => mockTextNode),
 		} as any;
 	});
 
-	it("deve inicializar com valores padrão", () => {
+	it("should initialize with default values", () => {
 		const defaultValues = { nome: "John", email: "john@example.com" };
 		const form = useForm({ defaultValues });
 
@@ -63,7 +66,7 @@ describe("useForm", () => {
 		expect(form.formState.getValue("email")).toBe("john@example.com");
 	});
 
-	it("deve atualizar valores através do formState", () => {
+	it("should update values through formState", () => {
 		const defaultValues = { nome: "", email: "" };
 		const form = useForm({ defaultValues });
 
@@ -74,7 +77,7 @@ describe("useForm", () => {
 		expect(form.formState.getValue("email")).toBe("maria@example.com");
 	});
 
-	it("deve atualizar múltiplos valores de uma vez", () => {
+	it("should update multiple values at once", () => {
 		const defaultValues = { nome: "", email: "", idade: 0 };
 		const form = useForm({ defaultValues });
 
@@ -89,39 +92,39 @@ describe("useForm", () => {
 		expect(form.formState.getValue("idade")).toBe(30);
 	});
 
-	it("deve registrar um campo de entrada e responder a eventos", () => {
+	it("should register an input field and respond to events", () => {
 		const defaultValues = { nome: "" };
 		const form = useForm({ defaultValues });
 
-		// Simular a função privateSetValue diretamente, já que os eventos DOM
-		// são difíceis de simular completamente no ambiente de teste
+		// Simulate the privateSetValue function directly, as DOM events
+		// are difficult to fully simulate in the test environment
 		form.formState.setValue("nome", "Ana");
 
 		expect(form.formState.getValue("nome")).toBe("Ana");
 	});
 
-	it("deve validar usando um resolver personalizado", async () => {
+	it("should validate using a custom resolver", async () => {
 		const defaultValues = { nome: "", email: "" };
 
-		// Resolver personalizado que valida se o nome tem pelo menos 3 caracteres
+		// Custom resolver that validates if the name has at least 3 characters
 		const customResolver = async (values: any, path?: string) => {
 			const errors = [];
 
-			// Se um campo específico é passado, validar apenas esse campo
+			// If a specific field is passed, validate only that field
 			if (path) {
 				if (path === "nome" && values.nome.length < 3) {
-					errors.push({ path: "nome", message: "Nome deve ter pelo menos 3 caracteres" });
+					errors.push({ path: "nome", message: "Name must have at least 3 characters" });
 				}
 				if (path === "email" && !values.email.includes("@")) {
-					errors.push({ path: "email", message: "Email inválido" });
+					errors.push({ path: "email", message: "Invalid email" });
 				}
 			} else {
-				// Validar todos os campos
+				// Validate all fields
 				if (values.nome.length < 3) {
-					errors.push({ path: "nome", message: "Nome deve ter pelo menos 3 caracteres" });
+					errors.push({ path: "nome", message: "Name must have at least 3 characters" });
 				}
 				if (!values.email.includes("@")) {
-					errors.push({ path: "email", message: "Email inválido" });
+					errors.push({ path: "email", message: "Invalid email" });
 				}
 			}
 
@@ -133,26 +136,26 @@ describe("useForm", () => {
 			resolver: customResolver,
 		});
 
-		// Verificar valor inválido - precisamos simular o comportamento do formState.isValid
+		// Check invalid value - we need to simulate the behavior of formState.isValid
 		form.formState.setValue("nome", "Jo");
 		let result = await customResolver({ ...defaultValues, nome: "Jo" }, "nome");
 		expect(result.errors.length > 0).toBe(true);
 
-		// Verificar valor válido
+		// Check valid value
 		form.formState.setValue("nome", "João");
 		result = await customResolver({ ...defaultValues, nome: "João" }, "nome");
 		expect(result.errors.length === 0).toBe(true);
 	});
 
-	it("deve manipular erros de validação corretamente", async () => {
+	it("should handle validation errors correctly", async () => {
 		const defaultValues = { username: "", password: "" };
 
-		// Não precisamos mock complexo, apenas verificar se os valores são definidos
+		// No need for complex mock, just check if values are set
 		const customResolver = async (values: any) => {
 			const errors = [];
 
 			if (values.username.length < 5) {
-				errors.push({ path: "username", message: "Username deve ter pelo menos 5 caracteres" });
+				errors.push({ path: "username", message: "Username must have at least 5 characters" });
 			}
 
 			return { errors };
@@ -163,24 +166,24 @@ describe("useForm", () => {
 			resolver: customResolver,
 		});
 
-		// Verificar a lógica sem depender de DOM
+		// Check logic without relying on DOM
 		form.formState.setValue("username", "abc");
 		form.formState.setErrors({
-			errors: [{ path: "username", message: "Username deve ter pelo menos 5 caracteres" }],
+			errors: [{ path: "username", message: "Username must have at least 5 characters" }],
 		});
 
-		// Verificamos que o erro está definido através da API pública
+		// Check that the error is set through the public API
 		expect(form.formState.getErrors().errors.length).toBe(1);
 
-		// Corrigir o valor e limpar erros
+		// Fix the value and clear errors
 		form.formState.setValue("username", "abcdef");
 		form.formState.setErrors({ errors: [] });
 
-		// O erro deve ser removido
+		// The error should be removed
 		expect(form.formState.getErrors().errors.length).toBe(0);
 	});
 
-	it("deve processar a submissão do formulário com validação", async () => {
+	it("should process form submission with validation", async () => {
 		const defaultValues = { email: "", password: "" };
 		const mockSubmitFn = jest.fn();
 		const mockEvent = { preventDefault: jest.fn() };
@@ -189,11 +192,11 @@ describe("useForm", () => {
 			const errors = [];
 
 			if (!values.email.includes("@")) {
-				errors.push({ path: "email", message: "Email inválido" });
+				errors.push({ path: "email", message: "Invalid email" });
 			}
 
 			if (values.password.length < 6) {
-				errors.push({ path: "password", message: "Senha muito curta" });
+				errors.push({ path: "password", message: "Password too short" });
 			}
 
 			return { errors };
@@ -204,57 +207,57 @@ describe("useForm", () => {
 			resolver: customResolver,
 		});
 
-		// Criar handler de submissão
+		// Create submission handler
 		const submitHandler = form.onSubmit(mockSubmitFn);
 
-		// Tentar submeter com valores inválidos
+		// Try to submit with invalid values
 		form.formState.setValues({
-			email: "emailinvalido",
+			email: "invalidemail",
 			password: "123",
 		});
 
 		await submitHandler(mockEvent as any);
 
-		// O callback não deve ser chamado porque a validação falhou
+		// The callback should not be called because validation failed
 		expect(mockSubmitFn).not.toHaveBeenCalled();
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
 
-		// Corrigir os valores e tentar novamente
+		// Fix the values and try again
 		form.formState.setValues({
-			email: "usuario@example.com",
-			password: "senha123",
+			email: "user@example.com",
+			password: "password123",
 		});
 
 		await submitHandler(mockEvent as any);
 
-		// Agora o callback deve ser chamado com os valores corretos
+		// Now the callback should be called with the correct values
 		expect(mockSubmitFn).toHaveBeenCalledWith(mockEvent, {
-			email: "usuario@example.com",
-			password: "senha123",
+			email: "user@example.com",
+			password: "password123",
 		});
 	});
 
-	it("deve notificar sobre mudanças nos valores", () => {
+	it("should notify about value changes", () => {
 		const defaultValues = { nome: "", idade: 0 };
 		const form = useForm({ defaultValues });
 
 		const onChangeMock = jest.fn();
 		form.onChange(onChangeMock);
 
-		// Alterar um valor
+		// Change a value
 		form.formState.setValue("nome", "Pedro");
 
-		// Verificar se o callback foi chamado com os novos valores
+		// Check if the callback was called with the new values
 		expect(onChangeMock).toHaveBeenCalledWith({ nome: "Pedro", idade: 0 }, expect.anything());
 
-		// Alterar outro valor
+		// Change another value
 		form.formState.setValue("idade", 25);
 
-		// Verificar se o callback foi chamado novamente
+		// Check if the callback was called again
 		expect(onChangeMock).toHaveBeenCalledWith({ nome: "Pedro", idade: 25 }, expect.anything());
 	});
 
-	it("deve notificar sobre erros de validação", async () => {
+	it("should notify about validation errors", async () => {
 		const defaultValues = { email: "" };
 		const onErrorsMock = jest.fn();
 
@@ -264,97 +267,97 @@ describe("useForm", () => {
 
 		form.onErrors(onErrorsMock);
 
-		// Definir erro manualmente, que deve acionar o callback
+		// Set error manually, which should trigger the callback
 		form.formState.setErrors({
-			errors: [{ path: "email", message: "Email inválido" }],
+			errors: [{ path: "email", message: "Invalid email" }],
 		});
 
-		// Verificar se o callback de erros foi chamado
+		// Check if the error callback was called
 		expect(onErrorsMock).toHaveBeenCalled();
 	});
 
-	it("deve funcionar sem resolver para formulários simples", () => {
+	it("should work without resolver for simple forms", () => {
 		const defaultValues = { nome: "", email: "" };
 		const form = useForm({ defaultValues });
 
 		form.formState.setValue("nome", "Ana");
 		expect(form.formState.getValue("nome")).toBe("Ana");
 
-		// Submissão sem validação
+		// Submission without validation
 		const mockSubmitFn = jest.fn();
 		const submitHandler = form.onSubmit(mockSubmitFn);
 		const mockEvent = { preventDefault: jest.fn() };
 
 		submitHandler(mockEvent as any);
 
-		// O callback deve ser chamado imediatamente sem validação
+		// The callback should be called immediately without validation
 		expect(mockSubmitFn).toHaveBeenCalledWith(mockEvent, {
 			nome: "Ana",
 			email: "",
 		});
 	});
 
-	it("deve permitir definir erros manualmente", () => {
+	it("should allow setting errors manually", () => {
 		const defaultValues = { nome: "", email: "" };
 		const form = useForm({ defaultValues });
 
-		// Definir erro manualmente
-		form.formState.setError("email", "Este email já está em uso");
+		// Set error manually
+		form.formState.setError("email", "This email is already in use");
 
-		// Verificar erro através da API pública
+		// Check error through the public API
 		const errors = form.formState.getErrors();
 		expect(errors.errors.length).toBe(1);
 		expect(errors.errors[0].path).toBe("email");
-		expect(errors.errors[0].message).toBe("Este email já está em uso");
+		expect(errors.errors[0].message).toBe("This email is already in use");
 
-		// Definir múltiplos erros
+		// Set multiple errors
 		form.formState.setErrors({
 			errors: [
-				{ path: "nome", message: "Nome é obrigatório" },
-				{ path: "email", message: "Email é obrigatório" },
+				{ path: "nome", message: "Name is required" },
+				{ path: "email", message: "Email is required" },
 			],
 		});
 
-		// Verificar os novos erros
+		// Check the new errors
 		const newErrors = form.formState.getErrors();
 		expect(newErrors.errors.length).toBe(2);
 		expect(newErrors.errors.some((e) => e.path === "nome")).toBe(true);
 		expect(newErrors.errors.some((e) => e.path === "email")).toBe(true);
 	});
 
-	// Novos testes para elementos adicionais de formulário
+	// New tests for additional form elements
 
-	it("deve lidar com checkbox (campos booleanos)", () => {
+	it("should handle checkbox (boolean fields)", () => {
 		const defaultValues = { nome: "João", aceitaTermos: false };
 		const form = useForm({ defaultValues });
 
-		// Registrar um checkbox
+		// Register a checkbox
 		const registerProps = form.register("aceitaTermos");
 		expect(registerProps.checked).toBe(false);
 
-		// Atualizar valor do checkbox
+		// Update checkbox value
 		form.formState.setValue("aceitaTermos", true);
 		expect(form.formState.getValue("aceitaTermos")).toBe(true);
 	});
 
-	it("deve lidar com radio buttons", () => {
+	it("should handle radio buttons", () => {
 		const defaultValues = { genero: "masculino" };
 		const form = useForm({ defaultValues });
 
-		// Registrar radio buttons
+		// Register radio buttons
 		const registerProps = form.register("genero");
 		expect(registerProps.value).toBe("masculino");
 
-		// Atualizar valor do radio button
+		// Update radio button value
 		form.formState.setValue("genero", "feminino");
 		expect(form.formState.getValue("genero")).toBe("feminino");
 	});
 
-	it("deve lidar com select múltiplo (arrays de valores)", () => {
+	it("should handle multiple select (arrays of values)", () => {
 		const defaultValues = { habilidades: ["js", "css"] };
 		const form = useForm({ defaultValues });
 
-		// Simular um select com opções múltiplas
+		// Simulate a select with multiple options
 		const mockSelect = new MockSelectElement(true);
 		mockSelect.name = "habilidades";
 		mockSelect.options = [
@@ -364,43 +367,43 @@ describe("useForm", () => {
 		];
 		mockSelect.selectedOptions = [{ value: "js" }, { value: "css" }];
 
-		// Substituir o mock padrão para usar nosso mock de select
-		(global.document.querySelector as jest.Mock).mockImplementation((selector) => {
+		// Replace the default mock to use our select mock
+		querySelectMock.mockImplementation((selector) => {
 			if (selector === '[name="habilidades"]') {
 				return mockSelect;
 			}
 			return new MockElement();
 		});
 
-		// Atualizar valores do select múltiplo
+		// Update multiple select values
 		form.formState.setValue("habilidades", ["js", "html"]);
 		expect(form.formState.getValue("habilidades")).toEqual(["js", "html"]);
 	});
 
-	it("deve lidar com input de arquivo", () => {
+	it("should handle file input", () => {
 		const defaultValues = { avatar: null };
 		const form = useForm({ defaultValues });
 
-		// Mockando um input de arquivo
+		// Mocking a file input
 		const mockFileInput = new MockInputElement("file");
 		mockFileInput.name = "avatar";
-		mockFileInput.files = { 0: { name: "foto.jpg" }, length: 1 };
+		mockFileInput.files = { 0: { name: "photo.jpg" }, length: 1 };
 
-		// Substituir o mock padrão
-		(global.document.querySelector as jest.Mock).mockImplementation((selector) => {
+		// Replace the default mock
+		querySelectMock.mockImplementation((selector) => {
 			if (selector === '[name="avatar"]') {
 				return mockFileInput;
 			}
 			return new MockElement();
 		});
 
-		// Registrar input de arquivo
+		// Register file input
 		const registerProps = form.register("avatar");
 		// expect(registerProps.type).toBe('file');
 
-		// Simular evento change no input de arquivo
-		// Em um cenário real, a função onChangeValue seria chamada com o evento
-		// e iria extrair o FileList do elemento input
+		// Simulate change event on file input
+		// In a real scenario, the onChangeValue function would be called with the event
+		// and would extract the FileList from the input element
 		form.formState.setValue("avatar", mockFileInput.files);
 		expect(form.formState.getValue("avatar")).toEqual(mockFileInput.files);
 	});
