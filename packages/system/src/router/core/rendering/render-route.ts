@@ -6,11 +6,11 @@ export async function renderRoute(route: TRouteInstance): Promise<HTMLElement | 
 		const target = await getTarget(route);
 		const element = await getElement(route);
 
-		if (!element || !target) return;
+		if (!element || !target || !(target instanceof HTMLElement)) return;
 
 		target.innerHTML = "";
 		target.append(element as HTMLElement);
-		return target as HTMLElement;
+		return target;
 	}
 	return;
 }
