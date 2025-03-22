@@ -5,8 +5,10 @@
  * @returns {string} - The normalized and converted string
  */
 export const serialize = (str: string, space = " "): string => {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/([^\w]+|\s+)/g, space)
-    .replace(/(^-+|-+$)/, "")
-    .toLowerCase();
+	return str
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/([^\w]+|\s+)/g, space)
+		.replace(/(^-+|-+$)/, "")
+		.toLowerCase();
 };

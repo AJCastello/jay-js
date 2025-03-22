@@ -4,10 +4,10 @@
  * @returns A string of random characters.
  */
 export function uniKey(length = 10): string {
-  let key = "";
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < length; i++) {
-    key += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return key;
+	let key = "";
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789";
+	for (let i = 0; i < length; i++) {
+		key += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	return key;
 }

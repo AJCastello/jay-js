@@ -1,5 +1,5 @@
-import { TBase, TBaseTagMap } from "../Base/Base.types.js";
+import type { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
 export type TSwap<T extends TBaseTagMap> = {
-  effect?: "swap-rotate" | "swap-flip";
+	effect?: "swap-rotate" | "swap-flip";
 } & TBase<T>;

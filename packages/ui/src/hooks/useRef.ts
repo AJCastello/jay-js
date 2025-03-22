@@ -1,9 +1,9 @@
 export interface IRefObject<T> {
-  current: T | null
+	current: T | null;
 }
 
 export function useRef<T>(): IRefObject<T> {
-  return {
-    current: null
-  };
+	return {
+		current: null,
+	};
 }

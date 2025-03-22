@@ -1,5 +1,5 @@
-import { TBase, TBaseTagMap } from "../Base/Base.types.js";
+import type { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
 export type TSpace<T extends TBaseTagMap> = {
-  h?: string;
+	h?: string;
 } & TBase<T>;

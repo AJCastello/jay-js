@@ -1,3 +1,3 @@
 export interface IResizableSplitter {
-  direction?: "horizontal" | "vertical";
+	direction?: "horizontal" | "vertical";
 }

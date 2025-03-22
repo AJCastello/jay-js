@@ -1,5 +1,5 @@
-import { TBase, TBaseTagMap } from "../Base/Base.types.js";
+import type { TBase, TBaseTagMap } from "../Base/Base.types.js";
 
 export type TDrawerOverlay<T extends TBaseTagMap> = {
-  for?: string;
+	for?: string;
 } & TBase<T>;
