@@ -19,7 +19,7 @@
     "postbuild": "cpy ./src/**/*.{css,styled} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ./src/**/*.{js,ts}"
+    "lint": "biome check --write ./src"
   },
   "publishConfig": {
     "access": "public"
@@ -58,11 +58,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@biomejs/biome": "^1.9.4",
     "tailwind-merge": "^2.3.0",
     "yup": "^1.4.0"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom"
   }
 }
