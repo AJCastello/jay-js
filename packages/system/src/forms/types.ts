@@ -1,11 +1,11 @@
-export type TResolver<T> = (values: T, fieldName?: string) => Promise<IFormValidateResult>;
+export type TResolver<T> = (values: T, fieldName?: string) => Promise<TFormValidateResult>;
 
-export interface IUseFormProps<T> {
+export type TUseFormProps<T> = {
 	defaultValues: T;
 	resolver?: TResolver<T>;
 }
 
-export interface IRegister {
+export type TRegister = {
 	name: string;
 	onchange: (ev: Event) => void;
 	oninput: (ev: Event) => void;
@@ -13,30 +13,30 @@ export interface IRegister {
 	checked?: boolean;
 }
 
-export interface IRegisterOptions {
+export type TRegisterOptions = {
 	beforeChange?: (ev: Event, value: string) => string | undefined;
 	value?: string;
 }
 
-export interface IUseForm<T> {
-	register: (path: keyof T, options?: IRegisterOptions) => IRegister;
-	formState: IFormState<T>;
+export type TUseForm<T> = {
+	register: (path: keyof T, options?: TRegisterOptions) => TRegister;
+	formState: TFormState<T>;
 	onChange: (callback: (data: T) => void) => void;
 	onSubmit: (callback: (ev: Event, data: T) => void) => (ev: SubmitEvent) => void;
-	onErrors: (callback: (errors: IFormValidateResult) => void) => void;
+	onErrors: (callback: (errors: TFormValidateResult) => void) => void;
 }
 
-export interface IFormState<T> {
+export type TFormState<T> = {
 	errors: (path: keyof T) => HTMLElement | Text;
 	setValue: <K extends keyof T>(path: K, value: T[K]) => void;
 	setValues: (values: Partial<T>) => void;
 	getValue: <K extends keyof T>(path: K) => T[K];
 	isValid: (path?: keyof T) => Promise<boolean>;
-	getErrors: () => IFormValidateResult;
+	getErrors: () => TFormValidateResult;
 	setError: (field: keyof T, message: string) => void;
-	setErrors: (errors: IFormValidateResult) => void;
+	setErrors: (errors: TFormValidateResult) => void;
 }
 
-export interface IFormValidateResult {
+export type TFormValidateResult = {
 	errors: Array<{ path: string; message: string }>;
 }

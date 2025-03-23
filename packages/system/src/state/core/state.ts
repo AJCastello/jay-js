@@ -1,4 +1,4 @@
-import type { StateType, setOptions } from "../types.js";
+import type { StateType, TSetOptions } from "../types.js";
 import { subscriberManager } from "./subscriber.js";
 
 /**
@@ -16,7 +16,7 @@ export const State = <T>(data: T): StateType<T> => {
 		 * @param newData New data value or function that receives the current state and returns new state
 		 * @param options Configuration options for the update operation
 		 */
-		set: (newData: T | ((currentState: T) => T), options?: setOptions): void => {
+		set: (newData: T | ((currentState: T) => T), options?: TSetOptions): void => {
 			let newValue: T;
 
 			if (typeof newData === "function") {

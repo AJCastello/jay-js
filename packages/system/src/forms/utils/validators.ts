@@ -1,9 +1,9 @@
-import type { IFormValidateResult } from "../types";
+import type { TFormValidateResult } from "../types";
 
 /**
  * Checks if a validation result is valid (no errors).
  *
- * @param {IFormValidateResult} result - The validation result to check.
+ * @param {TFormValidateResult} result - The validation result to check.
  * @returns {boolean} True if the result has no errors, otherwise false.
  *
  * @example
@@ -13,7 +13,7 @@ import type { IFormValidateResult } from "../types";
  *   submitForm(formData);
  * }
  */
-export function isValidResult(result: IFormValidateResult): boolean {
+export function isValidResult(result: TFormValidateResult): boolean {
 	return !result.errors || result.errors.length === 0;
 }
 
@@ -22,14 +22,14 @@ export function isValidResult(result: IFormValidateResult): boolean {
  *
  * @param {string} path - The path where the error occurred (usually the field name).
  * @param {string} message - The error message to display to the user.
- * @returns {IFormValidateResult} The formatted error result ready to be used with form state.
+ * @returns {TFormValidateResult} The formatted error result ready to be used with form state.
  *
  * @example
  * // Create a validation error for the email field
  * const emailError = formatError('email', 'Please enter a valid email address');
  * formState.setErrors(emailError);
  */
-export function formatError(path: string, message: string): IFormValidateResult {
+export function formatError(path: string, message: string): TFormValidateResult {
 	return {
 		errors: [{ path, message }],
 	};
@@ -39,8 +39,8 @@ export function formatError(path: string, message: string): IFormValidateResult 
  * Combines multiple validation results into a single result.
  * Useful when validating multiple form sections independently.
  *
- * @param {...IFormValidateResult[]} results - The validation results to combine.
- * @returns {IFormValidateResult} A single validation result containing all errors.
+ * @param {...TFormValidateResult[]} results - The validation results to combine.
+ * @returns {TFormValidateResult} A single validation result containing all errors.
  *
  * @example
  * // Combine validation results from different form sections
@@ -62,8 +62,8 @@ export function formatError(path: string, message: string): IFormValidateResult 
  *   formState.setErrors(combinedValidation);
  * }
  */
-export function combineValidationResults(...results: IFormValidateResult[]): IFormValidateResult {
-	const combinedErrors: IFormValidateResult["errors"] = [];
+export function combineValidationResults(...results: TFormValidateResult[]): TFormValidateResult {
+	const combinedErrors: TFormValidateResult["errors"] = [];
 
 	for (const result of results) {
 		if (result.errors && result.errors.length > 0) {

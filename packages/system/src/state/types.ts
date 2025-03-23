@@ -1,7 +1,7 @@
 /**
  * Options for the set operation on a state
  */
-export type setOptions = {
+export type TSetOptions = {
 	/**
 	 * When true, subscribers will not be notified of the change
 	 */
@@ -16,13 +16,13 @@ export type setOptions = {
 /**
  * Reactive state interface
  */
-export type StateType<T> = {
+export type TState<T> = {
 	/**
 	 * Sets a new value for the state
 	 * @param newData New value or function that returns a new value based on current state
 	 * @param options Configuration options for the update operation
 	 */
-	set: (newData: T | ((currentState: T) => T), options?: setOptions) => void;
+	set: (newData: T | ((currentState: T) => T), options?: TSetOptions) => void;
 
 	/**
 	 * Gets the current state value
@@ -67,6 +67,8 @@ export type StateType<T> = {
 	 */
 	value: T;
 };
+
+export type StateType<T> = TState<T>;
 
 /**
  * Interface for setValue function used by Values helper

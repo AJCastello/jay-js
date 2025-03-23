@@ -1,23 +1,23 @@
-import type { IFormValidateResult } from "../../types.js";
+import type { TFormValidateResult } from "../../types.js";
 import { combineValidationResults, formatError, isValidResult } from "../validators.js";
 
 describe("Form Validators Utilities", () => {
 	describe("isValidResult", () => {
 		it("should correctly identify valid results (no errors)", () => {
-			const validResult: IFormValidateResult = { errors: [] };
+			const validResult: TFormValidateResult = { errors: [] };
 			expect(isValidResult(validResult)).toBe(true);
 
-			const validResult2: IFormValidateResult = { errors: undefined as any };
+			const validResult2: TFormValidateResult = { errors: undefined as any };
 			expect(isValidResult(validResult2)).toBe(true);
 		});
 
 		it("should correctly identify invalid results (with errors)", () => {
-			const invalidResult: IFormValidateResult = {
+			const invalidResult: TFormValidateResult = {
 				errors: [{ path: "email", message: "Invalid email" }],
 			};
 			expect(isValidResult(invalidResult)).toBe(false);
 
-			const multipleErrorsResult: IFormValidateResult = {
+			const multipleErrorsResult: TFormValidateResult = {
 				errors: [
 					{ path: "nome", message: "Name is required" },
 					{ path: "email", message: "Invalid email" },
@@ -49,11 +49,11 @@ describe("Form Validators Utilities", () => {
 
 	describe("combineValidationResults", () => {
 		it("should combine multiple validation results", () => {
-			const result1: IFormValidateResult = {
+			const result1: TFormValidateResult = {
 				errors: [{ path: "nome", message: "Name is required" }],
 			};
 
-			const result2: IFormValidateResult = {
+			const result2: TFormValidateResult = {
 				errors: [{ path: "email", message: "Invalid email" }],
 			};
 
@@ -65,8 +65,8 @@ describe("Form Validators Utilities", () => {
 		});
 
 		it("should handle empty or error-free results", () => {
-			const result1: IFormValidateResult = { errors: [] };
-			const result2: IFormValidateResult = {
+			const result1: TFormValidateResult = { errors: [] };
+			const result2: TFormValidateResult = {
 				errors: [{ path: "email", message: "Invalid email" }],
 			};
 
@@ -77,8 +77,8 @@ describe("Form Validators Utilities", () => {
 		});
 
 		it("should produce a valid result when all inputs are valid", () => {
-			const result1: IFormValidateResult = { errors: [] };
-			const result2: IFormValidateResult = { errors: [] };
+			const result1: TFormValidateResult = { errors: [] };
+			const result2: TFormValidateResult = { errors: [] };
 
 			const combinedResult = combineValidationResults(result1, result2);
 
@@ -87,19 +87,19 @@ describe("Form Validators Utilities", () => {
 		});
 
 		it("should correctly process multiple results", () => {
-			const result1: IFormValidateResult = {
+			const result1: TFormValidateResult = {
 				errors: [{ path: "nome", message: "Name is required" }],
 			};
 
-			const result2: IFormValidateResult = {
+			const result2: TFormValidateResult = {
 				errors: [{ path: "email", message: "Invalid email" }],
 			};
 
-			const result3: IFormValidateResult = {
+			const result3: TFormValidateResult = {
 				errors: [{ path: "idade", message: "Age must be greater than 18" }],
 			};
 
-			const result4: IFormValidateResult = { errors: [] };
+			const result4: TFormValidateResult = { errors: [] };
 
 			const combinedResult = combineValidationResults(result1, result2, result3, result4);
 
@@ -110,14 +110,14 @@ describe("Form Validators Utilities", () => {
 		});
 
 		it("should maintain the order of errors when combining results", () => {
-			const result1: IFormValidateResult = {
+			const result1: TFormValidateResult = {
 				errors: [
 					{ path: "campo1", message: "Error in field 1" },
 					{ path: "campo2", message: "Error in field 2" },
 				],
 			};
 
-			const result2: IFormValidateResult = {
+			const result2: TFormValidateResult = {
 				errors: [
 					{ path: "campo3", message: "Error in field 3" },
 					{ path: "campo4", message: "Error in field 4" },
@@ -164,7 +164,7 @@ describe("Form Validators Utilities", () => {
 			const error = formatError("email", "Invalid email");
 
 			// Valid empty result
-			const validResult: IFormValidateResult = { errors: [] };
+			const validResult: TFormValidateResult = { errors: [] };
 
 			// Combination should contain only the error
 			const combinedResult = combineValidationResults(error, validResult);

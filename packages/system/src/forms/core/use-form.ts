@@ -1,21 +1,21 @@
 import { State } from "../../state/index.js";
 import type {
-	IFormState,
-	IFormValidateResult,
-	IRegister,
-	IRegisterOptions,
-	IUseForm,
-	IUseFormProps,
+	TFormState,
+	TFormValidateResult,
+	TRegister,
+	TRegisterOptions,
+	TUseForm,
+	TUseFormProps,
 } from "../types.js";
 
 /**
  * Creates a form management system with validation, state tracking, and DOM integration.
  *
  * @template T - The type of form values being managed
- * @param {IUseFormProps<T>} props - Form configuration options
+ * @param {TUseFormProps<T>} props - Form configuration options
  * @param {T} props.defaultValues - Initial values for the form fields
  * @param {TResolver<T>} [props.resolver] - Optional validation resolver function
- * @returns {IUseForm<T>} Form management interface with methods for registration, state access, and event handling
+ * @returns {TUseForm<T>} Form management interface with methods for registration, state access, and event handling
  *
  * @example
  * // Basic form with Zod validation
@@ -41,10 +41,10 @@ import type {
  *   console.log('Form submitted:', data);
  * });
  */
-export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseForm<T> {
-	const formErrors = State<IFormValidateResult>({ errors: [] });
+export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseForm<T> {
+	const formErrors = State<TFormValidateResult>({ errors: [] });
 	const formValues = State<T>(defaultValues);
-	const formState: IFormState<T> = {
+	const formState: TFormState<T> = {
 		errors: (path: keyof T) => {
 			const errorText = document.createTextNode("");
 			formErrors.sub(path as string, (error) => {
@@ -136,7 +136,7 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 				};
 			});
 		},
-		setErrors: (errors: IFormValidateResult) => {
+		setErrors: (errors: TFormValidateResult) => {
 			formErrors.set(errors);
 		},
 	};
@@ -162,7 +162,7 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 *
 	 * @param {Function} callback - Function called when validation errors change
 	 */
-	function onErrors(callback: (errors: IFormValidateResult) => void) {
+	function onErrors(callback: (errors: TFormValidateResult) => void) {
 		formErrors.sub("onErrors", callback);
 	}
 
@@ -209,10 +209,10 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 * Handles input/change events from form elements
 	 *
 	 * @param {Event} ev - The DOM event
-	 * @param {IRegisterOptions} options - Optional processing options
+	 * @param {TRegisterOptions} options - Optional processing options
 	 * @private
 	 */
-	async function onChangeValue(ev: Event, options: IRegisterOptions = {}) {
+	async function onChangeValue(ev: Event, options: TRegisterOptions = {}) {
 		const element = ev.target as HTMLElement;
 		if (
 			element instanceof HTMLInputElement ||
@@ -261,11 +261,11 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	/**
 	 * Process validation results and update error state
 	 *
-	 * @param {IFormValidateResult} result - The validation result
+	 * @param {TFormValidateResult} result - The validation result
 	 * @returns {boolean} True if validation passed, false otherwise
 	 * @private
 	 */
-	function validateResult(result: IFormValidateResult) {
+	function validateResult(result: TFormValidateResult) {
 		if (result.errors && result.errors.length > 0) {
 			formErrors.set({ errors: result.errors });
 			return false;
@@ -277,11 +277,11 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	/**
 	 * Checks if a validation result contains errors
 	 *
-	 * @param {IFormValidateResult} result - The validation result to check
+	 * @param {TFormValidateResult} result - The validation result to check
 	 * @returns {boolean} True if no errors, false otherwise
 	 * @private
 	 */
-	function checkValidate(result: IFormValidateResult) {
+	function checkValidate(result: TFormValidateResult) {
 		if (result.errors && result.errors.length > 0) {
 			return false;
 		}
@@ -292,10 +292,10 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 * Registers a form field to connect it with the form management system
 	 *
 	 * @param {keyof T} path - The field name/path in the form values object
-	 * @param {IRegisterOptions} options - Optional field registration options
-	 * @returns {IRegister} Props to apply to the HTML element
+	 * @param {TRegisterOptions} options - Optional field registration options
+	 * @returns {TRegister} Props to apply to the HTML element
 	 */
-	function register(path: keyof T, options: IRegisterOptions = {}): IRegister {
+	function register(path: keyof T, options: TRegisterOptions = {}): TRegister {
 		const value = options.value ? String(options.value) : defaultValues[path];
 
 		if (typeof value === "boolean") {
@@ -321,7 +321,7 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 *
 	 * @param {Function} callback - Function called when form values change
 	 */
-	function onChange(callback: (data: T, errors?: IFormValidateResult) => void) {
+	function onChange(callback: (data: T, errors?: TFormValidateResult) => void) {
 		formValues.sub("onChange", (data) => {
 			callback(data, formErrors.get());
 		});
