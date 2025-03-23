@@ -33,13 +33,13 @@ To install the library, you can use npm or yarn:
 With npm:
 
 ```bash
-npm i @jay-js/system @jay-js/ui
+npm i @jay-js/system
 ```
 
 With yarn:
 
 ```bash
-yarn add @jay-js/system @jay-js/ui
+yarn add @jay-js/system
 ```
 
 ## Usage
@@ -94,8 +94,8 @@ import { Box, Card } from "@jay-js/ui";
 render(document.body, 
   Box({
     id: "droppable",
-    class: "drop-zone",
-    style: "min-height: 150px; border: 2px dashed #ccc; padding: 20px;",
+    className: "drop-zone",
+    style: { minHeight: "150px", border: "2px dashed #ccc", padding: "20px" },
     children: "Drop here"
   })
 );
@@ -159,8 +159,8 @@ import { Box, FileInput } from "@jay-js/ui";
 render(document.body, 
   Box({
     id: "file-drop-zone",
-    class: "file-dropzone",
-    style: "border: 3px dashed #ccc; border-radius: 5px; padding: 25px; text-align: center;",
+    className: "file-dropzone",
+    style: { border: "3px dashed #ccc", borderRadius: "5px", padding: "25px", textAlign: "center" },
     children: [
       "Drag and drop files here",
       FileInput({
@@ -192,23 +192,23 @@ import { Box, Card } from "@jay-js/ui";
 // Create multiple containers with draggable items
 render(document.body, 
   Box({
-    class: "drag-group-container",
-    style: "display: flex; gap: 20px;",
+    className: "drag-group-container",
+    style: { display: "flex", gap: "20px" },
     children: [
       Box({
-        class: "drag-container",
-        style: "padding: 10px; border: 1px solid #ddd; flex: 1;",
+        className: "drag-container",
+        style: { padding: "10px", border: "1px solid #ddd", flex: 1 },
         children: [
-          Card({ class: "draggable-item", children: "Item A" }),
-          Card({ class: "draggable-item", children: "Item B" })
+          Card({ className: "draggable-item", children: "Item A" }),
+          Card({ className: "draggable-item", children: "Item B" })
         ]
       }),
       Box({
-        class: "drag-container",
-        style: "padding: 10px; border: 1px solid #ddd; flex: 1;",
+        className: "drag-container",
+        style: { padding: "10px", border: "1px solid #ddd", flex: 1 },
         children: [
-          Card({ class: "draggable-item", children: "Item C" }),
-          Card({ class: "draggable-item", children: "Item D" })
+          Card({ className: "draggable-item", children: "Item C" }),
+          Card({ className: "draggable-item", children: "Item D" })
         ]
       })
     ]
