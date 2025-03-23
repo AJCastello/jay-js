@@ -9,7 +9,7 @@ describe('definePermissions', () => {
     const permissions = definePermissions('user', 'articles')
       .allow('read')
       .save();
-    
+
     expect(permissions).toHaveLength(1);
     expect(permissions[0]).toEqual({
       role: ['user'],
@@ -23,7 +23,7 @@ describe('definePermissions', () => {
     const permissions = definePermissions(['admin', 'editor'], 'articles')
       .allow('read')
       .save();
-    
+
     expect(permissions).toHaveLength(1);
     expect(permissions[0].role).toEqual(['admin', 'editor']);
   });
@@ -32,7 +32,7 @@ describe('definePermissions', () => {
     const permissions = definePermissions('editor', 'articles')
       .allow(['read', 'write'])
       .save();
-    
+
     expect(permissions).toHaveLength(1);
     expect(permissions[0].action).toEqual(['read', 'write']);
   });
@@ -43,7 +43,7 @@ describe('definePermissions', () => {
       .allow('write')
       .forbid('delete')
       .save();
-    
+
     expect(permissions).toHaveLength(3);
     expect(permissions[0].action).toEqual(['read']);
     expect(permissions[0].granted).toBe(true);
@@ -57,7 +57,7 @@ describe('definePermissions', () => {
     const permissions = definePermissions('user', 'comments')
       .allow('edit', ['own'])
       .save();
-    
+
     expect(permissions).toHaveLength(1);
     expect(permissions[0].attributes).toEqual(['own']);
   });
@@ -66,7 +66,7 @@ describe('definePermissions', () => {
     const permissions = definePermissions('user', 'articles')
       .forbid('delete', ['others'])
       .save();
-    
+
     expect(permissions).toHaveLength(1);
     expect(permissions[0].attributes).toEqual(['others']);
     expect(permissions[0].granted).toBe(false);
@@ -77,9 +77,9 @@ describe('definePermissions', () => {
       .allow(['create', 'read', 'update'])
       .forbid('delete', ['draft'])
       .save();
-    
+
     expect(permissions).toHaveLength(2);
-    
+
     // Check first permission (allow)
     expect(permissions[0]).toEqual({
       role: ['admin', 'superuser'],
@@ -87,7 +87,7 @@ describe('definePermissions', () => {
       action: ['create', 'read', 'update'],
       granted: true
     });
-    
+
     // Check second permission (forbid with attributes)
     expect(permissions[1]).toEqual({
       role: ['admin', 'superuser'],
@@ -100,7 +100,7 @@ describe('definePermissions', () => {
 
   it('should return an empty array if no permissions defined', () => {
     const permissions = definePermissions('guest', 'articles').save();
-    
+
     expect(permissions).toEqual([]);
     expect(permissions).toHaveLength(0);
   });
