@@ -22,7 +22,7 @@
     "lint": "biome check --write ./src",
     "test": "jest --verbose",
     "test:full": "jest --verbose --coverage --coverageReporters=html --coverageReporters=text --collectCoverageFrom='src/**/*.{js,ts}'",
-    "test:cover": "jest --coverage --coverageReporters=html",
+    "test:cover": "jest --coverage --coverageReporters=html --collectCoverageFrom='src/**/*.{js,ts}'",
     "test:watch": "jest --watch"
   },
   "publishConfig": {
