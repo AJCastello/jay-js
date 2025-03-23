@@ -9,12 +9,13 @@ export interface IRegister {
 	name: string;
 	onchange: (ev: Event) => void;
 	oninput: (ev: Event) => void;
-	value?: string | boolean;
+	value?: string;
 	checked?: boolean;
 }
 
 export interface IRegisterOptions {
 	beforeChange?: (ev: Event, value: string) => string | undefined;
+	value?: string;
 }
 
 export interface IUseForm<T> {

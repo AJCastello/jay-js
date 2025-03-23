@@ -296,7 +296,7 @@ export function useForm<T>({ defaultValues, resolver }: IUseFormProps<T>): IUseF
 	 * @returns {IRegister} Props to apply to the HTML element
 	 */
 	function register(path: keyof T, options: IRegisterOptions = {}): IRegister {
-		const value = defaultValues[path];
+		const value = options.value ? String(options.value) : defaultValues[path];
 
 		if (typeof value === "boolean") {
 			return {
