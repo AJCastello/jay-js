@@ -1,6 +1,6 @@
 # @jay-js/system - Router
 
-A lightweight, flexible routing library for client-side single-page applications, providing path-based navigation without page reloads.
+A lightweight, flexible routing library for client-side single-page applications, providing path-based navigation without page reloads. Powered by path-to-regexp for advanced path matching capabilities.
 
 ## Table of Contents
 
@@ -16,6 +16,7 @@ A lightweight, flexible routing library for client-side single-page applications
   - [TRouteInstance](#trouteinstance)
   - [TRouterOptions](#trouteroptions)
 - [Advanced Usage](#advanced-usage)
+  - [Path Pattern Syntax](#path-pattern-syntax)
   - [Layouts](#layouts)
   - [Nested Routes](#nested-routes)
   - [Route Parameters](#route-parameters)
@@ -148,6 +149,11 @@ getParams(): Record<string, string>
 // For a route defined as '/users/:id' and URL '/users/123?filter=active'
 const { id, filter } = getParams();
 // id = '123', filter = 'active'
+
+// For more complex route patterns like '/users/:userId/posts/:postId?'
+// URL: '/users/123/posts/456?sort=newest'
+const { userId, postId, sort } = getParams();
+// userId = '123', postId = '456', sort = 'newest'
 ```
 
 ### routerDefineOptions
@@ -196,6 +202,8 @@ type TRoute = {
 type TRouteInstance = {
   id: string;
   parentLayoutId?: string;
+  pattern?: RegExp;
+  keys?: Key[];
 } & TRoute;
 ```
 
@@ -212,6 +220,38 @@ type TRouterOptions = {
 ```
 
 ## Advanced Usage
+
+### Path Pattern Syntax
+
+The router uses [path-to-regexp](https://github.com/pillarjs/path-to-regexp) for pattern matching, which provides powerful path matching capabilities:
+
+#### Named Parameters
+
+```typescript
+'/users/:id'         // matches '/users/123'
+'/posts/:category'   // matches '/posts/tech'
+```
+
+#### Optional Parameters
+
+```typescript
+'/users/:id?'            // matches '/users' and '/users/123'
+'/posts/:category?/:id?' // matches '/posts', '/posts/tech', '/posts/tech/123'
+```
+
+#### Custom Parameter Patterns
+
+```typescript
+'/users/:id(\\d+)'     // matches '/users/123' but not '/users/abc'
+'/files/:path(.*)'     // matches all paths under '/files/'
+```
+
+#### Wildcard (Catch-All) Routes
+
+```typescript
+'/docs/*'             // matches all paths starting with '/docs/'
+'/files/:path(.*)'    // similar to a wildcard, captures all segments as path
+```
 
 ### Layouts
 
@@ -262,10 +302,11 @@ Router([
 
 ### Route Parameters
 
-Define dynamic parts of a route path using the `:paramName` syntax.
+Define dynamic parts of a route path using various parameter syntax options.
 
 ```typescript
 Router([
+  // Basic parameter
   {
     path: '/users/:id',
     element: () => {
@@ -273,6 +314,22 @@ Router([
       const content = document.createElement('div');
       content.textContent = `User ID: ${id}`;
       return content;
+    }
+  },
+  // Optional parameter
+  {
+    path: '/products/:category?',
+    element: () => {
+      const { category } = getParams();
+      return createProductList(category);
+    }
+  },
+  // Multiple parameters with constraints
+  {
+    path: '/articles/:year(\\d{4})/:month(\\d{2})/:slug',
+    element: () => {
+      const { year, month, slug } = getParams();
+      return createArticleView(year, month, slug);
     }
   }
 ]);
@@ -303,7 +360,7 @@ Router([
 
 ## Examples
 
-### Basic SPA with Multiple Pages
+### Basic SPA with Advanced Routing
 
 ```typescript
 import { Router, Navigate, getParams } from '@jay-js/system';
@@ -323,7 +380,7 @@ function createPage(title, content) {
   return page;
 }
 
-// Define routes
+// Define routes with advanced patterns
 Router([
   {
     path: '/',
@@ -336,18 +393,40 @@ Router([
     target: '#app'
   },
   {
-    path: '/products/:id',
+    path: '/products/:category?',
     element: () => {
-      const { id } = getParams();
-      return createPage('Product Details', `You are viewing product ${id}`);
+      const { category } = getParams();
+      return createPage('Products', 
+        category ? `Browsing ${category} products` : 'Browse all product categories');
     },
+    target: '#app'
+  },
+  {
+    path: '/products/:category/:id(\\d+)',
+    element: () => {
+      const { category, id } = getParams();
+      return createPage('Product Details', 
+        `You are viewing ${category} product #${id}`);
+    },
+    target: '#app'
+  },
+  {
+    path: '/blog/:year(\\d{4})/:month(\\d{2})/:slug',
+    element: () => {
+      const { year, month, slug } = getParams();
+      return createPage('Blog Post', 
+        `Reading article "${slug}" from ${month}/${year}`);
+    },
+    target: '#app'
+  },
+  {
+    path: '*',
+    element: () => createPage('Not Found', 'Page not found'),
     target: '#app'
   }
 ], {
   onError: (err) => {
     console.error('Router error:', err);
-    const errorElement = createPage('Error', 'Page not found');
-    document.getElementById('app').appendChild(errorElement);
   }
 });
 
@@ -358,8 +437,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const links = [
     { href: '/', text: 'Home' },
     { href: '/about', text: 'About' },
-    { href: '/products/1', text: 'Product 1' },
-    { href: '/products/2', text: 'Product 2' }
+    { href: '/products', text: 'All Products' },
+    { href: '/products/electronics', text: 'Electronics' },
+    { href: '/products/electronics/123', text: 'Product #123' },
+    { href: '/blog/2025/03/new-features', text: 'Blog Post' }
   ];
   
   links.forEach(link => {
