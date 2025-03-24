@@ -1,80 +1,221 @@
 # Utility Functions
 
-## Index
-- [DOM Utilities](#dom-utilities)
-  - [Rendering Functions](#rendering-functions)
-  - [DOM Querying](#dom-querying)
-- [Type Definitions](#type-definitions)
-- [Usage Examples](#usage-examples)
-  - [Rendering Content](#rendering-content)
-  - [DOM Manipulation Examples](#dom-manipulation-examples)
-
 ## Table of Contents
 - [DOM Utilities](#dom-utilities)
+  - [Selector Functions](#selector-functions)
+    - [`selector()`](#selector)
+    - [`selectors()`](#selectors)
   - [Rendering Functions](#rendering-functions)
-  - [DOM Manipulation](#dom-manipulation)
+    - [`render()`](#render)
+- [Core Utilities](#core-utilities)
+  - [`uniKey()`](#unikey)
 - [Type Definitions](#type-definitions)
+  - [Rendering Types](#rendering-types)
+  - [Query Types](#query-types)
 - [Usage Examples](#usage-examples)
-  - [Rendering Content](#rendering-content)
-  - [DOM Manipulation Examples](#dom-manipulation-examples)
+  - [DOM Selection](#dom-selection)
+  - [DOM Rendering](#dom-rendering)
+  - [Unique ID Generation](#unique-id-generation)
 
-This directory contains utility functions for DOM manipulation, rendering, and more.
+This directory contains utility functions for DOM manipulation, rendering, and more. These utilities are core components of the @jay-js/system library.
 
 ## DOM Utilities
 
+### Selector Functions
+
+#### `selector()`
+
+Selects the first element that matches a CSS selector.
+
+```typescript
+function selector<T extends HTMLElement>(
+  selector: string,
+  target: HTMLElement | Document = document,
+  options: TQueryOptions = {}
+): T | null
+```
+
+**Parameters:**
+- `selector`: CSS selector string to match elements against
+- `target`: The root element or document to search within (default: document)
+- `options`: Additional query configuration options
+  - `onlyVisible`: If true, only returns visible elements
+  - `includeNested`: If false, excludes nested matches
+
+**Returns:** The first matching element or null if none found
+
+#### `selectors()`
+
+Selects all elements that match a CSS selector.
+
+```typescript
+function selectors<T extends NodeListOf<Element>>(
+  selector: string,
+  target: HTMLElement | Document = document,
+  options: TQueryOptions = {}
+): T
+```
+
+**Parameters:**
+- `selector`: CSS selector string to match elements against
+- `target`: The root element or document to search within (default: document)
+- `options`: Additional query configuration options
+  - `onlyVisible`: If true, only returns visible elements
+  - `includeNested`: If false, excludes nested matches
+
+**Returns:** NodeList of elements matching the selector
+
 ### Rendering Functions
 
-The rendering utilities provide functions to manipulate the DOM:
+#### `render()`
 
-- `render(target, content, options)`: Renders content into a target element with options for insertion method.
-- `createElement(tag, attributes, content)`: Creates an HTML element with specified attributes and content.
-- `clearElement(element)`: Removes all child nodes from an element.
-- `replaceElement(oldElement, newElement)`: Replaces one element with another in the DOM.
+Renders content into a target element in the DOM.
 
-### DOM Querying
+```typescript
+function render(
+  target: TRenderTarget,
+  content: TRenderContent,
+  options: TRenderOptions = {}
+): void
+```
 
-Query utilities for DOM element selection:
+**Parameters:**
+- `target`: Element or selector to render content into
+- `content`: Content to render (can be Node, string, HTMLElement, or array)
+- `options`: Optional rendering configuration
+  - `insert`: "append" or "prepend" (default: replace content)
 
-- `selector(query)`: Selects a single element using a CSS selector.
-- `selectorAll(query, options)`: Selects multiple elements using a CSS selector with filtering options.
+## Core Utilities
+
+### `uniKey()`
+
+Generates a unique and random string using cryptographically secure values.
+
+```typescript
+function uniKey(
+  length = 10,
+  chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789"
+): string
+```
+
+**Parameters:**
+- `length`: Desired length of the string (default: 10)
+- `chars`: Character set to use for generating the ID (default: alphanumeric)
+
+**Returns:** A unique alphanumeric string
+
+**Note:** Uniqueness is not mathematically guaranteed; use longer lengths to reduce the probability of collisions.
 
 ## Type Definitions
 
-Type definitions for consistent typing across the library:
+### Rendering Types
 
-- `RenderOptions`: Options for content rendering, including insertion method.
-- `RenderContent`: Supported types for rendering (Node, string, HTMLElement, arrays, null, undefined).
-- `RenderTarget`: Accepted target types for rendering (HTMLElement, string selector, null).
-- `QueryOptions`: Options for DOM queries, including visibility and nesting filters.
+```typescript
+// Options for render function
+type TRenderOptions = {
+  insert?: "append" | "prepend";
+};
+
+// Content types that can be rendered
+type TRenderContent = Node | string | HTMLElement | (Node | string | HTMLElement)[] | null | undefined;
+
+// Target types where content can be rendered
+type TRenderTarget = HTMLElement | string | null;
+```
+
+### Query Types
+
+```typescript
+// Options for selector functions
+type TQueryOptions = {
+  onlyVisible?: boolean;   // Only return visible elements
+  includeNested?: boolean; // Include elements that are nested within other matches
+};
+```
 
 ## Usage Examples
 
-### Rendering Content
+### DOM Selection
 
 ```typescript
-import { render } from './dom/render.js';
+import { selector, selectors } from '@jay-js/system';
 
-// Append content to an element
-render('#app', 'Hello World', { insert: 'append' });
+// Get a single element
+const mainContent = selector('#main-content');
+if (mainContent) {
+  mainContent.style.backgroundColor = '#f0f0f0';
+}
 
-// Replace content in an element
-render('#app', '<p>New content</p>');
+// Get only visible elements
+const visibleButtons = selectors('button', document, { onlyVisible: true });
+visibleButtons.forEach(button => {
+  console.log('Visible button:', button.textContent);
+});
 
-// Prepend content to an element
-render('#app', document.createElement('div'), { insert: 'prepend' });
+// Exclude nested elements
+const topLevelItems = selectors('.item', document, { 
+  includeNested: false 
+});
+console.log(`Found ${topLevelItems.length} top-level items`);
+
+// Using with a specific container
+const sidebar = selector('.sidebar');
+if (sidebar) {
+  const sidebarLinks = selectors('a', sidebar);
+  console.log(`Sidebar has ${sidebarLinks.length} links`);
+}
 ```
 
-### DOM Manipulation Examples
+### DOM Rendering
 
 ```typescript
-import { clearElement, replaceElement } from '@jay-js/system';
+import { render } from '@jay-js/system';
+import { Box, Typography } from '@jay-js/ui';
 
-// Clear container
-const container = selector('#container');
-clearElement(container);
+// Replace content
+render('#app', 'Hello World');
 
-// Replace elements
-const oldEl = selector('#old');
-const newEl = document.createElement('div');
-replaceElement(oldEl, newEl);
+// Render an HTML element
+const paragraph = document.createElement('p');
+paragraph.textContent = 'This is a paragraph';
+render('#app', paragraph);
+
+// Render UI components
+render('#app', Box({ 
+  className: 'container',
+  children: Typography({ content: 'Welcome to our app' })
+}));
+
+// Append multiple elements
+const header = document.createElement('header');
+const main = document.createElement('main');
+render('#app', [header, main], { insert: 'append' });
+
+// Prepend content
+render('#app', Typography({ content: 'IMPORTANT NOTICE' }), { 
+  insert: 'prepend' 
+});
+```
+
+### Unique ID Generation
+
+```typescript
+import { uniKey } from '@jay-js/system';
+
+// Generate a default unique ID (10 characters)
+const defaultId = uniKey();
+console.log('Default ID:', defaultId); // e.g., "A7bC9dE2f0"
+
+// Generate a longer ID for better uniqueness
+const longerId = uniKey(20);
+console.log('Longer ID:', longerId); // e.g., "A7bC9dE2f0G4hI6jK8lM"
+
+// Custom character set (only lowercase)
+const lowercaseId = uniKey(8, 'abcdefghijklmnopqrstuvwxyz');
+console.log('Lowercase ID:', lowercaseId); // e.g., "abcdefgh"
+
+// Use case: Create HTML elements with unique IDs
+const container = document.createElement('div');
+container.id = `container-${uniKey(6)}`;
+document.body.appendChild(container);
 ```
