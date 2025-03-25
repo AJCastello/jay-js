@@ -1,8 +1,99 @@
+/* @biome-ignore */
 @import "highlight.js/styles/atom-one-dark.css";
+@import "tailwindcss";
+@plugin "daisyui";
+@source "../../node_modules/@jay-js/ui/**/*.styled";
+@theme {
+	--font-primary: "Noto Sans", "sans-serif";
+}
+@plugin "daisyui/theme" {
+	name: "light";
+	default: true;
+	color-scheme: light;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+	--color-base-100: #ffffff;
+	--color-base-200: #efefef;
+	--color-base-300: #dfdfdf;
+	--color-base-content: #001a23;
+
+	--color-primary: #01b88b;
+	--color-primary-content: #ffffff;
+
+	--color-secondary: #ba68c8;
+	--color-secondary-content: #ffffff;
+
+	--color-accent: #00adfc;
+	--color-accent-content: #ffffff;
+
+	--color-neutral: #f4f4f4;
+	--color-neutral-content: #6b7280;
+
+	--color-info: #00b3f0;
+	--color-info-content: #000000;
+	--color-success: #00ca92;
+	--color-success-content: #000000;
+	--color-warning: #ffc22d;
+	--color-warning-content: #000000;
+	--color-error: #ff6f70;
+	--color-error-content: #000000;
+
+	--radius-selector: 1rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.5rem;
+
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+
+	--border: 1px;
+
+	--depth: 0;
+	--noise: 0;
+}
+
+@plugin "daisyui/theme" {
+	name: "dark";
+	default: false;
+	prefersdark: false;
+	color-scheme: dark;
+
+	--color-base-100: #3b424e;
+	--color-base-200: #303640;
+	--color-base-300: #272c34;
+	--color-base-content: #ebecf0;
+
+	--color-primary: #01b88b;
+	--color-primary-content: #ffffff;
+
+	--color-secondary: #ba68c8;
+	--color-secondary-content: #ffffff;
+
+	--color-accent: #00adfc;
+	--color-accent-content: #ffffff;
+
+	--color-neutral: #444b59;
+	--color-neutral-content: #d0d0d0;
+
+	--color-info: #00b3f0;
+	--color-info-content: #000000;
+	--color-success: #00ca92;
+	--color-success-content: #000000;
+	--color-warning: #ffc22d;
+	--color-warning-content: #000000;
+	--color-error: #ff6f70;
+	--color-error-content: #000000;
+
+	--radius-selector: 1rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.5rem;
+
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+
+	--border: 1px;
+
+	--depth: 0;
+	--noise: 0;
+}
 
 * {
   scrollbar-color: initial !important;
