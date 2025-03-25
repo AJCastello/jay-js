@@ -1,4 +1,4 @@
-import { mergeClasses } from "../../utils/mergeClasses.js";
+import { mergeClasses } from "../../utils/merge-classes.js";
 import type { TBaseTagMap } from "../Base/Base.types.js";
 import { ListItem } from "../ListItem/ListItem.js";
 import type { TStepItem } from "./StepItem.types.js";

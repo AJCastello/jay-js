@@ -1,5 +1,5 @@
-import { useDrawer } from "../../hooks/useDrawer.js";
-import { mergeClasses } from "../../utils/mergeClasses.js";
+import { useDrawer } from "../../hooks/use-drawer.js";
+import { mergeClasses } from "../../utils/merge-classes.js";
 import { Base } from "../Base/Base.js";
 import type { TBaseTagMap } from "../Base/Base.types.js";
 import type { TDrawerOverlay } from "./DrawerOverlay.types.js";

@@ -1,5 +1,5 @@
-import { mergeClasses } from "../../utils/mergeClasses.js";
-import { uniKey } from "../../utils/uniKey.js";
+import { mergeClasses } from "../../utils/merge-classes.js";
+import { uniKey } from "../../utils/uni-key.js";
 import type { TBase, TBaseTagMap, TStyle } from "./Base.types.js";
 
 export function Base<T extends TBaseTagMap = "div">(
