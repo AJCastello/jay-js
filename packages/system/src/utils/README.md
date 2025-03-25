@@ -85,6 +85,10 @@ function render(
 - `options`: Optional rendering configuration
   - `insert`: "append" or "prepend" (default: replace content)
 
+**Notes:**
+- When providing an array as `content`, any `null` or `undefined` values will be automatically filtered out
+- This is useful for conditional rendering where some items may not be present
+
 ## Core Utilities
 
 ### `uniKey()`
@@ -116,8 +120,11 @@ type TRenderOptions = {
   insert?: "append" | "prepend";
 };
 
+// Possible items in a render array
+type TRenderContentItem = Node | string | HTMLElement | null | undefined;
+
 // Content types that can be rendered
-type TRenderContent = Node | string | HTMLElement | (Node | string | HTMLElement)[] | null | undefined;
+type TRenderContent = TRenderContentItem | TRenderContentItem[] | null | undefined;
 
 // Target types where content can be rendered
 type TRenderTarget = HTMLElement | string | null;
@@ -195,6 +202,19 @@ render('#app', [header, main], { insert: 'append' });
 render('#app', Typography({ content: 'IMPORTANT NOTICE' }), { 
   insert: 'prepend' 
 });
+
+// Conditional rendering with null/undefined values
+const isLoggedIn = false;
+const username = undefined;
+const welcomeMessage = document.createElement('p');
+welcomeMessage.textContent = 'Welcome!';
+
+render('#app', [
+  welcomeMessage,
+  isLoggedIn ? document.createElement('button') : null,
+  username && document.createElement('span')
+]);
+// Only the welcomeMessage will be rendered, null and undefined are filtered
 ```
 
 ### Unique ID Generation
