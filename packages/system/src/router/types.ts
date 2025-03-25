@@ -10,10 +10,10 @@
 export type TRoute = {
 	path: string;
 	element?:
-		| (HTMLElement | DocumentFragment)
-		| ((props?: any) => HTMLElement | DocumentFragment)
-		| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
-		| undefined;
+	| (HTMLElement | DocumentFragment)
+	| ((props?: any) => HTMLElement | DocumentFragment)
+	| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
+	| undefined;
 	target?: HTMLElement | string;
 	layout?: boolean;
 	children?: Array<TRoute>;
@@ -37,14 +37,12 @@ export type TRouteInstance = {
  * @property {string} [prefix] - URL prefix to prepend to all routes
  * @property {HTMLElement|string} [target] - Default DOM element or selector where routes will be rendered
  * @property {Function} [onError] - Error handler function
- * @property {Function} [onNavigate] - Function called when navigation occurs
  * @property {Function} [beforeResolve] - Function called before resolving a route, can cancel navigation by returning false
  */
 export type TRouterOptions = {
 	prefix?: string;
 	target?: HTMLElement | string;
 	onError?: (error: Error) => void;
-	onNavigate?: (route: TRouteInstance) => void;
 	beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 

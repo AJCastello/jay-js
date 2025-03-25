@@ -260,7 +260,6 @@ type TRouterOptions = {
   prefix?: string;
   target?: HTMLElement | string;
   onError?: (error: Error) => void;
-  onNavigate?: (route: TRouteInstance) => void;
   beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 ```
@@ -418,7 +417,7 @@ function setupFormProtection(formElement) {
 
 ### Navigation Hooks
 
-Configure hooks to run before or after navigation.
+Configure hooks to run before navigation.
 
 ```typescript
 Router([
@@ -431,10 +430,6 @@ Router([
       return false; // Prevent original navigation
     }
     return true; // Allow navigation to proceed
-  },
-  onNavigate: (route) => {
-    // Run after successful navigation
-    analyticsTracker.trackPageView(route.path);
   }
 });
 ```

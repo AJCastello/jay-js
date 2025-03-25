@@ -9,7 +9,6 @@ export const routerOptions: TRouterOptions = {
 	prefix: "",
 	target: document.body,
 	onError: console.error,
-	onNavigate: () => {},
 	beforeResolve: () => true,
 };
 
