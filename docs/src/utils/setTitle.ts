@@ -1,3 +1,3 @@
 export function setTitle(title: string) {
-  document.title = `${title} - JayJS`;
+	document.title = `${title} - JayJS`;
 }

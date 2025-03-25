@@ -1,24 +1,23 @@
- @tailwind utilities;
+@tailwind utilities;
 
 @layer utilities {
-  .fscroll {
-    @apply overflow-auto; 
-  }
+	.fscroll {
+		@apply overflow-auto;
+	}
 
-  .fscroll::-webkit-scrollbar-track {
-    @apply bg-base-100;
-  }
+	.fscroll::-webkit-scrollbar-track {
+		@apply bg-base-100;
+	}
 
-  .fscroll::-webkit-scrollbar {
-    @apply w-2 bg-base-100;
-  }
+	.fscroll::-webkit-scrollbar {
+		@apply w-2 bg-base-100;
+	}
 
-  .fscroll::-webkit-scrollbar-thumb {
-    @apply rounded-lg bg-base-content/20;
-  }
+	.fscroll::-webkit-scrollbar-thumb {
+		@apply rounded-lg bg-base-content/20;
+	}
 
-  .fscroll::-webkit-scrollbar-thumb:hover {
-    @apply bg-base-content/60;
-  }
+	.fscroll::-webkit-scrollbar-thumb:hover {
+		@apply bg-base-content/60;
+	}
 }
-  

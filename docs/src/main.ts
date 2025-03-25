@@ -14,7 +14,7 @@ import { i18nConfig } from "./locales/i18n";
 const app = document.querySelector<HTMLDivElement>("#app")!;
 
 i18nProvider(() => {
-  Routes(app);
+	Routes(app);
 }, i18nConfig);
 
-export default { resolvedRoutes }
+export default { resolvedRoutes };

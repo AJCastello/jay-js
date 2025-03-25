@@ -1,6 +1,5 @@
-import { Ii18nBase } from "./i18n.types";
+import type { Ii18nBase } from "./i18n.types";
 
-const enUs: Ii18nBase = {
-}
+const enUs: Ii18nBase = {};
 
 export default enUs;
