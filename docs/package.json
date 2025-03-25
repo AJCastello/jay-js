@@ -1,5 +1,5 @@
 {
-  "name": "site",
+  "name": "docs",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -10,7 +10,8 @@
     "build:css": "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css",
     "postbuild": "jayjs build --static",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "biome check --write ./src"
   },
   "dependencies": {
     "@jay-js/system": "file:../packages/system/dist",
@@ -18,6 +19,7 @@
     "highlight.js": "^11.9.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@tailwindcss/typography": "^0.5.13",
     "autoprefixer": "latest",
     "daisyui": "latest",
