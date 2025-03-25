@@ -14,14 +14,14 @@ export function createSortableList(
 	itemSelector: string,
 	onSort?: (items: HTMLElement[]) => void,
 ): void {
-	const items = container.querySelectorAll(itemSelector);
+	const items = Array.from(container.querySelectorAll(itemSelector));
 
-	items.forEach((item) => {
+	for (const item of items) {
 		Draggable(item as HTMLElement, {
 			onDragStart: () => item.classList.add("dragging"),
 			onDragEnd: () => item.classList.remove("dragging"),
 		});
-	});
+	}
 
 	Droppable(container, {
 		dragOverClass: "sorting",
@@ -88,7 +88,7 @@ export function createDragGroup(
 	itemSelector: string,
 	onChange?: (source: HTMLElement, target: HTMLElement, item: HTMLElement) => void,
 ): void {
-	containers.forEach((container) => {
+	for (const container of containers) {
 		const items = container.querySelectorAll(itemSelector);
 
 		items.forEach((item) => {
@@ -107,5 +107,5 @@ export function createDragGroup(
 				onChange?.(sourceContainer!, container, draggedItem);
 			},
 		});
-	});
+	}
 }

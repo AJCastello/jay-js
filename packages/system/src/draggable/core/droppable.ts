@@ -22,7 +22,9 @@ export function Droppable(element: HTMLElement, options: TDroppableOptions & TDr
 		if (!accept) return;
 
 		event.preventDefault();
-		event.dataTransfer!.dropEffect = "move";
+		if (event.dataTransfer) {
+			event.dataTransfer.dropEffect = "move";
+		}
 
 		dragOptions.onDragOver?.(event);
 	});

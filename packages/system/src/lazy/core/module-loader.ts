@@ -9,7 +9,10 @@ import { lazyOptions, moduleCache } from "./configuration.js";
  * @throws {Error} When the module is not found in cache
  */
 export function loadFromCache(lazy: TLazyModule): HTMLElement {
-	const cached = moduleCache.get(lazy.module!);
+	if (!lazy.module) {
+		throw new Error("Module name is required.");
+	}
+	const cached = moduleCache.get(lazy.module);
 	if (!cached) {
 		throw new Error(`Module ${lazy.module} not found in cache`);
 	}
