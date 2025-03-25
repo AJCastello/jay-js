@@ -1,11 +1,25 @@
 import { Toast } from "../components/Toast/Toast.js";
 import type { TToast } from "../components/Toast/Toast.types.js";
 
-interface IUseToast {
+/**
+ * Configuration options for the useToast hook
+ */
+type TUseToast = {
+	/**
+	 * Optional ID of the toast container element
+	 * If provided, toast will be rendered in the element with this ID
+	 */
 	for?: string;
-}
+};
 
-export function useToast({ ...props }: IUseToast = {}) {
+/**
+ * A hook to create and manage toast notifications
+ *
+ * @param props - Configuration options for the toast
+ * @returns A function that creates and displays a toast notification
+ * @throws Error if no toast container element is found
+ */
+export function useToast({ ...props }: TUseToast = {}) {
 	const selector = props.for ? `#${props.for}` : ".toast-container";
 	const toastContainer = document.querySelector(selector);
 

@@ -1,10 +1,28 @@
-interface IUseDrawer {
+/**
+ * Configuration options for the useDrawer hook
+ */
+type TUseDrawer = {
+	/**
+	 * Optional ID of the drawer element to control
+	 */
 	for?: string;
+	/**
+	 * Callback function triggered when drawer is closed
+	 */
 	onClose?: () => void;
+	/**
+	 * Callback function triggered when drawer is opened
+	 */
 	onOpen?: () => void;
-}
+};
 
-export function useDrawer({ ...props }: IUseDrawer) {
+/**
+ * A hook to control drawer component functionality
+ *
+ * @param props - Configuration options for the drawer
+ * @returns A function that toggles the drawer's visibility state
+ */
+export function useDrawer({ ...props }: TUseDrawer) {
 	return () => {
 		const drawer = document.querySelector(`#${props.for}`);
 		if (drawer && drawer instanceof HTMLElement) {
