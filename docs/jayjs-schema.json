@@ -1,0 +1,39 @@
+{
+  "title": "Jay JS",
+  "type": "object",
+  "properties": {
+    "static": {
+      "type": "object",
+      "properties": {
+        "collections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contentPath": {
+                "type": "string"
+              },
+              "format": {
+                "type": "string"
+              },
+              "sufix": {
+                "type": "string"
+              },
+              "dir": {
+                "type": "string"
+              },
+              "metadata": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "contentPath",
+              "format",
+              "sufix"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

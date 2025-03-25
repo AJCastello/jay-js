@@ -1,0 +1,33 @@
+ - Getting Started // Introduction
+ - Install
+ - Config
+ - Requirements
+ - Overview // Routing
+ - Defining Routes
+ - Pages and Layouts
+ - Config
+ - Linking and Navigating
+ - Error Handling
+ - Redirecting
+ - Route Groups
+ - Project Organization
+ - Dynamic Routes
+ - Intercepting Routes
+ - Route Handlers
+ - Middleware
+ - Overview // State ========================
+ - Set data============
+ - Get data=========
+ - Subscribe effects/observable=======
+ - Manage effects
+ - Clear instance
+ - Overview // Lazy Module
+ - Load a module
+ - Config
+ - Handlers
+ - Overview // I18n
+ - Use words
+ - Define languages
+ - Provider
+ - Set language
+ - Config
