@@ -160,10 +160,7 @@ describe("Render Utility", () => {
 		const condition = false;
 
 		// Simulando renderização condicional comum em JSX/TSX
-		render("#app", [
-			p1,
-			condition ? p2 : null
-		]);
+		render("#app", [p1, condition ? p2 : null]);
 
 		expect(app?.childNodes.length).toBe(1);
 		expect(app?.innerHTML).toBe("<p>Always</p>");

@@ -1,4 +1,4 @@
-import type { TRenderContent, TRenderOptions, TRenderTarget, TRenderContentItem } from "../types.js";
+import type { TRenderContent, TRenderContentItem, TRenderOptions, TRenderTarget } from "../types.js";
 import { selector } from "./query.js";
 
 /**
@@ -27,8 +27,8 @@ export function render(target: TRenderTarget, content: TRenderContent, options: 
 
 	if (Array.isArray(content)) {
 		// Filter out null and undefined values
-		const validContent = content.filter((item): item is string | Node | HTMLElement =>
-			item !== null && item !== undefined
+		const validContent = content.filter(
+			(item): item is string | Node | HTMLElement => item !== null && item !== undefined,
 		);
 
 		if (options.insert === "prepend") {
