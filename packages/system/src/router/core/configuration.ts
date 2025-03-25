@@ -9,7 +9,7 @@ export const routerOptions: TRouterOptions = {
 	prefix: "",
 	target: document.body,
 	onError: console.error,
-	onNavigate: () => { },
+	onNavigate: () => {},
 	beforeResolve: () => true,
 };
 
@@ -21,13 +21,13 @@ export const resolvedRoutes = new Map<string, TRouteInstance>();
 
 /**
  * Configures the router with the specified options
- * 
+ *
  * This function allows customizing router behavior by providing configuration options.
  * It handles special cases like resolving string targets to DOM elements.
- * 
+ *
  * @param {Partial<TRouterOptions>} options - Partial router configuration options
  * @returns {void}
- * 
+ *
  * @example
  * routerDefineOptions({
  *   prefix: '/app',

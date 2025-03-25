@@ -1,6 +1,6 @@
 /**
  * Type definitions for the guard system
- * 
+ *
  * @module @jay-js/system/guard/types
  */
 
@@ -40,7 +40,7 @@ export type TPermission = {
 export type TDefinePermission = {
 	/**
 	 * Allows the specified actions on the subject
-	 * 
+	 *
 	 * @param action - The action or actions to allow
 	 * @param attributes - Optional attributes to restrict the permission to
 	 * @returns The permission definition object for chaining
@@ -49,7 +49,7 @@ export type TDefinePermission = {
 
 	/**
 	 * Forbids the specified actions on the subject
-	 * 
+	 *
 	 * @param action - The action or actions to forbid
 	 * @param attributes - Optional attributes to restrict the permission to
 	 * @returns The permission definition object for chaining
@@ -58,7 +58,7 @@ export type TDefinePermission = {
 
 	/**
 	 * Saves and returns the defined permissions
-	 * 
+	 *
 	 * @returns The array of permission objects
 	 */
 	save: () => TPermission[];
