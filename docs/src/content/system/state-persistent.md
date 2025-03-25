@@ -1,5 +1,5 @@
 ---
-category: State
+category: State Management
 categoryId: 2
 articleId: 3
 slug: state-persistent
@@ -8,6 +8,53 @@ description: Aprenda a usar PersistentState para persistir dados no localStorage
 ---
 
 # Estado Persistente
+
+## Referência da API
+
+### Criação
+
+```typescript
+// Sintaxe básica
+const state = PersistentState(key, defaultValue);
+
+// Com tipagem explícita
+const state = PersistentState<T>(key, defaultValue);
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `key` | `string` | Chave para armazenar o valor no localStorage |
+| `defaultValue` | `T` | Valor padrão usado se nada for encontrado no localStorage |
+
+### Métodos e Propriedades
+
+PersistentState herda todos os métodos e propriedades do State básico:
+
+| Método/Propriedade | Sintaxe | Descrição |
+|-------------------|---------|-----------|
+| `set()` | `state.set(newValue)` | Define um novo valor e salva no localStorage |
+| | `state.set((current) => newValue)` | Define baseado no atual e salva |
+| | `state.set(value, options)` | Define com opções e salva |
+| `get()` | `state.get()` | Retorna o valor atual |
+| | `state.get(callback)` | Retorna e executa o callback |
+| `value` | `state.value` | Acessa/define o valor com detecção de dependência |
+| `sub()` | `state.sub(id, callback)` | Assina mudanças |
+| | `state.sub(id, callback, true)` | Assina e executa imediatamente |
+| `unsub()` | `state.unsub(id)` | Cancela assinatura |
+| `trigger()` | `state.trigger()` | Dispara notificações para todos assinantes |
+| | `state.trigger(id1, id2, ...)` | Dispara para assinantes específicos |
+| `clear()` | `state.clear()` | Remove assinaturas e mantém no localStorage |
+| | `state.clear(newValue)` | Remove assinaturas, define valor e salva |
+
+### Comportamento Especial
+
+- Cada atualização com `set()` ou `value` é automaticamente salva no localStorage
+- Lida graciosamente com erros de leitura/escrita no localStorage
+- Serializa/deserializa automaticamente objetos e arrays usando JSON
+
+## Visão Geral
 
 O `PersistentState` é uma extensão do estado básico que salva automaticamente os valores no `localStorage` do navegador. Isso permite que seus estados mantenham seus valores entre recarregamentos de página ou sessões de navegação.
 

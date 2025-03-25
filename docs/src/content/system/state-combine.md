@@ -1,5 +1,5 @@
 ---
-category: State
+category: State Management
 categoryId: 2
 articleId: 4
 slug: state-combine
@@ -8,6 +8,58 @@ description: Aprenda a usar CombineStates para combinar múltiplos estados em um
 ---
 
 # Estados Combinados
+
+## Referência da API
+
+### Criação
+
+```typescript
+// Sintaxe básica
+const combinedState = CombineStates(statesObject);
+
+// Exemplo com tipagem
+interface Person {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
+
+const combinedState = CombineStates<Person>({
+  firstName: firstNameState,
+  lastName: lastNameState,
+  age: ageState
+});
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `statesObject` | `Record<string, State<any>>` | Objeto onde cada propriedade é um estado existente |
+
+### Métodos e Propriedades
+
+Um estado combinado inclui todos os métodos e propriedades de um estado básico:
+
+| Método/Propriedade | Sintaxe | Descrição |
+|-------------------|---------|-----------|
+| `set()` | `combinedState.set(newObject)` | Define um novo objeto completo |
+| | `combinedState.set((current) => newObject)` | Define baseado no objeto atual |
+| `get()` | `combinedState.get()` | Retorna o objeto combinado completo |
+| `value` | `combinedState.value` | Acessa o objeto combinado completo |
+| | `combinedState.value.propName` | Acessa uma propriedade específica |
+| `sub()` | `combinedState.sub(id, callback)` | Assina mudanças no objeto combinado |
+| `unsub()` | `combinedState.unsub(id)` | Cancela assinatura |
+| `trigger()` | `combinedState.trigger()` | Dispara notificações manualmente |
+| `clear()` | `combinedState.clear()` | Remove todas as assinaturas |
+
+### Comportamento Especial
+
+- **Atualização automática**: Quando qualquer estado fonte muda, o objeto combinado é atualizado
+- **Reatividade uni-direcional**: Atualizar o estado combinado não atualiza os estados fonte
+- **Estrutura fixada**: As propriedades do objeto combinado correspondem exatamente às chaves do objeto de estados fonte
+
+## Visão Geral
 
 A função `CombineStates` permite combinar múltiplos estados individuais em um único estado composto. Isso é útil quando você precisa agrupar dados relacionados ou quando quer trabalhar com uma "única fonte de verdade" que compõe vários estados.
 

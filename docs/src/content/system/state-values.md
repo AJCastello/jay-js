@@ -1,5 +1,5 @@
 ---
-category: State
+category: State Management
 categoryId: 2
 articleId: 7
 slug: state-values
@@ -8,6 +8,52 @@ description: Aprenda a usar a função Values para definir valores em objetos de
 ---
 
 # Valores Reativos
+
+## Referência da API
+
+### Criação
+
+```typescript
+// Sintaxe básica
+const setter = Values(computeFn);
+
+// Com tipagem explícita
+const setter = Values<T>(() => computedValue);
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `computeFn` | `() => any` | Função que calcula o valor a ser definido; dependências são automaticamente detectadas |
+
+### Uso
+
+```typescript
+// Sintaxe básica
+setter(target, ...path);
+
+// Exemplos de uso
+setter(obj, 'propName');
+setter(obj, 'prop', 'nestedProp');
+setter(stateObj, 'value');
+```
+
+### Parâmetros de Uso
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `target` | `object` | Objeto alvo onde o valor será definido |
+| `...path` | `string[]` | Caminho da propriedade, pode ser múltiplos níveis aninhados |
+
+### Comportamento Especial
+
+- **Reatividade automática**: Quando dependências mudam, o valor é recalculado e atualizado
+- **Criação de caminho**: Cria automaticamente objetos aninhados se não existirem
+- **Compatibilidade com State**: Pode definir valores em estados usando a propriedade 'value'
+- **Múltiplas dependências**: Pode rastrear múltiplos estados em uma única função
+
+## Visão Geral
 
 A função `Values` é uma ferramenta poderosa que permite definir valores em objetos de forma reativa. Quando um estado acessado dentro da função muda, o valor é automaticamente recalculado e atribuído ao objeto alvo.
 

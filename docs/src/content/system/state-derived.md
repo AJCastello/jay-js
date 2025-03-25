@@ -1,5 +1,5 @@
 ---
-category: State
+category: State Management
 categoryId: 2
 articleId: 5
 slug: state-derived
@@ -8,6 +8,48 @@ description: Aprenda a usar Derived para criar estados que se recalculam automat
 ---
 
 # Estados Derivados
+
+## Referência da API
+
+### Criação
+
+```typescript
+// Sintaxe básica
+const derivedState = Derived(computeFn);
+
+// Com tipagem explícita
+const derivedState = Derived<T>(() => computedValue);
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `computeFn` | `() => T` | Função que calcula o valor derivado; as dependências são automaticamente detectadas |
+
+### Métodos e Propriedades
+
+Estados derivados incluem todos os métodos de um estado básico:
+
+| Método/Propriedade | Sintaxe | Descrição |
+|-------------------|---------|-----------|
+| `get()` | `derivedState.get()` | Retorna o valor derivado atual |
+| `value` | `derivedState.value` | Acessa o valor com detecção de dependência |
+| `set()` | `derivedState.set(newValue)` | Define manualmente um valor (sobrescreve o cálculo) |
+| | `derivedState.set(current => newValue)` | Define com base no valor atual |
+| `sub()` | `derivedState.sub(id, callback)` | Assina mudanças |
+| `unsub()` | `derivedState.unsub(id)` | Cancela assinatura |
+| `trigger()` | `derivedState.trigger()` | Dispara notificações manualmente |
+| `clear()` | `derivedState.clear()` | Remove assinaturas |
+
+### Comportamento Especial
+
+- **Recálculo automático**: Valor recalculado sempre que qualquer dependência muda
+- **Detecção automática de dependências**: As dependências são rastreadas automaticamente através da propriedade `value`
+- **Dependências aninhadas**: Pode depender de outros estados derivados
+- **Computação preguiçosa**: Só recalcula quando seu valor é acessado após uma mudança de dependência
+
+## Visão Geral
 
 A função `Derived` permite criar estados que calculam seu valor automaticamente a partir de outros estados. Quando qualquer um dos estados dependentes muda, o estado derivado é recalculado automaticamente.
 

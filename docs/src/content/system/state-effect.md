@@ -1,5 +1,5 @@
 ---
-category: State
+category: State Management
 categoryId: 2
 articleId: 6
 slug: state-effect
@@ -8,6 +8,53 @@ description: Aprenda a usar Effect para criar efeitos colaterais que respondem a
 ---
 
 # Efeitos Reativos
+
+## Referência da API
+
+### Criação
+
+```typescript
+// Sintaxe básica
+const effectCleanup = Effect(effectFn);
+
+// Com retorno opcional para limpeza
+const cleanup = Effect(() => {
+  // efeito
+  return () => {
+    // função de limpeza opcional
+  };
+});
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `effectFn` | `() => void \| (() => void)` | Função que contém o efeito; pode retornar uma função de limpeza opcional |
+
+### Retorno
+
+| Tipo | Descrição |
+|------|-----------|
+| `() => void` | Função para cancelar o efeito manualmente |
+
+### Comportamento Especial
+
+- **Execução imediata**: O efeito é executado imediatamente quando definido
+- **Detecção automática de dependências**: Rastreia automaticamente estados acessados via `.value`
+- **Execução reativa**: Executa novamente quando qualquer estado observado muda
+- **Dependências dinâmicas**: As dependências podem mudar entre execuções com base em condições
+- **Sem valor de retorno útil**: Diferente de `Derived`, não cria um estado com valor derivado
+
+### Padrões de Uso
+
+- **Sincronização de UI**: Atualizar o DOM em resposta a mudanças de estado
+- **Conexão com APIs externas**: Fazer chamadas de API quando estados relevantes mudam
+- **Lógica de derivação complexa**: Quando múltiplos estados derivados precisam ser atualizados juntos
+- **Persistência de dados**: Salvar estados em localStorage ou outras áreas de armazenamento
+- **Integrações com sistemas externos**: Conectar o sistema de estados a outras bibliotecas
+
+## Visão Geral
 
 A função `Effect` permite criar efeitos colaterais reativos que são executados automaticamente quando estados observados mudam. Isso é perfeito para sincronizar o estado com sistemas externos, como o DOM, APIs ou outros componentes.
 
