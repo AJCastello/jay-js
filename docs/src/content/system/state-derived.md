@@ -1,5 +1,5 @@
 ---
-category: State Management
+category: State
 categoryId: 2
 articleId: 5
 slug: state-derived

@@ -1,9 +1,9 @@
 ---
-category: State Management
+category: State
 categoryId: 2
 articleId: 1
 slug: state-overview
-title: State Management Overview
+title: Overview
 description: Uma visão geral do sistema de gerenciamento de estado reativo do pacote @jay-js/system.
 ---
 

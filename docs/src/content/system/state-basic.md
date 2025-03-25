@@ -9,6 +9,48 @@ description: Aprendendo a criar e gerenciar estados reativos básicos com a fun�
 
 # Estado Básico
 
+## Referência da API
+
+### Criação
+
+```typescript
+// Sintaxe básica
+const state = State(initialValue);
+
+// Com tipagem explícita
+const state = State<T>(initialValue);
+```
+
+### Métodos e Propriedades
+
+| Método/Propriedade | Sintaxe | Descrição |
+|-------------------|---------|-----------|
+| `set()` | `state.set(newValue)` | Define um novo valor |
+| | `state.set((current) => newValue)` | Define um valor baseado no atual |
+| | `state.set(value, options)` | Define com opções de atualização |
+| `get()` | `state.get()` | Retorna o valor atual |
+| | `state.get(callback)` | Retorna e executa o callback |
+| `value` | `state.value` | Acessa/define o valor com detecção de dependência |
+| `sub()` | `state.sub(id, callback)` | Assina mudanças |
+| | `state.sub(id, callback, true)` | Assina e executa imediatamente |
+| `unsub()` | `state.unsub(id)` | Cancela assinatura |
+| `trigger()` | `state.trigger()` | Dispara notificações para todos assinantes |
+| | `state.trigger(id1, id2, ...)` | Dispara para assinantes específicos |
+| `clear()` | `state.clear()` | Remove todas as assinaturas |
+| | `state.clear(newValue)` | Remove assinaturas e define novo valor |
+
+### Opções de Atualização
+
+```typescript
+// Opções disponíveis no método set
+interface SetOptions {
+  silent?: boolean;       // Não notifica assinantes quando true
+  target?: string | string[]; // Notifica apenas assinantes específicos
+}
+```
+
+## Visão Geral
+
 O componente fundamental do sistema de gerenciamento de estado é a função `State`, que permite criar estados reativos que notificam automaticamente assinantes quando seus valores mudam.
 
 ## Criando um Estado
