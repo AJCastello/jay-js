@@ -27,7 +27,8 @@
       },
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noThenProperty": "off"
       }
     }
   },

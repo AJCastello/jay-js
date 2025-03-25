@@ -10,11 +10,11 @@ const navigationGuards = new Set<BeforeNavigateFunction>();
  * Register a function to be executed before the next navigation.
  * The navigation will only proceed if the function returns true.
  * The function is automatically removed after being executed once.
- * 
+ *
  * @param {Function} guardFn - Function that returns boolean or Promise<boolean>
  * @param {Object} options - Additional options (reserved for future use)
  * @returns {Function} - Function to manually remove the guard if needed
- * 
+ *
  * @example
  * // Prevent navigation if form has unsaved changes
  * beforeNavigate(() => {
@@ -54,7 +54,7 @@ async function runNavigationGuards(): Promise<boolean> {
 				return false;
 			}
 		} catch (error) {
-			console.error('Navigation guard failed:', error);
+			console.error("Navigation guard failed:", error);
 			return false;
 		}
 	}
@@ -67,7 +67,7 @@ async function runNavigationGuards(): Promise<boolean> {
  *
  * This function updates the browser URL and triggers route resolution without requiring a full page reload.
  * If a prefix is configured in the router options, it will be automatically applied to the path.
- * 
+ *
  * Before navigation occurs, any registered beforeNavigate guards are executed.
  * The navigation will only proceed if all guards return true.
  *
