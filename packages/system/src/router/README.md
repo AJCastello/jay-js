@@ -9,6 +9,7 @@ A lightweight, flexible routing library for client-side single-page applications
 - [API Reference](#api-reference)
   - [Router](#router)
   - [Navigate](#navigate)
+  - [beforeNavigate](#beforenavigate)
   - [getParams](#getparams)
   - [routerDefineOptions](#routerdefineoptions)
 - [Type Definitions](#type-definitions)
@@ -20,6 +21,7 @@ A lightweight, flexible routing library for client-side single-page applications
   - [Layouts](#layouts)
   - [Nested Routes](#nested-routes)
   - [Route Parameters](#route-parameters)
+  - [Navigation Guards](#navigation-guards)
   - [Navigation Hooks](#navigation-hooks)
 - [Examples](#examples)
 
@@ -129,6 +131,50 @@ document.getElementById('about-btn').addEventListener('click', () => {
 });
 
 // With a configured prefix of '/app', this navigates to '/app/about'
+```
+
+### beforeNavigate
+
+Register a function that runs before the next navigation attempt, allowing you to interrupt navigation when necessary.
+
+```typescript
+beforeNavigate(guardFn: () => boolean | Promise<boolean>): () => void
+```
+
+#### Parameters
+
+- `guardFn`: Function that returns a boolean or Promise<boolean> indicating whether navigation should proceed
+- `options`: (Optional) Additional options for future extensions
+
+#### Returns
+
+- A function that can be called to manually remove the guard if needed
+
+#### Example
+
+```typescript
+import { beforeNavigate, Navigate, selector } from '@jay-js/system';
+
+// Detect unsaved form changes and confirm before navigating away
+const form = selector('form');
+
+let isDirty = false;
+
+form.addEventListener('input', () => {
+  isDirty = true;
+});
+
+form.addEventListener('submit', () => {
+  isDirty = false; // Reset on submit
+});
+
+beforeNavigate(() => {
+  if (isDirty) {
+    return confirm('You have unsaved changes. Do you want to leave this page?');
+  }
+  return true; // Allow navigation
+});
+
 ```
 
 ### getParams
@@ -335,6 +381,41 @@ Router([
 ]);
 ```
 
+### Navigation Guards
+
+Use `beforeNavigate` to protect navigation with custom logic:
+
+```typescript
+import { beforeNavigate, Navigate } from '@jay-js/system';
+
+// Form with unsaved changes
+function setupFormProtection(formElement) {
+  let hasChanges = false;
+  
+  formElement.addEventListener('input', () => {
+    hasChanges = true;
+  });
+
+  // Guard is only applied for the next navigation attempt
+  beforeNavigate(() => {
+    if (hasChanges) {
+      const wantsToProceed = confirm('Discard unsaved changes?');
+      if (wantsToProceed) {
+        hasChanges = false;
+        return true;
+      }
+      return false;
+    }
+    return true;
+  });
+  
+  formElement.addEventListener('submit', () => {
+    hasChanges = false;
+  });
+}
+
+```
+
 ### Navigation Hooks
 
 Configure hooks to run before or after navigation.
@@ -457,3 +538,4 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.body.insertBefore(nav, document.getElementById('app'));
 });
+```
