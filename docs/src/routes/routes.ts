@@ -5,7 +5,7 @@ import { DocsIntro } from "../pages/docs/DocsIntro";
 import { Article } from "../pages/docs/article";
 import { Home } from "../pages/home";
 
-export function Routes(app: HTMLDivElement) {
+export function Routes() {
 	Router(
 		[
 			{

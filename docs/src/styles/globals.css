@@ -1,6 +1,7 @@
 /* @biome-ignore */
 @import "highlight.js/styles/atom-one-dark.css";
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @plugin "daisyui";
 @source "../../node_modules/@jay-js/ui/**/*.styled";
 @theme {
