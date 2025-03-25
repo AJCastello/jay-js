@@ -243,8 +243,8 @@ describe("RenderElements", () => {
 
 		// Define the function to safely call RenderElement with non-array data
 		const callWithNonArray = () => {
-			// @ts-ignore - Intentionally passing invalid data for testing
-			const nonArrayData = "not an array";
+			// Use type assertion to bypass TypeScript's type checking
+			const nonArrayData = "not an array" as unknown as TElementData[];
 			const result = RenderElements({ data: nonArrayData });
 			return result;
 		};
