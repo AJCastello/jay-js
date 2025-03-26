@@ -1,8 +1,10 @@
 ---
+category: Internationalization
+categoryId: 3
+articleId: 3
 slug: i18n-usage
 title: Using Translations
-excerpt: Learn how to use translations in your components with type safety
-hidden: false
+description: Learn how to use translations in your components with type safety
 ---
 
 # Using Translations

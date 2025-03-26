@@ -1,8 +1,10 @@
 ---
+category: Internationalization
+categoryId: 3
+articleId: 1
 slug: i18n-overview
 title: Internationalization Overview
-excerpt: A lightweight, type-safe internationalization system for JavaScript and TypeScript applications
-hidden: false
+description: A lightweight, type-safe internationalization system for JavaScript and TypeScript applications
 ---
 
 # Internationalization (i18n)

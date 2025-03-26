@@ -1,8 +1,10 @@
 ---
+category: Internationalization
+categoryId: 3
+articleId: 5
 slug: i18n-provider
 title: I18n Provider
-excerpt: Learn how to set up and use the i18n provider in your application
-hidden: false
+description: Learn how to set up and use the i18n provider in your application
 ---
 
 # I18n Provider
