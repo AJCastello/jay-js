@@ -9,6 +9,44 @@ description: Learn how to use translations in your components with type safety
 
 # Using Translations
 
+## API Reference
+
+### Core Function
+
+```typescript
+// Basic usage syntax
+const t = useI18n<TranslationsType>();
+const translatedText = t(key, variables?, options?);
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `key` | `string` | Translation key to lookup |
+| `variables` | `Record<string, string \| number>` | Optional variables to inject into the translation |
+| `options` | `{ default?: string }` | Optional configuration with default fallback text |
+
+### Return Value
+
+| Type | Description |
+|------|-------------|
+| `string` | The translated text with any variables replaced |
+
+### Type Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `T` | TypeScript type representing your translation structure |
+
+### Special Features
+
+- **Type Safety**: Full TypeScript support for translation keys
+- **Variable Injection**: Support for `{{variableName}}` syntax in translations
+- **Default Values**: Fallback text for missing translations
+- **Nested Keys**: Support for dot notation with nested translations (when enabled)
+- **Auto-detection**: No need to specify current language, handled internally
+
 The i18n system provides a simple hook-based API for accessing translations in your components. This guide covers the basic usage patterns and advanced features.
 
 ## Basic Usage
@@ -84,7 +122,7 @@ function MyComponent() {
       <p>{t('greeting.welcome')}</p>
       <nav>
         <a href="/">{t('navigation.home')}</a>
-        <a href="/about">{t('navigation.about')}</a>
+        <a href="/about'>{t('navigation.about')}</a>
       </nav>
     </div>
   );

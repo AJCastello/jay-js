@@ -9,6 +9,39 @@ description: Learn how to configure and manage languages in your internationaliz
 
 # Defining Languages
 
+## API Reference
+
+### Language Configuration
+
+```typescript
+// Language configuration type
+interface LanguageConfig {
+  code: string;            // Language identifier (e.g., 'en', 'es')
+  data?: Record<string, any>; // Direct translation data
+  import?: () => Promise<Record<string, any>>; // Lazy loading function
+}
+
+// In i18nDefineOptions
+{
+  languages: LanguageConfig[];
+  // ...other options
+}
+```
+
+### Language Management Functions
+
+| Function | Description |
+|----------|-------------|
+| `setLanguage(code)` | Changes the active language to the specified code |
+| `getCurrentLocale()` | Returns the current active language code |
+| `initLanguage()` | Initializes the language system with configured languages |
+
+### Loading Patterns
+
+- **Direct Loading**: Provide translations directly in the `data` property
+- **Dynamic Import**: Use the `import` function to load translations on demand
+- **Hybrid Loading**: Combine both approaches for critical vs. additional translations
+
 The i18n system supports multiple approaches to defining and managing your application's languages. This guide covers the different ways to set up your language configurations.
 
 ## Static Language Data

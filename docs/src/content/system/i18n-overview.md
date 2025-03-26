@@ -9,6 +9,37 @@ description: A lightweight, type-safe internationalization system for JavaScript
 
 # Internationalization (i18n)
 
+## API Reference
+
+### Core API
+
+| Function | Description |
+|----------|-------------|
+| `i18nDefineOptions()` | Configures the i18n system with languages and options |
+| `i18nProvider()` | Initializes the i18n system with a callback |
+| `initLanguage()` | Manually initializes the language system |
+| `setLanguage()` | Changes the active language |
+| `getCurrentLocale()` | Gets the current active language code |
+| `useI18n()` | React hook for accessing translations |
+
+### Configuration Types
+
+```typescript
+interface Ii18nOptions {
+  languages: LanguageConfig[];
+  defaultLocale?: string;
+  saveToLocalStorage?: boolean;
+  localStorageKey?: string;
+  nestedKeys?: boolean;
+}
+
+interface LanguageConfig {
+  code: string;
+  data?: Record<string, any>;
+  import?: () => Promise<Record<string, any>>;
+}
+```
+
 The Jay-JS internationalization system provides a lightweight, type-safe solution for managing translations in JavaScript and TypeScript applications. It offers a simple yet powerful API that makes it easy to internationalize your applications while maintaining full type safety.
 
 ## Features

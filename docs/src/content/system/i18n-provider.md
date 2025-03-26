@@ -11,6 +11,49 @@ description: Learn how to set up and use the i18n provider in your application
 
 The i18n provider is responsible for initializing and managing the internationalization system in your application. This guide explains how to set up and use the provider effectively.
 
+## API Reference
+
+### Provider Function
+
+```typescript
+// Basic provider syntax
+i18nProvider(
+  callback: (language: Ti18nLanguages) => void,
+  options?: Ii18nOptions
+);
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `callback` | `(language: Ti18nLanguages) => void` | Function called after language initialization |
+| `options` | `Ii18nOptions` | Configuration options for the i18n system |
+
+### Configuration Type
+
+```typescript
+interface Ii18nOptions {
+  languages: Array<{
+    code: string;
+    data?: Record<string, any>;
+    import?: () => Promise<Record<string, any>>;
+  }>;
+  defaultLocale?: string;
+  saveToLocalStorage?: boolean;
+  localStorageKey?: string;
+  nestedKeys?: boolean;
+}
+```
+
+### Behavior
+
+- **Initialization**: Sets up the i18n system and loads the default language
+- **Callback Timing**: The callback is called after the language is loaded
+- **Error Handling**: Built-in error handling for language loading failures
+- **Dynamic Loading**: Supports both immediate and dynamic language loading
+- **Persistence**: Automatically manages localStorage settings when enabled
+
 ## Basic Setup
 
 The most common way to set up the i18n system is in your application's entry point:

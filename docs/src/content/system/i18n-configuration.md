@@ -9,6 +9,50 @@ description: Complete guide to configuring the internationalization system
 
 # I18n Configuration
 
+## API Reference
+
+### Configuration Function
+
+```typescript
+// Basic configuration syntax
+i18nDefineOptions(options: Ii18nOptions);
+```
+
+### Configuration Type
+
+```typescript
+interface Ii18nOptions {
+  languages: LanguageConfig[];
+  defaultLocale?: string;
+  saveToLocalStorage?: boolean;
+  localStorageKey?: string;
+  nestedKeys?: boolean;
+}
+
+interface LanguageConfig {
+  code: string;
+  data?: Record<string, any>;
+  import?: () => Promise<Record<string, any>>;
+}
+```
+
+### Parameters
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `languages` | `LanguageConfig[]` | Required | Array of language configurations |
+| `defaultLocale` | `string` | `'en'` | Default language code |
+| `saveToLocalStorage` | `boolean` | `true` | Save language preference |
+| `localStorageKey` | `string` | `'jayjs-i18n-default-locale'` | Storage key name |
+| `nestedKeys` | `boolean` | `false` | Enable nested translation keys |
+
+### Usage Patterns
+
+- **Basic Configuration**: Direct configuration with static translations
+- **Dynamic Loading**: Configuration with lazy-loaded translations
+- **Mixed Approach**: Static data for critical translations with dynamic loading for others
+- **Framework Integration**: Configuration as part of framework initialization
+
 The i18n system offers a flexible configuration API through the `i18nDefineOptions` function. This guide covers all available configuration options and their use cases.
 
 ## Configuration Options
