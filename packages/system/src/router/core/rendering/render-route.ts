@@ -25,11 +25,14 @@ export async function getElement(route: TRouteInstance) {
 	try {
 		// Handle lazy loading via import and module properties
 		if (route.import) {
+			// Pass loader only if it's an HTMLElement (LazyModule expects HTMLElement)
+			const loader = route.loader instanceof HTMLElement ? route.loader : undefined;
+
 			const lazyElement = LazyModule({
 				import: route.import,
 				module: route.module,
 				props: route.params,
-			});
+			}, loader);
 
 			if (route.layout) {
 				lazyElement.dataset.layoutId = route.id;

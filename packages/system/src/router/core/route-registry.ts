@@ -54,6 +54,7 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string
 				if (route.module) routeBuild.module = route.module;
 				if (route.params) routeBuild.params = route.params;
 				if (route.layout) routeBuild.layout = route.layout;
+				if (route.loader) routeBuild.loader = route.loader;
 				if (parentLayoutId) routeBuild.parentLayoutId = parentLayoutId;
 
 				outputRoutes.push(routeBuild);

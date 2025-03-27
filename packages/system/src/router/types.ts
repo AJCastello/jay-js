@@ -9,6 +9,7 @@
  * @property {() => Promise<any>} [import] - Dynamic import function for lazy loading the module
  * @property {string} [module] - Name of the exported module (optional for default exports)
  * @property {Record<string, any>} [params] - Additional parameters to pass to the module
+ * @property {HTMLElement} [loader] - Custom loader element to show while the route is loading
  */
 export type TRoute = {
 	path: string;
@@ -23,6 +24,7 @@ export type TRoute = {
 	import?: () => Promise<any>;
 	module?: string;
 	params?: Record<string, any>;
+	loader?: HTMLElement;
 };
 
 /**

@@ -242,6 +242,7 @@ type TRoute = {
   import?: () => Promise<any>;
   module?: string;
   params?: Record<string, any>;
+  loader?: HTMLElement;
 };
 ```
 
@@ -253,6 +254,7 @@ type TRoute = {
 - `import`: Dynamic import function for lazy loading the module
 - `module`: Name of the exported module (optional for default exports)
 - `params`: Additional parameters to pass to the module
+- `loader`: Custom loading component to display while route is loading
 
 ### TRouteInstance
 
@@ -302,7 +304,10 @@ The router supports integration with the LazyModule system for efficient lazy lo
   params: {                     // Optional parameters to pass to the module
     theme: 'dark',
     showSidebar: true
-  }
+  },
+  loader: Box({
+    className: "skeleton-loader animate-pulse"
+  })
 }
 ```
 
@@ -317,6 +322,16 @@ This approach offers several benefits:
 ```typescript
 import { Router } from '@jay-js/system';
 
+// Create a reusable loading component
+function createSkeletonLoader() {
+  return Box({
+    className: "skeleton-loader",
+    children: Array.from({ length: 4 }).map(Box({
+      className: "skeleton-item"
+    }))
+  });
+}
+
 Router([
   {
     path: '/',
@@ -330,11 +345,13 @@ Router([
     path: '/dashboard',
     import: () => import('./pages/Dashboard.js'),
     module: 'DashboardComponent',
-    params: { initialTab: 'overview' }
+    params: { initialTab: 'overview' },
+    loader: createSkeletonLoader()
   },
   {
     path: '/profile',
-    import: () => import('./pages/Profile.js')
+    import: () => import('./pages/Profile.js'),
+    loader: createSkeletonLoader()
     // No module name needed for default exports
   }
 ], {
