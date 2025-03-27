@@ -1,6 +1,6 @@
 import { Box, Outlet, Section } from "@jay-js/ui";
-import { DocsFooter } from "../components/footer/DocsFooter";
-import { DocsNavBar } from "../components/navbar/DocsNavBar";
+import { DocsFooter } from "../components/footer/docs-footer";
+import { DocsNavBar } from "../components/navbar/docs-nav-bar";
 
 export function Docs() {
 	return Section({

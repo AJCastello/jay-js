@@ -12,11 +12,6 @@
 	default: true;
 	color-scheme: light;
 
-	--color-base-100: #ffffff;
-	--color-base-200: #efefef;
-	--color-base-300: #dfdfdf;
-	--color-base-content: #001a23;
-
 	--color-primary: #01b88b;
 	--color-primary-content: #ffffff;
 
@@ -54,13 +49,8 @@
 @plugin "daisyui/theme" {
 	name: "dark";
 	default: false;
-	prefersdark: false;
+	prefersdark: true;
 	color-scheme: dark;
-
-	--color-base-100: #3b424e;
-	--color-base-200: #303640;
-	--color-base-300: #272c34;
-	--color-base-content: #ebecf0;
 
 	--color-primary: #01b88b;
 	--color-primary-content: #ffffff;
@@ -113,6 +103,11 @@ div#app {
 .prose :where(h2) {
   @apply scroll-mt-28;
 }  
+
+.prose :where(pre) {
+  @apply bg-[#282c34];
+}  
+
 
 .prose code {
   @apply text-balance

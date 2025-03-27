@@ -1,11 +1,11 @@
 import { getParams } from "@jay-js/system";
 import { Box, Divider, Section } from "@jay-js/ui";
-import { OnThisPage } from "../../components/aside/OnThisPage";
+import { OnThisPage } from "../../components/aside/on-this-page";
 import { DocsScrollBullet } from "../../components/docs/DocsScrollBullet";
-import { ArticleFooter } from "../../components/footer/ArticleFooter";
+import { ArticleFooter } from "../../components/footer/article-footer";
 import type { TArticle, TCollection } from "../../types";
-import { contentFormatter } from "../../utils/contentFormatter";
-import { setTitle } from "../../utils/setTitle";
+import { contentFormatter } from "../../utils/content-formatter";
+import { setTitle } from "../../utils/set-title";
 import { useCollection } from "../../utils/useCollection";
 import { useContent } from "../../utils/useContent";
 

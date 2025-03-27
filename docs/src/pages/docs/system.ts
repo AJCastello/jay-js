@@ -1,7 +1,7 @@
 import { Box, Outlet } from "@jay-js/ui";
-import { SystemSideMenu } from "../../components/aside/SystemSideMenu";
+import { SystemSideMenu } from "../../components/aside/system-side-menu";
 
-import "../../utils/setNavStyle";
+import "../../utils/set-nav-style";
 
 export function System() {
 	return Box({

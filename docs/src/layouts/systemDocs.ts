@@ -1,9 +1,9 @@
 import { Box, Outlet, Section } from "@jay-js/ui";
-import { SystemSideMenu } from "../components/aside/SystemSideMenu";
-import { DocsFooter } from "../components/footer/DocsFooter";
-import { DocsNavBar } from "../components/navbar/DocsNavBar";
+import { SystemSideMenu } from "../components/aside/system-side-menu";
+import { DocsFooter } from "../components/footer/docs-footer";
+import { DocsNavBar } from "../components/navbar/docs-nav-bar";
 
-import "../utils/setNavStyle";
+import "../utils/set-nav-style";
 
 export function SystemDocs() {
 	return Section({

@@ -1,7 +1,7 @@
 import { Box, Section } from "@jay-js/ui";
-import { Logo } from "./Logo";
-import { SearchForm } from "./SearchForm";
-import { SelectLocation } from "./SelectLocation";
+import { Logo } from "./logo";
+import { SearchForm } from "./search-form";
+import { SelectLocation } from "./select-location";
 
 export function DocsNavBar() {
 	return Section({
