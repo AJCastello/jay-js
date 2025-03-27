@@ -115,12 +115,12 @@ setLazyOptions({
   gcInterval: 60000    // 1 minute in milliseconds
 });
 
-// Create a lazy-loaded module with props and disable garbage collection
+// Create a lazy-loaded module with params and disable garbage collection
 function LazyDataTable() {
   return LazyModule({
     module: "DataTable",
     import: () => import("./components/DataTable.js"),
-    props: {
+    params: {
       data: fetchData(),
       pageSize: 10,
       sortable: true
@@ -189,7 +189,7 @@ function LazyModule(lazy: ILazyModule, loader?: HTMLElement): HTMLElement
 interface ILazyModule {
   module?: string;        // Name of the exported module (optional for default exports)
   import: () => Promise<any>; // Dynamic import function
-  props?: Record<string, any>; // Props to pass to the module
+  params?: Record<string, any>; // Props to pass to the module
   collect?: boolean;     // Whether the module can be garbage collected
 }
 ```

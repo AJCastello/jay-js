@@ -27,7 +27,7 @@ describe("Module Loader", () => {
 			const config: TLazyModule = {
 				module: "TestModule",
 				import: jest.fn(),
-				props: { test: "value" },
+				params: { test: "value" },
 			};
 
 			const result = loadFromCache(config);
@@ -63,7 +63,7 @@ describe("Module Loader", () => {
 			const config: TLazyModule = {
 				module: "TestModule",
 				import: mockImportFn,
-				props: { test: "value" },
+				params: { test: "value" },
 			};
 
 			const moduleSection = document.createElement("div");

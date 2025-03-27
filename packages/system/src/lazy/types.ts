@@ -9,7 +9,7 @@ export type TImportedModule = {
 export type TLazyModule = {
 	module?: string;
 	import: () => Promise<any>;
-	props?: Record<string, any>;
+	params?: Record<string, any>;
 	collect?: boolean;
 	loader?: HTMLElement | DocumentFragment;
 };

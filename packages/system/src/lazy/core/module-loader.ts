@@ -16,7 +16,7 @@ export function loadFromCache(lazy: TLazyModule): HTMLElement {
 	if (!cached) {
 		throw new Error(`Module ${lazy.module} not found in cache`);
 	}
-	const moduleSection = cached.module({ ...lazy.props });
+	const moduleSection = cached.module({ ...lazy.params });
 	cached.lastUsed = 0;
 	return moduleSection;
 }
@@ -58,7 +58,7 @@ export async function loadModule(lazy: TLazyModule, moduleSection: HTMLElement) 
 		if (!cached) {
 			throw new Error(`Module ${lazy.module} not found in cache`);
 		}
-		const loadedModule = cached.module(lazy.props || {});
+		const loadedModule = cached.module(lazy.params || {});
 		moduleSection.replaceWith(loadedModule);
 		return loadedModule;
 	} catch (error) {
