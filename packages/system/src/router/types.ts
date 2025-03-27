@@ -10,6 +10,7 @@
  * @property {string} [module] - Name of the exported module (optional for default exports)
  * @property {Record<string, any>} [params] - Additional parameters to pass to the module
  * @property {HTMLElement} [loader] - Custom loader element to show while the route is loading
+ * @property {(route: TRouteInstance) => boolean | Promise<boolean>} [guard] - Function that controls access to the route, returning true to allow access
  */
 export type TRoute = {
 	path: string;
@@ -25,6 +26,7 @@ export type TRoute = {
 	module?: string;
 	params?: Record<string, any>;
 	loader?: HTMLElement;
+	guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 
 /**

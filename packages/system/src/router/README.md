@@ -19,6 +19,7 @@ A lightweight, flexible routing library for client-side single-page applications
 - [Advanced Usage](#advanced-usage)
   - [Path Pattern Syntax](#path-pattern-syntax)
   - [LazyModule Integration](#lazy-module-integration)
+  - [Route Guards](#route-guards)
   - [Layouts](#layouts)
   - [Nested Routes](#nested-routes)
   - [Route Parameters](#route-parameters)
@@ -243,6 +244,7 @@ type TRoute = {
   module?: string;
   params?: Record<string, any>;
   loader?: HTMLElement;
+  guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 ```
 
@@ -255,6 +257,7 @@ type TRoute = {
 - `module`: Name of the exported module (optional for default exports)
 - `params`: Additional parameters to pass to the module
 - `loader`: Custom loading component to display while route is loading
+- `guard`: Function that controls access to the route, returning true to allow access
 
 ### TRouteInstance
 
@@ -356,6 +359,81 @@ Router([
   }
 ], {
   target: '#app'
+});
+```
+
+### Route Guards
+
+Route guards provide a way to control access to routes based on certain conditions. Guards are functions that return a boolean value - `true` to allow navigation or `false` to prevent it. If a guard throws an error, the router will trigger the `onError` callback.
+
+```typescript
+import { Router, Navigate } from '@jay-js/system';
+
+// Authentication service example
+const authService = {
+  isAuthenticated: false,
+  currentUser: null,
+  
+  login(username, password) {
+    // Simulate authentication
+    this.isAuthenticated = true;
+    this.currentUser = { username, role: 'user' };
+    return this.currentUser;
+  },
+  
+  logout() {
+    this.isAuthenticated = false;
+    this.currentUser = null;
+  },
+  
+  hasRole(role) {
+    return this.isAuthenticated && this.currentUser?.role === role;
+  }
+};
+
+// Create route guards
+function authGuard(route) {
+  if (!authService.isAuthenticated) {
+    // Could redirect here
+    Navigate('/login');
+    return false;
+  }
+  return true;
+}
+
+function adminGuard(route) {
+  if (!authService.hasRole('admin')) {
+    throw new Error('Access denied: Admin privileges required');
+  }
+  return true;
+}
+
+// Router with protected routes
+Router([
+  {
+    path: '/',
+    element: () => createHomePage()
+  },
+  {
+    path: '/login',
+    element: () => createLoginPage()
+  },
+  {
+    path: '/dashboard',
+    element: () => createDashboardPage(),
+    guard: authGuard
+  },
+  {
+    path: '/admin',
+    element: () => createAdminPage(),
+    guard: adminGuard
+  }
+], {
+  onError: (error) => {
+    // Handle errors from guards
+    displayErrorMessage(error.message);
+    console.error('Route error:', error);
+  }
 });
 ```
 
