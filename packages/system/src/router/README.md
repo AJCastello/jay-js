@@ -18,6 +18,7 @@ A lightweight, flexible routing library for client-side single-page applications
   - [TRouterOptions](#trouteroptions)
 - [Advanced Usage](#advanced-usage)
   - [Path Pattern Syntax](#path-pattern-syntax)
+  - [LazyModule Integration](#lazy-module-integration)
   - [Layouts](#layouts)
   - [Nested Routes](#nested-routes)
   - [Route Parameters](#route-parameters)
@@ -231,16 +232,27 @@ routerDefineOptions({
 ```typescript
 type TRoute = {
   path: string;
-  element?: 
-    | (HTMLElement | DocumentFragment)
-    | ((props?: any) => HTMLElement | DocumentFragment)
-    | ((props?: any) => Promise<HTMLElement | DocumentFragment>)
-    | undefined;
+  element?: (HTMLElement | DocumentFragment) | 
+            ((props?: any) => HTMLElement | DocumentFragment) | 
+            ((props?: any) => Promise<HTMLElement | DocumentFragment>) | 
+            undefined;
   target?: HTMLElement | string;
   layout?: boolean;
   children?: Array<TRoute>;
+  import?: () => Promise<any>;
+  module?: string;
+  params?: Record<string, any>;
 };
 ```
+
+- `path`: The URL pattern to match against
+- `element`: Element or function to render for this route
+- `target`: DOM element or selector where content will be rendered
+- `layout`: Whether this route acts as a layout for child routes
+- `children`: Nested routes under this route
+- `import`: Dynamic import function for lazy loading the module
+- `module`: Name of the exported module (optional for default exports)
+- `params`: Additional parameters to pass to the module
 
 ### TRouteInstance
 
@@ -268,34 +280,66 @@ type TRouterOptions = {
 
 ### Path Pattern Syntax
 
-The router uses [path-to-regexp](https://github.com/pillarjs/path-to-regexp) for pattern matching, which provides powerful path matching capabilities:
+The router uses path-to-regexp for path matching, offering powerful pattern matching capabilities:
 
-#### Named Parameters
+- Static segments: `/users/profile`
+- Parameter segments: `/users/:id`
+- Optional parameters: `/files/:folder?/items/:id?`
+- Wildcard routes: `/files/*`
+- Regexp parameters: `/users/:id(\\d+)` (matches only numeric IDs)
+
+For comprehensive documentation on path patterns, see the [path-to-regexp documentation](https://github.com/pillarjs/path-to-regexp).
+
+### LazyModule Integration
+
+The router supports integration with the LazyModule system for efficient lazy loading of components and modules. Instead of providing an `element` property, you can use the following properties:
 
 ```typescript
-'/users/:id'         // matches '/users/123'
-'/posts/:category'   // matches '/posts/tech'
+{
+  path: '/dashboard',
+  import: () => import('./pages/Dashboard.js'),
+  module: 'DashboardComponent', // Optional for named exports
+  params: {                     // Optional parameters to pass to the module
+    theme: 'dark',
+    showSidebar: true
+  }
+}
 ```
 
-#### Optional Parameters
+This approach offers several benefits:
+- **Code splitting**: Components are only loaded when needed
+- **Automatic garbage collection**: Unused modules can be cleaned up by the LazyModule collector
+- **Custom loading indicators**: Works with LazyModule's loader system
+- **Memory optimization**: Reduces initial bundle size and memory usage
+
+#### Example with LazyModule
 
 ```typescript
-'/users/:id?'            // matches '/users' and '/users/123'
-'/posts/:category?/:id?' // matches '/posts', '/posts/tech', '/posts/tech/123'
-```
+import { Router } from '@jay-js/system';
 
-#### Custom Parameter Patterns
-
-```typescript
-'/users/:id(\\d+)'     // matches '/users/123' but not '/users/abc'
-'/files/:path(.*)'     // matches all paths under '/files/'
-```
-
-#### Wildcard (Catch-All) Routes
-
-```typescript
-'/docs/*'             // matches all paths starting with '/docs/'
-'/files/:path(.*)'    // similar to a wildcard, captures all segments as path
+Router([
+  {
+    path: '/',
+    element: () => {
+      const el = document.createElement('div');
+      el.textContent = 'Home Page';
+      return el;
+    }
+  },
+  {
+    path: '/dashboard',
+    import: () => import('./pages/Dashboard.js'),
+    module: 'DashboardComponent',
+    params: { initialTab: 'overview' }
+  },
+  {
+    path: '/profile',
+    import: () => import('./pages/Profile.js')
+    // No module name needed for default exports
+  }
+], {
+  target: '#app'
+});
 ```
 
 ### Layouts

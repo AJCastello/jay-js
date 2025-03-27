@@ -6,17 +6,23 @@
  * @property {HTMLElement|string} [target] - The DOM element or selector where the route content will be rendered
  * @property {boolean} [layout] - Whether this route serves as a layout for child routes
  * @property {Array<TRoute>} [children] - Child routes nested under this route
+ * @property {() => Promise<any>} [import] - Dynamic import function for lazy loading the module
+ * @property {string} [module] - Name of the exported module (optional for default exports)
+ * @property {Record<string, any>} [params] - Additional parameters to pass to the module
  */
 export type TRoute = {
 	path: string;
 	element?:
-		| (HTMLElement | DocumentFragment)
-		| ((props?: any) => HTMLElement | DocumentFragment)
-		| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
-		| undefined;
+	| (HTMLElement | DocumentFragment)
+	| ((props?: any) => HTMLElement | DocumentFragment)
+	| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
+	| undefined;
 	target?: HTMLElement | string;
 	layout?: boolean;
 	children?: Array<TRoute>;
+	import?: () => Promise<any>;
+	module?: string;
+	params?: Record<string, any>;
 };
 
 /**
