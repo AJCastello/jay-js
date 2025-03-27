@@ -31,7 +31,7 @@ export async function getElement(route: TRouteInstance) {
 			const lazyElement = LazyModule({
 				import: route.import,
 				module: route.module,
-				props: route.params,
+				params: route.params,
 			}, loader);
 
 			if (route.layout) {

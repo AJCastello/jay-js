@@ -15,8 +15,8 @@ export type TRoute = {
 	path: string;
 	element?:
 	| (HTMLElement | DocumentFragment)
-	| ((props?: any) => HTMLElement | DocumentFragment)
-	| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
+	| ((params?: any) => HTMLElement | DocumentFragment)
+	| ((params?: any) => Promise<HTMLElement | DocumentFragment>)
 	| undefined;
 	target?: HTMLElement | string;
 	layout?: boolean;
