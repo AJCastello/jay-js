@@ -1,6 +1,6 @@
 export type TResolver<T> = (values: T, fieldName?: string) => Promise<TFormValidateResult>;
 
-export type TUseFormProps<T> = {
+export type TUseFormOptions<T> = {
 	defaultValues: T;
 	resolver?: TResolver<T>;
 };

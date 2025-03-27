@@ -5,16 +5,16 @@ import type {
 	TRegister,
 	TRegisterOptions,
 	TUseForm,
-	TUseFormProps,
+	TUseFormOptions,
 } from "../types.js";
 
 /**
  * Creates a form management system with validation, state tracking, and DOM integration.
  *
  * @template T - The type of form values being managed
- * @param {TUseFormProps<T>} props - Form configuration options
- * @param {T} props.defaultValues - Initial values for the form fields
- * @param {TResolver<T>} [props.resolver] - Optional validation resolver function
+ * @param {TUseFormOptions<T>} options - Form configuration options
+ * @param {T} options.defaultValues - Initial values for the form fields
+ * @param {TResolver<T>} [options.resolver] - Optional validation resolver function
  * @returns {TUseForm<T>} Form management interface with methods for registration, state access, and event handling
  *
  * @example
@@ -41,7 +41,7 @@ import type {
  *   console.log('Form submitted:', data);
  * });
  */
-export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseForm<T> {
+export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUseForm<T> {
 	const formErrors = State<TFormValidateResult>({ errors: [] });
 	const formValues = State<T>(defaultValues);
 	const formState: TFormState<T> = {
