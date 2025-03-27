@@ -1,7 +1,7 @@
 import { Box, Section } from "@jay-js/ui";
-import { ExplorePackages } from "../../components/docs/ExplorePackages";
-import { Introduction } from "../../components/docs/Introduction";
-import { UnleashPotential } from "../../components/docs/UnleashPotential";
+import { ExplorePackages } from "../../components/docs/explore-packages";
+import { Introduction } from "../../components/docs/introduction";
+import { UnleashPotential } from "../../components/docs/unleash-potential";
 import { WhyChoose } from "../../components/docs/WhyChoose";
 import { DocsFooter } from "../../components/footer/docs-footer";
 import { DocsNavBar } from "../../components/navbar/docs-nav-bar";

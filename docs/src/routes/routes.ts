@@ -1,7 +1,7 @@
 import { Navigate, Router } from "@jay-js/system";
 import { Layout } from "../layouts/layout";
-import { SystemDocs } from "../layouts/systemDocs";
-import { DocsIntro } from "../pages/docs/DocsIntro";
+import { SystemDocs } from "../layouts/system-docs";
+import { DocsIntro } from "../pages/docs/docs-intro";
 import { Article } from "../pages/docs/article";
 import { Home } from "../pages/home";
 

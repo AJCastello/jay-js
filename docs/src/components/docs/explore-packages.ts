@@ -1,6 +1,6 @@
 import { Box, Typography } from "@jay-js/ui";
 import { PACKAGES } from "../../constants";
-import { CardPackage } from "./CardPackage";
+import { CardPackage } from "./card-package";
 
 export function ExplorePackages() {
 	return Box({

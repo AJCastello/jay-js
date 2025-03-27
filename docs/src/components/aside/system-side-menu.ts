@@ -1,8 +1,8 @@
 import { Section } from "@jay-js/ui";
 import type { TCollection } from "../../types";
 import { groupByCategory } from "../../utils/group-by-category";
-import { useCollection } from "../../utils/useCollection";
-import { MenuGroup } from "../docs/MenuGroup";
+import { useCollection } from "../../utils/use-collection";
+import { MenuGroup } from "../docs/menu-group";
 
 export async function SystemSideMenu() {
 	const data = await SystemSideMenu.collection.get();
