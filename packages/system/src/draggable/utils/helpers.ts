@@ -1,6 +1,6 @@
 import { Draggable } from "../core/draggable";
 import { Droppable } from "../core/droppable";
-import { TDraggableOptions, type TDroppableOptions } from "../types.js";
+import { type TDroppableOptions } from "../types.js";
 
 /**
  * Creates a sortable list with drag-and-drop functionality.
