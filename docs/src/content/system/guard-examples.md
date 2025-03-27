@@ -1,6 +1,6 @@
 ---
 category: Access Control
-categoryId: 3
+categoryId: 5
 articleId: 5
 slug: guard-examples
 title: Guard System Examples

@@ -1,6 +1,6 @@
 ---
 category: Internationalization
-categoryId: 3
+categoryId: 6
 articleId: 2
 slug: i18n-configuration
 title: I18n Configuration

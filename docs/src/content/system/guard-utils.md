@@ -1,6 +1,6 @@
 ---
 category: Access Control
-categoryId: 3
+categoryId: 5
 articleId: 4
 slug: guard-utils
 title: Permission Utilities

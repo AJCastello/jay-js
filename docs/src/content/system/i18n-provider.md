@@ -1,6 +1,6 @@
 ---
 category: Internationalization
-categoryId: 3
+categoryId: 6
 articleId: 4
 slug: i18n-provider
 title: I18n Provider

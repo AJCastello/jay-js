@@ -1,6 +1,6 @@
 ---
 category: Internationalization
-categoryId: 3
+categoryId: 6
 articleId: 5
 slug: i18n-usage
 title: Using Translations

@@ -1,6 +1,6 @@
 ---
 category: Internationalization
-categoryId: 3
+categoryId: 6
 articleId: 3
 slug: i18n-languages
 title: Defining Languages

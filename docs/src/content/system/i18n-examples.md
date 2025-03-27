@@ -1,6 +1,6 @@
 ---
 category: Internationalization
-categoryId: 3
+categoryId: 6
 articleId: 6
 slug: i18n-examples
 title: I18n Examples and Patterns

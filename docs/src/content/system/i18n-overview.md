@@ -1,6 +1,6 @@
 ---
 category: Internationalization
-categoryId: 3
+categoryId: 6
 articleId: 1
 slug: i18n-overview
 title: Internationalization Overview

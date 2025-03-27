@@ -1,6 +1,6 @@
 ---
 category: Access Control
-categoryId: 3
+categoryId: 5
 articleId: 3
 slug: guard-check
 title: Checking Permissions
