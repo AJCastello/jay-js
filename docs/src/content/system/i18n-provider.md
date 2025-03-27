@@ -1,7 +1,7 @@
 ---
 category: Internationalization
 categoryId: 3
-articleId: 5
+articleId: 4
 slug: i18n-provider
 title: I18n Provider
 description: Learn how to set up and use the i18n provider in your application

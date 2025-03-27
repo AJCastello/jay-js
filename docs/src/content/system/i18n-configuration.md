@@ -1,7 +1,7 @@
 ---
 category: Internationalization
 categoryId: 3
-articleId: 6
+articleId: 2
 slug: i18n-configuration
 title: I18n Configuration
 description: Complete guide to configuring the internationalization system

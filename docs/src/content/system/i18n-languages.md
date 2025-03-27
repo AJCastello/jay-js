@@ -1,7 +1,7 @@
 ---
 category: Internationalization
 categoryId: 3
-articleId: 4
+articleId: 3
 slug: i18n-languages
 title: Defining Languages
 description: Learn how to configure and manage languages in your internationalized application

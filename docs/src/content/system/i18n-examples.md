@@ -1,7 +1,7 @@
 ---
 category: Internationalization
 categoryId: 3
-articleId: 7
+articleId: 6
 slug: i18n-examples
 title: I18n Examples and Patterns
 description: Common usage patterns and examples for the internationalization system
