@@ -31,6 +31,7 @@ export type TFormState<T> = {
 	setValue: <K extends keyof T>(path: K, value: T[K]) => void;
 	setValues: (values: Partial<T>) => void;
 	getValue: <K extends keyof T>(path: K) => T[K];
+	getValues: () => T;
 	isValid: (path?: keyof T) => Promise<boolean>;
 	getErrors: () => TFormValidateResult;
 	setError: (field: keyof T, message: string) => void;

@@ -107,6 +107,9 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 			const values = formValues.get();
 			return values[path] as T[K];
 		},
+		getValues: () => {
+			return formValues.get();
+		},
 		isValid: async (path?: keyof T) => {
 			try {
 				if (!resolver) {
