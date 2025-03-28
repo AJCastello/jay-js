@@ -1,9 +1,9 @@
 export type TResolver<T> = (values: T, fieldName?: string) => Promise<TFormValidateResult>;
 
-export type TUseFormProps<T> = {
+export type TUseFormOptions<T> = {
 	defaultValues: T;
 	resolver?: TResolver<T>;
-}
+};
 
 export type TRegister = {
 	name: string;
@@ -11,12 +11,12 @@ export type TRegister = {
 	oninput: (ev: Event) => void;
 	value?: string;
 	checked?: boolean;
-}
+};
 
 export type TRegisterOptions = {
 	beforeChange?: (ev: Event, value: string) => string | undefined;
 	value?: string;
-}
+};
 
 export type TUseForm<T> = {
 	register: (path: keyof T, options?: TRegisterOptions) => TRegister;
@@ -24,19 +24,20 @@ export type TUseForm<T> = {
 	onChange: (callback: (data: T) => void) => void;
 	onSubmit: (callback: (ev: Event, data: T) => void) => (ev: SubmitEvent) => void;
 	onErrors: (callback: (errors: TFormValidateResult) => void) => void;
-}
+};
 
 export type TFormState<T> = {
 	errors: (path: keyof T) => HTMLElement | Text;
 	setValue: <K extends keyof T>(path: K, value: T[K]) => void;
 	setValues: (values: Partial<T>) => void;
 	getValue: <K extends keyof T>(path: K) => T[K];
+	getValues: () => T;
 	isValid: (path?: keyof T) => Promise<boolean>;
 	getErrors: () => TFormValidateResult;
 	setError: (field: keyof T, message: string) => void;
 	setErrors: (errors: TFormValidateResult) => void;
-}
+};
 
 export type TFormValidateResult = {
 	errors: Array<{ path: string; message: string }>;
-}
+};

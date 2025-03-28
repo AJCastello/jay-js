@@ -19,7 +19,11 @@
     "postbuild": "cpy ./src/**/*.{css,styled} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check --write ./src"
+    "lint": "biome check --write ./src",
+    "test": "jest --verbose",
+    "test:full": "jest --verbose --coverage --coverageReporters=html --coverageReporters=text --collectCoverageFrom='src/**/*.{js,ts}'",
+    "test:cover": "jest --coverage --coverageReporters=html --collectCoverageFrom='src/**/*.{js,ts}'",
+    "test:watch": "jest --watch"
   },
   "publishConfig": {
     "access": "public"
@@ -48,17 +52,14 @@
   },
   "homepage": "https://github.com/AJCastello/jay-js#readme",
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/jest": "^29.5.14",
-    "@typescript-eslint/eslint-plugin": "^7.10.0",
-    "@typescript-eslint/parser": "^7.10.0",
-    "eslint": "^9.3.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.6",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.9.4",
     "tailwind-merge": "^2.3.0",
     "yup": "^1.4.0"
   }

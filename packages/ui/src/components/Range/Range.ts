@@ -1,4 +1,4 @@
-import { mergeClasses } from "../../utils/mergeClasses.js";
+import { mergeClasses } from "../../utils/merge-classes.js";
 import type { TBaseTagMap } from "../Base/Base.types.js";
 import { Input } from "../Input/Input.js";
 import type { TRange } from "./Range.types.js";

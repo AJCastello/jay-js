@@ -131,4 +131,38 @@ describe("Render Utility", () => {
 
 		expect(document.body.innerHTML).toBe(initialHTML);
 	});
+
+	it("should filter out null and undefined values from arrays", () => {
+		const app = document.getElementById("app");
+
+		const p1 = document.createElement("p");
+		p1.textContent = "First";
+
+		const p2 = document.createElement("p");
+		p2.textContent = "Second";
+
+		// Array com valores null e undefined
+		render("#app", [p1, null, undefined, p2]);
+
+		expect(app?.childNodes.length).toBe(2);
+		expect(app?.innerHTML).toBe("<p>First</p><p>Second</p>");
+	});
+
+	it("should handle conditional rendering in arrays", () => {
+		const app = document.getElementById("app");
+
+		const p1 = document.createElement("p");
+		p1.textContent = "Always";
+
+		const p2 = document.createElement("p");
+		p2.textContent = "Conditional";
+
+		const condition = false;
+
+		// Simulando renderização condicional comum em JSX/TSX
+		render("#app", [p1, condition ? p2 : null]);
+
+		expect(app?.childNodes.length).toBe(1);
+		expect(app?.innerHTML).toBe("<p>Always</p>");
+	});
 });

@@ -1,4 +1,4 @@
-import type { TRenderContent, TRenderOptions, TRenderTarget } from "../types.js";
+import type { TRenderContent, TRenderContentItem, TRenderOptions, TRenderTarget } from "../types.js";
 import { selector } from "./query.js";
 
 /**
@@ -12,10 +12,11 @@ import { selector } from "./query.js";
  * render('#app', 'Hello'); // Replaces content
  * render(element, 'World', { insert: 'append' }); // Appends content
  * render('#app', [el1, el2], { insert: 'prepend' }); // Prepends multiple elements
+ * render('#app', [el1, null, undefined, el2]); // Handles null/undefined values in arrays
  * ```
  */
 export function render(target: TRenderTarget, content: TRenderContent, options: TRenderOptions = {}): void {
-	if (!target || !content) return;
+	if (!target || content === null || content === undefined) return;
 
 	const element = typeof target === "string" ? selector(target) : target;
 	if (!element) return;
@@ -25,10 +26,15 @@ export function render(target: TRenderTarget, content: TRenderContent, options: 
 	}
 
 	if (Array.isArray(content)) {
+		// Filter out null and undefined values
+		const validContent = content.filter(
+			(item): item is string | Node | HTMLElement => item !== null && item !== undefined,
+		);
+
 		if (options.insert === "prepend") {
-			element.prepend(...content);
+			element.prepend(...validContent);
 		} else {
-			element.append(...content);
+			element.append(...validContent);
 		}
 		return;
 	}

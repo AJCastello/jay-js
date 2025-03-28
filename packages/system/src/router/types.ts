@@ -6,17 +6,27 @@
  * @property {HTMLElement|string} [target] - The DOM element or selector where the route content will be rendered
  * @property {boolean} [layout] - Whether this route serves as a layout for child routes
  * @property {Array<TRoute>} [children] - Child routes nested under this route
+ * @property {() => Promise<any>} [import] - Dynamic import function for lazy loading the module
+ * @property {string} [module] - Name of the exported module (optional for default exports)
+ * @property {Record<string, any>} [params] - Additional parameters to pass to the module
+ * @property {HTMLElement} [loader] - Custom loader element to show while the route is loading
+ * @property {(route: TRouteInstance) => boolean | Promise<boolean>} [guard] - Function that controls access to the route, returning true to allow access
  */
 export type TRoute = {
 	path: string;
 	element?:
 	| (HTMLElement | DocumentFragment)
-	| ((props?: any) => HTMLElement | DocumentFragment)
-	| ((props?: any) => Promise<HTMLElement | DocumentFragment>)
+	| ((params?: any) => HTMLElement | DocumentFragment)
+	| ((params?: any) => Promise<HTMLElement | DocumentFragment>)
 	| undefined;
 	target?: HTMLElement | string;
 	layout?: boolean;
 	children?: Array<TRoute>;
+	import?: () => Promise<any>;
+	module?: string;
+	params?: Record<string, any>;
+	loader?: HTMLElement;
+	guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 
 /**
@@ -37,14 +47,12 @@ export type TRouteInstance = {
  * @property {string} [prefix] - URL prefix to prepend to all routes
  * @property {HTMLElement|string} [target] - Default DOM element or selector where routes will be rendered
  * @property {Function} [onError] - Error handler function
- * @property {Function} [onNavigate] - Function called when navigation occurs
  * @property {Function} [beforeResolve] - Function called before resolving a route, can cancel navigation by returning false
  */
 export type TRouterOptions = {
 	prefix?: string;
 	target?: HTMLElement | string;
 	onError?: (error: Error) => void;
-	onNavigate?: (route: TRouteInstance) => void;
 	beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 

@@ -10,7 +10,7 @@ import { loadFromCache, loadModule } from "./module-loader.js";
  * @param {TLazyModule} lazy - Configuration object for the lazy module
  * @param {string} [lazy.module] - Name of the module to import. If not provided, a unique default name will be generated
  * @param {() => Promise<any>} lazy.import - Function that returns a promise resolving to the module
- * @param {Record<string, any>} [lazy.props] - Props to pass to the module when instantiated
+ * @param {Record<string, any>} [lazy.params] - Props to pass to the module when instantiated
  * @param {boolean} [lazy.collect] - Whether the module can be garbage collected
  * @param {HTMLElement|DocumentFragment} [lazy.loader] - Custom loader element to show while loading
  * @param {HTMLElement} [loader] - Optional loader element to show while module is loading

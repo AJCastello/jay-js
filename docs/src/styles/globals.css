@@ -1,0 +1,182 @@
+/* @biome-ignore */
+@import "highlight.js/styles/atom-one-dark.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+@source "../../node_modules/@jay-js/ui/**/*.styled";
+@theme {
+	--font-primary: "Noto Sans", "sans-serif";
+}
+@plugin "daisyui/theme" {
+	name: "light";
+	default: true;
+	color-scheme: light;
+
+	--color-primary: #01b88b;
+	--color-primary-content: #ffffff;
+
+	--color-secondary: #ba68c8;
+	--color-secondary-content: #ffffff;
+
+	--color-accent: #00adfc;
+	--color-accent-content: #ffffff;
+
+	--color-neutral: #f4f4f4;
+	--color-neutral-content: #6b7280;
+
+	--color-info: #00b3f0;
+	--color-info-content: #000000;
+	--color-success: #00ca92;
+	--color-success-content: #000000;
+	--color-warning: #ffc22d;
+	--color-warning-content: #000000;
+	--color-error: #ff6f70;
+	--color-error-content: #000000;
+
+	--radius-selector: 1rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.5rem;
+
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+
+	--border: 1px;
+
+	--depth: 0;
+	--noise: 0;
+}
+
+@plugin "daisyui/theme" {
+	name: "dark";
+	default: false;
+	prefersdark: true;
+	color-scheme: dark;
+
+	--color-primary: #01b88b;
+	--color-primary-content: #ffffff;
+
+	--color-secondary: #ba68c8;
+	--color-secondary-content: #ffffff;
+
+	--color-accent: #00adfc;
+	--color-accent-content: #ffffff;
+
+	--color-neutral: #444b59;
+	--color-neutral-content: #d0d0d0;
+
+	--color-info: #00b3f0;
+	--color-info-content: #000000;
+	--color-success: #00ca92;
+	--color-success-content: #000000;
+	--color-warning: #ffc22d;
+	--color-warning-content: #000000;
+	--color-error: #ff6f70;
+	--color-error-content: #000000;
+
+	--radius-selector: 1rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.5rem;
+
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+
+	--border: 1px;
+
+	--depth: 0;
+	--noise: 0;
+}
+
+* {
+  scrollbar-color: initial !important;
+}
+
+html,
+body,
+div#app {
+  @apply w-full h-full scroll-smooth;
+}
+
+.prose {
+  @apply max-w-none;
+}
+
+.prose :where(h2) {
+  @apply scroll-mt-28;
+}  
+
+.prose :where(pre) {
+  @apply bg-[#282c34];
+}  
+
+
+.prose code {
+  @apply text-balance
+}
+
+.nav-active {
+  @apply border-l-primary font-bold;
+}
+
+.reading-progress {
+  @apply h-[2px] bg-primary/70 fixed top-20 left-0 w-full;
+  transform-origin: 0 50%;
+  animation: scaleProgress auto linear;
+  animation-timeline: scroll(root);
+}
+
+@keyframes scaleProgress {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.reading-progress-vertical{
+  @apply w-[2px] bg-primary/70 fixed top-32 h-full mx-auto opacity-0;
+  transform-origin: 50% 0;
+  height: calc(100vh - 30rem);
+  animation: scaleProgressVertical auto linear;
+  animation-timeline: scroll(root);
+}
+
+@keyframes scaleProgressVertical {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(1);
+  }
+}
+
+
+.docs-section-progress {
+  @apply w-6 h-6 fixed top-32 bg-base-300/50 rounded-full animate-pulse opacity-0;
+  animation: docsSection linear forwards;
+  animation-timeline: scroll(root);
+}
+
+@keyframes docsSection {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(100vh - 30rem));
+  }
+}

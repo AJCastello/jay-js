@@ -35,7 +35,7 @@ class MockSelectElement extends MockElement {
 }
 
 // Helper for creating DOM events
-const createEvent = (target: any) => ({ target, preventDefault: jest.fn() });
+// const createEvent = (target: any) => ({ target, preventDefault: jest.fn() });
 
 describe("useForm", () => {
 	let querySelectMock: jest.Mock;
@@ -398,7 +398,7 @@ describe("useForm", () => {
 		});
 
 		// Register file input
-		const registerProps = form.register("avatar");
+		// const registerProps = form.register("avatar");
 		// expect(registerProps.type).toBe('file');
 
 		// Simulate change event on file input

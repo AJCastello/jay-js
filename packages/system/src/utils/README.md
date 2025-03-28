@@ -85,6 +85,10 @@ function render(
 - `options`: Optional rendering configuration
   - `insert`: "append" or "prepend" (default: replace content)
 
+**Notes:**
+- When providing an array as `content`, any `null` or `undefined` values will be automatically filtered out
+- This is useful for conditional rendering where some items may not be present
+
 ## Core Utilities
 
 ### `uniKey()`
@@ -116,8 +120,11 @@ type TRenderOptions = {
   insert?: "append" | "prepend";
 };
 
+// Possible items in a render array
+type TRenderContentItem = Node | string | HTMLElement | null | undefined;
+
 // Content types that can be rendered
-type TRenderContent = Node | string | HTMLElement | (Node | string | HTMLElement)[] | null | undefined;
+type TRenderContent = TRenderContentItem | TRenderContentItem[] | null | undefined;
 
 // Target types where content can be rendered
 type TRenderTarget = HTMLElement | string | null;
@@ -143,56 +150,125 @@ import { selector, selectors } from '@jay-js/system';
 // Get a single element
 const mainContent = selector('#main-content');
 if (mainContent) {
-  mainContent.style.backgroundColor = '#f0f0f0';
+  // Apply styles directly to the selected element
+  mainContent.classList.add('active');
 }
 
 // Get only visible elements
 const visibleButtons = selectors('button', document, { onlyVisible: true });
 visibleButtons.forEach(button => {
-  console.log('Visible button:', button.textContent);
+  button.setAttribute('aria-live', 'polite');
 });
 
-// Exclude nested elements
-const topLevelItems = selectors('.item', document, { 
+// Exclude nested elements - useful for complex UIs
+const topLevelCards = selectors('.card', document, { 
   includeNested: false 
 });
-console.log(`Found ${topLevelItems.length} top-level items`);
+console.log(`Found ${topLevelCards.length} top-level cards`);
 
-// Using with a specific container
+// Using with a specific container - great for component isolation
 const sidebar = selector('.sidebar');
 if (sidebar) {
-  const sidebarLinks = selectors('a', sidebar);
-  console.log(`Sidebar has ${sidebarLinks.length} links`);
+  const menuItems = selectors('.menu-item', sidebar);
+  menuItems.forEach((item, index) => {
+    item.setAttribute('data-index', index.toString());
+  });
 }
 ```
 
 ### DOM Rendering
 
 ```typescript
-import { render } from '@jay-js/system';
-import { Box, Typography } from '@jay-js/ui';
+import { render, selector } from '@jay-js/system';
+import { 
+  Box, Card, CardBody, CardTitle, Button, 
+  Typography, Alert, Stack, Avatar, Badge
+} from '@jay-js/ui';
 
-// Replace content
-render('#app', 'Hello World');
-
-// Render an HTML element
-const paragraph = document.createElement('p');
-paragraph.textContent = 'This is a paragraph';
-render('#app', paragraph);
-
-// Render UI components
-render('#app', Box({ 
-  className: 'container',
-  children: Typography({ content: 'Welcome to our app' })
+// Basic content replacement
+render('#app', Typography({ 
+  content: 'Hello World',
+  variant: 'h1',
+  className: 'text-center'
 }));
 
-// Append multiple elements
-const header = document.createElement('header');
-const main = document.createElement('main');
-render('#app', [header, main], { insert: 'append' });
+// Create a complete card component
+const userCard = Card({
+  className: 'shadow-lg',
+  children: [
+    CardTitle({ content: 'User Profile' }),
+    CardBody({
+      children: [
+        Box({
+          className: 'flex items-center gap-4',
+          children: [
+            Avatar({ 
+              src: 'https://example.com/avatar.jpg',
+              alt: 'User avatar'
+            }),
+            Typography({ 
+              content: 'John Doe',
+              variant: 'h3'
+            })
+          ]
+        }),
+        Typography({ 
+          content: 'Frontend Developer', 
+          className: 'text-gray-600' 
+        }),
+        Button({ 
+          content: 'Edit Profile',
+          variant: 'primary',
+          className: 'mt-4'
+        })
+      ]
+    })
+  ]
+});
 
-// Prepend content
-render('#app', Typography({ content: 'IMPORTANT NOTICE' }), { 
+// Render the card into the container
+render('#user-profile', userCard);
+
+// Conditional rendering with authentication state
+const isLoggedIn = false;
+const userData = isLoggedIn ? { name: 'Jane', role: 'Admin' } : null;
+
+// Easily render different UI based on conditions
+render('#header', [
+  Typography({ 
+    content: 'Dashboard', 
+    variant: 'h2'
+  }),
+  // These null values will be automatically filtered out
+  isLoggedIn ? Badge({ content: 'Admin', color: 'red' }) : null,
+  userData?.role === 'Admin' ? Alert({ content: 'Admin Mode', variant: 'warning' }) : null
+]);
+
+// Working with dynamic lists and conditional data
+const notifications = [
+  { id: 1, text: 'New message', read: false },
+  { id: 2, text: 'Payment received', read: true },
+  { id: 3, text: 'Update available', read: false }
+];
+
+// Create notification items
+const notificationItems = notifications.map(note => 
+  Box({
+    key: note.id.toString(),
+    className: note.read ? 'text-gray-500' : 'text-black font-bold',
+    children: [
+      Typography({ content: note.text }),
+      // Only adds badge if unread
+      note.read ? null : Badge({ content: 'New', color: 'blue' })
+    ]
+  })
+);
+
+// Insert items at the top of the notification panel
+render('#notification-center', Stack({ 
+  children: notificationItems,
+  gap: 'sm' 
+}), { 
   insert: 'prepend' 
 });
 ```
@@ -201,21 +277,54 @@ render('#app', Typography({ content: 'IMPORTANT NOTICE' }), {
 
 ```typescript
 import { uniKey } from '@jay-js/system';
+import { render, selector } from '@jay-js/system';
+import { Box, TextInput, Button } from '@jay-js/ui';
 
 // Generate a default unique ID (10 characters)
-const defaultId = uniKey();
-console.log('Default ID:', defaultId); // e.g., "A7bC9dE2f0"
+const sessionId = uniKey();
+console.log('Session ID:', sessionId); // e.g., "A7bC9dE2f0"
 
-// Generate a longer ID for better uniqueness
-const longerId = uniKey(20);
-console.log('Longer ID:', longerId); // e.g., "A7bC9dE2f0G4hI6jK8lM"
+// Generate shorter IDs for UI elements
+const formId = `form-${uniKey(6)}`;
+const inputId = `input-${uniKey(6)}`;
 
-// Custom character set (only lowercase)
-const lowercaseId = uniKey(8, 'abcdefghijklmnopqrstuvwxyz');
-console.log('Lowercase ID:', lowercaseId); // e.g., "abcdefgh"
+// Use IDs for creating accessible forms
+const loginForm = Box({
+  id: formId,
+  role: 'form',
+  ariaLabel: 'Login Form',
+  children: [
+    TextInput({
+      id: inputId,
+      label: 'Username',
+      placeholder: 'Enter username',
+      required: true
+    }),
+    Button({
+      content: 'Submit',
+      type: 'submit',
+      variant: 'primary',
+      className: 'mt-4'
+    })
+  ]
+});
 
-// Use case: Create HTML elements with unique IDs
-const container = document.createElement('div');
-container.id = `container-${uniKey(6)}`;
-document.body.appendChild(container);
+render('#auth-container', loginForm);
+
+// Using unique IDs to connect related elements
+const tooltipId = `tip-${uniKey(5)}`;
+const helpButton = Button({
+  content: '?',
+  variant: 'outline',
+  ariaDescribedby: tooltipId
+});
+
+const tooltip = Box({
+  id: tooltipId,
+  role: 'tooltip',
+  className: 'hidden',
+  children: Typography({ content: 'Click for help' })
+});
+
+render('#help-section', [helpButton, tooltip]);
 ```

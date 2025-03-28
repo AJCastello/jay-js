@@ -20,6 +20,26 @@ export async function getRoute() {
 		return;
 	}
 
+	// Check route guard if present
+	if (match.route.guard) {
+		try {
+			const guardResult = await match.route.guard(match.route);
+			if (!guardResult) {
+				// Guard rejected the navigation
+				if (routerOptions.onError) {
+					routerOptions.onError(new Error("Route access denied by guard", { cause: "guard-rejected" }));
+				}
+				return;
+			}
+		} catch (error) {
+			// Guard threw an error
+			if (routerOptions.onError) {
+				routerOptions.onError(error instanceof Error ? error : new Error("Route guard error", { cause: error }));
+			}
+			return;
+		}
+	}
+
 	if (match.route.layout) {
 		const matchLayoutIndex = getPotentialMatchIndex();
 		if (!matchLayoutIndex.route) {
@@ -31,10 +51,6 @@ export async function getRoute() {
 		}
 		await renderRoute(matchLayoutIndex.route);
 		return;
-	}
-
-	if (routerOptions.onNavigate) {
-		routerOptions.onNavigate(match.route);
 	}
 
 	await renderRoute(match.route);

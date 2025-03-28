@@ -1,35 +1,40 @@
 {
-    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-    "vcs": {
-      "enabled": false,
-      "clientKind": "git",
-      "useIgnoreFile": false
-    },
-    "files": {
-      "ignoreUnknown": false,
-      "ignore": ["./src/styles/*.css"]
-    },
-    "formatter": {
-      "enabled": true,
-      "indentStyle": "tab",
-      "lineWidth": 120
-    },
-    "organizeImports": {
-      "enabled": true
-    },
-    "linter": {
-      "enabled": true,
-      "rules": {
-        "recommended": true,
-        "suspicious": {
-          "noExplicitAny": "off"
-        }
-      }
-    },
-    "javascript": {
-      "formatter": {
-        "quoteStyle": "double",
-        "lineWidth": 120
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": [
+      "./src/styles/*.css"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "tab",
+    "lineWidth": 120
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "noUnusedVariables": "error"
+      },
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off"
       }
     }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "lineWidth": 120
+    }
   }
+}

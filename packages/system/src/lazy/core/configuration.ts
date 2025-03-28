@@ -52,12 +52,12 @@ export function removeConfigChangeListener(callback: ConfigChangeCallback): void
  * @param {Partial<TLazyOptions>} options - Partial configuration object
  */
 export function setLazyOptions(options: Partial<TLazyOptions>): void {
-	Object.keys(options).forEach((key) => {
+	for (const key of Object.keys(options)) {
 		const typedKey = key as keyof TLazyOptions;
 		if (options[typedKey] === undefined) {
 			delete options[typedKey];
 		}
-	});
+	}
 	Object.assign(lazyOptions, options);
 	configChangeListeners.forEach((listener) => listener(lazyOptions));
 }

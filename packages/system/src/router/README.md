@@ -1,6 +1,6 @@
 # @jay-js/system - Router
 
-A lightweight, flexible routing library for client-side single-page applications, providing path-based navigation without page reloads.
+A lightweight, flexible routing library for client-side single-page applications, providing path-based navigation without page reloads. Powered by path-to-regexp for advanced path matching capabilities.
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ A lightweight, flexible routing library for client-side single-page applications
 - [API Reference](#api-reference)
   - [Router](#router)
   - [Navigate](#navigate)
+  - [beforeNavigate](#beforenavigate)
   - [getParams](#getparams)
   - [routerDefineOptions](#routerdefineoptions)
 - [Type Definitions](#type-definitions)
@@ -16,9 +17,13 @@ A lightweight, flexible routing library for client-side single-page applications
   - [TRouteInstance](#trouteinstance)
   - [TRouterOptions](#trouteroptions)
 - [Advanced Usage](#advanced-usage)
+  - [Path Pattern Syntax](#path-pattern-syntax)
+  - [LazyModule Integration](#lazy-module-integration)
+  - [Route Guards](#route-guards)
   - [Layouts](#layouts)
   - [Nested Routes](#nested-routes)
   - [Route Parameters](#route-parameters)
+  - [Navigation Guards](#navigation-guards)
   - [Navigation Hooks](#navigation-hooks)
 - [Examples](#examples)
 
@@ -130,6 +135,50 @@ document.getElementById('about-btn').addEventListener('click', () => {
 // With a configured prefix of '/app', this navigates to '/app/about'
 ```
 
+### beforeNavigate
+
+Register a function that runs before the next navigation attempt, allowing you to interrupt navigation when necessary.
+
+```typescript
+beforeNavigate(guardFn: () => boolean | Promise<boolean>): () => void
+```
+
+#### Parameters
+
+- `guardFn`: Function that returns a boolean or Promise<boolean> indicating whether navigation should proceed
+- `options`: (Optional) Additional options for future extensions
+
+#### Returns
+
+- A function that can be called to manually remove the guard if needed
+
+#### Example
+
+```typescript
+import { beforeNavigate, Navigate, selector } from '@jay-js/system';
+
+// Detect unsaved form changes and confirm before navigating away
+const form = selector('form');
+
+let isDirty = false;
+
+form.addEventListener('input', () => {
+  isDirty = true;
+});
+
+form.addEventListener('submit', () => {
+  isDirty = false; // Reset on submit
+});
+
+beforeNavigate(() => {
+  if (isDirty) {
+    return confirm('You have unsaved changes. Do you want to leave this page?');
+  }
+  return true; // Allow navigation
+});
+
+```
+
 ### getParams
 
 Retrieves route parameters and query string parameters from the current URL.
@@ -148,6 +197,11 @@ getParams(): Record<string, string>
 // For a route defined as '/users/:id' and URL '/users/123?filter=active'
 const { id, filter } = getParams();
 // id = '123', filter = 'active'
+
+// For more complex route patterns like '/users/:userId/posts/:postId?'
+// URL: '/users/123/posts/456?sort=newest'
+const { userId, postId, sort } = getParams();
+// userId = '123', postId = '456', sort = 'newest'
 ```
 
 ### routerDefineOptions
@@ -179,16 +233,31 @@ routerDefineOptions({
 ```typescript
 type TRoute = {
   path: string;
-  element?: 
-    | (HTMLElement | DocumentFragment)
-    | ((props?: any) => HTMLElement | DocumentFragment)
-    | ((props?: any) => Promise<HTMLElement | DocumentFragment>)
-    | undefined;
+  element?: (HTMLElement | DocumentFragment) | 
+            ((params?: any) => HTMLElement | DocumentFragment) | 
+            ((params?: any) => Promise<HTMLElement | DocumentFragment>) | 
+            undefined;
   target?: HTMLElement | string;
   layout?: boolean;
   children?: Array<TRoute>;
+  import?: () => Promise<any>;
+  module?: string;
+  params?: Record<string, any>;
+  loader?: HTMLElement;
+  guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 ```
+
+- `path`: The URL pattern to match against
+- `element`: Element or function to render for this route
+- `target`: DOM element or selector where content will be rendered
+- `layout`: Whether this route acts as a layout for child routes
+- `children`: Nested routes under this route
+- `import`: Dynamic import function for lazy loading the module
+- `module`: Name of the exported module (optional for default exports)
+- `params`: Additional parameters to pass to the module
+- `loader`: Custom loading component to display while route is loading
+- `guard`: Function that controls access to the route, returning true to allow access
 
 ### TRouteInstance
 
@@ -196,6 +265,8 @@ type TRoute = {
 type TRouteInstance = {
   id: string;
   parentLayoutId?: string;
+  pattern?: RegExp;
+  keys?: Key[];
 } & TRoute;
 ```
 
@@ -206,12 +277,165 @@ type TRouterOptions = {
   prefix?: string;
   target?: HTMLElement | string;
   onError?: (error: Error) => void;
-  onNavigate?: (route: TRouteInstance) => void;
   beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
 };
 ```
 
 ## Advanced Usage
+
+### Path Pattern Syntax
+
+The router uses path-to-regexp for path matching, offering powerful pattern matching capabilities:
+
+- Static segments: `/users/profile`
+- Parameter segments: `/users/:id`
+- Optional parameters: `/files/:folder?/items/:id?`
+- Wildcard routes: `/files/*`
+- Regexp parameters: `/users/:id(\\d+)` (matches only numeric IDs)
+
+For comprehensive documentation on path patterns, see the [path-to-regexp documentation](https://github.com/pillarjs/path-to-regexp).
+
+### LazyModule Integration
+
+The router supports integration with the LazyModule system for efficient lazy loading of components and modules. Instead of providing an `element` property, you can use the following properties:
+
+```typescript
+{
+  path: '/dashboard',
+  import: () => import('./pages/Dashboard.js'),
+  module: 'DashboardComponent', // Optional for named exports
+  params: {                     // Optional parameters to pass to the module
+    theme: 'dark',
+    showSidebar: true
+  },
+  loader: Box({
+    className: "skeleton-loader animate-pulse"
+  })
+}
+```
+
+This approach offers several benefits:
+- **Code splitting**: Components are only loaded when needed
+- **Automatic garbage collection**: Unused modules can be cleaned up by the LazyModule collector
+- **Custom loading indicators**: Works with LazyModule's loader system
+- **Memory optimization**: Reduces initial bundle size and memory usage
+
+#### Example with LazyModule
+
+```typescript
+import { Router } from '@jay-js/system';
+
+// Create a reusable loading component
+function createSkeletonLoader() {
+  return Box({
+    className: "skeleton-loader",
+    children: Array.from({ length: 4 }).map(Box({
+      className: "skeleton-item"
+    }))
+  });
+}
+
+Router([
+  {
+    path: '/',
+    element: () => {
+      const el = document.createElement('div');
+      el.textContent = 'Home Page';
+      return el;
+    }
+  },
+  {
+    path: '/dashboard',
+    import: () => import('./pages/Dashboard.js'),
+    module: 'DashboardComponent',
+    params: { initialTab: 'overview' },
+    loader: createSkeletonLoader()
+  },
+  {
+    path: '/profile',
+    import: () => import('./pages/Profile.js'),
+    loader: createSkeletonLoader()
+    // No module name needed for default exports
+  }
+], {
+  target: '#app'
+});
+```
+
+### Route Guards
+
+Route guards provide a way to control access to routes based on certain conditions. Guards are functions that return a boolean value - `true` to allow navigation or `false` to prevent it. If a guard throws an error, the router will trigger the `onError` callback.
+
+```typescript
+import { Router, Navigate } from '@jay-js/system';
+
+// Authentication service example
+const authService = {
+  isAuthenticated: false,
+  currentUser: null,
+  
+  login(username, password) {
+    // Simulate authentication
+    this.isAuthenticated = true;
+    this.currentUser = { username, role: 'user' };
+    return this.currentUser;
+  },
+  
+  logout() {
+    this.isAuthenticated = false;
+    this.currentUser = null;
+  },
+  
+  hasRole(role) {
+    return this.isAuthenticated && this.currentUser?.role === role;
+  }
+};
+
+// Create route guards
+function authGuard(route) {
+  if (!authService.isAuthenticated) {
+    // Could redirect here
+    Navigate('/login');
+    return false;
+  }
+  return true;
+}
+
+function adminGuard(route) {
+  if (!authService.hasRole('admin')) {
+    throw new Error('Access denied: Admin privileges required');
+  }
+  return true;
+}
+
+// Router with protected routes
+Router([
+  {
+    path: '/',
+    element: () => createHomePage()
+  },
+  {
+    path: '/login',
+    element: () => createLoginPage()
+  },
+  {
+    path: '/dashboard',
+    element: () => createDashboardPage(),
+    guard: authGuard
+  },
+  {
+    path: '/admin',
+    element: () => createAdminPage(),
+    guard: adminGuard
+  }
+], {
+  onError: (error) => {
+    // Handle errors from guards
+    displayErrorMessage(error.message);
+    console.error('Route error:', error);
+  }
+});
+```
 
 ### Layouts
 
@@ -262,10 +486,11 @@ Router([
 
 ### Route Parameters
 
-Define dynamic parts of a route path using the `:paramName` syntax.
+Define dynamic parts of a route path using various parameter syntax options.
 
 ```typescript
 Router([
+  // Basic parameter
   {
     path: '/users/:id',
     element: () => {
@@ -274,13 +499,64 @@ Router([
       content.textContent = `User ID: ${id}`;
       return content;
     }
+  },
+  // Optional parameter
+  {
+    path: '/products/:category?',
+    element: () => {
+      const { category } = getParams();
+      return createProductList(category);
+    }
+  },
+  // Multiple parameters with constraints
+  {
+    path: '/articles/:year(\\d{4})/:month(\\d{2})/:slug',
+    element: () => {
+      const { year, month, slug } = getParams();
+      return createArticleView(year, month, slug);
+    }
   }
 ]);
 ```
 
+### Navigation Guards
+
+Use `beforeNavigate` to protect navigation with custom logic:
+
+```typescript
+import { beforeNavigate, Navigate } from '@jay-js/system';
+
+// Form with unsaved changes
+function setupFormProtection(formElement) {
+  let hasChanges = false;
+  
+  formElement.addEventListener('input', () => {
+    hasChanges = true;
+  });
+
+  // Guard is only applied for the next navigation attempt
+  beforeNavigate(() => {
+    if (hasChanges) {
+      const wantsToProceed = confirm('Discard unsaved changes?');
+      if (wantsToProceed) {
+        hasChanges = false;
+        return true;
+      }
+      return false;
+    }
+    return true;
+  });
+  
+  formElement.addEventListener('submit', () => {
+    hasChanges = false;
+  });
+}
+
+```
+
 ### Navigation Hooks
 
-Configure hooks to run before or after navigation.
+Configure hooks to run before navigation.
 
 ```typescript
 Router([
@@ -293,17 +569,13 @@ Router([
       return false; // Prevent original navigation
     }
     return true; // Allow navigation to proceed
-  },
-  onNavigate: (route) => {
-    // Run after successful navigation
-    analyticsTracker.trackPageView(route.path);
   }
 });
 ```
 
 ## Examples
 
-### Basic SPA with Multiple Pages
+### Basic SPA with Advanced Routing
 
 ```typescript
 import { Router, Navigate, getParams } from '@jay-js/system';
@@ -323,7 +595,7 @@ function createPage(title, content) {
   return page;
 }
 
-// Define routes
+// Define routes with advanced patterns
 Router([
   {
     path: '/',
@@ -336,18 +608,40 @@ Router([
     target: '#app'
   },
   {
-    path: '/products/:id',
+    path: '/products/:category?',
     element: () => {
-      const { id } = getParams();
-      return createPage('Product Details', `You are viewing product ${id}`);
+      const { category } = getParams();
+      return createPage('Products', 
+        category ? `Browsing ${category} products` : 'Browse all product categories');
     },
+    target: '#app'
+  },
+  {
+    path: '/products/:category/:id(\\d+)',
+    element: () => {
+      const { category, id } = getParams();
+      return createPage('Product Details', 
+        `You are viewing ${category} product #${id}`);
+    },
+    target: '#app'
+  },
+  {
+    path: '/blog/:year(\\d{4})/:month(\\d{2})/:slug',
+    element: () => {
+      const { year, month, slug } = getParams();
+      return createPage('Blog Post', 
+        `Reading article "${slug}" from ${month}/${year}`);
+    },
+    target: '#app'
+  },
+  {
+    path: '*',
+    element: () => createPage('Not Found', 'Page not found'),
     target: '#app'
   }
 ], {
   onError: (err) => {
     console.error('Router error:', err);
-    const errorElement = createPage('Error', 'Page not found');
-    document.getElementById('app').appendChild(errorElement);
   }
 });
 
@@ -358,8 +652,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const links = [
     { href: '/', text: 'Home' },
     { href: '/about', text: 'About' },
-    { href: '/products/1', text: 'Product 1' },
-    { href: '/products/2', text: 'Product 2' }
+    { href: '/products', text: 'All Products' },
+    { href: '/products/electronics', text: 'Electronics' },
+    { href: '/products/electronics/123', text: 'Product #123' },
+    { href: '/blog/2025/03/new-features', text: 'Blog Post' }
   ];
   
   links.forEach(link => {
@@ -376,3 +672,4 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.body.insertBefore(nav, document.getElementById('app'));
 });
+```

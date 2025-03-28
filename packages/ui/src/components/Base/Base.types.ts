@@ -1,4 +1,4 @@
-import type { IRefObject } from "../../hooks/useRef.js";
+import type { TRefObject } from "../../hooks/use-ref.js";
 
 interface HTMLFormElementExt extends HTMLElement {
 	acceptCharset: string;
@@ -64,15 +64,15 @@ export type TBaseElement<T extends TBaseTagMap> = {
 	tag?: T;
 	className?: string;
 	listeners?: Listener;
-	ref?: IRefObject<HTMLElement>;
+	ref?: TRefObject<HTMLElement>;
 	dataset?: Partial<DOMStringMap>;
 	style?: TStyle;
 	children?: TChildren;
 	onmount?: (element: HTMLElement) => void;
 } & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style" | "size">;
 
-export type IBaseDiv = TBaseElement<TBaseTagMap> & {
+export type TBaseDiv = TBaseElement<TBaseTagMap> & {
 	tag: TBaseTagMap;
 };
 
-export type TBase<T extends TBaseTagMap> = TBaseElement<T> | IBaseDiv;
+export type TBase<T extends TBaseTagMap> = TBaseElement<T> | TBaseDiv;

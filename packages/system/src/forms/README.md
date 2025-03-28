@@ -194,6 +194,9 @@ The `formState` object provides methods to interact with and manage the form sta
 // Get current value of a field
 const currentEmail = form.formState.getValue('email');
 
+// Get all current form values
+const formData = form.formState.getValues();
+
 // Set a single field value
 form.formState.setValue('email', 'user@example.com');
 

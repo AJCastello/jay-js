@@ -1,7 +1,6 @@
-import { themeOptions } from "../../core/configuration.js";
-import * as themeManagerModule from "../../core/theme-manager.js";
-import { initTheme, prefersColorSchemeDark, setTheme } from "../../core/theme-manager.js";
-import { themeDefineOptions } from "../../index.js";
+import { themeDefineOptions, themeOptions } from "../configuration";
+import { initTheme, setTheme, prefersColorSchemeDark } from "../theme-manager";
+import * as themeManagerModule from "../theme-manager";
 
 // Mock localStorage for testing
 const localStorageMock = (() => {
@@ -302,7 +301,7 @@ describe("Theme Manager", () => {
 				throw new Error("Storage error");
 			});
 
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => { });
 
 			setTheme("dark");
 

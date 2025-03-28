@@ -5,10 +5,10 @@ import { routerOptions } from "./configuration";
 
 /**
  * Processes and registers route definitions for the router
- * 
+ *
  * This function transforms the user-provided route definitions into internal route instances
  * that the router can work with. It handles nested routes, layouts, and target resolution.
- * 
+ *
  * @param {Array<TRoute>} inputRoutes - Array of route configurations to register
  * @param {HTMLElement|string} [target] - Default rendering target for routes that don't specify their own
  * @param {string} [prefix=''] - Path prefix to prepend to all routes in this set
@@ -30,7 +30,7 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string
 				.replace(/\/{2,}/g, "/");
 			const routeId = uniKey();
 
-			if (route.element) {
+			if (route.element || route.import) {
 				let routeTarget = route.target || target || document.body;
 				if (typeof routeTarget === "string") {
 					const targetElement = selector(routeTarget);
@@ -45,12 +45,19 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string
 				const routeBuild: TRouteInstance = {
 					id: routeId,
 					path: newPath,
-					element: route.element,
 					target: routeTarget as HTMLElement,
 				};
 
-				route.layout && (routeBuild.layout = route.layout);
-				parentLayoutId && (routeBuild.parentLayoutId = parentLayoutId);
+				// Copy properties from the route
+				if (route.element) routeBuild.element = route.element;
+				if (route.import) routeBuild.import = route.import;
+				if (route.module) routeBuild.module = route.module;
+				if (route.params) routeBuild.params = route.params;
+				if (route.layout) routeBuild.layout = route.layout;
+				if (route.loader) routeBuild.loader = route.loader;
+				if (route.guard) routeBuild.guard = route.guard;
+				if (parentLayoutId) routeBuild.parentLayoutId = parentLayoutId;
+
 				outputRoutes.push(routeBuild);
 			}
 

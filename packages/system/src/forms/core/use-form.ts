@@ -5,16 +5,16 @@ import type {
 	TRegister,
 	TRegisterOptions,
 	TUseForm,
-	TUseFormProps,
+	TUseFormOptions,
 } from "../types.js";
 
 /**
  * Creates a form management system with validation, state tracking, and DOM integration.
  *
  * @template T - The type of form values being managed
- * @param {TUseFormProps<T>} props - Form configuration options
- * @param {T} props.defaultValues - Initial values for the form fields
- * @param {TResolver<T>} [props.resolver] - Optional validation resolver function
+ * @param {TUseFormOptions<T>} options - Form configuration options
+ * @param {T} options.defaultValues - Initial values for the form fields
+ * @param {TResolver<T>} [options.resolver] - Optional validation resolver function
  * @returns {TUseForm<T>} Form management interface with methods for registration, state access, and event handling
  *
  * @example
@@ -41,7 +41,7 @@ import type {
  *   console.log('Form submitted:', data);
  * });
  */
-export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseForm<T> {
+export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUseForm<T> {
 	const formErrors = State<TFormValidateResult>({ errors: [] });
 	const formValues = State<T>(defaultValues);
 	const formState: TFormState<T> = {
@@ -70,7 +70,6 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 				if (fieldElement.type === "checkbox") {
 					fieldElement.checked = Boolean(value);
 				} else if (fieldElement.type === "radio") {
-					// Para radio buttons, precisamos selecionar o correto com base no valor
 					const radioGroup = document.querySelectorAll(`input[type="radio"][name="${String(path)}"]`);
 					radioGroup.forEach((radio) => {
 						if (radio instanceof HTMLInputElement) {
@@ -84,7 +83,6 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 				fieldElement.value = String(value);
 			} else if (fieldElement instanceof HTMLSelectElement) {
 				if (fieldElement.multiple && Array.isArray(value)) {
-					// Para select múltiplo com array de valores
 					Array.from(fieldElement.options).forEach((option) => {
 						option.selected = (value as unknown as string[]).includes(option.value);
 					});
@@ -101,7 +99,6 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 				};
 			});
 
-			// Atualiza os elementos DOM para cada campo alterado
 			for (const field in values) {
 				formState.setValue(field as keyof T, values[field as keyof T] as T[keyof T]);
 			}
@@ -109,6 +106,9 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 		getValue: <K extends keyof T>(path: K) => {
 			const values = formValues.get();
 			return values[path] as T[K];
+		},
+		getValues: () => {
+			return formValues.get();
 		},
 		isValid: async (path?: keyof T) => {
 			try {
@@ -174,29 +174,22 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 	 */
 	function getElementValue(element: HTMLElement): any {
 		if (element instanceof HTMLInputElement) {
-			// Checkboxes retornam booleanos
 			if (element.type === "checkbox") {
 				return element.checked;
-			}
-			// Radio buttons só são considerados se estiverem marcados
-			else if (element.type === "radio") {
+			} else if (element.type === "radio") {
 				if (element.checked) {
 					return element.value;
 				}
-				return undefined; // Ignorar radio buttons desmarcados
-			}
-			// Inputs de tipo file retornam o FileList
-			else if (element.type === "file") {
+				return undefined;
+			} else if (element.type === "file") {
 				return element.files;
 			}
-			// Outros inputs retornam o valor como string
 			return element.value;
 		} else if (element instanceof HTMLSelectElement) {
-			// Select múltiplo retorna array de valores
 			if (element.multiple) {
 				return Array.from(element.selectedOptions).map((option) => option.value);
 			}
-			// Select normal retorna string
+
 			return element.value;
 		} else if (element instanceof HTMLTextAreaElement) {
 			return element.value;
@@ -221,10 +214,8 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 		) {
 			const field = element.getAttribute("name") as string;
 
-			// Obtém o valor apropriado baseado no tipo de elemento
 			let value: any = getElementValue(element);
 
-			// Retorna undefined para radio buttons desmarcados
 			if (value === undefined) return;
 
 			if (options.beforeChange && typeof value === "string") {
@@ -233,7 +224,6 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 					return;
 				}
 
-				// Atualiza o elemento do DOM para refletir a alteração
 				if (element instanceof HTMLInputElement && element.type !== "checkbox" && element.type !== "radio") {
 					element.value = value;
 				} else if (element instanceof HTMLTextAreaElement) {
@@ -241,10 +231,8 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 				}
 			}
 
-			// Atualiza o estado interno
 			privateSetValue(field, value);
 
-			// Valida o campo se houver um resolver
 			try {
 				if (!resolver) {
 					return;
@@ -307,7 +295,6 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormProps<T>): TUseF
 			};
 		}
 
-		// Entrada padrão para outros tipos
 		return {
 			name: path as string,
 			onchange: (ev) => onChangeValue(ev, options),

@@ -1,23 +1,48 @@
 import type { TRouteInstance } from "../../types";
 import { resolvedRoutes, routerOptions } from "../configuration";
 
-export async function renderRoute(route: TRouteInstance): Promise<HTMLElement | undefined> {
-	if (route.element && route.target) {
-		const target = await getTarget(route);
-		const element = await getElement(route);
+// Import LazyModule functionality
+import { LazyModule } from "../../../lazy/core/lazy-module.js";
 
-		if (!element || !target || !(target instanceof HTMLElement)) return;
+export async function renderRoute(route: TRouteInstance): Promise<HTMLElement | undefined> {
+	const target = await getTarget(route);
+	if (!target || !(target instanceof HTMLElement)) return;
+
+	// Handle both element and import/module properties
+	if (route.element || route.import) {
+		const element = await getElement(route);
+		if (!element) return;
 
 		target.innerHTML = "";
 		target.append(element as HTMLElement);
 		return target;
 	}
+
 	return;
 }
 
 export async function getElement(route: TRouteInstance) {
 	try {
-		if (route && route.element) {
+		// Handle lazy loading via import and module properties
+		if (route.import) {
+			// Pass loader only if it's an HTMLElement (LazyModule expects HTMLElement)
+			const loader = route.loader instanceof HTMLElement ? route.loader : undefined;
+
+			const lazyElement = LazyModule({
+				import: route.import,
+				module: route.module,
+				params: route.params,
+			}, loader);
+
+			if (route.layout) {
+				lazyElement.dataset.layoutId = route.id;
+			}
+
+			return lazyElement;
+		}
+
+		// Handle traditional element property
+		if (route.element) {
 			if (typeof route.element === "function" && route.element instanceof Promise) {
 				const element = (await route.element()) as HTMLElement;
 				if (route.layout) {

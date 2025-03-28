@@ -9,11 +9,14 @@ import { lazyOptions, moduleCache } from "./configuration.js";
  * @throws {Error} When the module is not found in cache
  */
 export function loadFromCache(lazy: TLazyModule): HTMLElement {
-	const cached = moduleCache.get(lazy.module!);
+	if (!lazy.module) {
+		throw new Error("Module name is required.");
+	}
+	const cached = moduleCache.get(lazy.module);
 	if (!cached) {
 		throw new Error(`Module ${lazy.module} not found in cache`);
 	}
-	const moduleSection = cached.module({ ...lazy.props });
+	const moduleSection = cached.module({ ...lazy.params });
 	cached.lastUsed = 0;
 	return moduleSection;
 }
@@ -55,7 +58,7 @@ export async function loadModule(lazy: TLazyModule, moduleSection: HTMLElement) 
 		if (!cached) {
 			throw new Error(`Module ${lazy.module} not found in cache`);
 		}
-		const loadedModule = cached.module(lazy.props || {});
+		const loadedModule = cached.module(lazy.params || {});
 		moduleSection.replaceWith(loadedModule);
 		return loadedModule;
 	} catch (error) {

@@ -1,0 +1,45 @@
+import { Box, Dropdown, DropdownContent, DropdownLabel, Icon, Menu, MenuItem, Typography } from "@jay-js/ui";
+import { i18n } from "../../locales/i18n";
+
+export function SelectLocation() {
+	return Box({
+		children: Dropdown({
+			toEnd: true,
+			children: [
+				DropdownLabel({
+					className: "btn",
+					children: Icon({
+						className: "text-xl",
+						icon: "ph-duotone ph-translate",
+					}),
+				}),
+				DropdownContent({
+					className: "p-4 shadow-lg bg-base-200 rounded-box w-52",
+					children: [
+						Menu({
+							size: "menu-md",
+							position: "menu-vertical",
+							children: [
+								MenuItem({
+									children: Typography({
+										children: "Portuguese",
+									}),
+								}),
+								MenuItem({
+									children: Typography({
+										children: "English",
+									}),
+								}),
+								MenuItem({
+									children: Typography({
+										children: "French",
+									}),
+								}),
+							],
+						}),
+					],
+				}),
+			],
+		}),
+	});
+}
