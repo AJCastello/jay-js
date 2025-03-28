@@ -8,7 +8,7 @@ export function DocsNavBar() {
 		tag: "header",
 		className: "bg-base-300/40 fixed w-full z-50 backdrop-blur-md",
 		children: Box({
-			className: "p-4 flex justify-between items-center max-w-screen-xl mx-auto",
+			className: "p-4 flex justify-between items-center max-w-screen-2xl mx-auto",
 			children: [Logo(), SearchForm(), SelectLocation()],
 		}),
 	});

@@ -12,7 +12,7 @@ import { i18n } from "../locales/i18n";
 export function Layout() {
 	return Section({
 		tag: "section",
-		className: "max-w-lg mx-auto h-screen w-screen flex flex-col justify-center items-center",
+		className: "max-w-2xl mx-auto h-screen w-screen flex flex-col justify-center items-center",
 		children: [
 			Img({
 				src: jayjs,

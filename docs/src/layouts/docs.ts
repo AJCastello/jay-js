@@ -8,7 +8,7 @@ export function Docs() {
 		children: [
 			DocsNavBar(),
 			Box({
-				className: "max-w-screen-xl w-full mx-auto pb-8 pt-20  grow",
+				className: "max-w-screen-2xl w-full mx-auto pb-8 pt-20  grow",
 				children: Outlet(),
 			}),
 			DocsFooter(),
