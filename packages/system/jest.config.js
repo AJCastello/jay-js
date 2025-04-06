@@ -12,12 +12,13 @@ export default {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^(.+)\\.js$": "$1"
   },
-  setupFilesAfterEnv: [
-    "<rootDir>/src/draggable/__tests__/setup.ts"
-  ],
+  // setupFilesAfterEnv: [
+  //   "<rootDir>/src/draggable/__tests__/setup.ts"
+  // ],
   globals: {
     "ts-jest": {
       tsconfig: "./tsconfig.json",
     },
   },
+  // rootDir: "./src",
 }
