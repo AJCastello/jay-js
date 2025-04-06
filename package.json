@@ -48,5 +48,5 @@
     "rimraf": "^5.0.7",
     "ts-jest": "^29.1.0"
   },
-  "packageManager": "pnpm@10.6.5"
+  "packageManager": "pnpm@10.7.0"
 }

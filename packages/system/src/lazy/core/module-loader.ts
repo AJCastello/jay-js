@@ -58,7 +58,7 @@ export async function loadModule(lazy: TLazyModule, moduleSection: HTMLElement) 
 		if (!cached) {
 			throw new Error(`Module ${lazy.module} not found in cache`);
 		}
-		const loadedModule = cached.module(lazy.params || {});
+		const loadedModule = await cached.module(lazy.params || {});
 		moduleSection.replaceWith(loadedModule);
 		return loadedModule;
 	} catch (error) {

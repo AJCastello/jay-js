@@ -2,12 +2,67 @@ import { mergeClasses } from "../../utils/merge-classes.js";
 import { uniKey } from "../../utils/uni-key.js";
 import type { TBase, TBaseTagMap, TStyle } from "./Base.types.js";
 
+const elementLifecycle = new Map<string, { element: HTMLElement; ondismount?: (element: HTMLElement) => void }>();
+
+const observer = new MutationObserver((mutations) => {
+	for (const mutation of mutations) {
+		if (mutation.type === "childList" && mutation.removedNodes.length > 0) {
+			mutation.removedNodes.forEach((node) => {
+				if (node instanceof HTMLElement) {
+					processRemovedElement(node);
+					const removedElements = node.querySelectorAll("*");
+					removedElements.forEach((el) => {
+						if (el instanceof HTMLElement) {
+							processRemovedElement(el);
+						}
+					});
+				}
+			});
+		}
+	}
+});
+
+function startObserver() {
+	if (typeof document !== "undefined") {
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+		});
+	}
+}
+
+function processRemovedElement(element: HTMLElement) {
+	const id = element.id;
+	if (id && elementLifecycle.has(id)) {
+		const { ondismount } = elementLifecycle.get(id) || {};
+		if (ondismount) {
+			try {
+				ondismount(element);
+				console.log("JayJS: ondismount callback executed for element:", id);
+			} catch (error) {
+				console.error("JayJS: Error executing ondismount callback:", error);
+			}
+		}
+		elementLifecycle.delete(id);
+	}
+}
+
+if (typeof document !== "undefined") {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", startObserver);
+	} else {
+		startObserver();
+	}
+}
+
 export function Base<T extends TBaseTagMap = "div">(
-	{ id, tag, ref, style, children, dataset, className, listeners, onmount, ...props }: TBase<T> = { tag: "div" },
+	{ id, tag, ref, style, children, dataset, className, listeners, onmount, ondismount, ...props }: TBase<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
 	const base = document.createElement(tag || "div");
 	ref && (ref.current = base);
-	id ? (base.id = id) : (base.id = uniKey());
+
+	const elementId = id || uniKey();
+	base.id = elementId;
 
 	if (className) {
 		if (typeof className === "function" && (className as Function).name.includes("_set_value_effect")) {
@@ -33,7 +88,23 @@ export function Base<T extends TBaseTagMap = "div">(
 			base.dataset[key] = value as string;
 		});
 
-	onmount && setTimeout(() => onmount(base));
+	// TODO: fix
+	if (ondismount) {
+		elementLifecycle.set(elementId, {
+			element: base,
+			ondismount
+		});
+	}
+
+	if (onmount) {
+		setTimeout(() => {
+			try {
+				onmount(base);
+			} catch (error) {
+				console.error("JayJS: Error executing onmount callback:", error);
+			}
+		});
+	}
 
 	if (children) {
 		if (children instanceof Promise) {

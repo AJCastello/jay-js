@@ -22,14 +22,16 @@ export function CardArticleFooter(article: TArticleFooter) {
 
 	const { position, title, description } = article;
 
+	function handleClick(e: Event) {
+		e.preventDefault();
+		Navigate(`/docs/system/${article.slug}`);
+		window.scrollTo(0, 0);
+	}
+
 	const card = Link({
 		className: `no-underline border border-base-300 bg-base-200/50 flex flex-row items-center p-8 rounded-lg hover:border-primary transition-all duration-500 ease-in-out group ${CARD_OPTIONS[position].justify}`,
 		href: `/docs/system/${article.slug}`,
-		onclick: (e) => {
-			e.preventDefault();
-			Navigate(`/docs/system/${article.slug}`);
-			window.scrollTo(0, 0);
-		},
+		onclick: handleClick,
 		children: [
 			Box({
 				className: "mr-2",

@@ -1,5 +1,4 @@
 import { Box, Dropdown, DropdownContent, DropdownLabel, Icon, Menu, MenuItem, Typography } from "@jay-js/ui";
-import { i18n } from "../../locales/i18n";
 
 export function SelectLocation() {
 	return Box({

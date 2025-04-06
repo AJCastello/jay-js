@@ -25,6 +25,7 @@ A lightweight, flexible routing library for client-side single-page applications
   - [Route Parameters](#route-parameters)
   - [Navigation Guards](#navigation-guards)
   - [Navigation Hooks](#navigation-hooks)
+  - [Route Metadata](#route-metadata)
 - [Examples](#examples)
 
 ## Installation
@@ -245,6 +246,7 @@ type TRoute = {
   params?: Record<string, any>;
   loader?: HTMLElement;
   guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
+  metadata?: any;
 };
 ```
 
@@ -258,6 +260,7 @@ type TRoute = {
 - `params`: Additional parameters to pass to the module
 - `loader`: Custom loading component to display while route is loading
 - `guard`: Function that controls access to the route, returning true to allow access
+- `metadata`: Custom data to associate with the route for application needs
 
 ### TRouteInstance
 
@@ -285,15 +288,77 @@ type TRouterOptions = {
 
 ### Path Pattern Syntax
 
-The router uses path-to-regexp for path matching, offering powerful pattern matching capabilities:
+The router uses [path-to-regexp](https://github.com/pillarjs/path-to-regexp) for matching URL paths to routes. This allows for powerful path pattern matching features:
 
-- Static segments: `/users/profile`
-- Parameter segments: `/users/:id`
-- Optional parameters: `/files/:folder?/items/:id?`
-- Wildcard routes: `/files/*`
-- Regexp parameters: `/users/:id(\\d+)` (matches only numeric IDs)
+#### Named Parameters
 
-For comprehensive documentation on path patterns, see the [path-to-regexp documentation](https://github.com/pillarjs/path-to-regexp).
+Match dynamic segments with named parameters:
+
+```typescript
+// Matches /users/123, /users/abc, etc.
+{
+  path: '/users/:id',
+  element: () => createUserComponent()
+}
+```
+
+#### Optional Parameters
+
+Make parts of the route optional using braces:
+
+```typescript
+// Matches /files and /files/document.pdf
+{
+  path: '/files{/:filename}',
+  element: () => createFileViewer()
+}
+```
+
+#### Wildcard Parameters
+
+Match multiple segments with wildcards:
+
+```typescript
+// Matches /docs/getting-started, /docs/getting-started/installation, etc.
+{
+  path: '/docs/*splat',
+  element: () => createDocViewer()
+}
+```
+
+#### Parameter Modifiers
+
+Parameters can have custom matching patterns:
+
+```typescript
+// Only matches numeric IDs
+{
+  path: '/users/:id(\\d+)',
+  element: () => createUserComponent()
+}
+
+// Only matches specific file extensions
+{
+  path: '/files/:name.:ext(jpg|png|gif)',
+  element: () => createImageViewer()
+}
+```
+
+#### Accessing Parameters
+
+Parameters from the URL can be accessed using the `getParams` function:
+
+```typescript
+import { getParams } from '@jay-js/system';
+
+function UserProfile() {
+  const { id } = getParams();
+  // Use id to fetch user data
+  return createProfileElement(id);
+}
+```
+
+For routes with wildcard parameters (`*splat`), the parameter value will be an array of path segments.
 
 ### LazyModule Integration
 
@@ -572,6 +637,93 @@ Router([
   }
 });
 ```
+
+### Route Metadata
+
+Routes can include custom metadata that can be used for various purposes in your application. Metadata is preserved during route processing and can be accessed when working with routes.
+
+```typescript
+Router([
+  {
+    path: '/dashboard',
+    element: () => createDashboardComponent(),
+    metadata: {
+      title: 'Dashboard',
+      icon: 'dashboard-icon',
+      permissions: ['view:dashboard'],
+      showInMenu: true
+    }
+  },
+  {
+    path: '/users',
+    element: () => createUsersComponent(),
+    metadata: {
+      title: 'Users Management',
+      icon: 'users-icon', 
+      permissions: ['view:users', 'manage:users'],
+      showInMenu: true
+    }
+  },
+  {
+    path: '/settings',
+    element: () => createSettingsComponent(),
+    metadata: {
+      title: 'Settings',
+      icon: 'settings-icon',
+      permissions: ['admin'],
+      showInMenu: false
+    }
+  }
+]);
+```
+
+Metadata can be used for various purposes:
+
+- **Setting document title**: Update the page title based on the current route
+  ```typescript
+  import { getPotentialMatch } from '@jay-js/system';
+  
+  function updatePageTitle() {
+    const match = getPotentialMatch();
+    if (match.route?.metadata?.title) {
+      document.title = match.route.metadata.title;
+    }
+  }
+  
+  // Call this after navigation events
+  window.addEventListener('popstate', updatePageTitle);
+  ```
+
+- **Building navigation menus**: Filter and display navigation items
+  ```typescript
+  import { resolvedRoutes } from '@jay-js/system';
+  
+  function buildNavMenu() {
+    const menuItems = [];
+    
+    for (const route of resolvedRoutes.values()) {
+      if (route.metadata?.showInMenu) {
+        menuItems.push({
+          path: route.path,
+          title: route.metadata.title,
+          icon: route.metadata.icon
+        });
+      }
+    }
+    
+    return createMenu(menuItems);
+  }
+  ```
+
+- **Access control**: Check permissions before showing UI elements
+  ```typescript
+  function hasAccess(route) {
+    const userPermissions = getUserPermissions(); // Your permission function
+    const requiredPermissions = route.metadata?.permissions || [];
+    
+    return requiredPermissions.some(perm => userPermissions.includes(perm));
+  }
+  ```
 
 ## Examples
 

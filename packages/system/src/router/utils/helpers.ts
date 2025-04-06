@@ -1,3 +1,4 @@
+import { compile, match, pathToRegexp } from "path-to-regexp";
 import { routerDefineOptions } from "../core/configuration";
 
 /**
@@ -6,5 +7,23 @@ import { routerDefineOptions } from "../core/configuration";
  * @returns {RegExp} A regular expression that matches the route path
  */
 export function pathToRegex(path: string) {
-	return new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "([^/]+)") + "$");
+	return pathToRegexp(path);
+}
+
+/**
+ * Creates a matcher function for a path pattern
+ * @param {string} path - The route path pattern
+ * @returns A matcher function that returns match information or null
+ */
+export function createMatcher(path: string) {
+	return match(path, { decode: decodeURIComponent });
+}
+
+/**
+ * Creates a path generator function from a pattern
+ * @param {string} path - The route path pattern
+ * @returns A function that generates paths from parameters
+ */
+export function createPathGenerator(path: string) {
+	return compile(path, { encode: encodeURIComponent });
 }

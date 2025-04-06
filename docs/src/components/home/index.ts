@@ -1,0 +1,9 @@
+// Export all home page components
+export { Hero } from "./hero";
+export { FeaturesSection } from "./features-section";
+export { WhyJayJS } from "./why-jayjs";
+export { Packages } from "./packages";
+export { CodeExamples } from "./code-examples";
+export { GettingStarted } from "./getting-started";
+export { Community } from "./community";
+export { CallToAction } from "./call-to-action";

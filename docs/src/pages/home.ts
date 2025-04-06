@@ -1,24 +1,27 @@
-import { Button, Section } from "@jay-js/ui";
+import { Section } from "@jay-js/ui";
+import {
+	Hero,
+	FeaturesSection,
+	WhyJayJS,
+	GettingStarted,
+	Packages,
+	CodeExamples,
+	Community,
+	CallToAction
+} from "../components/home";
 
 export function Home() {
-	let count = 0;
-
-	function handleCount(event: MouseEvent) {
-		count++;
-		const target = event.target as HTMLButtonElement;
-		target.innerHTML = `Count is ${count}`;
-	}
-
 	return Section({
-		tag: "section",
-		className: "flex flex-col justify-center items-center",
+		tag: "main",
 		children: [
-			Button({
-				color: "btn-primary",
-				className: "normal-case",
-				children: `Count is ${count}`,
-				onclick: handleCount,
-			}),
-		],
+			Hero(),
+			FeaturesSection(),
+			WhyJayJS(),
+			Packages(),
+			CodeExamples(),
+			GettingStarted(),
+			Community(),
+			CallToAction()
+		]
 	});
 }

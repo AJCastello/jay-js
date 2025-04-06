@@ -9,9 +9,10 @@ export function DocsFooter() {
 		tag: "footer",
 		className: "bg-base-300/50",
 		children: Box({
-			className: "footer p-16  max-w-screen-xl w-full mx-auto",
+			className: "footer p-16 max-w-screen-xl w-full mx-auto",
 			children: [
 				Box({
+					tag: "nav",
 					children: Img({
 						src: jayjs,
 						alt: "Jay JS Logo",
@@ -19,6 +20,7 @@ export function DocsFooter() {
 					}),
 				}),
 				Box({
+					tag: "nav",
 					children: [
 						Typography({
 							className: "font-bold",
@@ -51,6 +53,7 @@ export function DocsFooter() {
 					],
 				}),
 				Box({
+					tag: "nav",
 					children: [
 						Typography({
 							className: "font-bold",

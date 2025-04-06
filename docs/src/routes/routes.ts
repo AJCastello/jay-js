@@ -1,16 +1,17 @@
 import { Navigate, Router } from "@jay-js/system";
-import { Layout } from "../layouts/layout";
-import { SystemDocs } from "../layouts/system-docs";
+import { SiteLayout } from "../layouts/site.layout";
+import { DocsSystem } from "../layouts/docs-system.layout";
 import { DocsIntro } from "../pages/docs/docs-intro";
 import { Article } from "../pages/docs/article";
 import { Home } from "../pages/home";
+import { DocsJsx } from "../layouts/docs-jsx.layout";
 
 export function Routes() {
 	Router(
 		[
 			{
 				path: "/",
-				element: Layout,
+				element: SiteLayout,
 				layout: true,
 				children: [
 					{
@@ -25,7 +26,18 @@ export function Routes() {
 			},
 			{
 				path: "/docs/system",
-				element: SystemDocs,
+				element: DocsSystem,
+				layout: true,
+				children: [
+					{
+						path: "/:slug",
+						element: Article,
+					},
+				],
+			},
+			{
+				path: "/docs/jsx",
+				element: DocsJsx,
 				layout: true,
 				children: [
 					{

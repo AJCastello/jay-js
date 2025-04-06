@@ -11,6 +11,7 @@
  * @property {Record<string, any>} [params] - Additional parameters to pass to the module
  * @property {HTMLElement} [loader] - Custom loader element to show while the route is loading
  * @property {(route: TRouteInstance) => boolean | Promise<boolean>} [guard] - Function that controls access to the route, returning true to allow access
+ * @property {Record<string, any>} [metadata] - Additional metadata to associate with the route, can be used for navigation, titles, permissions, etc.
  */
 export type TRoute = {
 	path: string;
@@ -27,6 +28,7 @@ export type TRoute = {
 	params?: Record<string, any>;
 	loader?: HTMLElement;
 	guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
+	metadata?: Record<string, any>;
 };
 
 /**
