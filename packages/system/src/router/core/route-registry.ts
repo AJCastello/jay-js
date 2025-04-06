@@ -24,10 +24,21 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string
 		}
 
 		for (const route of routes) {
-			const newPath = [prefixOptions, prefix, route.path]
-				.join("/")
-				.replace(/\/+$/, "")
-				.replace(/\/{2,}/g, "/");
+			// Special handling for index routes under a layout
+			// If the child route path is "/" and we're in a nested route context, 
+			// use the parent's path directly instead of concatenating
+			const childIsIndexRoute = route.path === "/" && prefix !== "";
+
+			const newPath = childIsIndexRoute
+				? [prefixOptions, prefix]
+					.join("/")
+					.replace(/\/+$/, "")
+					.replace(/\/{2,}/g, "/")
+				: [prefixOptions, prefix, route.path]
+					.join("/")
+					.replace(/\/+$/, "")
+					.replace(/\/{2,}/g, "/");
+
 			const routeId = uniKey();
 
 			if (route.element || route.import) {
