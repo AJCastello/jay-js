@@ -2,8 +2,8 @@ import { routerOptions } from "../configuration";
 import { getPotentialMatch, getPotentialMatchIndex } from "../matching/get-potential-match";
 import { renderRoute } from "../rendering/render-route";
 
-export async function getRoute() {
-	const match = getPotentialMatch();
+export async function getRoute(pathName: string = window.location.pathname): Promise<void> {
+	const match = getPotentialMatch(pathName);
 
 	if (routerOptions.beforeResolve) {
 		const beforeResolve = await routerOptions.beforeResolve(match.route);
@@ -41,7 +41,7 @@ export async function getRoute() {
 	}
 
 	if (match.route.layout) {
-		const matchLayoutIndex = getPotentialMatchIndex();
+		const matchLayoutIndex = getPotentialMatchIndex(pathName);
 		if (!matchLayoutIndex.route) {
 			if (routerOptions.onError) {
 				routerOptions.onError(new Error("No layout match found", { cause: "no-layout-match" }));
@@ -57,4 +57,4 @@ export async function getRoute() {
 	return;
 }
 
-window.addEventListener("popstate", getRoute);
+window.addEventListener("popstate", () => getRoute());

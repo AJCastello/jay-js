@@ -2,8 +2,8 @@ import type { TPotentialMatch, TRouteInstance } from "../../types";
 import { createMatcher, pathToRegex } from "../../utils/helpers";
 import { resolvedRoutes } from "../configuration";
 
-export function getPotentialMatch(): TPotentialMatch {
-	const potentialMatches = getPotentialMatches();
+export function getPotentialMatch(pathName: string): TPotentialMatch {
+	const potentialMatches = getPotentialMatches(pathName);
 
 	const firstRoute = resolvedRoutes.values().next().value as TRouteInstance;
 
@@ -34,8 +34,7 @@ export function getPotentialMatch(): TPotentialMatch {
 	return potentialMatches[0];
 }
 
-export function getPotentialMatches(): Array<TPotentialMatch> {
-	let pathName = location.pathname;
+export function getPotentialMatches(pathName: string): Array<TPotentialMatch> {
 
 	// Normalize path (remove trailing slash except for root)
 	if (pathName !== "/" && pathName.substring(pathName.length - 1) === "/") {
@@ -65,12 +64,21 @@ export function getPotentialMatches(): Array<TPotentialMatch> {
 	return potentialMatches;
 }
 
-export function getPotentialMatchIndex() {
-	const potentialMatches = getPotentialMatches();
+export function getPotentialMatchIndex(pathName: string): TPotentialMatch {
+	const potentialMatches = getPotentialMatches(pathName);
 
 	if (potentialMatches.length === 0) {
 		const firstRoute = resolvedRoutes.values().next().value;
+		// If no matches, return the first route as a fallback
+		// This is useful for root navigation or when no routes are registered
+		if (!firstRoute) {
+			throw new Error("No routes registered and no fallback route available.");
+		}
 		return { route: firstRoute, result: [location.pathname] };
+	}
+
+	if (potentialMatches.length === 2) {
+		return potentialMatches[1];
 	}
 
 	// Return the most specific match (first after sorting)

@@ -17,7 +17,9 @@ import { createMatcher } from "./helpers";
  */
 export function getParams(): Record<string, string | string[]> {
 	const params: Record<string, string | string[]> = {};
-	const match = getPotentialMatch();
+	const pathName = window.location.pathname;
+	const match = getPotentialMatch(pathName);
+
 
 	if (match.route && match.route.path) {
 		const matcher = createMatcher(match.route.path);
