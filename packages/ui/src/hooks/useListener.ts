@@ -7,7 +7,7 @@ import type { Listener } from "../components/Base/Base.types.js";
  * @param listeners - An object containing event handler functions
  * @returns void
  */
-export function useListener(type: string, listeners: Listener) {
+export function useListener(type: string, listeners: Listener): void {
   const listener = Object.entries(listeners).find(([key, _value]) => key === type);
   if (!listener || !listener[1]) return;
   (listener[1] as any)();

@@ -10,7 +10,20 @@ type CleanupFunction = () => void;
  * Cria um gerenciador de ciclo de vida para componentes
  * @returns Funções para registrar callbacks e gerenciar recursos
  */
-export function createLifecycleHandler() {
+export function createLifecycleHandler(): {
+  registerEventListener: <K extends keyof HTMLElementEventMap>(
+    element: HTMLElement,
+    type: K,
+    listener: (ev: HTMLElementEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ) => void;
+  registerCleanup: (cleanupFn: CleanupFunction) => void;
+  cleanup: () => void;
+  setupLifecycle: (element: HTMLElement, onMount?: (element: HTMLElement) => void) => {
+    onmount: (el: HTMLElement) => void;
+    ondismount: () => void;
+  };
+} {
   const cleanupFunctions: CleanupFunction[] = [];
 
   /**
