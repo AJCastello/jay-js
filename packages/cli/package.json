@@ -18,7 +18,7 @@
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
-    "build": "swc src -d dist --strip-leading-paths && pnpm run build:types && pnpm run build:chmod",
+    "build": "swc src -d dist --strip-leading-paths && npm run build:types && npm run build:chmod",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
     "build:chmod": "chmod +x ./dist/bin/jayjs.js",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
