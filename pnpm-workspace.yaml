@@ -1,8 +1,0 @@
-packages:
-  - packages/*
-  - docs
-onlyBuiltDependencies:
-  - '@biomejs/biome'
-  - '@swc/core'
-  - esbuild
-  - nx
