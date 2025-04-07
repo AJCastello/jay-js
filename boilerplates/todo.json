@@ -8,6 +8,6 @@
     "uiPackage": true,
     "cssPlugin": "daisyui",
     "useJSX": true,
-    "installDependencies": "pnpm"
+    "installDependencies": "npm"
   }
 }

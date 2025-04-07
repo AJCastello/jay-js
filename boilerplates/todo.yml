@@ -9,11 +9,11 @@ init:
   useJSX: true
   useTests: true
   testLibrary: "vitest"
-  installDependencies: pnpm
+  installDependencies: npm
 
 ctx:
   name: todoList
-  resources: 
+  resources:
     actions:
       - name: init
         description: "Loads data from localStorage, updates state with received data, registers a listener for state changes"

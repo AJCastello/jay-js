@@ -12,18 +12,19 @@
     "build:cli": "nx build @jay-js/cli",
     "build:jsx": "nx build @jay-js/jsx",
     "build:static": "nx build @jay-js/static",
-    "pub:all": "pnpm run pub:cli && pnpm run pub:system && pnpm run pub:ui && pnpm run pub:jsx && pnpm run pub:static",
-    "pub:cli": "(cd packages/cli/dist && npm publish --access public)",
-    "pub:system": "(cd packages/system/dist && npm publish --access public)",
-    "pub:ui": "(cd packages/ui/dist && npm publish --access public)",
-    "pub:jsx": "(cd packages/jsx/dist && npm publish --access public)",
-    "pub:static": "(cd packages/static/dist && npm publish --access public)",
-    "link:all": "pnpm run link:cli && pnpm run link:system && pnpm run link:ui && pnpm run link:jsx && pnpm run link:static",
-    "link:cli": "node -e \"const path = require('path').resolve('./packages/cli/dist'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/cli in package.json to:\\n', 'file://' + path)\"",
-    "link:system": "node -e \"const path = require('path').resolve('./packages/system/dist'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/system in package.json to:\\n', 'file://' + path)\"",
-    "link:ui": "node -e \"const path = require('path').resolve('./packages/ui/dist'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/ui in package.json to:\\n', 'file://' + path)\"",
-    "link:jsx": "node -e \"const path = require('path').resolve('./packages/jsx/dist'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/jsx in package.json to:\\n', 'file://' + path)\"",
-    "link:static": "node -e \"const path = require('path').resolve('./packages/static/dist'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/static in package.json to:\\n', 'file://' + path)\""
+    "pub:all": "npm run pub:cli && npm run pub:system && npm run pub:ui && npm run pub:jsx && npm run pub:static",
+    "pub:cli": "cd packages/cli/dist && npm publish --access public",
+    "pub:system": "cd packages/system/dist && npm publish --access public",
+    "pub:ui": "cd packages/ui/dist && npm publish --access public",
+    "pub:jsx": "cd packages/jsx/dist && npm publish --access public",
+    "pub:static": "cd packages/static/dist && npm publish --access public",
+    "link:all": "npm run link:cli && npm run link:system && npm run link:ui && npm run link:jsx && npm run link:static",
+    "link:cli": "node -e \"const path = require('path').resolve('./packages/cli/dist').replace(/\\\\/g, '/'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/cli in package.json to:\\n', 'file://' + path)\"",
+    "link:system": "node -e \"const path = require('path').resolve('./packages/system/dist').replace(/\\\\/g, '/'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/system in package.json to:\\n', 'file://' + path)\"",
+    "link:ui": "node -e \"const path = require('path').resolve('./packages/ui/dist').replace(/\\\\/g, '/'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/ui in package.json to:\\n', 'file://' + path)\"",
+    "link:jsx": "node -e \"const path = require('path').resolve('./packages/jsx/dist').replace(/\\\\/g, '/'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/jsx in package.json to:\\n', 'file://' + path)\"",
+    "link:static": "node -e \"const path = require('path').resolve('./packages/static/dist').replace(/\\\\/g, '/'); console.log('\\x1b[36m%s\\x1b[0m','To use in another project:\\nChange the dependency path in @jay-js/static in package.json to:\\n', 'file://' + path)\"",
+    "migrate-to-npm": "node scripts/migrate-to-npm.js"
   },
   "author": "AJ Castello",
   "license": "MIT",
@@ -41,6 +42,5 @@
     "nx": "19.1.0",
     "rimraf": "^5.0.7",
     "ts-jest": "^29.1.0"
-  },
-  "packageManager": "pnpm@10.7.1"
+  }
 }
