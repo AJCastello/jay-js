@@ -22,7 +22,7 @@ type TUseDrawer = {
  * @param props - Configuration options for the drawer
  * @returns A function that toggles the drawer's visibility state
  */
-export function useDrawer({ ...props }: TUseDrawer) {
+export function useDrawer({ ...props }: TUseDrawer): () => void {
   return () => {
     const drawer = document.querySelector(`#${props.for}`);
     if (drawer && drawer instanceof HTMLElement) {

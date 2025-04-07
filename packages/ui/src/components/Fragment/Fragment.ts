@@ -1,6 +1,6 @@
 import type { IFragment } from "./Fragment.types";
 
-export function Fragment({ children, ...props }: IFragment) {
+export function Fragment({ children, ...props }: IFragment): DocumentFragment {
 	const fragment = document.createDocumentFragment();
 
 	props &&

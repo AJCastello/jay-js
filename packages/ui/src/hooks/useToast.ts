@@ -27,7 +27,7 @@ export function useToast({ ...props }: TUseToast = {}) {
     throw new Error(`useToast: No element found for selector: ${selector}`);
   }
 
-  return ({ duration, vertical, horizontal, children, ...props }: TToast<"div">) => {
+  return ({ duration, vertical, horizontal, children, ...props }: TToast<"div">): void => {
     const toastSettings = (toastContainer as HTMLDivElement).dataset;
 
     if (!vertical) {
