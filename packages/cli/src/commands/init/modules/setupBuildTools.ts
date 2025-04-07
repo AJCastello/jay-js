@@ -13,18 +13,18 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
     packageFile.scripts.dev = "vite";
     let buildCommand = "vite build";
     if (options.javascriptVariant === "ts") {
-      if(options.type === "static"){
+      if (options.type === "static") {
         buildCommand = "tsc";
-      }else{
+      } else {
         buildCommand = "tsc && vite build";
       }
     }
     packageFile.scripts.build = buildCommand;
-    if(options.type === "static"){
+    if (options.type === "static") {
       packageFile.scripts.prebuild = "jayjs build --prepare";
-      if(options.uiPackage) {
-        packageFile.scripts.prebuild = "jayjs build --prepare && pnpm run build:css";
-        packageFile.scripts["build:css"] = "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";      
+      if (options.uiPackage) {
+        packageFile.scripts.prebuild = "jayjs build --prepare && npm run build:css";
+        packageFile.scripts["build:css"] = "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";
       }
       packageFile.scripts.postbuild = "jayjs build --static";
     }

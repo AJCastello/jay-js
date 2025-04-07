@@ -118,9 +118,9 @@ export function registerInitCommand(program: Command) {
           message: "Install dependencies?",
           choices: [
             { name: faceChalk`{red.italic No, I will install them myself}`, value: "none" },
-            { name: faceChalk`{green PNPM} {italic.gray (Recommended)}`, value: "pnpm" },
-            { name: faceChalk`{yellow NPM}`, value: "npm" },
+            { name: faceChalk`{yellow NPM} {italic.gray (Recommended)}`, value: "npm" },
             { name: faceChalk`{blueBright Yarn}`, value: "yarn" },
+            { name: faceChalk`{green PNPM}`, value: "pnpm" },
           ],
           loop: false
         },

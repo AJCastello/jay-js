@@ -10,9 +10,13 @@ export async function finalizeInitialization(options: IJayJSCLIInitOptions) {
     await createFile(`${projectRoot}/tsconfig.json`, JSON.stringify(tsConfigFile, null, 2));
   }
 
-  if(options.installDependencies !== "none"){
-    // Expected a semver version: enforceExactVersion
-    // packageFile.packageManager = options.installDependencies;
+  // Definir npm como gerenciador de pacotes padrão
+  if (options.installDependencies === "npm") {
+    packageFile.packageManager = "npm@latest";
+  } else if (options.installDependencies === "yarn") {
+    packageFile.packageManager = "yarn@latest";
+  } else if (options.installDependencies === "pnpm") {
+    packageFile.packageManager = "pnpm@latest";
   }
 
   await createFile(`${projectRoot}/package.json`, JSON.stringify(packageFile, null, 2));
