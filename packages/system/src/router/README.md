@@ -37,44 +37,47 @@ npm install @jay-js/system
 ## Quick Start
 
 ```typescript
-import { Router, Navigate } from '@jay-js/system';
+import { Router, Navigate } from "@jay-js/system";
 
 // Define your routes
-Router([
+Router(
+  [
+    {
+      path: "/",
+      element: () => {
+        const el = document.createElement("div");
+        el.textContent = "Home Page";
+        return el;
+      },
+    },
+    {
+      path: "/about",
+      element: () => {
+        const el = document.createElement("div");
+        el.textContent = "About Page";
+        return el;
+      },
+    },
+    {
+      path: "/contact",
+      element: () => {
+        const el = document.createElement("div");
+        el.textContent = "Contact Page";
+        return el;
+      },
+    },
+  ],
   {
-    path: '/',
-    element: () => {
-      const el = document.createElement('div');
-      el.textContent = 'Home Page';
-      return el;
-    }
-  },
-  {
-    path: '/about',
-    element: () => {
-      const el = document.createElement('div');
-      el.textContent = 'About Page';
-      return el;
-    }
-  },
-  {
-    path: '/contact',
-    element: () => {
-      const el = document.createElement('div');
-      el.textContent = 'Contact Page';
-      return el;
-    }
+    target: "#app",
+    prefix: "/app", // Optional: adds a prefix to all routes
   }
-], {
-  target: '#app',
-  prefix: '/app' // Optional: adds a prefix to all routes
-});
+);
 
 // Create navigation links
-document.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', (e) => {
+document.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", (e) => {
     e.preventDefault();
-    Navigate(link.getAttribute('href'));
+    Navigate(link.getAttribute("href"));
   });
 });
 ```
@@ -97,20 +100,23 @@ Router(routes: Array<TRoute>, options?: TRouterOptions): void
 #### Example
 
 ```typescript
-Router([
+Router(
+  [
+    {
+      path: "/",
+      element: () => createHomeComponent(),
+      target: "#main-content",
+    },
+    {
+      path: "/users/:id",
+      element: () => createUserProfileComponent(),
+    },
+  ],
   {
-    path: '/',
-    element: () => createHomeComponent(),
-    target: '#main-content'
-  },
-  {
-    path: '/users/:id',
-    element: () => createUserProfileComponent()
+    prefix: "/dashboard",
+    onError: (err) => showErrorNotification(err.message),
   }
-], {
-  prefix: '/dashboard',
-  onError: (err) => showErrorNotification(err.message)
-});
+);
 ```
 
 ### Navigate
@@ -129,8 +135,8 @@ Navigate(path: string): void
 
 ```typescript
 // Navigate to about page
-document.getElementById('about-btn').addEventListener('click', () => {
-  Navigate('/about');
+document.getElementById("about-btn").addEventListener("click", () => {
+  Navigate("/about");
 });
 
 // With a configured prefix of '/app', this navigates to '/app/about'
@@ -156,28 +162,27 @@ beforeNavigate(guardFn: () => boolean | Promise<boolean>): () => void
 #### Example
 
 ```typescript
-import { beforeNavigate, Navigate, selector } from '@jay-js/system';
+import { beforeNavigate, Navigate, selector } from "@jay-js/system";
 
 // Detect unsaved form changes and confirm before navigating away
-const form = selector('form');
+const form = selector("form");
 
 let isDirty = false;
 
-form.addEventListener('input', () => {
+form.addEventListener("input", () => {
   isDirty = true;
 });
 
-form.addEventListener('submit', () => {
+form.addEventListener("submit", () => {
   isDirty = false; // Reset on submit
 });
 
 beforeNavigate(() => {
   if (isDirty) {
-    return confirm('You have unsaved changes. Do you want to leave this page?');
+    return confirm("You have unsaved changes. Do you want to leave this page?");
   }
   return true; // Allow navigation
 });
-
 ```
 
 ### getParams
@@ -221,9 +226,9 @@ routerDefineOptions(options: Partial<TRouterOptions>): void
 
 ```typescript
 routerDefineOptions({
-  prefix: '/app',
-  target: '#content',
-  onError: (err) => logError(err)
+  prefix: "/app",
+  target: "#content",
+  onError: (err) => logError(err),
 });
 ```
 
@@ -234,10 +239,11 @@ routerDefineOptions({
 ```typescript
 type TRoute = {
   path: string;
-  element?: (HTMLElement | DocumentFragment) | 
-            ((params?: any) => HTMLElement | DocumentFragment) | 
-            ((params?: any) => Promise<HTMLElement | DocumentFragment>) | 
-            undefined;
+  element?:
+    | (HTMLElement | DocumentFragment)
+    | ((params?: any) => HTMLElement | DocumentFragment)
+    | ((params?: any) => Promise<HTMLElement | DocumentFragment>)
+    | undefined;
   target?: HTMLElement | string;
   layout?: boolean;
   children?: Array<TRoute>;
@@ -281,6 +287,7 @@ type TRouterOptions = {
   target?: HTMLElement | string;
   onError?: (error: Error) => void;
   beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
+  setPathname?: () => string;
 };
 ```
 
@@ -349,7 +356,7 @@ Parameters can have custom matching patterns:
 Parameters from the URL can be accessed using the `getParams` function:
 
 ```typescript
-import { getParams } from '@jay-js/system';
+import { getParams } from "@jay-js/system";
 
 function UserProfile() {
   const { id } = getParams();
@@ -380,6 +387,7 @@ The router supports integration with the LazyModule system for efficient lazy lo
 ```
 
 This approach offers several benefits:
+
 - **Code splitting**: Components are only loaded when needed
 - **Automatic garbage collection**: Unused modules can be cleaned up by the LazyModule collector
 - **Custom loading indicators**: Works with LazyModule's loader system
@@ -388,43 +396,48 @@ This approach offers several benefits:
 #### Example with LazyModule
 
 ```typescript
-import { Router } from '@jay-js/system';
+import { Router } from "@jay-js/system";
 
 // Create a reusable loading component
 function createSkeletonLoader() {
   return Box({
     className: "skeleton-loader",
-    children: Array.from({ length: 4 }).map(Box({
-      className: "skeleton-item"
-    }))
+    children: Array.from({ length: 4 }).map(
+      Box({
+        className: "skeleton-item",
+      })
+    ),
   });
 }
 
-Router([
+Router(
+  [
+    {
+      path: "/",
+      element: () => {
+        const el = document.createElement("div");
+        el.textContent = "Home Page";
+        return el;
+      },
+    },
+    {
+      path: "/dashboard",
+      import: () => import("./pages/Dashboard.js"),
+      module: "DashboardComponent",
+      params: { initialTab: "overview" },
+      loader: createSkeletonLoader(),
+    },
+    {
+      path: "/profile",
+      import: () => import("./pages/Profile.js"),
+      loader: createSkeletonLoader(),
+      // No module name needed for default exports
+    },
+  ],
   {
-    path: '/',
-    element: () => {
-      const el = document.createElement('div');
-      el.textContent = 'Home Page';
-      return el;
-    }
-  },
-  {
-    path: '/dashboard',
-    import: () => import('./pages/Dashboard.js'),
-    module: 'DashboardComponent',
-    params: { initialTab: 'overview' },
-    loader: createSkeletonLoader()
-  },
-  {
-    path: '/profile',
-    import: () => import('./pages/Profile.js'),
-    loader: createSkeletonLoader()
-    // No module name needed for default exports
+    target: "#app",
   }
-], {
-  target: '#app'
-});
+);
 ```
 
 ### Route Guards
@@ -432,74 +445,77 @@ Router([
 Route guards provide a way to control access to routes based on certain conditions. Guards are functions that return a boolean value - `true` to allow navigation or `false` to prevent it. If a guard throws an error, the router will trigger the `onError` callback.
 
 ```typescript
-import { Router, Navigate } from '@jay-js/system';
+import { Router, Navigate } from "@jay-js/system";
 
 // Authentication service example
 const authService = {
   isAuthenticated: false,
   currentUser: null,
-  
+
   login(username, password) {
     // Simulate authentication
     this.isAuthenticated = true;
-    this.currentUser = { username, role: 'user' };
+    this.currentUser = { username, role: "user" };
     return this.currentUser;
   },
-  
+
   logout() {
     this.isAuthenticated = false;
     this.currentUser = null;
   },
-  
+
   hasRole(role) {
     return this.isAuthenticated && this.currentUser?.role === role;
-  }
+  },
 };
 
 // Create route guards
 function authGuard(route) {
   if (!authService.isAuthenticated) {
     // Could redirect here
-    Navigate('/login');
+    Navigate("/login");
     return false;
   }
   return true;
 }
 
 function adminGuard(route) {
-  if (!authService.hasRole('admin')) {
-    throw new Error('Access denied: Admin privileges required');
+  if (!authService.hasRole("admin")) {
+    throw new Error("Access denied: Admin privileges required");
   }
   return true;
 }
 
 // Router with protected routes
-Router([
+Router(
+  [
+    {
+      path: "/",
+      element: () => createHomePage(),
+    },
+    {
+      path: "/login",
+      element: () => createLoginPage(),
+    },
+    {
+      path: "/dashboard",
+      element: () => createDashboardPage(),
+      guard: authGuard,
+    },
+    {
+      path: "/admin",
+      element: () => createAdminPage(),
+      guard: adminGuard,
+    },
+  ],
   {
-    path: '/',
-    element: () => createHomePage()
-  },
-  {
-    path: '/login',
-    element: () => createLoginPage()
-  },
-  {
-    path: '/dashboard',
-    element: () => createDashboardPage(),
-    guard: authGuard
-  },
-  {
-    path: '/admin',
-    element: () => createAdminPage(),
-    guard: adminGuard
+    onError: (error) => {
+      // Handle errors from guards
+      displayErrorMessage(error.message);
+      console.error("Route error:", error);
+    },
   }
-], {
-  onError: (error) => {
-    // Handle errors from guards
-    displayErrorMessage(error.message);
-    console.error('Route error:', error);
-  }
-});
+);
 ```
 
 ### Layouts
@@ -509,20 +525,20 @@ Layouts allow you to create a persistent UI structure across multiple routes.
 ```typescript
 Router([
   {
-    path: '/admin',
+    path: "/admin",
     element: () => createAdminLayout(),
     layout: true,
     children: [
       {
-        path: '/dashboard',
-        element: () => createDashboardContent()
+        path: "/dashboard",
+        element: () => createDashboardContent(),
       },
       {
-        path: '/users',
-        element: () => createUsersContent()
-      }
-    ]
-  }
+        path: "/users",
+        element: () => createUsersContent(),
+      },
+    ],
+  },
 ]);
 ```
 
@@ -533,19 +549,19 @@ Nested routes allow you to organize your routes hierarchically.
 ```typescript
 Router([
   {
-    path: '/products',
+    path: "/products",
     element: () => createProductsPage(),
     children: [
       {
-        path: '/:id',
-        element: () => createProductDetailPage()
+        path: "/:id",
+        element: () => createProductDetailPage(),
       },
       {
-        path: '/:id/reviews',
-        element: () => createProductReviewsPage()
-      }
-    ]
-  }
+        path: "/:id/reviews",
+        element: () => createProductReviewsPage(),
+      },
+    ],
+  },
 ]);
 ```
 
@@ -557,30 +573,30 @@ Define dynamic parts of a route path using various parameter syntax options.
 Router([
   // Basic parameter
   {
-    path: '/users/:id',
+    path: "/users/:id",
     element: () => {
       const { id } = getParams();
-      const content = document.createElement('div');
+      const content = document.createElement("div");
       content.textContent = `User ID: ${id}`;
       return content;
-    }
+    },
   },
   // Optional parameter
   {
-    path: '/products/:category?',
+    path: "/products/:category?",
     element: () => {
       const { category } = getParams();
       return createProductList(category);
-    }
+    },
   },
   // Multiple parameters with constraints
   {
-    path: '/articles/:year(\\d{4})/:month(\\d{2})/:slug',
+    path: "/articles/:year(\\d{4})/:month(\\d{2})/:slug",
     element: () => {
       const { year, month, slug } = getParams();
       return createArticleView(year, month, slug);
-    }
-  }
+    },
+  },
 ]);
 ```
 
@@ -589,20 +605,20 @@ Router([
 Use `beforeNavigate` to protect navigation with custom logic:
 
 ```typescript
-import { beforeNavigate, Navigate } from '@jay-js/system';
+import { beforeNavigate, Navigate } from "@jay-js/system";
 
 // Form with unsaved changes
 function setupFormProtection(formElement) {
   let hasChanges = false;
-  
-  formElement.addEventListener('input', () => {
+
+  formElement.addEventListener("input", () => {
     hasChanges = true;
   });
 
   // Guard is only applied for the next navigation attempt
   beforeNavigate(() => {
     if (hasChanges) {
-      const wantsToProceed = confirm('Discard unsaved changes?');
+      const wantsToProceed = confirm("Discard unsaved changes?");
       if (wantsToProceed) {
         hasChanges = false;
         return true;
@@ -611,12 +627,11 @@ function setupFormProtection(formElement) {
     }
     return true;
   });
-  
-  formElement.addEventListener('submit', () => {
+
+  formElement.addEventListener("submit", () => {
     hasChanges = false;
   });
 }
-
 ```
 
 ### Navigation Hooks
@@ -624,18 +639,21 @@ function setupFormProtection(formElement) {
 Configure hooks to run before navigation.
 
 ```typescript
-Router([
-  // Routes definition
-], {
-  beforeResolve: (route) => {
-    // Run before a route is resolved
-    if (route.path.includes('/admin') && !isUserLoggedIn()) {
-      Navigate('/login'); // Redirect to login
-      return false; // Prevent original navigation
-    }
-    return true; // Allow navigation to proceed
+Router(
+  [
+    // Routes definition
+  ],
+  {
+    beforeResolve: (route) => {
+      // Run before a route is resolved
+      if (route.path.includes("/admin") && !isUserLoggedIn()) {
+        Navigate("/login"); // Redirect to login
+        return false; // Prevent original navigation
+      }
+      return true; // Allow navigation to proceed
+    },
   }
-});
+);
 ```
 
 ### Route Metadata
@@ -645,72 +663,74 @@ Routes can include custom metadata that can be used for various purposes in your
 ```typescript
 Router([
   {
-    path: '/dashboard',
+    path: "/dashboard",
     element: () => createDashboardComponent(),
     metadata: {
-      title: 'Dashboard',
-      icon: 'dashboard-icon',
-      permissions: ['view:dashboard'],
-      showInMenu: true
-    }
+      title: "Dashboard",
+      icon: "dashboard-icon",
+      permissions: ["view:dashboard"],
+      showInMenu: true,
+    },
   },
   {
-    path: '/users',
+    path: "/users",
     element: () => createUsersComponent(),
     metadata: {
-      title: 'Users Management',
-      icon: 'users-icon', 
-      permissions: ['view:users', 'manage:users'],
-      showInMenu: true
-    }
+      title: "Users Management",
+      icon: "users-icon",
+      permissions: ["view:users", "manage:users"],
+      showInMenu: true,
+    },
   },
   {
-    path: '/settings',
+    path: "/settings",
     element: () => createSettingsComponent(),
     metadata: {
-      title: 'Settings',
-      icon: 'settings-icon',
-      permissions: ['admin'],
-      showInMenu: false
-    }
-  }
+      title: "Settings",
+      icon: "settings-icon",
+      permissions: ["admin"],
+      showInMenu: false,
+    },
+  },
 ]);
 ```
 
 Metadata can be used for various purposes:
 
 - **Setting document title**: Update the page title based on the current route
+
   ```typescript
-  import { getPotentialMatch } from '@jay-js/system';
-  
+  import { getPotentialMatch } from "@jay-js/system";
+
   function updatePageTitle() {
     const match = getPotentialMatch();
     if (match.route?.metadata?.title) {
       document.title = match.route.metadata.title;
     }
   }
-  
+
   // Call this after navigation events
-  window.addEventListener('popstate', updatePageTitle);
+  window.addEventListener("popstate", updatePageTitle);
   ```
 
 - **Building navigation menus**: Filter and display navigation items
+
   ```typescript
-  import { resolvedRoutes } from '@jay-js/system';
-  
+  import { resolvedRoutes } from "@jay-js/system";
+
   function buildNavMenu() {
     const menuItems = [];
-    
+
     for (const route of resolvedRoutes.values()) {
       if (route.metadata?.showInMenu) {
         menuItems.push({
           path: route.path,
           title: route.metadata.title,
-          icon: route.metadata.icon
+          icon: route.metadata.icon,
         });
       }
     }
-    
+
     return createMenu(menuItems);
   }
   ```
@@ -720,8 +740,8 @@ Metadata can be used for various purposes:
   function hasAccess(route) {
     const userPermissions = getUserPermissions(); // Your permission function
     const requiredPermissions = route.metadata?.permissions || [];
-    
-    return requiredPermissions.some(perm => userPermissions.includes(perm));
+
+    return requiredPermissions.some((perm) => userPermissions.includes(perm));
   }
   ```
 
@@ -730,98 +750,109 @@ Metadata can be used for various purposes:
 ### Basic SPA with Advanced Routing
 
 ```typescript
-import { Router, Navigate, getParams } from '@jay-js/system';
+import { Router, Navigate, getParams } from "@jay-js/system";
 
 // Helper function to create page elements
 function createPage(title, content) {
-  const page = document.createElement('div');
-  const heading = document.createElement('h1');
+  const page = document.createElement("div");
+  const heading = document.createElement("h1");
   heading.textContent = title;
-  
-  const text = document.createElement('p');
+
+  const text = document.createElement("p");
   text.textContent = content;
-  
+
   page.appendChild(heading);
   page.appendChild(text);
-  
+
   return page;
 }
 
 // Define routes with advanced patterns
-Router([
-  {
-    path: '/',
-    element: () => createPage('Home', 'Welcome to our website!'),
-    target: '#app'
-  },
-  {
-    path: '/about',
-    element: () => createPage('About', 'Learn about our company history.'),
-    target: '#app'
-  },
-  {
-    path: '/products/:category?',
-    element: () => {
-      const { category } = getParams();
-      return createPage('Products', 
-        category ? `Browsing ${category} products` : 'Browse all product categories');
+Router(
+  [
+    {
+      path: "/",
+      element: () => createPage("Home", "Welcome to our website!"),
+      target: "#app",
     },
-    target: '#app'
-  },
-  {
-    path: '/products/:category/:id(\\d+)',
-    element: () => {
-      const { category, id } = getParams();
-      return createPage('Product Details', 
-        `You are viewing ${category} product #${id}`);
+    {
+      path: "/about",
+      element: () => createPage("About", "Learn about our company history."),
+      target: "#app",
     },
-    target: '#app'
-  },
-  {
-    path: '/blog/:year(\\d{4})/:month(\\d{2})/:slug',
-    element: () => {
-      const { year, month, slug } = getParams();
-      return createPage('Blog Post', 
-        `Reading article "${slug}" from ${month}/${year}`);
+    {
+      path: "/products/:category?",
+      element: () => {
+        const { category } = getParams();
+        return createPage(
+          "Products",
+          category
+            ? `Browsing ${category} products`
+            : "Browse all product categories"
+        );
+      },
+      target: "#app",
     },
-    target: '#app'
-  },
+    {
+      path: "/products/:category/:id(\\d+)",
+      element: () => {
+        const { category, id } = getParams();
+        return createPage(
+          "Product Details",
+          `You are viewing ${category} product #${id}`
+        );
+      },
+      target: "#app",
+    },
+    {
+      path: "/blog/:year(\\d{4})/:month(\\d{2})/:slug",
+      element: () => {
+        const { year, month, slug } = getParams();
+        return createPage(
+          "Blog Post",
+          `Reading article "${slug}" from ${month}/${year}`
+        );
+      },
+      target: "#app",
+    },
+    {
+      path: "*",
+      element: () => createPage("Not Found", "Page not found"),
+      target: "#app",
+    },
+  ],
   {
-    path: '*',
-    element: () => createPage('Not Found', 'Page not found'),
-    target: '#app'
+    onError: (err) => {
+      console.error("Router error:", err);
+    },
   }
-], {
-  onError: (err) => {
-    console.error('Router error:', err);
-  }
-});
+);
 
 // Set up navigation
-document.addEventListener('DOMContentLoaded', () => {
-  const nav = document.createElement('nav');
-  
+document.addEventListener("DOMContentLoaded", () => {
+  const nav = document.createElement("nav");
+
   const links = [
-    { href: '/', text: 'Home' },
-    { href: '/about', text: 'About' },
-    { href: '/products', text: 'All Products' },
-    { href: '/products/electronics', text: 'Electronics' },
-    { href: '/products/electronics/123', text: 'Product #123' },
-    { href: '/blog/2025/03/new-features', text: 'Blog Post' }
+    { href: "/", text: "Home" },
+    { href: "/about", text: "About" },
+    { href: "/products", text: "All Products" },
+    { href: "/products/electronics", text: "Electronics" },
+    { href: "/products/electronics/123", text: "Product #123" },
+    { href: "/blog/2025/03/new-features", text: "Blog Post" },
   ];
-  
-  links.forEach(link => {
-    const a = document.createElement('a');
+
+  links.forEach((link) => {
+    const a = document.createElement("a");
     a.href = link.href;
     a.textContent = link.text;
-    a.addEventListener('click', (e) => {
+    a.addEventListener("click", (e) => {
       e.preventDefault();
       Navigate(link.href);
     });
     nav.appendChild(a);
-    nav.appendChild(document.createTextNode(' | '));
+    nav.appendChild(document.createTextNode(" | "));
   });
-  
-  document.body.insertBefore(nav, document.getElementById('app'));
+
+  document.body.insertBefore(nav, document.getElementById("app"));
 });
 ```
