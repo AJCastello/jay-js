@@ -102,24 +102,35 @@ Controls the visibility and animation of a drawer component.
 
 ```typescript
 type TUseDrawer = {
-  for?: string;
+  id?: string;
+  for?: string; // deprecated, use id instead
   onClose?: () => void;
   onOpen?: () => void;
 }
 
-function useDrawer(props: TUseDrawer): () => void
+interface DrawerControls {
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
+}
+
+function useDrawer(props: TUseDrawer): DrawerControls
 ```
 
 #### Parameters
 
 - `props`: Configuration options for the drawer
-  - `for?: string`: Optional ID of the drawer element to control
+  - `id?: string`: ID of the drawer element to control
+  - `for?: string`: (Deprecated) Optional ID of the drawer element to control, use `id` instead
   - `onClose?: () => void`: Callback function triggered when drawer is closed
   - `onOpen?: () => void`: Callback function triggered when drawer is opened
 
 #### Returns
 
-- A function that toggles the drawer's visibility state
+- An object with methods to control the drawer:
+  - `open()`: Opens the drawer
+  - `close()`: Closes the drawer
+  - `toggle()`: Toggles the drawer between open and closed states
 
 ### useListener
 

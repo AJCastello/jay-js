@@ -19,14 +19,17 @@ export function DrawerOverlay<T extends TBaseTagMap = "div">(
 		props.className,
 	]);
 
-	const drawerToggle = useDrawer({ for: props.for });
+	const drawerToggle = useDrawer({ id: props.id });
 
 	return Base({
 		...props,
 		className,
 		dataset: {
-			drawerFor: props.for,
+			drawerFor: props.id,
 		},
-		onclick: props.onclick || drawerToggle,
+		onclick: props.onclick || ((e) => {
+			e.preventDefault();
+			drawerToggle.close();
+		}),
 	}) as HTMLElementTagNameMap[T];
 }
