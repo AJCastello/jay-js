@@ -290,7 +290,6 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 			return {
 				name: path as string,
 				onchange: (ev) => onChangeValue(ev, options),
-				oninput: (ev) => onChangeValue(ev, options),
 				checked: Boolean(value),
 			};
 		}

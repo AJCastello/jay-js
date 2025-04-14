@@ -8,7 +8,7 @@ export type TUseFormOptions<T> = {
 export type TRegister = {
 	name: string;
 	onchange: (ev: Event) => void;
-	oninput: (ev: Event) => void;
+	oninput?: (ev: Event) => void;
 	value?: string;
 	checked?: boolean;
 };
