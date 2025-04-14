@@ -108,13 +108,13 @@ type TUseDrawer = {
   onOpen?: () => void;
 }
 
-interface DrawerControls {
+type TDrawerControls = {
   open: () => void;
   close: () => void;
   toggle: () => void;
 }
 
-function useDrawer(props: TUseDrawer): DrawerControls
+function useDrawer(props: TUseDrawer): TDrawerControls
 ```
 
 #### Parameters

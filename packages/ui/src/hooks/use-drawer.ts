@@ -24,7 +24,7 @@ type TUseDrawer = {
 /**
  * Interface for drawer control methods
  */
-interface DrawerControls {
+export type TDrawerControls = {
 	/**
 	 * Opens the drawer
 	 */
@@ -45,7 +45,7 @@ interface DrawerControls {
  * @param props - Configuration options for the drawer
  * @returns Object with methods to open, close, or toggle the drawer
  */
-export function useDrawer({ ...props }: TUseDrawer): DrawerControls {
+export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 	const drawerId = props.id || props.for;
 
 	const getElements = () => {
