@@ -66,7 +66,7 @@ export function Base<T extends TBaseTagMap = "div">(
 		registerJayJsElement(tag || "div");
 	}
 
-	let elementOptions = hasLifecycle ? { is: `jayjs-${tag}` } : undefined;
+	let elementOptions = hasLifecycle ? { is: `jayjs-${tag || "div"}` } : undefined;
 
 	const base = document.createElement(tag || "div", elementOptions);
 

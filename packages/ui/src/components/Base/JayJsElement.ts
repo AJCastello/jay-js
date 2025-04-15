@@ -1,7 +1,7 @@
 import { TBaseTagMap } from "./Base.types";
 
 // Factory function para criar e registrar elementos customizados
-export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T) {
+export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new () => HTMLElement {
   // Verifica se o nome do elemento é válido
   if (!/^[a-z][a-z0-9-]*$/.test(tagName)) {
     throw new Error(`Nome de elemento inválido: ${tagName}`);
@@ -12,7 +12,7 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T) {
   const BaseClass = baseElement.constructor as { new(): HTMLElement };
 
   // Definir a classe para este tipo de elemento
-  return class JayJsElement extends BaseClass {
+  class JayJsElement extends BaseClass {
     // Define properties for lifecycle callbacks
     onmount?: (element: HTMLElement) => void;
     ondismount?: (element: HTMLElement) => void;
@@ -35,6 +35,8 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T) {
       }
     }
   };
+
+  return JayJsElement;
 }
 
 // Função para registrar um elemento customizado dinamicamente
