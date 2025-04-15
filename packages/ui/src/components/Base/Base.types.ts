@@ -60,6 +60,11 @@ export type TChildren =
 	| Promise<string | Node | boolean | null | undefined>[]
 	| (string | Node | Promise<string | Node> | boolean | null | undefined)[];
 
+export type TLifecycleElement = {
+	onmount?: (element: HTMLElement) => void;
+	ondismount?: (element: HTMLElement) => void;
+} & HTMLElement;
+
 export type TBaseElement<T extends TBaseTagMap> = {
 	tag?: T;
 	className?: string;
