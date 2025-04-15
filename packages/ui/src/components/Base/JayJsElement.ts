@@ -15,7 +15,7 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
   class JayJsElement extends BaseClass {
     // Define properties for lifecycle callbacks
     onmount?: (element: HTMLElement) => void;
-    ondismount?: (element: HTMLElement) => void;
+    onunmount?: (element: HTMLElement) => void;
 
     constructor() {
       super();
@@ -30,8 +30,8 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
 
     disconnectedCallback() {
       console.log(`Elemento ${tagName} removido do DOM`);
-      if (typeof this.ondismount === "function") {
-        this.ondismount(this);
+      if (typeof this.onunmount === "function") {
+        this.onunmount(this);
       }
     }
   };

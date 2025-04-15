@@ -62,7 +62,7 @@ export type TChildren =
 
 export type TLifecycleElement = {
 	onmount?: (element: HTMLElement) => void;
-	ondismount?: (element: HTMLElement) => void;
+	onunmount?: (element: HTMLElement) => void;
 } & HTMLElement;
 
 export type TBaseElement<T extends TBaseTagMap> = {
@@ -74,7 +74,7 @@ export type TBaseElement<T extends TBaseTagMap> = {
 	style?: TStyle;
 	children?: TChildren;
 	onmount?: (element: HTMLElement) => void;
-	ondismount?: (element: HTMLElement) => void;
+	onunmount?: (element: HTMLElement) => void;
 } & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style" | "size">;
 
 export type TBaseDiv = TBaseElement<TBaseTagMap> & {

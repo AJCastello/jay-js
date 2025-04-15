@@ -3,7 +3,7 @@ import { uniKey } from "../../utils/uni-key.js";
 import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./Base.types.js";
 import { registerJayJsElement } from "./JayJsElement.js";
 
-// const elementLifecycle = new Map<string, { element: HTMLElement; ondismount?: (element: HTMLElement) => void }>();
+// const elementLifecycle = new Map<string, { element: HTMLElement; onunmount?: (element: HTMLElement) => void }>();
 
 // const observer = new MutationObserver((mutations) => {
 // 	for (const mutation of mutations) {
@@ -35,13 +35,13 @@ import { registerJayJsElement } from "./JayJsElement.js";
 // function processRemovedElement(element: HTMLElement) {
 // 	const id = element.id;
 // 	if (id && elementLifecycle.has(id)) {
-// 		const { ondismount } = elementLifecycle.get(id) || {};
-// 		if (ondismount) {
+// 		const { onunmount } = elementLifecycle.get(id) || {};
+// 		if (onunmount) {
 // 			try {
-// 				ondismount(element);
-// 				console.log("JayJS: ondismount callback executed for element:", id);
+// 				onunmount(element);
+// 				console.log("JayJS: onunmount callback executed for element:", id);
 // 			} catch (error) {
-// 				console.error("JayJS: Error executing ondismount callback:", error);
+// 				console.error("JayJS: Error executing onunmount callback:", error);
 // 			}
 // 		}
 // 		elementLifecycle.delete(id);
@@ -57,10 +57,10 @@ import { registerJayJsElement } from "./JayJsElement.js";
 // }
 
 export function Base<T extends TBaseTagMap = "div">(
-	{ id, tag, ref, style, children, dataset, className, listeners, onmount, ondismount, ...props }: TBase<T> = { tag: "div" },
+	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
 
-	const hasLifecycle = Boolean(onmount || ondismount);
+	const hasLifecycle = Boolean(onmount || onunmount);
 
 	if (hasLifecycle) {
 		registerJayJsElement(tag || "div");
@@ -73,7 +73,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	if (hasLifecycle) {
 		const lyfercycleElement = base as unknown as TLifecycleElement
 		if (onmount) lyfercycleElement.onmount = onmount;
-		if (ondismount) lyfercycleElement.ondismount = ondismount;
+		if (onunmount) lyfercycleElement.onunmount = onunmount;
 	}
 
 	ref && (ref.current = base);
@@ -108,10 +108,10 @@ export function Base<T extends TBaseTagMap = "div">(
 
 
 	// // TODO: fix
-	// if (ondismount) {
+	// if (onunmount) {
 	// 	elementLifecycle.set(elementId, {
 	// 		element: base,
-	// 		ondismount
+	// 		onunmount
 	// 	});
 	// }
 
