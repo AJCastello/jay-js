@@ -14,11 +14,11 @@ type TUseDrawer = {
 	/**
 	 * Callback function triggered when drawer is closed
 	 */
-	onClose?: () => void;
+	onClose?: (drawerContent: HTMLElement, drawer: HTMLElement) => void;
 	/**
 	 * Callback function triggered when drawer is opened
 	 */
-	onOpen?: () => void;
+	onOpen?: (drawerContent: HTMLElement, drawer: HTMLElement) => void;
 };
 
 /**
@@ -51,8 +51,8 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 	const getElements = () => {
 		const drawer = document.querySelector(`#${drawerId}`);
 		if (drawer && drawer instanceof HTMLElement) {
-			const drawerOverlay = document.querySelector(`[data-drawer-for="${drawerId}"]`);
-			const drawerContent = drawer.querySelector(".drawer-content");
+			const drawerOverlay = document.querySelector(`[data-drawer-for="${drawerId}"]`) as HTMLElement;
+			const drawerContent = drawer.querySelector(".drawer-content") as HTMLElement;
 			return { drawer, drawerOverlay, drawerContent };
 		}
 		return null;
@@ -63,6 +63,16 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 		if (!elements) return;
 
 		const { drawer, drawerOverlay, drawerContent } = elements;
+
+		if (!drawerContent) {
+			console.warn(`useDrawer: No element found for selector: .drawer-content`);
+			return;
+		}
+
+		if (!drawer) {
+			console.warn(`useDrawer: No element found for selector: #${drawerId}`);
+			return;
+		}
 
 		if (drawer.classList.contains("hidden")) {
 			drawer.classList.remove("hidden");
@@ -96,7 +106,7 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 				}
 
 				if (props.onOpen) {
-					props.onOpen();
+					props.onOpen(drawerContent, drawer);
 				}
 			}, 20);
 		}
@@ -107,6 +117,16 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 		if (!elements) return;
 
 		const { drawer, drawerOverlay, drawerContent } = elements;
+
+		if (!drawerContent) {
+			console.warn(`useDrawer: No element found for selector: .drawer-content`);
+			return;
+		}
+
+		if (!drawer) {
+			console.warn(`useDrawer: No element found for selector: #${drawerId}`);
+			return;
+		}
 
 		if (!drawer.classList.contains("hidden")) {
 			if (drawerContent && drawerContent instanceof HTMLElement) {
@@ -140,7 +160,7 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 				drawer.classList.add("hidden");
 
 				if (props.onClose) {
-					props.onClose();
+					props.onClose(drawerContent, drawer);
 				}
 			}, 300);
 		}
