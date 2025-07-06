@@ -8,6 +8,7 @@
   - [useRef](#useref)
   - [useToast](#usetoast)
   - [useDrawer](#usedrawer)
+  - [useModal](#usemodal)
   - [useListener](#uselistener)
 - [Utilities](#utilities)
   - [mergeClasses](#mergeclasses)
@@ -17,6 +18,7 @@
   - [Using useRef](#using-useref)
   - [Using useToast](#using-usetoast)
   - [Using useDrawer](#using-usedrawer)
+  - [Using useModal](#using-usemodal)
   - [Using Utilities](#using-utilities)
 
 ## Introduction
@@ -131,6 +133,46 @@ function useDrawer(props: TUseDrawer): TDrawerControls
   - `open()`: Opens the drawer
   - `close()`: Closes the drawer
   - `toggle()`: Toggles the drawer between open and closed states
+
+### useModal
+
+Controls a dialog modal component using the HTML dialog element.
+
+#### Type Definition
+
+```typescript
+type TUseModal = {
+  id?: string;
+  onClose?: () => void;
+  onOpen?: () => void;
+}
+
+type TModalControls = {
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
+}
+
+function useModal(props: TUseModal): TModalControls
+```
+
+#### Parameters
+
+- `props`: Configuration options for the modal
+  - `id?: string`: ID of the modal element to control
+  - `onClose?: () => void`: Callback function triggered when modal is closed
+  - `onOpen?: () => void`: Callback function triggered when modal is opened
+
+#### Returns
+
+- An object with methods to control the modal:
+  - `open()`: Opens the modal using the showModal() method
+  - `close()`: Closes the modal
+  - `toggle()`: Toggles the modal between open and closed states
+
+#### Throws
+
+- Error: If no modal element is found for the specified ID
 
 ### useListener
 
@@ -322,6 +364,50 @@ function DrawerExample() {
             children: Typography({
               children: "Drawer Content"
             })
+          })
+        ]
+      })
+    ]
+  });
+}
+```
+
+### Using useModal
+
+```typescript
+import { useModal, Button, Div, Typography } from '@jay-js/ui';
+
+function ModalExample() {
+  const modalControls = useModal({
+    id: "my-modal",
+    onOpen: () => console.log("Modal opened"),
+    onClose: () => console.log("Modal closed")
+  });
+  
+  return Section({
+    children: [
+      Button({
+        children: "Open Modal",
+        onclick: () => modalControls.open()
+      }),
+      // HTML dialog element with an ID matching the one used in useModal
+      Base({
+        tag: "dialog",
+        id: "my-modal",
+        className: "p-4 rounded-lg shadow-lg",
+        children: [
+          Typography({
+            children: "Modal Content",
+            className: "mb-4"
+          }),
+          Div({
+            className: "flex justify-end",
+            children: [
+              Button({
+                children: "Close",
+                onclick: () => modalControls.close()
+              })
+            ]
           })
         ]
       })
