@@ -11,8 +11,9 @@ export function ModalBackdrop<T extends TBaseTagMap = "div">(
 
 	return Box({
 		className,
-		children: Base({
+		children: Base<"button">({
 			tag: "button",
+			type: "button",
 			...props,
 		}),
 	}) as HTMLDivElement;
