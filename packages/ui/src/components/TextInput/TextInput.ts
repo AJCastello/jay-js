@@ -1,5 +1,3 @@
-import "./TextInput.style.css";
-
 import { mergeClasses } from "../../utils/merge-classes.js";
 import { type TBaseTagMap } from "../Base";
 import { Box } from "../Box/Box.js";
