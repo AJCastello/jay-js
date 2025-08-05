@@ -80,6 +80,18 @@ beforeEach(() => {
 	documentMock.documentElement = new MockHTMLElement();
 	documentMock.dispatchEvent = jest.fn();
 	windowMock._prefersColorSchemeDark = false;
+
+	// Reset theme configuration to default values
+	Object.assign(themeOptions, {
+		target: documentMock.documentElement as unknown as HTMLElement,
+		saveToLocalStorage: true,
+		defaultTheme: "light",
+		defaultDarkTheme: "dark",
+		localStorageKey: "jayjs-current-theme",
+		useAsDataset: true,
+		useAsClass: false,
+		themes: undefined, // Clear any existing themes
+	});
 });
 
 describe("Theme Manager", () => {
@@ -146,7 +158,7 @@ describe("Theme Manager", () => {
 			const initThemeSpy = jest.spyOn(themeManagerModule, "initTheme");
 
 			themeDefineOptions({
-				defaultTheme: "blue",
+				defaultTheme: "custom-blue",
 			});
 
 			expect(initThemeSpy).toHaveBeenCalled();
@@ -172,7 +184,9 @@ describe("Theme Manager", () => {
 		it("should set default theme when no preference exists", () => {
 			initTheme();
 
+			// Should use default theme in light mode
 			expect(documentMock.documentElement.dataset.theme).toBe("light");
+			expect(documentMock.documentElement.dataset.themeMode).toBe("light");
 		});
 
 		it("should use stored theme from localStorage if available", () => {
@@ -249,6 +263,7 @@ describe("Theme Manager", () => {
 
 			setTheme("dark");
 
+			// Should remove all theme classes (including from default theme)
 			expect(documentMock.documentElement.classList.remove).toHaveBeenCalledWith("light", "dark");
 			expect(documentMock.documentElement.classList.add).toHaveBeenCalledWith("dark");
 			expect(documentMock.documentElement._classes).toContain("dark");
@@ -338,8 +353,9 @@ describe("Theme Manager", () => {
 			// Initialize theme system
 			initTheme();
 
-			// Initial theme should be light
+			// Initial theme should be light (from default theme)
 			expect(documentMock.documentElement.dataset.theme).toBe("light");
+			expect(documentMock.documentElement.dataset.themeMode).toBe("light");
 			expect(documentMock.documentElement._classes).toContain("light");
 
 			// Change to dark theme

@@ -3,7 +3,7 @@
  * @description Configuration options and setup for the theme management system.
  */
 
-import type { TThemeOptions } from "../types.js";
+import type { TThemeOptions, TThemeDefinition } from "../types.js";
 import { initTheme } from "./theme-manager.js";
 
 /**
@@ -22,15 +22,70 @@ export const themeOptions: TThemeOptions = {
 };
 
 /**
+ * Ensures that a default theme exists in the themes array.
+ * Creates or updates the themes array to include a theme with id "default".
+ *
+ * @param {Partial<TThemeOptions>} options - The configuration options
+ * @returns {Partial<TThemeOptions>} The processed options with ensured default theme
+ */
+function ensureDefaultTheme(options: Partial<TThemeOptions>): Partial<TThemeOptions> {
+	const processedOptions = { ...options };
+
+	// Get default theme values (use provided or fallback to defaults)
+	const defaultLight = options.defaultTheme || themeOptions.defaultTheme || "light";
+	const defaultDark = options.defaultDarkTheme || themeOptions.defaultDarkTheme || "dark";
+
+	// Case 1: No themes array provided - create one with default theme
+	if (!processedOptions.themes) {
+		processedOptions.themes = [
+			{
+				id: "default",
+				light: defaultLight,
+				dark: defaultDark,
+			}
+		];
+		return processedOptions;
+	}
+
+	// Case 2: Themes array exists - check if default theme is present
+	const hasDefaultTheme = processedOptions.themes.some(theme => theme.id === "default");
+
+	if (!hasDefaultTheme) {
+		// Case 3: Add default theme to existing themes array
+		processedOptions.themes = [
+			{
+				id: "default",
+				light: defaultLight,
+				dark: defaultDark,
+			},
+			...processedOptions.themes
+		];
+	}
+
+	// Case 4: Default theme already exists - no changes needed
+	return processedOptions;
+}
+
+/**
  * Configures the theme system with custom options and initializes the theme.
  *
- * This function allows overriding default theme options and automatically calls
- * initTheme() to apply the theme based on the new configuration.
+ * This function processes the configuration to ensure a default theme exists,
+ * then applies the theme based on the new configuration. The defaultTheme and
+ * defaultDarkTheme properties are used to create a default theme definition
+ * if one doesn't exist.
  *
  * @param {Partial<TThemeOptions>} options - Custom theme options to merge with defaults
  *
  * @example
- * // Configure theme with custom theme definitions
+ * // Legacy configuration - automatically creates default theme
+ * themeDefineOptions({
+ *   defaultTheme: "light",
+ *   defaultDarkTheme: "dark",
+ * });
+ * // Results in: themes: [{ id: "default", light: "light", dark: "dark" }]
+ *
+ * @example
+ * // Modern configuration with theme definitions
  * themeDefineOptions({
  *   themes: [
  *     { id: "orange", light: "orange-light", dark: "orange-dark" },
@@ -44,15 +99,25 @@ export const themeOptions: TThemeOptions = {
  *     }
  *   ]
  * });
+ * // Automatically adds: { id: "default", light: "light", dark: "dark" }
  *
  * @example
- * // Configure theme to use classes instead of dataset attributes
+ * // Mixed configuration - preserves existing default
  * themeDefineOptions({
- *   useAsDataset: false,
- *   useAsClass: true,
+ *   defaultTheme: "custom-light",
+ *   defaultDarkTheme: "custom-dark",
+ *   themes: [
+ *     { id: "default", light: "light", dark: "dark" },
+ *     { id: "red", light: "volcano", dark: "cave" }
+ *   ]
  * });
+ * // No changes - default theme already exists
  */
 export function themeDefineOptions(options: Partial<TThemeOptions>): void {
-	Object.assign(themeOptions, options);
+	// Process options to ensure default theme exists
+	const processedOptions = ensureDefaultTheme(options);
+
+	// Apply the processed configuration
+	Object.assign(themeOptions, processedOptions);
 	initTheme();
 }

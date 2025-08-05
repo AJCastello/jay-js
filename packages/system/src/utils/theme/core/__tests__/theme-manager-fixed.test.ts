@@ -80,6 +80,18 @@ beforeEach(() => {
   documentMock.documentElement = new MockHTMLElement();
   documentMock.dispatchEvent = jest.fn();
   windowMock._prefersColorSchemeDark = false;
+
+  // Reset theme configuration to default values
+  Object.assign(themeOptions, {
+    target: documentMock.documentElement as unknown as HTMLElement,
+    saveToLocalStorage: true,
+    defaultTheme: "light",
+    defaultDarkTheme: "dark",
+    localStorageKey: "jayjs-current-theme",
+    useAsDataset: true,
+    useAsClass: false,
+    themes: undefined, // Clear any existing themes
+  });
 });
 
 describe("Theme Manager", () => {
@@ -146,7 +158,7 @@ describe("Theme Manager", () => {
       const initThemeSpy = jest.spyOn(themeManagerModule, "initTheme");
 
       themeDefineOptions({
-        defaultTheme: "blue",
+        defaultTheme: "custom-blue",
       });
 
       expect(initThemeSpy).toHaveBeenCalled();

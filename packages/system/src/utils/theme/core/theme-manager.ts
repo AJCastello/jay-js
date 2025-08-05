@@ -19,23 +19,33 @@ import type { TThemeMode, TThemeModeResult } from "../types";
  * This function determines which theme to set by checking:
  * 1. localStorage for previously saved theme preference
  * 2. System dark mode preference (if no stored theme)
- * 3. Defaults to the configured default theme
+ * 3. Defaults to the default theme definition
  *
  * @example
  * // Basic usage - call this after configuring theme options
  * initTheme();
  */
 export function initTheme() {
-	let themeToSet = themeOptions.defaultTheme;
 	const storedTheme = localStorage.getItem(themeOptions.localStorageKey);
 
 	if (storedTheme) {
-		themeToSet = storedTheme;
-	} else if (prefersColorSchemeDark()) {
-		themeToSet = themeOptions.defaultDarkTheme;
+		// Use stored theme directly
+		setTheme(storedTheme);
+	} else {
+		// No stored theme - use default theme with appropriate mode
+		const defaultTheme = findThemeById("default");
+		if (defaultTheme) {
+			// Use default theme with system preference for mode
+			const prefersDark = prefersColorSchemeDark();
+			setTheme("default", prefersDark ? "dark" : "light");
+		} else {
+			// Fallback to legacy behavior if no default theme exists
+			const themeToSet = prefersColorSchemeDark() ?
+				themeOptions.defaultDarkTheme :
+				themeOptions.defaultTheme;
+			setTheme(themeToSet);
+		}
 	}
-
-	setTheme(themeToSet);
 }
 
 /**
@@ -74,9 +84,21 @@ function getCurrentThemeMode(): TThemeMode {
  * console.log(`Current theme: ${theme}, Mode: ${mode}`);
  */
 export function getCurrentTheme(): TThemeModeResult {
-	const theme = themeOptions.target.dataset.theme || themeOptions.defaultTheme;
-	const mode = getCurrentThemeMode();
+	let theme = themeOptions.target.dataset.theme;
 
+	// If no theme is set, try to get default theme
+	if (!theme) {
+		const defaultTheme = findThemeById("default");
+		if (defaultTheme) {
+			// Use default theme light variant as fallback
+			theme = defaultTheme.light;
+		} else {
+			// Final fallback to legacy default
+			theme = themeOptions.defaultTheme;
+		}
+	}
+
+	const mode = getCurrentThemeMode();
 	return { theme, mode };
 }
 
@@ -221,7 +243,7 @@ export function toggleThemeMode(): TThemeModeResult {
 
 	if (themeOptions.themes) {
 		// Find current theme by looking at the current theme value
-		const currentTheme = themeOptions.target.dataset.theme || themeOptions.defaultTheme;
+		const currentTheme = themeOptions.target.dataset.theme;
 
 		// Try to find which theme definition this belongs to
 		let currentThemeDefinition = themeOptions.themes.find(t =>
@@ -232,11 +254,17 @@ export function toggleThemeMode(): TThemeModeResult {
 			// Use the theme ID to set the new mode
 			themeToSet = currentThemeDefinition.id;
 		} else {
-			// Fallback to default themes
-			themeToSet = newMode === "dark" ? themeOptions.defaultDarkTheme : themeOptions.defaultTheme;
+			// Fallback to default theme
+			const defaultTheme = findThemeById("default");
+			if (defaultTheme) {
+				themeToSet = "default";
+			} else {
+				// Final fallback to legacy behavior
+				themeToSet = newMode === "dark" ? themeOptions.defaultDarkTheme : themeOptions.defaultTheme;
+			}
 		}
 	} else {
-		// No theme definitions - use defaults
+		// No theme definitions - use legacy defaults
 		themeToSet = newMode === "dark" ? themeOptions.defaultDarkTheme : themeOptions.defaultTheme;
 	}
 

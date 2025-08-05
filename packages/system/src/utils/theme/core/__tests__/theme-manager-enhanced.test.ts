@@ -110,10 +110,12 @@ describe("Enhanced Theme Manager", () => {
         themes,
       });
 
-      expect(themeOptions.themes).toEqual(themes);
-    });
-
-    it("should handle themes with custom styles", () => {
+      // Should have added default theme at the beginning
+      expect(themeOptions.themes).toEqual([
+        { id: "default", light: "light", dark: "dark" },
+        ...themes
+      ]);
+    }); it("should handle themes with custom styles", () => {
       const themes: TThemeDefinition[] = [
         {
           id: "blue",
@@ -129,7 +131,11 @@ describe("Enhanced Theme Manager", () => {
         themes,
       });
 
-      expect(themeOptions.themes).toEqual(themes);
+      // Should have added default theme at the beginning
+      expect(themeOptions.themes).toEqual([
+        { id: "default", light: "light", dark: "dark" },
+        ...themes
+      ]);
     });
   });
 
