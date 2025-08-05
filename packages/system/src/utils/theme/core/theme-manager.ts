@@ -59,6 +59,28 @@ function getCurrentThemeMode(): TThemeMode {
 }
 
 /**
+ * Gets the current theme and mode information.
+ *
+ * @returns {TThemeModeResult} Object containing the current theme name and mode
+ *
+ * @example
+ * // Get current theme info
+ * const current = getCurrentTheme();
+ * // Returns: { theme: "orange-light", mode: "light" }
+ *
+ * @example
+ * // Use the returned info
+ * const { theme, mode } = getCurrentTheme();
+ * console.log(`Current theme: ${theme}, Mode: ${mode}`);
+ */
+export function getCurrentTheme(): TThemeModeResult {
+	const theme = themeOptions.target.dataset.theme || themeOptions.defaultTheme;
+	const mode = getCurrentThemeMode();
+
+	return { theme, mode };
+}
+
+/**
  * Applies CSS styles to the target element.
  *
  * @param {Record<string, string>} styles - Object containing CSS properties and values

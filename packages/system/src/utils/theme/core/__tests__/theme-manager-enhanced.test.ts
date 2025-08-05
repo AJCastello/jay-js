@@ -1,5 +1,5 @@
 import { themeDefineOptions, themeOptions } from "../configuration";
-import { initTheme, prefersColorSchemeDark, setTheme, toggleThemeMode } from "../theme-manager";
+import { initTheme, prefersColorSchemeDark, setTheme, toggleThemeMode, getCurrentTheme } from "../theme-manager";
 import * as themeManagerModule from "../theme-manager";
 import type { TThemeDefinition, TThemeMode } from "../../types";
 
@@ -417,6 +417,101 @@ describe("Enhanced Theme Manager", () => {
 
       expect(result.theme).toBe("dark");
       expect(result.mode).toBe("dark");
+    });
+  });
+
+  describe("getCurrentTheme", () => {
+    beforeEach(() => {
+      const themes: TThemeDefinition[] = [
+        { id: "orange", light: "orange-light", dark: "orange-dark" },
+        { id: "red", light: "volcano", dark: "cave" },
+      ];
+
+      Object.assign(themeOptions, {
+        target: documentMock.documentElement as unknown as HTMLElement,
+        saveToLocalStorage: true,
+        defaultTheme: "light",
+        defaultDarkTheme: "dark",
+        localStorageKey: "jayjs-current-theme",
+        useAsDataset: true,
+        useAsClass: false,
+        themes,
+      });
+    });
+
+    it("should return current theme and mode", () => {
+      // Set a theme with mode
+      documentMock.documentElement.dataset.theme = "orange-light";
+      documentMock.documentElement.dataset.themeMode = "light";
+
+      const result = getCurrentTheme();
+
+      expect(result).toEqual({ theme: "orange-light", mode: "light" });
+    });
+
+    it("should return dark mode theme", () => {
+      documentMock.documentElement.dataset.theme = "volcano";
+      documentMock.documentElement.dataset.themeMode = "dark";
+
+      const result = getCurrentTheme();
+
+      expect(result).toEqual({ theme: "volcano", mode: "dark" });
+    });
+
+    it("should default to light mode when themeMode is not set", () => {
+      documentMock.documentElement.dataset.theme = "custom-theme";
+      // No themeMode set
+
+      const result = getCurrentTheme();
+
+      expect(result).toEqual({ theme: "custom-theme", mode: "light" });
+    });
+
+    it("should use defaultTheme when no theme is set", () => {
+      // No theme or mode set
+      delete documentMock.documentElement.dataset.theme;
+      delete documentMock.documentElement.dataset.themeMode;
+
+      const result = getCurrentTheme();
+
+      expect(result).toEqual({ theme: "light", mode: "light" });
+    });
+
+    it("should handle invalid theme mode", () => {
+      documentMock.documentElement.dataset.theme = "custom-theme";
+      documentMock.documentElement.dataset.themeMode = "invalid" as any;
+
+      const result = getCurrentTheme();
+
+      expect(result).toEqual({ theme: "custom-theme", mode: "light" });
+    });
+
+    it("should work without theme definitions", () => {
+      // Remove theme definitions
+      Object.assign(themeOptions, {
+        themes: undefined,
+      });
+
+      documentMock.documentElement.dataset.theme = "my-theme";
+      documentMock.documentElement.dataset.themeMode = "dark";
+
+      const result = getCurrentTheme();
+
+      expect(result).toEqual({ theme: "my-theme", mode: "dark" });
+    });
+
+    it("should return consistent results after theme changes", () => {
+      // Set initial theme
+      setTheme("red", "light");
+
+      let result = getCurrentTheme();
+      expect(result).toEqual({ theme: "volcano", mode: "light" });
+
+      // Toggle mode
+      toggleThemeMode();
+
+      result = getCurrentTheme();
+      expect(result).toEqual({ theme: "cave", mode: "dark" });
     });
   });
 });
