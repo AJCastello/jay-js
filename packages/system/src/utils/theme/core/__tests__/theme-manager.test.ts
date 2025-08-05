@@ -94,20 +94,17 @@ describe("Theme Manager", () => {
 				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
-				themeList: ["light", "dark"],
 			});
 
 			const customOptions = {
 				defaultTheme: "custom-light",
 				defaultDarkTheme: "custom-dark",
-				themeList: ["custom-light", "custom-dark", "high-contrast"],
 			};
 
 			themeDefineOptions(customOptions);
 
 			expect(themeOptions.defaultTheme).toBe("custom-light");
 			expect(themeOptions.defaultDarkTheme).toBe("custom-dark");
-			expect(themeOptions.themeList).toEqual(["custom-light", "custom-dark", "high-contrast"]);
 		});
 
 		it("should merge options with defaults", () => {
@@ -120,7 +117,6 @@ describe("Theme Manager", () => {
 				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
-				themeList: ["light", "dark"],
 			});
 
 			const partialOptions = {
@@ -144,7 +140,6 @@ describe("Theme Manager", () => {
 				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
-				themeList: ["light", "dark"],
 			});
 
 			// Mock initTheme since it's called by themeDefineOptions
@@ -171,7 +166,6 @@ describe("Theme Manager", () => {
 				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
-				themeList: ["light", "dark"],
 			});
 		});
 
@@ -218,7 +212,6 @@ describe("Theme Manager", () => {
 				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: false,
-				themeList: ["light", "dark"],
 			});
 		});
 
@@ -249,7 +242,6 @@ describe("Theme Manager", () => {
 			Object.assign(themeOptions, {
 				useAsDataset: false,
 				useAsClass: true,
-				themeList: ["light", "dark", "sepia"],
 			});
 
 			// Add an existing theme class
@@ -257,7 +249,7 @@ describe("Theme Manager", () => {
 
 			setTheme("dark");
 
-			expect(documentMock.documentElement.classList.remove).toHaveBeenCalledWith("light", "dark", "sepia");
+			expect(documentMock.documentElement.classList.remove).toHaveBeenCalledWith("light", "dark");
 			expect(documentMock.documentElement.classList.add).toHaveBeenCalledWith("dark");
 			expect(documentMock.documentElement._classes).toContain("dark");
 			expect(documentMock.documentElement._classes).not.toContain("light");
@@ -301,7 +293,7 @@ describe("Theme Manager", () => {
 				throw new Error("Storage error");
 			});
 
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => { });
 
 			setTheme("dark");
 
@@ -341,7 +333,6 @@ describe("Theme Manager", () => {
 				localStorageKey: "jayjs-current-theme",
 				useAsDataset: true,
 				useAsClass: true,
-				themeList: ["light", "dark", "sepia"],
 			});
 
 			// Initialize theme system

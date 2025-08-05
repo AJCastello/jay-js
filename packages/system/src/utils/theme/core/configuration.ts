@@ -19,7 +19,6 @@ export const themeOptions: TThemeOptions = {
 	localStorageKey: "jayjs-current-theme",
 	useAsDataset: true,
 	useAsClass: false,
-	themeList: ["light", "dark"],
 };
 
 /**
@@ -31,11 +30,19 @@ export const themeOptions: TThemeOptions = {
  * @param {Partial<TThemeOptions>} options - Custom theme options to merge with defaults
  *
  * @example
- * // Configure theme with custom options
+ * // Configure theme with custom theme definitions
  * themeDefineOptions({
- *   defaultTheme: 'light-blue',
- *   defaultDarkTheme: 'dark-blue',
- *   themeList: ['light-blue', 'dark-blue', 'high-contrast']
+ *   themes: [
+ *     { id: "orange", light: "orange-light", dark: "orange-dark" },
+ *     { id: "red", light: "volcano", dark: "cave" },
+ *     { 
+ *       id: "blue", 
+ *       light: "skytheme", 
+ *       dark: "alaska",
+ *       lightStyle: { "text-decoration": "underline" },
+ *       darkStyle: { "font-size": "16px" }
+ *     }
+ *   ]
  * });
  *
  * @example
