@@ -362,6 +362,76 @@ describe("Enhanced Theme Manager", () => {
       // Mode should be determined from theme name or default to light
       expect(documentMock.documentElement.dataset.themeMode).toBeDefined();
     });
+
+    it("should validate stored theme exists in configuration", () => {
+      // Store a valid theme
+      localStorage.setItem("jayjs-current-theme", "orange-light");
+
+      initTheme();
+
+      expect(documentMock.documentElement.dataset.theme).toBe("orange-light");
+    });
+
+    it("should fallback to default when stored theme is invalid", () => {
+      // Store an invalid theme
+      localStorage.setItem("jayjs-current-theme", "nonexistent-theme");
+
+      const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => { });
+
+      initTheme();
+
+      // Should fallback to default theme
+      expect(documentMock.documentElement.dataset.theme).toBe("light");
+      expect(documentMock.documentElement.dataset.themeMode).toBe("light");
+
+      // Should log warning about invalid theme
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Stored theme "nonexistent-theme" is not valid in current configuration')
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it("should fallback to default when stored theme ID is invalid", () => {
+      // Store an invalid theme ID
+      localStorage.setItem("jayjs-current-theme", "invalid-theme-id");
+
+      const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => { });
+
+      initTheme();
+
+      // Should fallback to default theme
+      expect(documentMock.documentElement.dataset.theme).toBe("light");
+      expect(documentMock.documentElement.dataset.themeMode).toBe("light");
+
+      // Should log warning
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Stored theme "invalid-theme-id" is not valid in current configuration')
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it("should accept stored theme by ID", () => {
+      // Store a valid theme ID
+      localStorage.setItem("jayjs-current-theme", "orange");
+
+      initTheme();
+
+      // Should use the theme ID and apply current mode (default to light)
+      expect(documentMock.documentElement.dataset.theme).toBe("orange-light");
+      expect(documentMock.documentElement.dataset.themeMode).toBe("light");
+    });
+
+    it("should preserve legacy default themes as valid", () => {
+      // Store legacy default theme
+      localStorage.setItem("jayjs-current-theme", "dark");
+
+      initTheme();
+
+      // Should accept the legacy default theme
+      expect(documentMock.documentElement.dataset.theme).toBe("dark");
+    });
   });
 
   describe("CSS class support with theme definitions", () => {

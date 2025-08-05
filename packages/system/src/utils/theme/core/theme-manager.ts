@@ -14,11 +14,48 @@ import { themeOptions } from "./configuration";
 import type { TThemeMode, TThemeModeResult } from "../types";
 
 /**
+ * Validates if a theme exists in the current configuration.
+ *
+ * This function checks if a theme name corresponds to:
+ * 1. A theme ID in the themes array
+ * 2. A light or dark variant of any theme in the themes array
+ * 3. The default theme or default dark theme values
+ *
+ * @param {string} themeName - The theme name to validate
+ * @returns {boolean} True if the theme exists in the configuration, false otherwise
+ */
+function isValidTheme(themeName: string): boolean {
+	// Check if themes array is defined
+	if (themeOptions.themes) {
+		// Check if it's a theme ID
+		const themeById = findThemeById(themeName);
+		if (themeById) {
+			return true;
+		}
+
+		// Check if it's a light or dark variant of any theme
+		const isVariant = themeOptions.themes.some(theme =>
+			theme.light === themeName || theme.dark === themeName
+		);
+		if (isVariant) {
+			return true;
+		}
+	}
+
+	// Check if it matches legacy default themes
+	if (themeName === themeOptions.defaultTheme || themeName === themeOptions.defaultDarkTheme) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Initializes the theme system based on stored preferences or system settings.
  *
  * This function determines which theme to set by checking:
- * 1. localStorage for previously saved theme preference
- * 2. System dark mode preference (if no stored theme)
+ * 1. localStorage for previously saved theme preference (validates if theme exists)
+ * 2. System dark mode preference (if no stored theme or invalid theme)
  * 3. Defaults to the default theme definition
  *
  * @example
@@ -28,11 +65,16 @@ import type { TThemeMode, TThemeModeResult } from "../types";
 export function initTheme() {
 	const storedTheme = localStorage.getItem(themeOptions.localStorageKey);
 
-	if (storedTheme) {
-		// Use stored theme directly
+	if (storedTheme && isValidTheme(storedTheme)) {
+		// Use stored theme if it exists in current configuration
 		setTheme(storedTheme);
 	} else {
-		// No stored theme - use default theme with appropriate mode
+		// No stored theme or invalid theme - use default theme with appropriate mode
+		if (storedTheme && !isValidTheme(storedTheme)) {
+			// Log warning about invalid stored theme
+			console.warn(`Stored theme "${storedTheme}" is not valid in current configuration. Falling back to default theme.`);
+		}
+
 		const defaultTheme = findThemeById("default");
 		if (defaultTheme) {
 			// Use default theme with system preference for mode
