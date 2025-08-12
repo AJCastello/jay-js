@@ -167,6 +167,36 @@ function clearStyles(styles: Record<string, string>) {
 }
 
 /**
+ * Finds a theme definition by checking if the given theme name matches any theme ID,
+ * light variant, or dark variant in the themes array.
+ *
+ * @param {string} themeName - The theme name to find (could be ID, light variant, or dark variant)
+ * @returns {object | undefined} Object with themeDefinition and mode, or undefined if not found
+ */
+function findThemeByName(themeName: string) {
+	if (!themeOptions.themes) return undefined;
+
+	for (const theme of themeOptions.themes) {
+		// Check if it's a theme ID
+		if (theme.id === themeName) {
+			return { themeDefinition: theme, mode: getCurrentThemeMode() };
+		}
+
+		// Check if it's a light variant
+		if (theme.light === themeName) {
+			return { themeDefinition: theme, mode: "light" as TThemeMode };
+		}
+
+		// Check if it's a dark variant
+		if (theme.dark === themeName) {
+			return { themeDefinition: theme, mode: "dark" as TThemeMode };
+		}
+	}
+
+	return undefined;
+}
+
+/**
  * Sets the current theme of the application.
  *
  * This function supports two modes of operation:
@@ -206,11 +236,12 @@ export function setTheme(theme: string, mode?: TThemeMode) {
 		}
 	}
 
-	// Check if themes are defined and theme exists in the list
+	// Check if themes are defined and find the theme
 	if (themeOptions.themes) {
+		// First try to find by theme ID
 		const themeDefinition = findThemeById(theme);
 		if (themeDefinition) {
-			// Use theme definition
+			// Use theme definition with provided or current mode
 			finalTheme = finalMode === "dark" ? themeDefinition.dark : themeDefinition.light;
 
 			// Apply custom styles if defined
@@ -218,8 +249,22 @@ export function setTheme(theme: string, mode?: TThemeMode) {
 			if (stylesToApply) {
 				applyStyles(stylesToApply);
 			}
+		} else {
+			// If not found by ID, try to find by theme variant name
+			const themeInfo = findThemeByName(theme);
+			if (themeInfo) {
+				// Found the theme by variant - use the detected mode and apply styles
+				finalTheme = theme; // Keep the variant name as final theme
+				finalMode = mode || themeInfo.mode; // Use provided mode or detected mode
+
+				// Apply custom styles based on the detected mode
+				const stylesToApply = finalMode === "dark" ? themeInfo.themeDefinition.darkStyle : themeInfo.themeDefinition.lightStyle;
+				if (stylesToApply) {
+					applyStyles(stylesToApply);
+				}
+			}
 		}
-		// If theme not found in definitions, use the theme name directly
+		// If theme not found in definitions at all, use the theme name directly
 	}
 
 	// Apply theme and mode to dataset

@@ -423,6 +423,76 @@ describe("Enhanced Theme Manager", () => {
       expect(documentMock.documentElement.dataset.themeMode).toBe("light");
     });
 
+    it("should apply custom styles when setting theme by variant name on init", () => {
+      // Setup theme with custom styles
+      const themes: TThemeDefinition[] = [
+        {
+          id: "default",
+          light: "default-light",
+          dark: "default-dark",
+          lightStyle: { "--main-bg": "#ffffff", "--text-color": "#000000" },
+          darkStyle: { "--main-bg": "#000000", "--text-color": "#ffffff" }
+        },
+      ];
+
+      Object.assign(themeOptions, {
+        target: documentMock.documentElement as unknown as HTMLElement,
+        saveToLocalStorage: true,
+        defaultTheme: "default-light",
+        defaultDarkTheme: "default-dark",
+        localStorageKey: "jayjs-current-theme",
+        useAsDataset: true,
+        useAsClass: false,
+        themes,
+      });
+
+      // Simulate stored theme variant
+      localStorage.setItem("jayjs-current-theme", "default-light");
+
+      initTheme();
+
+      // Should apply custom light styles immediately
+      expect(documentMock.documentElement.style.setProperty).toHaveBeenCalledWith("--main-bg", "#ffffff");
+      expect(documentMock.documentElement.style.setProperty).toHaveBeenCalledWith("--text-color", "#000000");
+      expect(documentMock.documentElement.dataset.theme).toBe("default-light");
+      expect(documentMock.documentElement.dataset.themeMode).toBe("light");
+    });
+
+    it("should apply dark custom styles when setting dark theme variant on init", () => {
+      // Setup theme with custom styles
+      const themes: TThemeDefinition[] = [
+        {
+          id: "default",
+          light: "default-light",
+          dark: "default-dark",
+          lightStyle: { "--main-bg": "#ffffff", "--text-color": "#000000" },
+          darkStyle: { "--main-bg": "#000000", "--text-color": "#ffffff" }
+        },
+      ];
+
+      Object.assign(themeOptions, {
+        target: documentMock.documentElement as unknown as HTMLElement,
+        saveToLocalStorage: true,
+        defaultTheme: "default-light",
+        defaultDarkTheme: "default-dark",
+        localStorageKey: "jayjs-current-theme",
+        useAsDataset: true,
+        useAsClass: false,
+        themes,
+      });
+
+      // Simulate stored dark theme variant
+      localStorage.setItem("jayjs-current-theme", "default-dark");
+
+      initTheme();
+
+      // Should apply custom dark styles immediately
+      expect(documentMock.documentElement.style.setProperty).toHaveBeenCalledWith("--main-bg", "#000000");
+      expect(documentMock.documentElement.style.setProperty).toHaveBeenCalledWith("--text-color", "#ffffff");
+      expect(documentMock.documentElement.dataset.theme).toBe("default-dark");
+      expect(documentMock.documentElement.dataset.themeMode).toBe("dark");
+    });
+
     it("should preserve legacy default themes as valid", () => {
       // Store legacy default theme
       localStorage.setItem("jayjs-current-theme", "dark");
