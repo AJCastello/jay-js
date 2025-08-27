@@ -44,6 +44,28 @@ import type {
 export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUseForm<T> {
 	const formErrors = State<TFormValidateResult>({ errors: [] });
 	const formValues = State<T>(defaultValues);
+
+	// Cache for DOM elements using WeakMap for automatic garbage collection
+	const elementCache = new Map<string, HTMLElement>();
+
+	// MutationObserver for automatic cleanup when elements are removed
+	const observer = new MutationObserver((mutations) => {
+		mutations.forEach((mutation) => {
+			mutation.removedNodes.forEach((node) => {
+				if (node instanceof HTMLElement) {
+					const name = node.getAttribute('name');
+					if (name && elementCache.has(name)) {
+						elementCache.delete(name);
+					}
+				}
+			});
+		});
+	});
+
+	// Start observing the DOM
+	if (typeof document !== 'undefined') {
+		observer.observe(document.body, { childList: true, subtree: true });
+	}
 	const formState: TFormState<T> = {
 		errors: (path: keyof T) => {
 			const errorText = document.createTextNode("");
@@ -63,7 +85,19 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 					[path]: value,
 				};
 			});
-			const fieldElement = document.querySelector(`[name="${String(path)}"]`);
+
+			// Use cache or search for element and store in cache
+
+			const pathStr = String(path);
+			let fieldElement = elementCache.get(pathStr);
+
+			if (!fieldElement || !document.contains(fieldElement)) {
+				fieldElement = document.querySelector(`[name="${pathStr}"]`) as HTMLElement;
+				if (fieldElement) {
+					elementCache.set(pathStr, fieldElement);
+				}
+			}
+
 			if (!fieldElement) return;
 
 			if (fieldElement instanceof HTMLInputElement) {
@@ -138,6 +172,22 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 		},
 		setErrors: (errors: TFormValidateResult) => {
 			formErrors.set(errors);
+		},
+
+		/**
+		 * Resets the form to default values and clears all errors
+		 */
+		reset: () => {
+			// Restaura valores padrão
+			formValues.set(defaultValues);
+
+			// Limpa erros
+			formErrors.set({ errors: [] });
+
+			// Atualiza elementos DOM com valores padrão
+			for (const field in defaultValues) {
+				formState.setValue(field as keyof T, defaultValues[field]);
+			}
 		},
 	};
 
@@ -339,11 +389,20 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 		};
 	}
 
+	/**
+	 * Cleans up resources and stops DOM observation
+	 */
+	function destroy() {
+		observer.disconnect();
+		elementCache.clear();
+	}
+
 	return {
 		formState,
 		register,
 		onChange,
 		onSubmit,
 		onErrors,
+		destroy,
 	};
 }
