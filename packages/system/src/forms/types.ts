@@ -24,6 +24,7 @@ export type TUseForm<T> = {
 	onChange: (callback: (data: T) => void) => void;
 	onSubmit: (callback: (ev: Event, data: T) => void) => (ev: SubmitEvent) => void;
 	onErrors: (callback: (errors: TFormValidateResult) => void) => void;
+	destroy: () => void;
 };
 
 export type TFormState<T> = {
@@ -36,6 +37,7 @@ export type TFormState<T> = {
 	getErrors: () => TFormValidateResult;
 	setError: (field: keyof T, message: string) => void;
 	setErrors: (errors: TFormValidateResult) => void;
+	reset: () => void;
 };
 
 export type TFormValidateResult = {
