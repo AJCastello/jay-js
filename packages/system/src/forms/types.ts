@@ -3,6 +3,7 @@ export type TResolver<T> = (values: T, fieldName?: string) => Promise<TFormValid
 export type TUseFormOptions<T> = {
 	defaultValues: T;
 	resolver?: TResolver<T>;
+	debounceMs?: number;
 };
 
 export type TRegister = {

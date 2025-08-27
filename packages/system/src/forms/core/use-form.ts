@@ -15,13 +15,15 @@ import type {
  * @param {TUseFormOptions<T>} options - Form configuration options
  * @param {T} options.defaultValues - Initial values for the form fields
  * @param {TResolver<T>} [options.resolver] - Optional validation resolver function
+ * @param {number} [options.debounceMs=300] - Debounce time for validation in milliseconds
  * @returns {TUseForm<T>} Form management interface with methods for registration, state access, and event handling
  *
  * @example
- * // Basic form with Zod validation
+ * // Basic form with Zod validation and custom debounce
  * const form = useForm({
  *   defaultValues: { email: '', password: '', remember: false },
- *   resolver: zodResolver(loginSchema)
+ *   resolver: zodResolver(loginSchema),
+ *   debounceMs: 500 // Custom debounce time
  * });
  *
  * // Register an input element
@@ -40,13 +42,25 @@ import type {
  * form.onSubmit((event, data) => {
  *   console.log('Form submitted:', data);
  * });
+ *
+ * // Reset form
+ * form.formState.reset();
+ *
+ * // Cleanup when component unmounts
+ * form.destroy();
  */
-export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUseForm<T> {
+export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFormOptions<T>): TUseForm<T> {
 	const formErrors = State<TFormValidateResult>({ errors: [] });
 	const formValues = State<T>(defaultValues);
 
 	// Cache for DOM elements using WeakMap for automatic garbage collection
 	const elementCache = new Map<string, HTMLElement>();
+	
+	// Debounce timers for validation
+	const debounceTimers = new Map<string, NodeJS.Timeout>();
+	
+	// Event listeners cleanup registry
+	const eventListeners = new Set<() => void>();
 
 	// MutationObserver for automatic cleanup when elements are removed
 	const observer = new MutationObserver((mutations) => {
@@ -56,6 +70,12 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 					const name = node.getAttribute('name');
 					if (name && elementCache.has(name)) {
 						elementCache.delete(name);
+						// Clear debounce timer for removed element
+						const timer = debounceTimers.get(name);
+						if (timer) {
+							clearTimeout(timer);
+							debounceTimers.delete(name);
+						}
 					}
 				}
 			});
@@ -208,12 +228,52 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 	}
 
 	/**
+	 * Creates a debounced validation function for a specific field
+	 *
+	 * @param {string} field - The field name to validate
+	 * @returns {Function} Debounced validation function
+	 * @private
+	 */
+	function createDebouncedValidation(field: string) {
+		return () => {
+			const timer = debounceTimers.get(field);
+			if (timer) {
+				clearTimeout(timer);
+			}
+			
+			const newTimer = setTimeout(async () => {
+				try {
+					if (!resolver) {
+						return;
+					}
+					const formValuesData = formValues.get();
+					const result = await resolver(formValuesData, field);
+					validateResult(result);
+				} catch (error: any) {
+					validateResult(error);
+				} finally {
+					debounceTimers.delete(field);
+				}
+			}, debounceMs);
+			
+			debounceTimers.set(field, newTimer);
+		};
+	}
+
+	/**
 	 * Subscribes to error state changes
 	 *
 	 * @param {Function} callback - Function called when validation errors change
 	 */
 	function onErrors(callback: (errors: TFormValidateResult) => void) {
 		formErrors.sub("onErrors", callback);
+		// Store callback reference for cleanup
+		const cleanup = () => {
+			// The State system will handle cleanup automatically
+			// when the form is destroyed
+		};
+		eventListeners.add(cleanup);
+		return cleanup;
 	}
 
 	/**
@@ -283,15 +343,10 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 
 			privateSetValue(field, value);
 
-			try {
-				if (!resolver) {
-					return;
-				}
-				const formValuesData = formValues.get();
-				const result = await resolver(formValuesData, field);
-				validateResult(result);
-			} catch (error: any) {
-				validateResult(error);
+			// Use debounced validation instead of immediate validation
+			if (resolver) {
+				const debouncedValidate = createDebouncedValidation(field);
+				debouncedValidate();
 			}
 		}
 	}
@@ -361,6 +416,13 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 		formValues.sub("onChange", (data) => {
 			callback(data, formErrors.get());
 		});
+		// Store callback reference for cleanup
+		const cleanup = () => {
+			// The State system will handle cleanup automatically
+			// when the form is destroyed
+		};
+		eventListeners.add(cleanup);
+		return cleanup;
 	}
 
 	/**
@@ -393,8 +455,23 @@ export function useForm<T>({ defaultValues, resolver }: TUseFormOptions<T>): TUs
 	 * Cleans up resources and stops DOM observation
 	 */
 	function destroy() {
+		// Disconnect DOM observer
 		observer.disconnect();
+		
+		// Clear element cache
 		elementCache.clear();
+		
+		// Clear all debounce timers
+		debounceTimers.forEach((timer) => clearTimeout(timer));
+		debounceTimers.clear();
+		
+		// Cleanup all event listeners
+		eventListeners.forEach((unsubscribe) => {
+			if (typeof unsubscribe === 'function') {
+				unsubscribe();
+			}
+		});
+		eventListeners.clear();
 	}
 
 	return {
