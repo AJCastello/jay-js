@@ -1,4 +1,4 @@
-import type { Listener } from "../components/Base/Base.types.js";
+import type { Listener } from "@jay-js/elements";
 
 /**
  * A hook to handle event listeners

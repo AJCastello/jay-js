@@ -1,5 +1,5 @@
-import { Toast } from "../components/Toast/Toast.js";
-import type { TToast } from "../components/Toast/Toast.types.js";
+import { TToast, Toast } from "../components";
+
 
 /**
  * Configuration options for the useToast hook

@@ -16,7 +16,11 @@
       "jest",
       "node"
     ],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@jay-js/elements": ["../elements/src"],
+      "@jay-js/elements/*": ["../elements/src/*"]
+    }
   },
   "include": [
     "./src/**/*",

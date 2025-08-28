@@ -3,7 +3,7 @@
  * @description Provides the JSX transformation functions for development use
  */
 
-import { TBase, Base, Fragment } from "@jay-js/ui";
+import { TBase, Base, Fragment } from "@jay-js/elements";
 
 /**
  * JSX namespace for TypeScript that defines all intrinsic HTML elements

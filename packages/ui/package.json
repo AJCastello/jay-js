@@ -60,6 +60,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@jay-js/elements": "file:../elements",
     "tailwind-merge": "^2.3.0",
     "yup": "^1.4.0"
   }

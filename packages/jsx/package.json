@@ -57,7 +57,11 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.4.5"
   },
+  "dependencies": {
+    "@jay-js/elements": "file:../elements"
+  },
   "peerDependencies": {
-    "@jay-js/ui": "^3.1.1"
+    "@jay-js/ui": "^3.1.1",
+    "@jay-js/elements": "^1.1.0"
   }
 }

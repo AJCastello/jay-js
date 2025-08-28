@@ -12,8 +12,20 @@
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@jay-js/elements": [
+        "../elements/src"
+      ],
+      "@jay-js/elements/*": [
+        "../elements/src/*"
+      ]
+    }
   },
-  "include": ["./src/**/*","./src/index.ts"],
+  "include": [
+    "./src/**/*",
+    "./src/index.ts"
+  ],
   "exclude": [
     "./node_modules",
     "./dist"

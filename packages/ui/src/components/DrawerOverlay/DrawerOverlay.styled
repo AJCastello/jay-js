@@ -1,8 +1,0 @@
-transition-opacity
-ease-in-out
-duration-300
-opacity-0
-fixed
-inset-0
-bg-black/30
-z-10

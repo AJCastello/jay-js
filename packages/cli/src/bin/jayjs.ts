@@ -11,6 +11,7 @@ import { registerBuildCommand } from "../commands/build/register/registerBuildCo
 import { registerContextCommand } from "../commands/context/register/registerContextCommand.js";
 import { registerI18nCommand } from "../commands/i18n/register/registerI18nCommand.js";
 import { registerModuleCommand } from "../commands/module/register/registerModuleCommand.js";
+import { registerUiCommand } from "../commands/ui/register/register-ui-command.js";
 
 const program = new Command();
 
@@ -21,5 +22,6 @@ registerBuildCommand(program);
 registerContextCommand(program);
 registerI18nCommand(program);
 registerModuleCommand(program);
+registerUiCommand(program);
 
 program.parse(process.argv);
