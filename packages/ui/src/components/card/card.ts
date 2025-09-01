@@ -8,7 +8,7 @@ export function Card<T extends TBaseTagMap = "div">(
 		"card shadow-md hover:shadow-xl transition-all duration-500 ease-in-out",
 		variant,
 		size,
-		imagePosition == "left" || imagePosition == "right" ? "card-side" : "",
+		imagePosition === "left" || imagePosition === "right" ? "card-side" : "",
 		imageFull ? "image-full" : "",
 		props.className,
 	);
