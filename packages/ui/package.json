@@ -59,9 +59,10 @@
     "ts-jest": "^29.2.6",
     "typescript": "^5.4.5"
   },
+  "peerDependencies": {
+    "@jay-js/elements": "^1.0.0"
+  },
   "dependencies": {
-    "@jay-js/elements": "file:../elements",
-    "tailwind-merge": "^2.3.0",
-    "yup": "^1.4.0"
+    "tailwind-merge": "^2.3.0"
   }
 }
