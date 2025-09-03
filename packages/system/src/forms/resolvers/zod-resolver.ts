@@ -1,4 +1,4 @@
-import type { ZodObject, ZodType } from "zod";
+import type { ZodType } from "zod";
 import type { TResolver } from "../types";
 
 /**
@@ -20,28 +20,35 @@ export function zodResolver<T>(schema: ZodType<T>): TResolver<T> {
 	return async (values: T, fieldName?: string) => {
 		try {
 			if (fieldName) {
-				// Para validação de campo único, tentamos criar um schema parcial
-				// Se o schema for um objeto, tentamos usar pick, senão validamos o campo diretamente
-				const fieldValue = values[fieldName as keyof T];
+				// Para validação de campo único, validamos o objeto inteiro e depois filtramos
+				try {
+					await schema.parseAsync(values);
+					return { errors: [] };
+				} catch (error: any) {
+					// Filtra apenas os erros do campo específico
+					if (error && error.issues && Array.isArray(error.issues)) {
+						const fieldErrors = error.issues
+							.map((issue: any) => ({
+								path: Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path || "unknown"),
+								message: issue.message || "Validation error",
+							}))
+							.filter((err: any) =>
+								err.path === fieldName || err.path.startsWith(`${fieldName}.`)
+							);
 
-				// Verifica se o schema tem o método pick (é um ZodObject)
-				if (typeof (schema as any).pick === 'function') {
-					const fieldSchema = (schema as any).pick({ [fieldName]: true });
-					const singleFieldObject = { [fieldName]: fieldValue };
-					await fieldSchema.parseAsync(singleFieldObject);
-				} else {
-					// Para outros tipos de schema, validamos o valor diretamente
-					await schema.parseAsync(fieldValue);
+						return { errors: fieldErrors };
+					}
+					throw error;
 				}
 			} else {
 				await schema.parseAsync(values);
+				return { errors: [] };
 			}
-			return { errors: [] };
 		} catch (error: any) {
-			if (error && error.errors && error.errors.length > 0) {
-				const errors = error.errors.map((err: any) => ({
-					path: Array.isArray(err.path) ? err.path.join(".") : err.path || "unknown",
-					message: err.message,
+			if (error && error.issues && Array.isArray(error.issues)) {
+				const errors = error.issues.map((issue: any) => ({
+					path: Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path || "unknown"),
+					message: issue.message || "Validation error",
 				}));
 				return { errors };
 			}
