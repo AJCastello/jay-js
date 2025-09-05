@@ -15,7 +15,7 @@ export type TRegister = {
 };
 
 export type TRegisterOptions = {
-	beforeChange?: (ev: Event, value: string) => string | undefined;
+	beforeChange?: (value: string, ev: Event) => string | undefined;
 	value?: string;
 };
 

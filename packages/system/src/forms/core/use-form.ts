@@ -329,7 +329,7 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 			if (value === undefined) return;
 
 			if (options.beforeChange && typeof value === "string") {
-				value = options.beforeChange(ev, value);
+				value = options.beforeChange(value, ev);
 				if (value === undefined) {
 					return;
 				}
