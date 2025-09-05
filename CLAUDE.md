@@ -208,6 +208,7 @@ When tech-lead returns:
 - typescript-specialist: TypeScript library development
 - npm-package-expert: NPM package management and publishing
 - jayjs-framework-expert: Jay JS framework development
+- jayjs-system-expert: Jay JS system package (state, router, forms, i18n)
 - jayjs-elements-expert: Jay JS elements package specialist
 - documentation-specialist: Documentation and examples
 ```
@@ -234,7 +235,7 @@ The project follows a hierarchical structure:
 
 4. **Specialized Agents** (`agents/specialized/`)
    - Framework-specific experts organized by technology
-   - **Jay JS Specialists**: jayjs-framework-expert, jayjs-elements-expert, jayjs-context-expert, jayjs-domain-expert
+   - **Jay JS Specialists**: jayjs-framework-expert, jayjs-system-expert, jayjs-elements-expert, jayjs-context-expert, jayjs-domain-expert
    - Subdirectories: jayjs/, tailwind/ (firebase/, nodejs/ removed - not applicable)
 
 ### Three-Phase Orchestration Workflow (Main Agent Coordinated)
@@ -367,6 +368,7 @@ Task 4: Update Documentation
 ## Available Agents for This Project
 - project-analyst
 - jayjs-framework-expert
+- jayjs-system-expert
 - jayjs-elements-expert
 - typescript-specialist
 - npm-package-expert
@@ -384,11 +386,12 @@ Use ONLY the agents listed above. Do NOT use react, vue, angular, or other frame
 Main Agent: "Based on the tech-lead's routing, I'll now coordinate the implementation:"
 
 1. ✓ Using project-analyst to analyze package structure  
-2. ✓ Using jayjs-elements-expert for element implementation (when working with @jay-js/elements)
-3. ✓ Using jayjs-framework-expert for framework integration
-4. ✓ Using npm-package-expert for export management
-5. ✓ Using documentation-specialist for docs update
-6. ✓ Using lint-specialist and typecheck-specialist for code quality
+2. ✓ Using jayjs-system-expert for system features (state, router, forms, i18n)
+3. ✓ Using jayjs-elements-expert for element implementation (when working with @jay-js/elements)
+4. ✓ Using jayjs-framework-expert for framework integration
+5. ✓ Using npm-package-expert for export management
+6. ✓ Using documentation-specialist for docs update
+7. ✓ Using lint-specialist and typecheck-specialist for code quality
 
 [Executes each step with the EXACT agents specified]
 ```
