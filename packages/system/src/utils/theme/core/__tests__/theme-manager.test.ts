@@ -308,7 +308,7 @@ describe("Theme Manager", () => {
 				throw new Error("Storage error");
 			});
 
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => { });
+			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
 			setTheme("dark");
 

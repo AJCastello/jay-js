@@ -14,21 +14,21 @@
  * @property {Record<string, any>} [metadata] - Additional metadata to associate with the route, can be used for navigation, titles, permissions, etc.
  */
 export type TRoute = {
-  path: string;
-  element?:
-  | (HTMLElement | DocumentFragment)
-  | ((params?: any) => HTMLElement | DocumentFragment)
-  | ((params?: any) => Promise<HTMLElement | DocumentFragment>)
-  | undefined;
-  target?: HTMLElement | string;
-  layout?: boolean;
-  children?: Array<TRoute>;
-  import?: () => Promise<any>;
-  module?: string;
-  params?: Record<string, any>;
-  loader?: HTMLElement;
-  guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
-  metadata?: Record<string, any>;
+	path: string;
+	element?:
+		| (HTMLElement | DocumentFragment)
+		| ((params?: any) => HTMLElement | DocumentFragment)
+		| ((params?: any) => Promise<HTMLElement | DocumentFragment>)
+		| undefined;
+	target?: HTMLElement | string;
+	layout?: boolean;
+	children?: Array<TRoute>;
+	import?: () => Promise<any>;
+	module?: string;
+	params?: Record<string, any>;
+	loader?: HTMLElement;
+	guard?: (route: TRouteInstance) => boolean | Promise<boolean>;
+	metadata?: Record<string, any>;
 };
 
 /**
@@ -39,8 +39,8 @@ export type TRoute = {
  * @extends TRoute
  */
 export type TRouteInstance = {
-  id: string;
-  parentLayoutId?: string;
+	id: string;
+	parentLayoutId?: string;
 } & TRoute;
 
 /**
@@ -52,11 +52,11 @@ export type TRouteInstance = {
  * @property {Function} [beforeResolve] - Function called before resolving a route, can cancel navigation by returning false
  */
 export type TRouterOptions = {
-  prefix?: string;
-  target?: HTMLElement | string;
-  onError?: (error: Error) => void;
-  beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
-  setPathname?: () => string;
+	prefix?: string;
+	target?: HTMLElement | string;
+	onError?: (error: Error) => void;
+	beforeResolve?: (route: TRouteInstance) => boolean | Promise<boolean>;
+	setPathname?: () => string;
 };
 
 /**
@@ -66,6 +66,6 @@ export type TRouterOptions = {
  * @property {RegExpMatchArray|null} result - The result of matching the current URL against the route path
  */
 export type TPotentialMatch = {
-  route: TRouteInstance;
-  result: RegExpMatchArray | null;
+	route: TRouteInstance;
+	result: RegExpMatchArray | null;
 };

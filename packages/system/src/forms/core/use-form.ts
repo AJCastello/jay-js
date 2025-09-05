@@ -55,10 +55,10 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 
 	// Cache for DOM elements using WeakMap for automatic garbage collection
 	const elementCache = new Map<string, HTMLElement>();
-	
+
 	// Debounce timers for validation
 	const debounceTimers = new Map<string, NodeJS.Timeout>();
-	
+
 	// Event listeners cleanup registry
 	const eventListeners = new Set<() => void>();
 
@@ -67,7 +67,7 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 		mutations.forEach((mutation) => {
 			mutation.removedNodes.forEach((node) => {
 				if (node instanceof HTMLElement) {
-					const name = node.getAttribute('name');
+					const name = node.getAttribute("name");
 					if (name && elementCache.has(name)) {
 						elementCache.delete(name);
 						// Clear debounce timer for removed element
@@ -83,7 +83,7 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 	});
 
 	// Start observing the DOM
-	if (typeof document !== 'undefined') {
+	if (typeof document !== "undefined") {
 		observer.observe(document.body, { childList: true, subtree: true });
 	}
 	const formState: TFormState<T> = {
@@ -240,7 +240,7 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 			if (timer) {
 				clearTimeout(timer);
 			}
-			
+
 			const newTimer = setTimeout(async () => {
 				try {
 					if (!resolver) {
@@ -255,7 +255,7 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 					debounceTimers.delete(field);
 				}
 			}, debounceMs);
-			
+
 			debounceTimers.set(field, newTimer);
 		};
 	}
@@ -457,17 +457,17 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 	function destroy() {
 		// Disconnect DOM observer
 		observer.disconnect();
-		
+
 		// Clear element cache
 		elementCache.clear();
-		
+
 		// Clear all debounce timers
 		debounceTimers.forEach((timer) => clearTimeout(timer));
 		debounceTimers.clear();
-		
+
 		// Cleanup all event listeners
 		eventListeners.forEach((unsubscribe) => {
-			if (typeof unsubscribe === 'function') {
+			if (typeof unsubscribe === "function") {
 				unsubscribe();
 			}
 		});

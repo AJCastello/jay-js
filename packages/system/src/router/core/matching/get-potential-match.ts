@@ -35,7 +35,6 @@ export function getPotentialMatch(pathName: string): TPotentialMatch {
 }
 
 export function getPotentialMatches(pathName: string): Array<TPotentialMatch> {
-
 	// Normalize path (remove trailing slash except for root)
 	if (pathName !== "/" && pathName.substring(pathName.length - 1) === "/") {
 		pathName = pathName.substring(0, pathName.length - 1);

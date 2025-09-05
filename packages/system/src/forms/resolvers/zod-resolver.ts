@@ -17,9 +17,7 @@ import type { TResolver } from "../types";
  * - Accepts the form values and an optional field name.
  * - Returns an object containing an array of validation errors, or an empty array if validation passes.
  */
-export function zodResolver<TSchema extends ZodSchema>(
-	schema: TSchema
-): TResolver<TSchema["_output"]> {
+export function zodResolver<TSchema extends ZodSchema>(schema: TSchema): TResolver<TSchema["_output"]> {
 	return async (values: TSchema["_output"], fieldName?: string) => {
 		try {
 			if (fieldName) {
@@ -35,9 +33,7 @@ export function zodResolver<TSchema extends ZodSchema>(
 								path: Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path || "unknown"),
 								message: issue.message || "Validation error",
 							}))
-							.filter((err: any) =>
-								err.path === fieldName || err.path.startsWith(`${fieldName}.`)
-							);
+							.filter((err: any) => err.path === fieldName || err.path.startsWith(`${fieldName}.`));
 
 						return { errors: fieldErrors };
 					}
