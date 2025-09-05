@@ -117,6 +117,7 @@ docs/
 3. **Type Safety**: Maintain strict TypeScript configuration across all packages
 4. **Testing**: Each package should have comprehensive unit tests
 5. **Documentation**: Update package README and docs/ examples when adding features
+6. **Changelog Updates**: **MANDATORY** - Document all changes in the package's CHANGELOG.md file
 
 #### Package Utilities Pattern
 
@@ -141,6 +142,7 @@ export const componentUtils = {
 2. **Type Generation**: TypeScript compiler generates .d.ts files
 3. **Clean Package**: Removes devDependencies from distributed package.json
 4. **NPM Publishing**: Automated through package scripts with public access
+5. **Changelog Documentation**: **MANDATORY** - Every change must be documented in package CHANGELOG.md
 
 ## Working with Agents
 
@@ -472,4 +474,5 @@ Task N+1: Validate Type Safety
 - **MANDATORY**: Run lint-specialist and typecheck-specialist after completing coding tasks
 - **PACKAGE FOCUS**: Prioritize package development over documentation - docs support the packages
 - **NPM PUBLISHING**: Ensure all changes maintain proper package export structure
+- **CHANGELOG MANDATORY**: Every change to any package must be documented in its CHANGELOG.md file
 - **NO BACKEND**: This is a client-side framework - avoid server-side patterns
