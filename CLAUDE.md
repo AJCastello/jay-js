@@ -4,23 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a SaaS monorepo managed with NX, consisting of a TypeScript-based backend and multiple frontend applications. The project uses Google Firebase as its infrastructure (Auth, Firestore, Cloud Functions, Realtime DB, Messaging, Storage, Hosting).
+This is a TypeScript library monorepo for the Jay JS framework, consisting of multiple NPM packages that provide UI components, state management, routing, and development tools. The project is designed as a collection of publishable packages that work together to create modern web applications.
 
 ## Architecture
 
-- **Monorepo Management**: NX
-- **Backend**: Node.js with TypeScript and ExpressJS (`apps/server`)
-- **Packages**: 4 separate applications in `apps/web/`:
-  - `site` - Landing pages and one-page sites
-  - `blog` - Blog application
-  - `app` - Public access application
-  - `dashboard` - Administrative area
-	- `support` - Support tutorials area
-- **Frontend Stack**: Vite, TypeScript Vanilla, TailwindCSS with DaisyUI, Jay JS framework
-- **Database**: Firebase Firestore (NoSQL) - All data modeling must follow NoSQL patterns
-- **Shared Code**: `shared/` directory contains modules, components, types, and utilities
+- **Monorepo Management**: NPM Workspaces with NX for build orchestration
+- **Core Purpose**: TypeScript library packages published to NPM
+- **Packages**: 6 main packages in `packages/`:
+  - `system` - Core framework with state management, routing, and lazy loading
+  - `ui` - UI components and utilities
+  - `jsx` - JSX-like syntax support for Jay JS
+  - `cli` - Command-line interface for project scaffolding
+  - `static` - Static site generation utilities
+  - `elements` - Custom web elements and components
+- **Documentation**: Single web application in `docs/` using Vite, TypeScript, TailwindCSS with DaisyUI
+- **Build Tools**: SWC for compilation, TypeScript for type checking, Jest for testing
+- **No Backend**: This is a client-side framework - no server-side code
 
 ## Development Commands
+
+### Build Commands
+- `npm run build` - Build all packages
+- `npm run build:system` - Build system package
+- `npm run build:ui` - Build UI package
+- `npm run build:cli` - Build CLI package
+- `npm run build:jsx` - Build JSX package
+- `npm run build:static` - Build static package
+
+### Publish Commands
+- `npm run pub:all` - Publish all packages to NPM
+- `npm run pub:system` - Publish system package
+- `npm run pub:ui` - Publish UI package
+- Individual package publish: `npm run pub:[package-name]`
+
+### Development Tools
+- `npm run link:all` - Get local development paths for all packages
+- Package-specific commands available in each `packages/[name]/package.json`
+- Documentation dev server: `cd docs && npm run dev`
 
 ## Code Conventions
 
@@ -31,192 +51,96 @@ This is a SaaS monorepo managed with NX, consisting of a TypeScript-based backen
 - **Properties for queries/filters**: Use enums
 - **No "key" property** in components
 - **No code comments** unless explicitly requested
-- **Internationalization**: All user-facing text in frontend must use the translation function `t("Text here")` where the text is in English and serves as the translation key
+- **Package Exports**: Each package must have clean exports in `dist/index.js`
+- **Documentation**: All user-facing text in docs must use translation patterns for future i18n support
 
-## Database/NoSQL Guidelines
+## Package Architecture
 
-- **Database Type**: Firebase Firestore (NoSQL document database)
-- **Data Modeling**: Must follow NoSQL patterns and denormalization principles
-- **Collections**: Use singular nouns (e.g., `user`, `product`, `order`)
-- **Document Structure**: Flatten data structures when possible to avoid deep nesting
-- **Relationships**: Use subcollections, document references, or denormalized data based on access patterns
-- **Queries**: Design data structure around query requirements (query-driven modeling)
-- **Security**: Use Firestore Security Rules for access control
+### CRITICAL: Package Structure
 
-## Frontend Architecture - Resource-Oriented Modules
-
-### CRITICAL: Domain Layer Structure
-
-All frontend applications follow a **resource-oriented modules architecture**:
+Each package in `packages/` follows a consistent structure:
 
 ```
-src/
-├── contexts/
-├── pages/
-├── components/
-├── modules/          ← DOMAIN LOGIC LAYER (resource-oriented)
-│   ├── user/
-│   │   ├── user.types.ts      ← exports from @shared/types/user.types
-│   │   ├── user.dto.ts        ← data transformation objects
-│   │   ├── user.schemas.ts    ← validation schemas
-│   │   ├── user.repository.ts ← data access layer (Firebase/API)
-│   │   ├── user.service.ts    ← business logic layer
-│   │   ├── user.store.ts      ← state management layer
-│   │   └── user.utils.ts      ← resource-specific utilities
-│   ├── order/
-│   │   ├── order.types.ts     ← exports from @shared/types/order.types
-│   │   ├── order.dto.ts
-│   │   ├── order.schemas.ts
-│   │   ├── order.repository.ts
-│   │   ├── order.service.ts
-│   │   ├── order.store.ts
-│   │   └── order.utils.ts
-│   └── [resource-name]/
-└── other-folders/
+packages/[package-name]/
+├── src/                    ← Source TypeScript code
+│   ├── index.ts           ← Main export file
+│   ├── types/             ← Type definitions
+│   ├── components/        ← UI components (for ui package)
+│   ├── utils/             ← Utility functions
+│   ├── core/              ← Core functionality
+│   └── [feature-dirs]/    ← Feature-specific modules
+├── dist/                  ← Build output (auto-generated)
+├── package.json           ← Package configuration
+├── README.md             ← Package documentation
+└── tsconfig.json         ← TypeScript configuration
 ```
 
-### Module Layer Responsibilities
+### Package Responsibilities
 
-1. **[resource].types.ts**: Re-exports types from `@shared/types/[resource].types`
-2. **[resource].dto.ts**: Data transformation objects for API/Firebase communication
-3. **[resource].schemas.ts**: Zod validation schemas
-4. **[resource].repository.ts**: Data access layer - Firebase SDK or API operations
-5. **[resource].service.ts**: Business logic layer - orchestrates repository + store
-6. **[resource].store.ts**: State management for the resource
-7. **[resource].utils.ts**: Resource-specific utility functions and enum details
+1. **@jay-js/system**: Core framework with state management, routing, lazy loading
+2. **@jay-js/ui**: Reusable UI components and utilities
+3. **@jay-js/jsx**: JSX-like syntax support for Jay JS framework
+4. **@jay-js/cli**: Command-line tools for project scaffolding and development
+5. **@jay-js/static**: Static site generation utilities
+6. **@jay-js/elements**: Custom web elements and component definitions
 
-### CRITICAL: Data Access Architecture Decision
+### Documentation Application Structure
 
-**Before implementing any resource, the tech-lead-orchestrator MUST determine the data access pattern:**
+The `docs/` folder contains a single web application that demonstrates the packages:
 
-#### Option 1: Firebase SDK Direct (Frontend Only)
-- **Repository Layer**: Uses Firebase Modular SDK directly
-- **No REST API**: All persistence handled by Firebase SDK in frontend
-- **Agent Required**: firebase-architect (for Firestore modeling)
-- **Agent NOT Required**: api-architect
-- **Use Case**: Simple CRUD operations, real-time data, standard Firebase patterns
-
-#### Option 2: Cloud Functions REST API (Hybrid)
-- **Repository Layer**: Makes HTTP calls to Cloud Functions endpoints
-- **REST API**: Custom endpoints in `apps/server` (Cloud Functions)
-- **Agents Required**: firebase-architect + api-architect + nodejs-backend-expert
-- **Use Case**: Complex business logic, data validation, integration with external services
-
-#### Decision Criteria
-The tech-lead MUST analyze:
-1. **Business Logic Complexity**: Simple CRUD → Firebase SDK; Complex logic → Cloud Functions
-2. **Data Validation Needs**: Client validation only → Firebase SDK; Server validation → Cloud Functions  
-3. **External Integrations**: None → Firebase SDK; Required → Cloud Functions
-4. **Real-time Requirements**: High → Firebase SDK; Standard → Either approach
-5. **Security Rules Complexity**: Simple → Firebase SDK; Complex → Cloud Functions
-
-#### Agent Routing Impact
-```yaml
-# Firebase SDK Direct Pattern
-agents_required:
-  - firebase-architect  # Firestore modeling + security rules
-  - jayjs-domain-expert # Repository with Firebase SDK calls
-
-# Cloud Functions REST API Pattern  
-agents_required:
-  - api-architect       # REST endpoint design
-  - firebase-architect  # Firestore modeling
-  - nodejs-backend-expert # Cloud Functions implementation
-  - jayjs-domain-expert # Repository with HTTP calls
+```
+docs/
+├── src/
+│   ├── pages/             ← Documentation pages
+│   ├── components/        ← Doc-specific components
+│   ├── styles/            ← Styling with Tailwind
+│   └── examples/          ← Code examples
+├── public/                ← Static assets
+└── dist/                  ← Build output
 ```
 
-### Type System Rules
+### Package Development Guidelines
 
-- **MANDATORY**: All types MUST be defined in `shared/types/[resource].types.ts`
-- **Module types**: Each module's `[resource].types.ts` ONLY re-exports from shared
-- **Single source of truth**: Types are centralized in the shared directory
-- **Import pattern**: `export * from "@shared/types/[resource].types"`
+#### Type System Rules
 
-### Implementation Requirements
+- **Package Types**: Each package manages its own types in `src/types/`
+- **Export Strategy**: Clean exports through `src/index.ts` with proper type definitions
+- **Inter-package Types**: Shared types should be duplicated or use peer dependencies
+- **Import Patterns**: Use relative imports within packages, package imports across packages
 
-**When implementing any module functionality:**
+#### Development Workflow
 
-1. **Check shared types first**: Always read from `shared/types/` before creating types
-2. **Follow layer separation**: Service orchestrates repository + store, repository handles data access
-3. **Consistent naming**: Use `[resource].[layer].ts` pattern
-4. **Resource-oriented**: Group by business domain/resource, not by technical layer
-5. **Internationalization**: All user-facing text must be wrapped with `t("English text")` function for translation support
+**When implementing package functionality:**
 
-### Service Layer Pattern
+1. **Package Scope**: Focus on single-responsibility principle per package
+2. **Clean Exports**: Ensure all public APIs are exported through main index file
+3. **Type Safety**: Maintain strict TypeScript configuration across all packages
+4. **Testing**: Each package should have comprehensive unit tests
+5. **Documentation**: Update package README and docs/ examples when adding features
 
-Services follow dependency injection pattern:
-```typescript
-function create[Resource]Service(
-  store: ReturnType<typeof create[Resource]Store>,
-  repository: ReturnType<typeof create[Resource]Repository>,
-) {
-  return Object.assign(store, {
-    // business logic methods here
-  });
-}
-```
+#### Package Utilities Pattern
 
-### Resource Utilities Pattern (CRITICAL)
-
-**MANDATORY**: Resource-specific utilities must be created in `[resource].utils.ts` within each module.
-
-#### When to Create Resource Utils
-
-1. **Enum Details**: Functions that provide additional information about enum values
-2. **Resource-Specific Calculations**: Math functions exclusive to the resource domain
-3. **UI Helper Functions**: Resource-specific formatters, labels, icons, colors
-4. **Business Logic Utilities**: Domain-specific pure functions
-
-#### Implementation Rules
-
-1. **Check Shared Utils First**: Always search `shared/utils/` before creating resource-specific utilities
-2. **Resource-Exclusive Only**: Only create in resource utils if functionality is domain-specific
-3. **Centralization**: All resource utilities in single `[resource].utils.ts` file
-4. **Pure Functions**: Utils should be stateless and testable
-
-#### Example Implementation
+**Each package may include utilities specific to its domain:**
 
 ```typescript
-// modules/fruit/fruit.utils.ts
-import { FRUIT } from './fruit.types';
-
-export const fruitUtils = {
-  getFruitDetails(fruit: FRUIT) {
-    switch (fruit) {
-      case FRUIT.APPLE:
-        return { label: 'Apple', color: 'red', icon: AppleIcon };
-      case FRUIT.BANANA:
-        return { label: 'Banana', color: 'yellow', icon: BananaIcon };
-      default:
-        return { label: 'Unknown', color: 'gray', icon: DefaultIcon };
-    }
+// packages/ui/src/utils/component.utils.ts
+export const componentUtils = {
+  generateId(prefix: string): string {
+    return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
   },
-
-  calculateFruitNutrition(fruit: FRUIT, quantity: number) {
-    // Resource-specific calculation logic
-  },
-
-  getFruitSeasonality(fruit: FRUIT) {
-    // Domain-specific business logic
+  
+  mergeClasses(...classes: (string | undefined)[]): string {
+    return classes.filter(Boolean).join(' ');
   },
 };
 ```
 
-#### Usage Pattern
+#### Build and Distribution
 
-```typescript
-// In components or other modules
-import { fruitUtils } from '@dashboard/modules/fruit/fruit.utils';
-
-const fruitDetails = fruitUtils.getFruitDetails(FRUIT.APPLE);
-// Returns: { label: 'Apple', color: 'red', icon: AppleIcon }
-```
-
-#### Utility Organization Priority
-
-1. **Global/Shared**: Use `shared/utils/` for generic, reusable functions
-2. **Resource-Specific**: Use `modules/[resource]/[resource].utils.ts` for domain-exclusive functions
-3. **Component-Local**: Only for single-use, component-specific helpers
+1. **Build Process**: Each package uses SWC for fast compilation
+2. **Type Generation**: TypeScript compiler generates .d.ts files
+3. **Clean Package**: Removes devDependencies from distributed package.json
+4. **NPM Publishing**: Automated through package scripts with public access
 
 ## Working with Agents
 
@@ -279,9 +203,10 @@ User Request → Main Agent Guesses → Wrong Agent Selected → Task Fails
 When tech-lead returns:
 ```
 ## Available Agents for This Project
-- nodejs-backend-expert: Node.js/Express tasks
-- firebase-architect: Firebase integration tasks
-- jayjs-frontend-developer: Jay JS framework UI
+- typescript-specialist: TypeScript library development
+- npm-package-expert: NPM package management and publishing
+- jayjs-framework-expert: Jay JS framework development
+- documentation-specialist: Documentation and examples
 ```
 
 You MUST use these specific agents, NOT generic alternatives like "backend-developer"
@@ -405,7 +330,7 @@ System prompt content...
 Here's a full example showing proper agent routing:
 
 ### User Request:
-"Help me build an authentication system for my Firebase web app"
+"Help me add a new component to the UI package and update the documentation"
 
 ### Step 1: Tech-Lead Analysis
 ```
@@ -418,54 +343,54 @@ Main Agent: "I'll use the tech-lead-orchestrator to analyze this request and det
 ```
 ## Agent Routing Map
 
-Task 1: Detect Project Technology
+Task 1: Analyze Current Package Structure
 - PRIMARY AGENT: project-analyst
-- REASON: Need to identify framework for proper routing
+- REASON: Need to understand current package organization
 
-Task 2: Design Authentication Schema
-- PRIMARY AGENT: database-architect
-- REASON: Framework-agnostic database design
+Task 2: Implement UI Component
+- PRIMARY AGENT: jayjs-framework-expert
+- FALLBACK AGENT: typescript-specialist
+- REASON: Jay JS specific component patterns
 
-Task 3: Implement Auth Backend
-- PRIMARY AGENT: nodejs-backend-expert
-- FALLBACK AGENT: backend-developer
-- REASON: Node.js/Express detected in project
+Task 3: Update Package Exports
+- PRIMARY AGENT: npm-package-expert
+- REASON: Ensure proper package export structure
 
-Task 4: Create Firebase Auth Integration
-- PRIMARY AGENT: firebase-architect
-- FALLBACK AGENT: api-architect
-- REASON: Firebase Auth integration patterns
+Task 4: Update Documentation
+- PRIMARY AGENT: documentation-specialist
+- REASON: Add examples and usage documentation
 
 ## Available Agents for This Project
 - project-analyst
-- firebase-architect
-- nodejs-backend-expert
-- jayjs-frontend-developer
-- jayjs-domain-expert
-- jayjs-context-expert
+- jayjs-framework-expert
+- typescript-specialist
+- npm-package-expert
+- documentation-specialist
 - code-reviewer
+- lint-specialist
+- typecheck-specialist
 
 ## CRITICAL INSTRUCTION
-Use ONLY the agents listed above. Do NOT use django, laravel, rails, react, vue, or other framework agents.
+Use ONLY the agents listed above. Do NOT use react, vue, angular, or other framework agents.
 ```
 
 ### Step 3: Main Agent Executes Plan
 ```
 Main Agent: "Based on the tech-lead's routing, I'll now coordinate the implementation:"
 
-1. ✓ Using project-analyst to analyze the codebase
-2. ✓ Using firebase-architect for auth design
-3. ✓ Using nodejs-backend-expert for implementation
-4. ✓ Using jayjs-frontend-developer for UI integration
-5. ✓ Using code-reviewer for security audit
+1. ✓ Using project-analyst to analyze package structure
+2. ✓ Using jayjs-framework-expert for component implementation
+3. ✓ Using npm-package-expert for export management
+4. ✓ Using documentation-specialist for docs update
+5. ✓ Using lint-specialist and typecheck-specialist for code quality
 
 [Executes each step with the EXACT agents specified]
 ```
 
 ### What NOT to Do:
 ```
-❌ "I'll use backend-developer" (when tech-lead specified nodejs-backend-expert)
-❌ "I'll use nestjs-api-developer" (wrong framework)
+❌ "I'll use react-component-expert" (wrong framework)
+❌ "I'll use backend-developer" (not relevant for this project)
 ❌ "I'll skip the tech-lead and choose agents myself" (bypasses routing)
 ```
 
@@ -476,9 +401,9 @@ Main Agent: "Based on the tech-lead's routing, I'll now coordinate the implement
 The project includes specialized agents for ensuring code quality and type safety:
 
 #### lint-specialist
-- **Purpose**: Validates code against linting rules and fixes violations
-- **Commands**: `npm run lint`, `nx run-many -t lint --parallel=3`  
-- **Auto-fixes**: Applies `--fix` flags and manual corrections for lint violations
+- **Purpose**: Validates code against linting rules using Biome and fixes violations
+- **Commands**: `npm run lint` (uses Biome in each package), `npm run build:system:lint` for individual packages
+- **Auto-fixes**: Applies Biome auto-fixes and manual corrections for violations
 - **Usage**: 
   - **Mandatory**: After completing any coding task
   - **On-demand**: User can request lint validation at any time
@@ -486,7 +411,7 @@ The project includes specialized agents for ensuring code quality and type safet
 
 #### typecheck-specialist  
 - **Purpose**: Validates TypeScript type safety using `tsc --noEmit`
-- **Commands**: `tsc --noEmit` with appropriate configuration files
+- **Commands**: `npm run typecheck` in individual packages, `tsc --noEmit --skipLibCheck`
 - **Fixes**: Resolves type errors, import issues, and interface violations
 - **Usage**:
   - **Mandatory**: MUST be invoked after task completion in orchestrated workflows
@@ -545,3 +470,6 @@ Task N+1: Validate Type Safety
 - USE deep reasoning when coordinating the recommended agents
 - TRUST the tech-lead's expertise in agent selection
 - **MANDATORY**: Run lint-specialist and typecheck-specialist after completing coding tasks
+- **PACKAGE FOCUS**: Prioritize package development over documentation - docs support the packages
+- **NPM PUBLISHING**: Ensure all changes maintain proper package export structure
+- **NO BACKEND**: This is a client-side framework - avoid server-side patterns
