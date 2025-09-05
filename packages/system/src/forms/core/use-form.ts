@@ -39,7 +39,7 @@ import type {
  * errorElement.appendChild(form.formState.errors('email'));
  *
  * // Handle form submission
- * form.onSubmit((event, data) => {
+ * form.onSubmit((data, event) => {
  *   console.log('Form submitted:', data);
  * });
  *
@@ -431,19 +431,19 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 	 * @param {Function} callback - Function called on successful form submission
 	 * @returns {Function} Event handler for the form's submit event
 	 */
-	function onSubmit(callback: (ev: Event, data: T) => void) {
+	function onSubmit(callback: (data: T, ev: Event) => void) {
 		return async (ev: SubmitEvent) => {
 			ev.preventDefault();
 			const formValuesData = formValues.get();
 			try {
 				if (!resolver) {
-					callback(ev, formValuesData);
+					callback(formValuesData, ev);
 					return;
 				}
 				const result = await resolver(formValuesData);
 				const validated = validateResult(result);
 				if (validated) {
-					callback(ev, formValuesData);
+					callback(formValuesData, ev);
 				}
 			} catch (error: any) {
 				validateResult(error);

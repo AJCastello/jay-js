@@ -231,10 +231,10 @@ describe("useForm", () => {
 		await submitHandler(mockEvent as any);
 
 		// Now the callback should be called with the correct values
-		expect(mockSubmitFn).toHaveBeenCalledWith(mockEvent, {
+		expect(mockSubmitFn).toHaveBeenCalledWith({
 			email: "user@example.com",
 			password: "password123",
-		});
+		}, mockEvent);
 	});
 
 	it("should notify about value changes", () => {
@@ -291,10 +291,10 @@ describe("useForm", () => {
 		submitHandler(mockEvent as any);
 
 		// The callback should be called immediately without validation
-		expect(mockSubmitFn).toHaveBeenCalledWith(mockEvent, {
+		expect(mockSubmitFn).toHaveBeenCalledWith({
 			nome: "Ana",
 			email: "",
-		});
+		}, mockEvent);
 	});
 
 	it("should allow setting errors manually", () => {

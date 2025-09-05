@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Enhanced render function to support element replacement in addition to content insertion
+- **BREAKING CHANGE**: Changed `onSubmit` callback parameter order in useForm - data is now the first parameter, event is second: `(data, event) => void`
 
 ## Previous releases
 - See GitHub releases for historical changes
