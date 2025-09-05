@@ -13,6 +13,7 @@ import { selector } from "./query.js";
  * render(element, 'World', { insert: 'append' }); // Appends content
  * render('#app', [el1, el2], { insert: 'prepend' }); // Prepends multiple elements
  * render('#app', [el1, null, undefined, el2]); // Handles null/undefined values in arrays
+ * render('#old-element', newElement, { replace: true }); // Replaces the target element itself
  * ```
  */
 export function render(target: TRenderTarget, content: TRenderContent, options: TRenderOptions = {}): void {
@@ -20,6 +21,24 @@ export function render(target: TRenderTarget, content: TRenderContent, options: 
 
 	const element = typeof target === "string" ? selector(target) : target;
 	if (!element) return;
+
+	// Handle replace option - replaces the target element itself
+	if (options.replace) {
+		if (Array.isArray(content)) {
+			// Filter out null and undefined values
+			const validContent = content.filter(
+				(item): item is string | Node | HTMLElement => item !== null && item !== undefined,
+			);
+
+			// Create a document fragment to hold multiple elements
+			const fragment = document.createDocumentFragment();
+			fragment.append(...validContent);
+			element.replaceWith(fragment);
+		} else {
+			element.replaceWith(content);
+		}
+		return;
+	}
 
 	if (!options.insert) {
 		element.innerHTML = "";
