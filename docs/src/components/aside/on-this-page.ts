@@ -1,4 +1,4 @@
-import { Link, List, ListItem, Section, Typography } from "@jay-js/ui";
+import { Link, List, Section, Typography } from "../../../../packages/elements/src";
 import type { TOnThisPageList, TOnThisPageListItem } from "../../types";
 
 function TopicsItem(item: TOnThisPageListItem) {

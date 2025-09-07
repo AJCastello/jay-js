@@ -1,4 +1,4 @@
-import { Box, Outlet } from "@jay-js/ui";
+import { Box, Outlet } from "../../../../packages/elements/src";
 import { SystemSideMenu } from "../../components/aside/system-side-menu";
 
 import "../../utils/set-nav-style";

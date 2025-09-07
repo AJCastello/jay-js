@@ -1,13 +1,13 @@
-import { Section } from "@jay-js/ui";
+import { Section } from "../../../packages/elements/src";
 import {
-	Hero,
-	FeaturesSection,
-	WhyJayJS,
-	GettingStarted,
-	Packages,
+	CallToAction,
 	CodeExamples,
 	Community,
-	CallToAction
+	FeaturesSection,
+	GettingStarted,
+	Hero,
+	Packages,
+	WhyJayJS,
 } from "../components/home";
 
 export function Home() {
@@ -21,7 +21,7 @@ export function Home() {
 			CodeExamples(),
 			GettingStarted(),
 			Community(),
-			CallToAction()
-		]
+			CallToAction(),
+		],
 	});
 }

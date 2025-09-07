@@ -1,5 +1,6 @@
-import { Collapse, CollapseContent, CollapseTitle, Input, Typography } from "@jay-js/ui";
+import { Input, Typography } from "../../../../packages/elements/src";
 import type { ICollectionGrouped } from "../../types";
+import { Collapse, CollapseContent, CollapseTitle } from "../ui";
 import { MenuItem } from "./MenuItem";
 
 export function MenuGroup(item: ICollectionGrouped) {

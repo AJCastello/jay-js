@@ -1,4 +1,4 @@
-import { Box, Typography } from "@jay-js/ui";
+import { Box, Typography } from "../../../../packages/elements/src";
 
 export function Introduction() {
 	return Box({

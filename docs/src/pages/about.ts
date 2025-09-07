@@ -1,9 +1,9 @@
-import { Section } from "@jay-js/ui";
-import { i18n } from "../locales/i18n";
+import { Section } from "../../../packages/elements/src";
+import { intl } from "../locales";
 
 export function About() {
 	return Section({
 		tag: "section",
-		children: i18n("This is your lazy loaded About page."),
+		children: intl("This is your lazy loaded About page."),
 	});
 }

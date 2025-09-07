@@ -1,11 +1,18 @@
-import { Box, Icon, Section, Typography } from "@jay-js/ui";
+import { Box, Section, Typography } from "../../../../packages/elements/src";
+
+// Simple Icon function for creating icon elements
+function _Icon({ icon, className }: { icon: string; className?: string }) {
+	const element = document.createElement("i");
+	element.className = `${icon} ${className || ""}`.trim();
+	return element;
+}
 
 export function CodeExamples() {
-  const examples = [
-    {
-      title: "Creating UI Components",
-      language: "typescript",
-      code: `import { Button, Typography, Box } from "@jay-js/ui";
+	const examples = [
+		{
+			title: "Creating UI Components",
+			language: "typescript",
+			code: `import { Button, Typography, Box } from "@jay-js/elements";
 
 function Card({ title, content, onAction }) {
   return Box({
@@ -27,12 +34,12 @@ function Card({ title, content, onAction }) {
       })
     ]
   });
-}`
-    },
-    {
-      title: "State Management",
-      language: "typescript",
-      code: `import { State } from "@jay-js/system";
+}`,
+		},
+		{
+			title: "State Management",
+			language: "typescript",
+			code: `import { State } from "@jay-js/system";
 
 // Create a state object
 const counter = State({
@@ -54,12 +61,12 @@ document.getElementById("increment").addEventListener("click", () => {
     count: state.count + 1,
     lastUpdated: new Date()
   }));
-});`
-    },
-    {
-      title: "JSX Syntax (Optional)",
-      language: "typescript",
-      code: `/** @jsx jsx */
+});`,
+		},
+		{
+			title: "JSX Syntax (Optional)",
+			language: "typescript",
+			code: `/** @jsx jsx */
 import { jsx } from '@jay-js/jsx';
 
 function Greeting({ name, onGreet }) {
@@ -80,65 +87,65 @@ document.body.appendChild(
     name="Developer" 
     onGreet={() => alert('Hello!')} 
   />
-);`
-    }
-  ];
+);`,
+		},
+	];
 
-  return Section({
-    tag: "section",
-    className: "container py-20 mx-auto bg-base-200",
-    children: [
-      Box({
-        className: "text-center mb-16",
-        children: [
-          Typography({
-            className: "text-sm font-bold tracking-wider text-primary uppercase",
-            children: "Code Examples"
-          }),
-          Typography({
-            tag: "h2",
-            className: "mt-3 text-3xl font-bold tracking-tight lg:text-4xl",
-            children: "Simple, Expressive, Powerful"
-          }),
-          Typography({
-            className: "max-w-2xl mx-auto mt-4 text-lg opacity-80",
-            children: "JayJS makes it easy to write clean, maintainable code with a straightforward API."
-          })
-        ]
-      }),
-      Box({
-        className: "grid grid-cols-1 gap-10",
-        children: examples.map(({ title, language, code }) => {
-          return Box({
-            className: "flex flex-col rounded-lg overflow-hidden border border-base-300 shadow-md",
-            children: [
-              Box({
-                className: "bg-base-100 p-4 border-b border-base-300 flex items-center justify-between",
-                children: [
-                  Typography({
-                    tag: "h3",
-                    className: "font-mono text-lg font-semibold",
-                    children: title
-                  }),
-                  Box({
-                    className: "badge badge-primary font-mono",
-                    children: language
-                  })
-                ]
-              }),
-              Box({
-                tag: "pre",
-                className: `p-4 bg-base-300/50 overflow-x-auto language-${language}`,
-                children: Box({
-                  tag: "code",
-                  className: `language-${language} font-mono text-sm`,
-                  children: code
-                })
-              })
-            ]
-          });
-        })
-      })
-    ]
-  });
+	return Section({
+		tag: "section",
+		className: "container py-20 mx-auto bg-base-200",
+		children: [
+			Box({
+				className: "text-center mb-16",
+				children: [
+					Typography({
+						className: "text-sm font-bold tracking-wider text-primary uppercase",
+						children: "Code Examples",
+					}),
+					Typography({
+						tag: "h2",
+						className: "mt-3 text-3xl font-bold tracking-tight lg:text-4xl",
+						children: "Simple, Expressive, Powerful",
+					}),
+					Typography({
+						className: "max-w-2xl mx-auto mt-4 text-lg opacity-80",
+						children: "JayJS makes it easy to write clean, maintainable code with a straightforward API.",
+					}),
+				],
+			}),
+			Box({
+				className: "grid grid-cols-1 gap-10",
+				children: examples.map(({ title, language, code }) => {
+					return Box({
+						className: "flex flex-col rounded-lg overflow-hidden border border-base-300 shadow-md",
+						children: [
+							Box({
+								className: "bg-base-100 p-4 border-b border-base-300 flex items-center justify-between",
+								children: [
+									Typography({
+										tag: "h3",
+										className: "font-mono text-lg font-semibold",
+										children: title,
+									}),
+									Box({
+										className: "badge badge-primary font-mono",
+										children: language,
+									}),
+								],
+							}),
+							Box({
+								tag: "pre",
+								className: `p-4 bg-base-300/50 overflow-x-auto language-${language}`,
+								children: Box({
+									tag: "code",
+									className: `language-${language} font-mono text-sm`,
+									children: code,
+								}),
+							}),
+						],
+					});
+				}),
+			}),
+		],
+	});
 }

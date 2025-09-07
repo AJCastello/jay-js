@@ -1,8 +1,9 @@
 import { getParams } from "@jay-js/system";
-import { Box, Divider, Section } from "@jay-js/ui";
+import { Box, Section } from "../../../../packages/elements/src";
 import { OnThisPage } from "../../components/aside/on-this-page";
 import { DocsScrollBullet } from "../../components/docs/docs-scroll-bullet";
 import { ArticleFooter } from "../../components/footer/article-footer";
+import { Divider } from "../../components/ui/divider";
 import type { TArticle, TCollection } from "../../types";
 import { contentFormatter } from "../../utils/content-formatter";
 import { setTitle } from "../../utils/set-title";
@@ -10,7 +11,7 @@ import { useCollection } from "../../utils/use-collection";
 import { useContent } from "../../utils/use-content";
 
 export async function Article(slug?: string) {
-	slug = slug || getParams().slug;
+	slug = slug || (getParams().slug as string);
 	const articleData = await Article.content.get(slug);
 	const collectionData = await Article.collection.get();
 

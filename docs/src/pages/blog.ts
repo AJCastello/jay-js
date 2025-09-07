@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Link, Section, Typography } from "@jay-js/ui";
+import { Link, Section, Typography } from "../../../packages/elements/src";
 
 interface ICollectionArticle {
 	slug: string;

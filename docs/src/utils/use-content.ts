@@ -1,12 +1,4 @@
-export function useContent<T>({
-	dir,
-	param,
-	fileExt,
-}: {
-	dir: string;
-	fileExt: "md" | "mdx" | "js";
-	param: string;
-}) {
+export function useContent<T>({ dir, param, fileExt }: { dir: string; fileExt: "md" | "mdx" | "js"; param: string }) {
 	return {
 		dir,
 		fileExt,

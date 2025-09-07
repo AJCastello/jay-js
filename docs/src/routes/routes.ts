@@ -1,10 +1,10 @@
 import { Navigate, Router } from "@jay-js/system";
-import { SiteLayout } from "../layouts/site.layout";
-import { DocsSystem } from "../layouts/docs-system.layout";
-import { DocsIntro } from "../pages/docs/docs-intro";
-import { Article } from "../pages/docs/article";
-import { Home } from "../pages/home";
 import { DocsJsx } from "../layouts/docs-jsx.layout";
+import { DocsSystem } from "../layouts/docs-system.layout";
+import { SiteLayout } from "../layouts/site.layout";
+import { Article } from "../pages/docs/article";
+import { DocsIntro } from "../pages/docs/docs-intro";
+import { Home } from "../pages/home";
 
 export function Routes() {
 	Router(

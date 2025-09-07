@@ -1,4 +1,4 @@
-import { Box } from "@jay-js/ui";
+import { Box } from "../../../../packages/elements/src";
 import type { TCollection } from "../../types";
 import { getAdjacentArticles } from "../../utils/get-adjacents-articles";
 import { CardArticleFooter } from "./card-article-footer";

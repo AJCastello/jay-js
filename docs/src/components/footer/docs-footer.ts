@@ -1,5 +1,6 @@
-import { Box, Footer, Icon, Img, Link, Section, Typography } from "@jay-js/ui";
 import jayjs from "/jayjs.svg";
+import { Box, Img, Link, Section, Typography } from "../../../../packages/elements/src";
+import { Icon } from "../ui";
 // import { Logo } from "./Logo";
 // import { SearchForm } from "./SearchForm";
 // import { SelectLocation } from "./SelectLocation";

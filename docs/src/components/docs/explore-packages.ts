@@ -1,4 +1,4 @@
-import { Box, Typography } from "@jay-js/ui";
+import { Box, Typography } from "../../../../packages/elements/src";
 import { PACKAGES } from "../../constants";
 import { CardPackage } from "./card-package";
 

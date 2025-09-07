@@ -1,10 +1,4 @@
-export function useCollection<T>({
-	dir,
-	metadata,
-}: {
-	dir: string;
-	metadata: Array<string>;
-}) {
+export function useCollection<T>({ dir, metadata }: { dir: string; metadata: Array<string> }) {
 	return {
 		dir,
 		metadata,
