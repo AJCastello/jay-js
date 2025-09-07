@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TChatComponent } from "./chat-component.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TChatComponent } from "./chat-component.types";
 
 export function ChatComponent<T extends TBaseTagMap = "div">(
 	{ component = "chat-bubble", color, ...props }: TChatComponent<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses(component, color, props.className);
+	const className = cn(component, color, props.className);
 
 	return Base({
 		...props,

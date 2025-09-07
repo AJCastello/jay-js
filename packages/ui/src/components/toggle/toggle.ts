@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Input, Base, Typography } from "@jay-js/elements";
-import { TToggle } from "./toggle.types";
+import { Base, Input, type TBaseTagMap, Typography } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TToggle } from "./toggle.types";
 
 export function Toggle<T extends TBaseTagMap = "div" | "input">(
 	{ label, color, size, position = "toggle-after", formControl, ...props }: TToggle<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("toggle", color, size, props.className);
+	const className = cn("toggle", color, size, props.className);
 
 	const toggleElement = Input({
 		...props,
@@ -35,7 +36,7 @@ export function Toggle<T extends TBaseTagMap = "div" | "input">(
 
 		const formControlContainer = Base({
 			...formControl,
-			className: mergeClasses("form-control", formControl?.className),
+			className: cn("form-control", formControl?.className),
 			children: labelElement,
 		}) as HTMLDivElement;
 

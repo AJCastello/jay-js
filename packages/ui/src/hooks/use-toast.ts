@@ -1,5 +1,4 @@
-import { TToast, Toast } from "../components";
-
+import { type TToast, Toast } from "../components";
 
 /**
  * Configuration options for the useToast hook
@@ -44,11 +43,13 @@ export function useToast({ ...props }: TUseToast = {}) {
 		let existingToast: Element | null = null;
 
 		if (toastList.length > 0) {
-			toastList.forEach((toastItem) => {
-				if (toastItem.classList.contains(vertical as string) && toastItem.classList.contains(horizontal as string)) {
-					existingToast = toastItem;
-				}
-			});
+			const toastListArray = Array.from(toastList);
+			existingToast = toastListArray.find((toastItem) => {
+				return (
+					toastItem.classList.contains(vertical as string) &&
+					toastItem.classList.contains(horizontal as string)
+				);
+			}) || null;
 		}
 
 		if (existingToast) {

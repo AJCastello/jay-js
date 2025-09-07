@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TModal } from "./modal.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TModal } from "./modal.types";
 
 export function Modal<T extends TBaseTagMap = "dialog">(
 	{ position, ...props }: TModal<T> = { tag: "dialog" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("modal", position, props.className);
+	const className = cn("modal", position, props.className);
 
 	return Base({
 		...props,

@@ -37,7 +37,7 @@ export type TDrawerControls = {
 	 * Toggles the drawer between open and closed states
 	 */
 	toggle: () => void;
-}
+};
 
 /**
  * A hook to control drawer component functionality
@@ -65,7 +65,7 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 		const { drawer, drawerOverlay, drawerContent } = elements;
 
 		if (!drawerContent) {
-			console.warn(`useDrawer: No element found for selector: .drawer-content`);
+			console.warn("useDrawer: No element found for selector: .drawer-content");
 			return;
 		}
 
@@ -119,7 +119,7 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 		const { drawer, drawerOverlay, drawerContent } = elements;
 
 		if (!drawerContent) {
-			console.warn(`useDrawer: No element found for selector: .drawer-content`);
+			console.warn("useDrawer: No element found for selector: .drawer-content");
 			return;
 		}
 
@@ -182,6 +182,6 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 	return {
 		open,
 		close,
-		toggle
+		toggle,
 	};
 }

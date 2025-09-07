@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TNavbar } from "./navbar.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TNavbar } from "./navbar.types";
 
 export function Navbar<T extends TBaseTagMap = "nav">(
 	{ ...props }: TNavbar<T> = { tag: "nav" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("navbar", props.className);
+	const className = cn("navbar", props.className);
 
 	return Base({
 		...props,

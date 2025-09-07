@@ -1,11 +1,12 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import type { TDrawerOverlay } from "./drawer-overlay.types.js";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import { useDrawer } from "../../hooks/use-drawer.js";
+import { cn } from "../../utils/cn";
+import type { TDrawerOverlay } from "./drawer-overlay.types.js";
 
 export function DrawerOverlay<T extends TBaseTagMap = "div">(
 	{ ...props }: TDrawerOverlay<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses(
+	const className = cn(
 		"transition-opacity",
 		"ease-in-out",
 		"duration-300",
@@ -25,9 +26,11 @@ export function DrawerOverlay<T extends TBaseTagMap = "div">(
 		dataset: {
 			drawerFor: props.id,
 		},
-		onclick: props.onclick || ((e) => {
-			e.preventDefault();
-			handleDrawer.close();
-		}),
+		onclick:
+			props.onclick ||
+			((e) => {
+				e.preventDefault();
+				handleDrawer.close();
+			}),
 	}) as HTMLElementTagNameMap[T];
 }

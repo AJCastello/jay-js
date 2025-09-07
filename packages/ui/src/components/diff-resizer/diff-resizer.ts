@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TDiffResizer } from "./diff-resizer.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TDiffResizer } from "./diff-resizer.types";
 
 export function DiffResizer<T extends TBaseTagMap = "div">(
 	{ ...props }: TDiffResizer<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("diff-resizer", props.className);
+	const className = cn("diff-resizer", props.className);
 
 	return Base({
 		...props,

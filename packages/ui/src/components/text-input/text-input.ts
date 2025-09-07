@@ -1,5 +1,6 @@
-import { TBaseTagMap, Input, mergeClasses, Box } from "@jay-js/elements";
-import { TTextInput } from "./text-input.types";
+import { Box, Input, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TTextInput } from "./text-input.types";
 
 export function TextInput<T extends TBaseTagMap = "input">(
 	{
@@ -14,7 +15,6 @@ export function TextInput<T extends TBaseTagMap = "input">(
 		...props
 	}: TTextInput<T> = { tag: "input" },
 ): HTMLElementTagNameMap[T] {
-
 	const inputElement = Input({
 		...props,
 		tag: "input",
@@ -35,32 +35,16 @@ export function TextInput<T extends TBaseTagMap = "input">(
 	}
 
 	if (startAdornment || endAdornment) {
-		inputElement.className = mergeClasses(className);
+		inputElement.className = cn(className);
 
 		const inputLabelContainer = Box({
 			tag: "label",
-			className: mergeClasses(
-				"input",
-				color,
-				fullWidth ? "w-full" : "",
-				inputSize,
-				containerClassName
-			),
-			children: [
-				getStartAdornment(),
-				inputElement,
-				getEndAdornment(),
-			]
-		})
+			className: cn("input", color, fullWidth ? "w-full" : "", inputSize, containerClassName),
+			children: [getStartAdornment(), inputElement, getEndAdornment()],
+		});
 		return inputLabelContainer as HTMLElementTagNameMap[T];
 	}
 
-	inputElement.className = mergeClasses(
-		"input",
-		color,
-		inputSize,
-		className,
-		fullWidth ? "w-full" : ""
-	);
+	inputElement.className = cn("input", color, inputSize, className, fullWidth ? "w-full" : "");
 	return inputElement as HTMLElementTagNameMap[T];
 }

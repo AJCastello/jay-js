@@ -1,9 +1,10 @@
-import { TBaseTagMap, mergeClasses, Base, Box, TButton } from "@jay-js/elements";
+import { Base, Box, type TBaseTagMap, type TButton } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
 
 export function ModalBackdrop<T extends TBaseTagMap = "div">(
 	{ ...props }: TButton<T> = { tag: "div" },
 ): HTMLDivElement {
-	const className = mergeClasses("modal-backdrop", props.className);
+	const className = cn("modal-backdrop", props.className);
 
 	return Box({
 		className,
