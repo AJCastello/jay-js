@@ -10,6 +10,10 @@ export default defineConfig({
       contentPath: path.resolve(__dirname, "./src/content")
     })
   ],
+  server: {
+    host: '0.0.0.0',
+    port: 5173
+  },
   build: {
     minify: "terser",
     terserOptions: {

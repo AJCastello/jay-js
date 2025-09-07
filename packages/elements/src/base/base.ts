@@ -1,4 +1,3 @@
-import { mergeClasses } from "../utils/merge-classes.js";
 import { uniKey } from "../utils/uni-key.js";
 import { TBaseTagMap, TBase, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
@@ -32,7 +31,7 @@ export function Base<T extends TBaseTagMap = "div">(
 		if (typeof className === "function" && (className as Function).name.includes("_set_value_effect")) {
 			(className as Function)(base, "className");
 		} else {
-			base.className = mergeClasses(className);
+			base.className = className;
 		}
 	}
 
