@@ -1,10 +1,11 @@
-import { Base, mergeClasses, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import type { TDivider } from "./divider.types.js";
+import { cn } from "../../../utils/cn.js";
 
 export function Divider<T extends TBaseTagMap = "div">(
 	{ orientation, ...props }: TDivider<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("divider", orientation, props.className);
+	const className = cn("divider", orientation, props.className);
 
 	return Base({
 		...props,

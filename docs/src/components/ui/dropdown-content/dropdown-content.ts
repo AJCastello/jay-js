@@ -1,10 +1,11 @@
-import { Base, mergeClasses, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import type { TDropdownContent } from "./dropdown-content.types";
+import { cn } from "../../../utils/cn";
 
 export function DropdownContent<T extends TBaseTagMap = "div">(
 	{ ...props }: TDropdownContent<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("dropdown-content", props.className);
+	const className = cn("dropdown-content", props.className);
 
 	return Base({
 		...props,

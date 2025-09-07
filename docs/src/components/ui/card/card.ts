@@ -1,10 +1,11 @@
-import { Base, mergeClasses, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import type { TCard } from "./card.types";
+import { cn } from "../../../utils/cn";
 
 export function Card<T extends TBaseTagMap = "div">(
 	{ imagePosition, imageFull, variant, size, ...props }: TCard<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses(
+	const className = cn(
 		"card shadow-md hover:shadow-xl transition-all duration-500 ease-in-out",
 		variant,
 		size,

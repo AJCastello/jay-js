@@ -1,10 +1,11 @@
-import { Base, mergeClasses, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import type { TKbd } from "./kbd.types";
+import { cn } from "../../../utils/cn";
 
 export function Kbd<T extends TBaseTagMap = "kbd">(
 	{ size, ...props }: TKbd<T> = { tag: "kbd" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("kbd", size, props.className);
+	const className = cn("kbd", size, props.className);
 
 	return Base({
 		tag: "kbd",

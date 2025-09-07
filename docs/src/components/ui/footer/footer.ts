@@ -1,10 +1,11 @@
-import { Base, mergeClasses, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import type { TFooter } from "./footer.types";
+import { cn } from "../../../utils/cn";
 
 export function Footer<T extends TBaseTagMap = "footer">(
 	{ position, direction, ...props }: TFooter<T> = { tag: "footer" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("footer", position, direction, props.className);
+	const className = cn("footer", position, direction, props.className);
 
 	return Base({
 		...props,

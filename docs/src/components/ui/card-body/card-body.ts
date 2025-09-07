@@ -1,10 +1,11 @@
-import { Base, mergeClasses, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
 import type { TCardBody } from "./card-body.types";
+import { cn } from "../../../utils/cn";
 
 export function CardBody<T extends TBaseTagMap = "div">(
 	{ ...props }: TCardBody<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("card-body", props.className);
+	const className = cn("card-body", props.className);
 	return Base({
 		...props,
 		className,
