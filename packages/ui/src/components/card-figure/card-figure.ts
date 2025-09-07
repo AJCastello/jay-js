@@ -1,5 +1,4 @@
 import { Base, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
 import type { TCardFigure } from "./card-figure.types";
 
 export function CardFigure<T extends TBaseTagMap = "figure">(
