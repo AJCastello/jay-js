@@ -3,17 +3,17 @@ import { join } from "path";
 import { readFileSync, readdirSync } from "fs";
 
 // configurations
-import { jayJsViteOptions } from "../options/jayJsViteDefineOptions.js";
+import { jayJsViteOptions } from "../options/jay-js-vite-define-options.js";
 
 // types
 import { IBuildCollection } from "../types/index.js";
 
 // services
-import { getParsedFileContent } from "./getParsedFileContent.js";
-import { writeCollection } from "./writeCollection.js";
+import { getParsedFileContent } from "./get-parsed-file-content.js";
+import { writeCollection } from "./write-collection.js";
 
 // utilities
-import { reduceMetadata } from "../utils/reduceMetadata.js";
+import { reduceMetadata } from "../utils/reduce-metadata.js";
 
 
 export function buildCollection({
