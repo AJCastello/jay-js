@@ -1,7 +1,7 @@
 {
   "name": "@jay-js/elements",
   "version": "1.0.0",
-  "description": "A library of basic elements for Jay JS with Tailwind CSS and daisyUI.",
+  "description": "A headless library of basic elements for Jay JS framework.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -41,9 +41,9 @@
     "library",
     "elements",
     "components",
-    "tailwind",
-    "daisyui",
-    "headless"
+    "headless",
+    "ui-components",
+    "web-components"
   ],
   "author": "AJ Castello",
   "license": "MIT",
@@ -59,8 +59,5 @@
     "ts-jest": "^29.2.6",
     "typescript": "^5.4.5"
   },
-  "dependencies": {
-    "tailwind-merge": "^2.3.0",
-    "yup": "^1.4.0"
-  }
+  "dependencies": {}
 }
