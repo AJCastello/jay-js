@@ -37,6 +37,13 @@ export const PACKAGES: Array<IJayJSPackage> = [
 		url: "/docs/static",
 	},
 	{
+		name: "Elements",
+		packageName: "@jay-js/elements",
+		description: "A headless library of basic elements for building type-safe UI components with lifecycle management.",
+		image: "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg",
+		url: "/docs/elements/overview",
+	},
+	{
 		name: "Conventions 🚀",
 		packageName: "out of box",
 		description: "A set of conventions and better practices that help you build apps faster and more efficiently.",
