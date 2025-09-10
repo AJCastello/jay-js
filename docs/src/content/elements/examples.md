@@ -2,7 +2,7 @@
 category: Elements
 categoryId: 1
 articleId: 4
-slug: elements-examples
+slug: examples
 title: Exemplos Práticos e Casos de Uso
 description: Exemplos completos do @jay-js/elements incluindo formulários, lifecycle, async content, componentes interativos, performance e testes.
 ---

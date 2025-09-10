@@ -2,7 +2,7 @@
 category: Elements
 categoryId: 1
 articleId: 2
-slug: elements-components
+slug: components
 title: Referência de Componentes
 description: Documentação completa dos 21 componentes do @jay-js/elements incluindo Base, Form, UI, Typography, List e Control elements com exemplos TypeScript.
 ---

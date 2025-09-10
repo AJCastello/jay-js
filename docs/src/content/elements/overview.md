@@ -2,7 +2,7 @@
 category: Elements
 categoryId: 1
 articleId: 1
-slug: elements-overview
+slug: overview
 title: Visão Geral do Elements
 description: Biblioteca headless de elementos HTML fundamentais com TypeScript, lifecycle management e Promise-based children para o Jay JS framework.
 ---

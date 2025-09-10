@@ -2,7 +2,7 @@
 category: Elements
 categoryId: 1
 articleId: 3
-slug: elements-core-concepts
+slug: core-concepts
 title: Conceitos Fundamentais
 description: Arquitetura headless, função Base, lifecycle management com Custom Elements, Promise-based children e sistema de tipos do @jay-js/elements.
 ---
