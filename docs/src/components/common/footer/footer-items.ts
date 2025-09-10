@@ -32,7 +32,7 @@ export function FooterLegalItem({ label, href }: MenuItem) {
 	});
 }
 
-export function FooterSocialItem({ label, href, icon }: { label: string; href: string; icon: string }) {
+export function FooterSocialItem({ href, icon }: { label: string; href: string; icon: string }) {
 	return Link({
 		href: href,
 		target: "_blank",
