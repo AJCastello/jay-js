@@ -3,7 +3,7 @@ import type { ICollectionGrouped } from "../../types";
 import { Collapse, CollapseContent, CollapseTitle } from "../ui";
 import { MenuItem } from "./menu-item";
 
-export function MenuGroup(item: ICollectionGrouped) {
+export function MenuGroup(item: ICollectionGrouped, dir: string) {
 	return Collapse({
 		variant: "collapse-arrow",
 		tabIndex: 0,
@@ -21,7 +21,7 @@ export function MenuGroup(item: ICollectionGrouped) {
 			}),
 			CollapseContent({
 				className: "pb-0",
-				children: item.articles.map(MenuItem),
+				children: item.articles.map(article => MenuItem(article, dir)),
 			}),
 		],
 	});

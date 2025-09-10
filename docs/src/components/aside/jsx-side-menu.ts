@@ -10,7 +10,7 @@ export async function JsxSideMenu() {
 	return Section({
 		tag: "aside",
 		className: "p-4 w-64 min-w-64",
-		children: menuItems.map(MenuGroup),
+		children: menuItems.map(item => MenuGroup(item, "jsx")),
 	});
 }
 
