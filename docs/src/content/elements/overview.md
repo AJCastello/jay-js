@@ -1,3 +1,12 @@
+---
+category: Elements
+categoryId: 1
+articleId: 1
+slug: elements-overview
+title: Visão Geral do Elements
+description: Biblioteca headless de elementos HTML fundamentais com TypeScript, lifecycle management e Promise-based children para o Jay JS framework.
+---
+
 # Visão Geral do @jay-js/elements
 
 O **@jay-js/elements** é uma biblioteca headless de elementos HTML fundamentais, projetada especificamente para o ecossistema Jay JS. Esta biblioteca oferece uma abordagem inovadora para construção de interfaces, fornecendo funcionalidade sem imposições de estilo, permitindo total liberdade criativa aos desenvolvedores.

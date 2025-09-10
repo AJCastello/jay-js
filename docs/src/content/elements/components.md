@@ -1,3 +1,12 @@
+---
+category: Elements
+categoryId: 1
+articleId: 2
+slug: elements-components
+title: Referência de Componentes
+description: Documentação completa dos 21 componentes do @jay-js/elements incluindo Base, Form, UI, Typography, List e Control elements com exemplos TypeScript.
+---
+
 # Referência de Componentes - @jay-js/elements
 
 Este guia fornece documentação abrangente para todos os 21 componentes disponíveis no pacote `@jay-js/elements`. Cada componente oferece funcionalidades específicas com suporte completo ao TypeScript, gerenciamento de ciclo de vida e integração com Tailwind CSS.

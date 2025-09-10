@@ -1,3 +1,12 @@
+---
+category: Elements
+categoryId: 1
+articleId: 3
+slug: elements-core-concepts
+title: Conceitos Fundamentais
+description: Arquitetura headless, função Base, lifecycle management com Custom Elements, Promise-based children e sistema de tipos do @jay-js/elements.
+---
+
 # Conceitos Fundamentais do @jay-js/elements
 
 O pacote `@jay-js/elements` implementa uma abordagem única para criação de elementos HTML com funcionalidades avançadas mantendo compatibilidade total com os padrões web. Esta documentação explora os conceitos arquiteturais que tornam este pacote poderoso e flexível.

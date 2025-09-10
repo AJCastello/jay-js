@@ -1,3 +1,12 @@
+---
+category: Elements
+categoryId: 1
+articleId: 4
+slug: elements-examples
+title: Exemplos Práticos e Casos de Uso
+description: Exemplos completos do @jay-js/elements incluindo formulários, lifecycle, async content, componentes interativos, performance e testes.
+---
+
 # Exemplos Práticos do @jay-js/elements
 
 Esta documentação fornece exemplos completos e práticos do **@jay-js/elements**, organizados por complexidade e cenários de uso real. Todos os exemplos são funcionais e podem ser copiados e adaptados para seus próprios projetos.
