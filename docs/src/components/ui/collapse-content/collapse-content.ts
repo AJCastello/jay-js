@@ -1,6 +1,6 @@
 import { Base, type TBaseTagMap } from "@jay-js/elements";
-import type { TCollapseContent } from "./collapse-content.types";
 import { cn } from "../../../utils/cn";
+import type { TCollapseContent } from "./collapse-content.types";
 
 export function CollapseContent<T extends TBaseTagMap = "div">(
 	{ ...props }: TCollapseContent<T> = { tag: "div" },

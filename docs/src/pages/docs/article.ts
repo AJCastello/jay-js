@@ -30,7 +30,11 @@ export async function Article(slug?: string) {
 			DocsScrollBullet(),
 			Box({
 				className: "grow w-min",
-				children: [contentFormatted.element, Divider(), ArticleFooter(collectionData, articleData.articleId)],
+				children: [
+					contentFormatted.element,
+					Divider(),
+					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId),
+				],
 			}),
 			OnThisPage(contentFormatted.list),
 		],

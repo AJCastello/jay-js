@@ -1,6 +1,6 @@
 import { Base, type TBaseTagMap } from "@jay-js/elements";
-import type { TKbd } from "./kbd.types";
 import { cn } from "../../../utils/cn";
+import type { TKbd } from "./kbd.types";
 
 export function Kbd<T extends TBaseTagMap = "kbd">(
 	{ size, ...props }: TKbd<T> = { tag: "kbd" },

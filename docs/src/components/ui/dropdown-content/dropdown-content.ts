@@ -1,6 +1,6 @@
 import { Base, type TBaseTagMap } from "@jay-js/elements";
-import type { TDropdownContent } from "./dropdown-content.types";
 import { cn } from "../../../utils/cn";
+import type { TDropdownContent } from "./dropdown-content.types";
 
 export function DropdownContent<T extends TBaseTagMap = "div">(
 	{ ...props }: TDropdownContent<T> = { tag: "div" },

@@ -1,6 +1,6 @@
 import { Base, type TBaseTagMap } from "@jay-js/elements";
-import type { TCardBody } from "./card-body.types";
 import { cn } from "../../../utils/cn";
+import type { TCardBody } from "./card-body.types";
 
 export function CardBody<T extends TBaseTagMap = "div">(
 	{ ...props }: TCardBody<T> = { tag: "div" },

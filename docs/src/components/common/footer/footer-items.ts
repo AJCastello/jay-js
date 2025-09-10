@@ -1,5 +1,6 @@
 import { Navigate } from "@jay-js/system";
 import { Link } from "../../../../../packages/elements/src";
+import { Icon } from "../../ui";
 import { Logo } from "../logo";
 import type { MenuItem } from "../shared/menu-items";
 import { NavigationLink } from "../shared/navigation-link";
@@ -38,10 +39,9 @@ export function FooterSocialItem({ label, href, icon }: { label: string; href: s
 		rel: "noopener",
 		role: "button",
 		className: "btn btn-circle btn-ghost no-underline",
-		// children:
-		// Icon({
-		//   className: "text-2xl",
-		//   icon: icon
-		// })
+		children: Icon({
+			className: "text-2xl",
+			icon: icon,
+		}),
 	});
 }
