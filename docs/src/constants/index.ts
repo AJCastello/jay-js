@@ -6,7 +6,7 @@ export const PACKAGES: Array<IJayJSPackage> = [
 		packageName: "@jay-js/system",
 		description: "Routing, internationalization, asynchronous module loading, state management, and more.",
 		image: "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg",
-		url: "/docs/system",
+		url: "/docs/system/overview",
 	},
 	{
 		name: "UI",
