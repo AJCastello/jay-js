@@ -3,7 +3,9 @@ import { DocsElements } from "../layouts/docs-elements.layout";
 import { DocsJsx } from "../layouts/docs-jsx.layout";
 import { DocsSystem } from "../layouts/docs-system.layout";
 import { SiteLayout } from "../layouts/site.layout";
-import { Article } from "../pages/docs/article";
+import { ArticleSystem } from "../pages/docs/article-system";
+import { ArticleJsx } from "../pages/docs/article-jsx";
+import { ArticleElements } from "../pages/docs/article-elements";
 import { DocsIntro } from "../pages/docs/docs-intro";
 import { Home } from "../pages/home";
 
@@ -32,7 +34,7 @@ export function Routes() {
 				children: [
 					{
 						path: "/:slug",
-						element: Article,
+						element: ArticleSystem,
 					},
 				],
 			},
@@ -43,7 +45,7 @@ export function Routes() {
 				children: [
 					{
 						path: "/:slug",
-						element: Article,
+						element: ArticleJsx,
 					},
 				],
 			},
@@ -54,7 +56,7 @@ export function Routes() {
 				children: [
 					{
 						path: "/:slug",
-						element: Article,
+						element: ArticleElements,
 					},
 				],
 			},

@@ -1,7 +1,7 @@
 import { Input, Typography } from "../../../../packages/elements/src";
 import type { ICollectionGrouped } from "../../types";
 import { Collapse, CollapseContent, CollapseTitle } from "../ui";
-import { MenuItem } from "./MenuItem";
+import { MenuItem } from "./menu-item";
 
 export function MenuGroup(item: ICollectionGrouped) {
 	return Collapse({
