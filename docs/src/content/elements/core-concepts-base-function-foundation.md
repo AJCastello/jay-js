@@ -7,11 +7,9 @@ title: A Função Base como Fundação
 description: Como a função Base funciona como bloco de construção central, processo de criação e configuração de propriedades, manipulação de eventos e gerenciamento de estilos.
 ---
 
+# A Função Base como Fundação
 
-
-## 2. A Função Base como Fundação
-
-### Como Base serve como bloco de construção central
+## Como Base serve como bloco de construção central
 
 A função `Base` é o coração arquitetural do pacote. Ela implementa toda a lógica fundamental de criação e configuração de elementos HTML, fornecendo uma API consistente para todos os elementos específicos.
 
@@ -30,7 +28,7 @@ function Base<T extends TBaseTagMap = "div">({
 }: TBase<T>): HTMLElementTagNameMap[T]
 ```
 
-### Processo de criação e configuração de propriedades
+## Processo de criação e configuração de propriedades
 
 O Base segue um fluxo específico de criação que garante inicialização adequada:
 
@@ -64,11 +62,11 @@ Object.entries(props).forEach(([key, value]) => {
 });
 ```
 
-### Padrões de manipulação de eventos
+## Padrões de manipulação de eventos
 
 O Base oferece duas abordagens para manipulação de eventos:
 
-#### Propriedades diretas (recomendado para eventos simples)
+### Propriedades diretas (recomendado para eventos simples)
 ```typescript
 const input = Input({
   oninput: (event) => {
@@ -79,7 +77,7 @@ const input = Input({
 });
 ```
 
-#### Objeto listeners (recomendado para cenários complexos)
+### Objeto listeners (recomendado para cenários complexos)
 ```typescript
 const elemento = Base({
   tag: "div",
@@ -92,7 +90,7 @@ const elemento = Base({
 });
 ```
 
-### Gerenciamento de estilos e classes
+## Gerenciamento de estilos e classes
 
 ```typescript
 // Estilos inline

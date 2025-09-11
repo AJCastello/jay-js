@@ -7,11 +7,9 @@ title: Considerações de Performance
 description: Impacto de zero dependências, manipulação nativa do DOM, padrões de re-renderização eficiente, gerenciamento de memória e otimizações avançadas.
 ---
 
+# Considerações de Performance
 
-
-## 8. Considerações de Performance
-
-### Impacto de zero dependências
+## Impacto de zero dependências
 
 O @jay-js/elements foi projetado com performance em mente:
 
@@ -29,7 +27,7 @@ Memory Footprint:
 - Menos abstrações = menos memória
 ```
 
-### Manipulação nativa do DOM
+## Manipulação nativa do DOM
 
 Todas as operações utilizam APIs nativas otimizadas pelos navegadores:
 
@@ -49,9 +47,9 @@ const lista = Base({
 // Direct DOM creation -> Immediate insertion
 ```
 
-### Padrões de re-renderização eficiente
+## Padrões de re-renderização eficiente
 
-#### ✅ Padrões eficientes
+### ✅ Padrões eficientes
 
 1. **Atualizações granulares**
 ```typescript
@@ -121,7 +119,7 @@ function criarElementoCacheado(tipo: string, conteudo: string) {
 }
 ```
 
-#### ❌ Padrões ineficientes
+### ❌ Padrões ineficientes
 
 1. **Re-criação desnecessária**
 ```typescript
@@ -166,9 +164,9 @@ class ListaEficiente {
 }
 ```
 
-### Gerenciamento de memória - melhores práticas
+## Gerenciamento de memória - melhores práticas
 
-#### Prevenção de vazamentos de memória
+### Prevenção de vazamentos de memória
 
 ```typescript
 // ✅ Cleanup completo em onunmount
@@ -220,7 +218,7 @@ const componenteSeguro = Base({
 });
 ```
 
-#### Otimizações de performance avançadas
+### Otimizações de performance avançadas
 
 1. **Virtualização para listas grandes**
 ```typescript

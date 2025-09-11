@@ -7,11 +7,9 @@ title: Padrões de Manipulação de Eventos
 description: Propriedades de evento diretas, objeto listeners para cenários complexos, event delegation, eventos customizados e padrões avançados como debounce e composition.
 ---
 
+# Padrões de Manipulação de Eventos
 
-
-## 7. Padrões de Manipulação de Eventos
-
-### Propriedades de evento diretas
+## Propriedades de evento diretas
 
 A abordagem mais simples e recomendada para a maioria dos casos:
 
@@ -39,7 +37,7 @@ const input = Input({
 });
 ```
 
-### Objeto listeners para cenários complexos
+## Objeto listeners para cenários complexos
 
 Para casos onde você precisa de maior controle ou múltiplos listeners do mesmo tipo:
 
@@ -86,7 +84,7 @@ const elementoComplexo = Base({
 });
 ```
 
-### Event delegation e performance
+## Event delegation e performance
 
 Para listas grandes ou elementos dinâmicos, use event delegation:
 
@@ -126,7 +124,7 @@ function criarListaEficiente(items: string[]) {
 }
 ```
 
-### Manipulação de eventos customizados
+## Manipulação de eventos customizados
 
 O sistema suporta completamente eventos customizados:
 
@@ -190,9 +188,9 @@ const receiver = Base({
 });
 ```
 
-### Padrões avançados de eventos
+## Padrões avançados de eventos
 
-#### Debounce e throttle
+### Debounce e throttle
 ```typescript
 function debounce(func: Function, delay: number) {
   let timeoutId: number;
@@ -212,7 +210,7 @@ const searchInput = Input({
 });
 ```
 
-#### Event composition
+### Event composition
 ```typescript
 function criarDragDrop() {
   let isDragging = false;

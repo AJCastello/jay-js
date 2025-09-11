@@ -7,11 +7,9 @@ title: Integração com TypeScript e Type Safety
 description: Funções de componente genéricos, herança de propriedades de elementos HTML, tipagem de event handlers e referências, e tipos customizados para extensibilidade.
 ---
 
+# Integração com TypeScript e Type Safety
 
-
-## 5. Integração com TypeScript e Type Safety
-
-### Funções de componente genéricos
+## Funções de componente genéricos
 
 O sistema de tipos do @jay-js/elements fornece type safety completo mantendo flexibilidade:
 
@@ -45,7 +43,7 @@ const linkButton: HTMLAnchorElement = Button<"a">({
 });
 ```
 
-### Herança de propriedades de elementos HTML
+## Herança de propriedades de elementos HTML
 
 O sistema de tipos preserva todas as propriedades nativas dos elementos HTML:
 
@@ -84,7 +82,7 @@ const input = Input({
 });
 ```
 
-### Tipagem de event handlers
+## Tipagem de event handlers
 
 O sistema preserva a tipagem completa dos event handlers:
 
@@ -126,7 +124,7 @@ const elemento = Base({
 });
 ```
 
-### Tipagem de referências com useRef
+## Tipagem de referências com useRef
 
 ```typescript
 // Ref tipada para elemento específico
@@ -151,7 +149,7 @@ setTimeout(() => {
 }, 1000);
 ```
 
-### Tipos customizados para extensibilidade
+## Tipos customizados para extensibilidade
 
 ```typescript
 // Definição de tipos para elemento customizado

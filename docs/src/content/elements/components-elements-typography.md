@@ -7,11 +7,9 @@ title: Tipografia
 description: Documentação do componente Typography para renderização de todos os tipos de elementos textuais como parágrafos, títulos, spans e labels.
 ---
 
+# Tipografia
 
-
-## Tipografia
-
-### Typography
+## Typography
 
 **Propósito**: Componente flexível para todos os elementos de texto (p, h1-h6, span, label, etc.).
 
@@ -127,5 +125,3 @@ const textLink = Typography({
   children: 'Saiba mais sobre este tópico'
 });
 ```
-
----

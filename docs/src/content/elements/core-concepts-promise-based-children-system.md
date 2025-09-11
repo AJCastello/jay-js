@@ -7,11 +7,9 @@ title: Sistema de Children Baseado em Promises
 description: Carregamento assíncrono de conteúdo, exemplos com fetch, timeouts e renderização condicional, suporte para conteúdo misto e estados de carregamento.
 ---
 
+# Sistema de Children Baseado em Promises
 
-
-## 4. Sistema de Children Baseado em Promises
-
-### Como o carregamento assíncrono de conteúdo funciona
+## Como o carregamento assíncrono de conteúdo funciona
 
 O @jay-js/elements possui suporte nativo para conteúdo assíncrono através de Promises. Quando você passa uma Promise como child, o sistema:
 
@@ -34,9 +32,9 @@ const elementoAssincrono = Base({
 });
 ```
 
-### Exemplos com fetch, timeouts, renderização condicional
+## Exemplos com fetch, timeouts, renderização condicional
 
-#### Carregamento de dados externos
+### Carregamento de dados externos
 ```typescript
 async function criarListaProdutos() {
   return Base({
@@ -64,7 +62,7 @@ async function criarListaProdutos() {
 }
 ```
 
-#### Delays e animações
+### Delays e animações
 ```typescript
 const elementoComDelay = Base({
   tag: "div",
@@ -85,7 +83,7 @@ const elementoComDelay = Base({
 });
 ```
 
-#### Renderização condicional baseada em estado
+### Renderização condicional baseada em estado
 ```typescript
 function criarElementoCondicional(usuarioLogado: boolean) {
   return Base({
@@ -109,7 +107,7 @@ function criarElementoCondicional(usuarioLogado: boolean) {
 }
 ```
 
-### Conteúdo misto (strings, nodes, promises)
+## Conteúdo misto (strings, nodes, promises)
 
 O sistema suporta qualquer combinação de tipos de children:
 
@@ -142,9 +140,9 @@ const elementoMisto = Base({
 });
 ```
 
-### Estados de carregamento e tratamento de erros
+## Estados de carregamento e tratamento de erros
 
-#### Implementação de loading states
+### Implementação de loading states
 ```typescript
 function criarElementoComLoading() {
   let loadingElement: HTMLElement;
@@ -189,7 +187,7 @@ function criarElementoComLoading() {
 }
 ```
 
-#### Tratamento robusto de erros
+### Tratamento robusto de erros
 ```typescript
 // Sistema interno de tratamento de erros
 function appendChildToBase(base: HTMLElement, child: Promise<Node>) {

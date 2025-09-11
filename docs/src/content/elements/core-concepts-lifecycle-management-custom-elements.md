@@ -7,11 +7,9 @@ title: Gerenciamento de Ciclo de Vida com Custom Elements
 description: Implementação de onmount/onunmount com padrões web, registro de custom elements, connectedCallback e disconnectedCallback, e melhores práticas para gerenciamento de memória.
 ---
 
+# Gerenciamento de Ciclo de Vida com Custom Elements
 
-
-## 3. Gerenciamento de Ciclo de Vida com Custom Elements
-
-### Como onmount/onunmount funcionam com padrões web
+## Como onmount/onunmount funcionam com padrões web
 
 O sistema de lifecycle do @jay-js/elements utiliza os Web Components padrão para fornecer callbacks de montagem e desmontagem. Quando você especifica `onmount` ou `onunmount`, o sistema automaticamente:
 
@@ -33,7 +31,7 @@ const elemento = Base({
 });
 ```
 
-### Registro de custom elements
+## Registro de custom elements
 
 O sistema de registro é automático e eficiente:
 
@@ -67,7 +65,7 @@ class JayJsElement extends HTMLBaseElement {
 }
 ```
 
-### connectedCallback e disconnectedCallback
+## connectedCallback e disconnectedCallback
 
 Os callbacks utilizam os métodos nativos dos Web Components:
 
@@ -97,7 +95,7 @@ const timer = Base({
 });
 ```
 
-### Melhores práticas para cleanup e gerenciamento de memória
+## Melhores práticas para cleanup e gerenciamento de memória
 
 ```typescript
 // ✅ BOM: Cleanup completo

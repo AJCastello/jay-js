@@ -7,11 +7,9 @@ title: Sistema de Referências
 description: API useRef e padrões de uso, acesso direto ao DOM, integração com eventos de lifecycle e melhores práticas para utilização de referências.
 ---
 
+# Sistema de Referências
 
-
-## 6. Sistema de Referências
-
-### API useRef e padrões de uso
+## API useRef e padrões de uso
 
 O sistema `useRef` fornece acesso direto ao DOM quando necessário:
 
@@ -37,11 +35,11 @@ useEffect(() => {
 });
 ```
 
-### Acesso direto ao DOM quando necessário
+## Acesso direto ao DOM quando necessário
 
 Cenários onde refs são apropriadas:
 
-#### 1. Manipulação de foco
+### 1. Manipulação de foco
 ```typescript
 const inputRef = useRef<HTMLInputElement>();
 
@@ -67,7 +65,7 @@ const FormularioLogin = () => {
 };
 ```
 
-#### 2. Medições e posicionamento
+### 2. Medições e posicionamento
 ```typescript
 const containerRef = useRef<HTMLDivElement>();
 
@@ -90,7 +88,7 @@ const ComponenteMedido = () => {
 };
 ```
 
-#### 3. APIs de animação nativa
+### 3. APIs de animação nativa
 ```typescript
 const animatedRef = useRef<HTMLDivElement>();
 
@@ -116,7 +114,7 @@ const ComponenteAnimado = () => {
 };
 ```
 
-### Integração com eventos de lifecycle
+## Integração com eventos de lifecycle
 
 ```typescript
 const complexRef = useRef<HTMLDivElement>();
@@ -146,9 +144,9 @@ const ComponenteComplexo = () => {
 };
 ```
 
-### Melhores práticas vs quando evitar refs
+## Melhores práticas vs quando evitar refs
 
-#### ✅ Use refs quando:
+### ✅ Use refs quando:
 
 1. **Foco de elementos**
 ```typescript
@@ -180,7 +178,7 @@ const chartRef = useRef<HTMLCanvasElement>();
 // new Chart(chartRef.current, config)
 ```
 
-#### ❌ Evite refs quando:
+### ❌ Evite refs quando:
 
 1. **Manipulação de conteúdo** (use children)
 ```typescript

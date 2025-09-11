@@ -11,7 +11,7 @@ description: O conceito headless no @jay-js/elements, benefícios da separação
 
 O pacote `@jay-js/elements` implementa uma abordagem única para criação de elementos HTML com funcionalidades avançadas mantendo compatibilidade total com os padrões web. Esta documentação explora os conceitos arquiteturais que tornam este pacote poderoso e flexível.
 
-## 1. Filosofia de Design Headless
+## Filosofia de Design Headless
 
 ### O que significa Headless neste contexto
 
