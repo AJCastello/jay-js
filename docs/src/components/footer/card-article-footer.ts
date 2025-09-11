@@ -1,5 +1,13 @@
 import { Navigate } from "@jay-js/system";
-import { Box, Icon, Link, Typography } from "@jay-js/ui";
+import { Box, Link, Typography } from "../../../../packages/elements/src";
+
+// Simple Icon function for creating icon elements
+function Icon({ icon, className }: { icon: string; className?: string }) {
+	const element = document.createElement("i");
+	element.className = `${icon} ${className || ""}`.trim();
+	return element;
+}
+
 import type { TArticleFooter } from "../../types";
 
 const CARD_OPTIONS = {

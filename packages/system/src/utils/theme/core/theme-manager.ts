@@ -10,8 +10,8 @@
  * - Advanced theme management with theme definitions and mode switching
  */
 
-import { themeOptions } from "./configuration";
 import type { TThemeMode, TThemeModeResult } from "../types";
+import { themeOptions } from "./configuration";
 
 /**
  * Validates if a theme exists in the current configuration.
@@ -34,9 +34,7 @@ function isValidTheme(themeName: string): boolean {
 		}
 
 		// Check if it's a light or dark variant of any theme
-		const isVariant = themeOptions.themes.some(theme =>
-			theme.light === themeName || theme.dark === themeName
-		);
+		const isVariant = themeOptions.themes.some((theme) => theme.light === themeName || theme.dark === themeName);
 		if (isVariant) {
 			return true;
 		}
@@ -72,7 +70,9 @@ export function initTheme() {
 		// No stored theme or invalid theme - use default theme with appropriate mode
 		if (storedTheme && !isValidTheme(storedTheme)) {
 			// Log warning about invalid stored theme
-			console.warn(`Stored theme "${storedTheme}" is not valid in current configuration. Falling back to default theme.`);
+			console.warn(
+				`Stored theme "${storedTheme}" is not valid in current configuration. Falling back to default theme.`,
+			);
 		}
 
 		const defaultTheme = findThemeById("default");
@@ -82,9 +82,7 @@ export function initTheme() {
 			setTheme("default", prefersDark ? "dark" : "light");
 		} else {
 			// Fallback to legacy behavior if no default theme exists
-			const themeToSet = prefersColorSchemeDark() ?
-				themeOptions.defaultDarkTheme :
-				themeOptions.defaultTheme;
+			const themeToSet = prefersColorSchemeDark() ? themeOptions.defaultDarkTheme : themeOptions.defaultTheme;
 			setTheme(themeToSet);
 		}
 	}
@@ -97,7 +95,7 @@ export function initTheme() {
  * @returns {TThemeDefinition | undefined} The theme definition or undefined if not found
  */
 function findThemeById(themeId: string) {
-	return themeOptions.themes?.find(theme => theme.id === themeId);
+	return themeOptions.themes?.find((theme) => theme.id === themeId);
 }
 
 /**
@@ -107,7 +105,7 @@ function findThemeById(themeId: string) {
  */
 function getCurrentThemeMode(): TThemeMode {
 	const mode = themeOptions.target.dataset.themeMode;
-	return (mode === "dark" || mode === "light") ? mode : "light";
+	return mode === "dark" || mode === "light" ? mode : "light";
 }
 
 /**
@@ -258,7 +256,8 @@ export function setTheme(theme: string, mode?: TThemeMode) {
 				finalMode = mode || themeInfo.mode; // Use provided mode or detected mode
 
 				// Apply custom styles based on the detected mode
-				const stylesToApply = finalMode === "dark" ? themeInfo.themeDefinition.darkStyle : themeInfo.themeDefinition.lightStyle;
+				const stylesToApply =
+					finalMode === "dark" ? themeInfo.themeDefinition.darkStyle : themeInfo.themeDefinition.lightStyle;
 				if (stylesToApply) {
 					applyStyles(stylesToApply);
 				}
@@ -277,7 +276,7 @@ export function setTheme(theme: string, mode?: TThemeMode) {
 	if (themeOptions.useAsClass) {
 		// Remove all possible theme classes
 		if (themeOptions.themes) {
-			const allThemeNames = themeOptions.themes.flatMap(t => [t.light, t.dark]);
+			const allThemeNames = themeOptions.themes.flatMap((t) => [t.light, t.dark]);
 			themeOptions.target.classList.remove(...allThemeNames);
 		} else {
 			// Fallback: remove default themes
@@ -297,7 +296,7 @@ export function setTheme(theme: string, mode?: TThemeMode) {
 
 	// Dispatch theme changed event
 	const themeChangedEvent = new CustomEvent("themeChanged", {
-		detail: { theme: finalTheme, mode: finalMode }
+		detail: { theme: finalTheme, mode: finalMode },
 	});
 	document.dispatchEvent(themeChangedEvent);
 }
@@ -333,9 +332,7 @@ export function toggleThemeMode(): TThemeModeResult {
 		const currentTheme = themeOptions.target.dataset.theme;
 
 		// Try to find which theme definition this belongs to
-		let currentThemeDefinition = themeOptions.themes.find(t =>
-			t.light === currentTheme || t.dark === currentTheme
-		);
+		const currentThemeDefinition = themeOptions.themes.find((t) => t.light === currentTheme || t.dark === currentTheme);
 
 		if (currentThemeDefinition) {
 			// Use the theme ID to set the new mode

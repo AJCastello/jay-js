@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "$schema": "https://biomejs.dev/schemas/latest/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,28 +7,39 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
+    "includes": [
+      "**/*.ts",
+      "**/*.js"
+    ],
+    "experimentalScannerIgnores": [
       "./src/styles/*.css"
     ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "tab",
-    "lineWidth": 120
+    "lineWidth": 320
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "enabled": true,
     "rules": {
       "correctness": {
-        "noUnusedVariables": "error"
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error"
       },
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "off",
-        "noThenProperty": "off"
+        "noExplicitAny": "off"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off"
       }
     }
   },

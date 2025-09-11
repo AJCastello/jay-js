@@ -87,7 +87,7 @@ emailError.appendChild(form.formState.errors('email'));
 passwordError.appendChild(form.formState.errors('password'));
 
 // Handle form submission
-loginForm.addEventListener('submit', form.onSubmit((event, data) => {
+loginForm.addEventListener('submit', form.onSubmit((data, event) => {
   console.log('Form submitted with:', data);
   // Submit data to server
 }));
@@ -249,7 +249,7 @@ form.onChange((values) => {
 });
 
 // Handle form submission with validation
-const submitHandler = form.onSubmit((event, data) => {
+const submitHandler = form.onSubmit((data, event) => {
   console.log('Valid form submitted:', data);
   // Submit to server
 });
@@ -411,7 +411,7 @@ function initLoginForm() {
   // Form submission
   document.getElementById('login-form').addEventListener(
     'submit',
-    form.onSubmit((_, data) => {
+    form.onSubmit((data, _) => {
       // Submit login data to server
       console.log('Login data:', data);
     })

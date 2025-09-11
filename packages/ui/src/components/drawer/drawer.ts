@@ -1,4 +1,5 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
 import type { TDrawer } from "./drawer.types.js";
 
 export function Drawer<T extends TBaseTagMap = "div">(
@@ -11,7 +12,7 @@ export function Drawer<T extends TBaseTagMap = "div">(
 		bottom: "items-end",
 	};
 
-	const className = mergeClasses(
+	const className = cn(
 		asChild ? "absolute" : "fixed",
 		"inset-0",
 		"hidden",

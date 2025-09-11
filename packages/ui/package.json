@@ -52,17 +52,18 @@
   },
   "homepage": "https://github.com/AJCastello/jay-js#readme",
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.2.3",
     "@types/jest": "^29.5.14",
+    "clsx": "^2.1.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.6",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "tailwind-merge": "^2.3.0"
   },
   "peerDependencies": {
-    "@jay-js/elements": "^1.0.0"
-  },
-  "dependencies": {
-    "tailwind-merge": "^2.3.0"
+    "@jay-js/elements": "^1.0.0",
+    "tailwind-merge": "^2.3.0",
+    "clsx": "^2.1.1"
   }
 }

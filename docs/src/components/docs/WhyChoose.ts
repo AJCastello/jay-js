@@ -1,4 +1,4 @@
-import { Box, List, ListItem, Typography } from "@jay-js/ui";
+import { Box, List, ListItem, Typography } from "../../../../packages/elements/src";
 
 export function WhyChoose() {
 	return Box({

@@ -1,5 +1,6 @@
 export type TRenderOptions = {
 	insert?: "append" | "prepend";
+	replace?: boolean;
 };
 
 export type TRenderContentItem = Node | string | HTMLElement | null | undefined;

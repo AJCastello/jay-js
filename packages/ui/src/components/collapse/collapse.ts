@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TCollapse } from "./collapse.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TCollapse } from "./collapse.types";
 
 export function Collapse<T extends TBaseTagMap = "div">(
 	{ variant, forceOpen, forceClose, ...props }: TCollapse<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses(
+	const className = cn(
 		"collapse",
 		variant,
 		forceOpen ? "collapse-open" : "",

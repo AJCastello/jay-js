@@ -1,5 +1,6 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TDrawerContent } from "./drawer-content.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TDrawerContent } from "./drawer-content.types";
 
 export function DrawerContent<T extends TBaseTagMap = "div">(
 	{ position = "left", ...props }: TDrawerContent<T> = { tag: "div" },
@@ -11,7 +12,7 @@ export function DrawerContent<T extends TBaseTagMap = "div">(
 		bottom: "translate-y-full",
 	};
 
-	const className = mergeClasses(
+	const className = cn(
 		"drawer-content",
 		`drawer-${position}`,
 		"transition-transform",

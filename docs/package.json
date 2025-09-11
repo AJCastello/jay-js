@@ -13,13 +13,13 @@
     "lint": "biome check --write ./src"
   },
   "dependencies": {
+    "@jay-js/elements": "file:../packages/elements/dist",
     "@jay-js/static": "file:../packages/static/dist",
     "@jay-js/system": "file:../packages/system/dist",
-    "@jay-js/ui": "file:../packages/ui/dist",
     "highlight.js": "^11.9.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.2.3",
     "@tailwindcss/typography": "^0.5.13",
     "@tailwindcss/vite": "^4.0.16",
     "daisyui": "^5.0.0",

@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TRadialProgress } from "./radial-progress.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TRadialProgress } from "./radial-progress.types";
 
 export function RadialProgress<T extends TBaseTagMap = "div">(
 	{ value = 0, size, thickness, ...props }: TRadialProgress<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("radial-progress", props.className);
+	const className = cn("radial-progress", props.className);
 
 	const element = Base({
 		...props,

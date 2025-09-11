@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, ListItem } from "@jay-js/elements";
-import { TTimelineItems } from "./timeline-items.types";
+import { ListItem, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TTimelineItems } from "./timeline-items.types";
 
 export function TimelineItems<T extends TBaseTagMap = "li">(
 	{ ...props }: TTimelineItems<T> = { tag: "li" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses(props.className);
+	const className = cn(props.className);
 
 	return ListItem({
 		...props,

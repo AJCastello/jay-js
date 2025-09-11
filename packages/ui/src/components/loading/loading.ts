@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TLoading } from "./loading.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TLoading } from "./loading.types";
 
 export function Loading<T extends TBaseTagMap = "span">(
 	{ type = "loading-spinner", size = "loading-md", ...props }: TLoading<T> = { tag: "span" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("loading", type, size, props.className);
+	const className = cn("loading", type, size, props.className);
 
 	return Base({
 		tag: "span",

@@ -15,7 +15,7 @@ export type TRegister = {
 };
 
 export type TRegisterOptions = {
-	beforeChange?: (ev: Event, value: string) => string | undefined;
+	beforeChange?: (value: string, ev: Event) => string | undefined;
 	value?: string;
 };
 
@@ -23,7 +23,7 @@ export type TUseForm<T> = {
 	register: (path: keyof T, options?: TRegisterOptions) => TRegister;
 	formState: TFormState<T>;
 	onChange: (callback: (data: T) => void) => void;
-	onSubmit: (callback: (ev: Event, data: T) => void) => (ev: SubmitEvent) => void;
+	onSubmit: (callback: (data: T, ev: Event) => void) => (ev: SubmitEvent) => void;
 	onErrors: (callback: (errors: TFormValidateResult) => void) => void;
 	destroy: () => void;
 };

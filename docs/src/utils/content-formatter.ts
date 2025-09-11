@@ -1,8 +1,15 @@
-import { Icon, Link } from "@jay-js/ui";
 import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
+import { Link } from "../../../packages/elements/src";
 import type { TContentFormatter, TOnThisPageList } from "../types";
+
+// Simple Icon function for creating icon elements
+function Icon({ icon, className }: { icon: string; className?: string }) {
+	const element = document.createElement("i");
+	element.className = `${icon} ${className || ""}`.trim();
+	return element;
+}
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("typescript", typescript);

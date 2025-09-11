@@ -3,7 +3,7 @@
  * @description Configuration options and setup for the theme management system.
  */
 
-import type { TThemeOptions, TThemeDefinition } from "../types.js";
+import type { TThemeDefinition, TThemeOptions } from "../types.js";
 import { initTheme } from "./theme-manager.js";
 
 /**
@@ -42,13 +42,13 @@ function ensureDefaultTheme(options: Partial<TThemeOptions>): Partial<TThemeOpti
 				id: "default",
 				light: defaultLight,
 				dark: defaultDark,
-			}
+			},
 		];
 		return processedOptions;
 	}
 
 	// Case 2: Themes array exists - check if default theme is present
-	const hasDefaultTheme = processedOptions.themes.some(theme => theme.id === "default");
+	const hasDefaultTheme = processedOptions.themes.some((theme) => theme.id === "default");
 
 	if (!hasDefaultTheme) {
 		// Case 3: Add default theme to existing themes array
@@ -58,7 +58,7 @@ function ensureDefaultTheme(options: Partial<TThemeOptions>): Partial<TThemeOpti
 				light: defaultLight,
 				dark: defaultDark,
 			},
-			...processedOptions.themes
+			...processedOptions.themes,
 		];
 	}
 
@@ -90,9 +90,9 @@ function ensureDefaultTheme(options: Partial<TThemeOptions>): Partial<TThemeOpti
  *   themes: [
  *     { id: "orange", light: "orange-light", dark: "orange-dark" },
  *     { id: "red", light: "volcano", dark: "cave" },
- *     { 
- *       id: "blue", 
- *       light: "skytheme", 
+ *     {
+ *       id: "blue",
+ *       light: "skytheme",
  *       dark: "alaska",
  *       lightStyle: { "text-decoration": "underline" },
  *       darkStyle: { "font-size": "16px" }

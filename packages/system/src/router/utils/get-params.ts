@@ -20,7 +20,6 @@ export function getParams(): Record<string, string | string[]> {
 	const pathName = window.location.pathname;
 	const match = getPotentialMatch(pathName);
 
-
 	if (match.route && match.route.path) {
 		const matcher = createMatcher(match.route.path);
 		const matchResult = matcher(window.location.pathname);

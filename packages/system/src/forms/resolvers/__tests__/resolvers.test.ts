@@ -242,11 +242,10 @@ describe("Form Resolvers", () => {
 			const validData = {
 				nome: "Carlos",
 				telefones: [
-					{ numero: "12345678", tipo: "casa" },
-					{ numero: "87654321", tipo: "celular" },
+					{ numero: "12345678", tipo: "casa" as const },
+					{ numero: "87654321", tipo: "celular" as const },
 				],
 			};
-
 			const validResult = await resolver(validData);
 			expect(validResult.errors).toHaveLength(0);
 
@@ -263,9 +262,8 @@ describe("Form Resolvers", () => {
 			// Invalid data: short phone number
 			const invalidData2 = {
 				nome: "Carlos",
-				telefones: [{ numero: "123", tipo: "casa" }],
+				telefones: [{ numero: "123", tipo: "casa" as const }],
 			};
-
 			const invalidResult2 = await resolver(invalidData2);
 			expect(invalidResult2.errors).toHaveLength(1);
 			expect(invalidResult2.errors[0].path).toBe("telefones.0.numero");

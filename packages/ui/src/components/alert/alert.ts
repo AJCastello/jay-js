@@ -1,10 +1,11 @@
-import { TBaseTagMap, mergeClasses, Base } from "@jay-js/elements";
-import { TAlert } from "./alert.types";
+import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { cn } from "../../utils/cn";
+import type { TAlert } from "./alert.types";
 
 export function Alert<T extends TBaseTagMap = "div">(
 	{ severity = "alert-info", direction, variation, ...props }: TAlert<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const className = mergeClasses("alert", severity, direction, variation, props.className);
+	const className = cn("alert", severity, direction, variation, props.className);
 	return Base({
 		...props,
 		className,

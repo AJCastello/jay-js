@@ -1,4 +1,4 @@
-import { Box, Section } from "@jay-js/ui";
+import { Box, Section } from "../../../../packages/elements/src";
 import { ExplorePackages } from "../../components/docs/explore-packages";
 import { Introduction } from "../../components/docs/introduction";
 import { UnleashPotential } from "../../components/docs/unleash-potential";
@@ -14,12 +14,7 @@ export function DocsIntro() {
 			Box({
 				className: "max-w-screen-xl w-full mx-auto pb-8 pt-20  grow",
 				children: Section({
-					children: [
-						Introduction(),
-						WhyChoose(),
-						ExplorePackages(),
-						UnleashPotential()
-					],
+					children: [Introduction(), WhyChoose(), ExplorePackages(), UnleashPotential()],
 				}),
 			}),
 			DocsFooter(),

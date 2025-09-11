@@ -1,9 +1,9 @@
 import { extname } from "path";
 import { IJayJsViteOptions } from "../types/index.js";
-import { jayJsViteDefineOptions } from "../options/jayJsViteDefineOptions.js";
-import { buildCollection } from "../services/buildCollection.js";
-import { extractUseCollectionData } from "../utils/extractUseCollectionData.js";
-import { parseMarkdown } from "../utils/parseMarkdown.js";
+import { jayJsViteDefineOptions } from "../options/jay-js-vite-define-options.js";
+import { buildCollection } from "../services/build-collection.js";
+import { extractUseCollectionData } from "../utils/extract-use-collection-data.js";
+import { parseMarkdown } from "../utils/parse-markdown.js";
 
 export function jayJsViteStatic(options: IJayJsViteOptions) {
   if (options) {

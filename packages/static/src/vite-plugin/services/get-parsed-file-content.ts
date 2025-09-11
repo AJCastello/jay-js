@@ -1,5 +1,5 @@
 // utils
-import { extractMetadata } from "../utils/extractMetadata.js";
+import { extractMetadata } from "../utils/extract-metadata.js";
 
 export function getParsedFileContent(file: string, src: string): any {
   if (file.endsWith(".js")) {

@@ -1,4 +1,4 @@
-import { Section } from "@jay-js/ui";
+import { Section } from "../../../../packages/elements/src";
 import type { TCollection } from "../../types";
 import { groupByCategory } from "../../utils/group-by-category";
 import { useCollection } from "../../utils/use-collection";
@@ -10,7 +10,7 @@ export async function JsxSideMenu() {
 	return Section({
 		tag: "aside",
 		className: "p-4 w-64 min-w-64",
-		children: menuItems.map(MenuGroup),
+		children: menuItems.map(item => MenuGroup(item, "jsx")),
 	});
 }
 
