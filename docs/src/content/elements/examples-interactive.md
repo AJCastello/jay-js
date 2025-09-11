@@ -7,9 +7,9 @@ title: Componentes Interativos
 description: Exemplos de componentes interativos como modal dinâmico e sistema de abas (tabs) implementados com @jay-js/elements.
 ---
 
-## 🎯 Componentes Interativos
+# Componentes Interativos
 
-### 1. Modal Dinâmico
+## 1. Modal Dinâmico
 
 ```typescript
 import { Box, Button, Typography, TextInput } from '@jay-js/elements';
@@ -240,7 +240,7 @@ function criarSistemaModal() {
 document.body.appendChild(criarSistemaModal());
 ```
 
-### 2. Sistema de Abas (Tabs)
+## 2. Sistema de Abas (Tabs)
 
 ```typescript
 import { Box, Button, Typography } from '@jay-js/elements';

@@ -7,11 +7,9 @@ title: Integração com @jay-js/system
 description: Exemplos de como integrar @jay-js/elements com @jay-js/system para gerenciamento de estado global e reatividade.
 ---
 
+# Integração com @jay-js/system
 
-
-## 🔧 Integração com @jay-js/system
-
-### 1. Gerenciamento de Estado Global
+## 1. Gerenciamento de Estado Global
 
 ```typescript
 import { Box, Typography, Button, TextInput } from '@jay-js/elements';

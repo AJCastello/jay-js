@@ -7,11 +7,9 @@ title: Conteúdo Assíncrono
 description: Demonstrações de carregamento assíncrono de dados com estados de loading e lazy loading de imagens usando Promises no @jay-js/elements.
 ---
 
+# Conteúdo Assíncrono
 
-
-## ⚡ Conteúdo Assíncrono
-
-### 1. Carregamento de Dados com Loading States
+## 1. Carregamento de Dados com Loading States
 
 ```typescript
 import { Box, Typography, Button } from '@jay-js/elements';
@@ -126,7 +124,7 @@ function criarCarregadorDados() {
 document.body.appendChild(criarCarregadorDados());
 ```
 
-### 2. Lazy Loading de Imagens
+## 2. Lazy Loading de Imagens
 
 ```typescript
 import { Box, Typography, Img } from '@jay-js/elements';

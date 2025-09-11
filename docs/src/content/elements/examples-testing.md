@@ -7,11 +7,9 @@ title: Padrões de Teste
 description: Estratégias e exemplos de como testar componentes construídos com @jay-js/elements.
 ---
 
+# Padrões de Teste
 
-
-## 🧪 Padrões de Teste
-
-### 1. Funções Utilitárias para Teste
+## 1. Funções Utilitárias para Teste
 
 ```typescript
 // utils/test-helpers.ts
@@ -46,7 +44,7 @@ export function aguardarPromise(promise) {
 }
 ```
 
-### 2. Exemplo de Teste de Componente
+## 2. Exemplo de Teste de Componente
 
 ```typescript
 import { Button, TextInput, Form } from '@jay-js/elements';

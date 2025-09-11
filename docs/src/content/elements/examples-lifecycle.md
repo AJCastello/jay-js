@@ -7,11 +7,9 @@ title: Gerenciamento de Ciclo de Vida
 description: Exemplos de inicialização, limpeza de componentes e integração com APIs e WebSockets utilizando os hooks de ciclo de vida do @jay-js/elements.
 ---
 
+# Gerenciamento de Ciclo de Vida
 
-
-## 🔄 Gerenciamento de Ciclo de Vida
-
-### 1. Inicialização e Limpeza de Componentes
+## 1. Inicialização e Limpeza de Componentes
 
 ```typescript
 import { Box, Typography, Button } from '@jay-js/elements';
@@ -78,7 +76,7 @@ function criarComponenteComCicloDeVida() {
 document.body.appendChild(criarComponenteComCicloDeVida());
 ```
 
-### 2. Integração com APIs e WebSockets
+## 2. Integração com APIs e WebSockets
 
 ```typescript
 import { Box, Typography, Button, TextInput } from '@jay-js/elements';

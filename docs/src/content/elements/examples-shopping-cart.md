@@ -7,9 +7,7 @@ title: Aplicação Completa: Carrinho de Compras
 description: Implementação de um carrinho de compras completo com adição, remoção e atualização de itens usando @jay-js/elements.
 ---
 
-
-
-## 🛒 Aplicação Completa: Carrinho de Compras
+# Aplicação Completa: Carrinho de Compras
 
 ```typescript
 import { Box, Typography, Button, TextInput, Img } from '@jay-js/elements';

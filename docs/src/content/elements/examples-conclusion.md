@@ -7,9 +7,7 @@ title: Conclusão
 description: Resumo dos padrões e práticas recomendadas para trabalhar com @jay-js/elements, incluindo dicas finais e referências adicionais.
 ---
 
-
-
-## 📚 Conclusão
+# Conclusão
 
 Esta documentação fornece uma base sólida para trabalhar com o **@jay-js/elements**. Os exemplos demonstram:
 
@@ -19,14 +17,14 @@ Esta documentação fornece uma base sólida para trabalhar com o **@jay-js/elem
 - **Manutenibilidade**: Código organizando e testável
 - **Integração**: Como combinar com outras partes do ecossistema Jay JS
 
-### Próximos Passos
+## Próximos Passos
 
 1. **Experimente os exemplos**: Copie e cole em seus projetos
 2. **Adapte para suas necessidades**: Modifique conforme sua aplicação
 3. **Integre com @jay-js/system**: Para estado global e roteamento
 4. **Explore outros pacotes**: jsx, ui, cli para funcionalidades adicionais
 
-### Dicas de Performance
+## Dicas de Performance
 
 - Use **virtual scrolling** para listas com mais de 100 itens
 - Implemente **debounce** em campos de busca

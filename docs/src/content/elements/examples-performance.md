@@ -7,11 +7,9 @@ title: Padrões de Performance
 description: Técnicas e padrões para melhorar a performance como virtual scrolling para listas grandes e renderização eficiente.
 ---
 
+# Padrões de Performance
 
-
-## 📱 Padrões de Performance
-
-### 1. Virtual Scrolling para Listas Grandes
+## 1. Virtual Scrolling para Listas Grandes
 
 ```typescript
 import { Box, Typography } from '@jay-js/elements';
@@ -150,7 +148,7 @@ function criarVirtualScrolling() {
 document.body.appendChild(criarVirtualScrolling());
 ```
 
-### 2. Debounced Search
+## 2. Debounced Search
 
 ```typescript
 import { Box, Typography, TextInput } from '@jay-js/elements';

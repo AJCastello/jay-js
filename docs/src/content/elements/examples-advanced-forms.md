@@ -7,11 +7,9 @@ title: Formulários Avançados
 description: Implementação de formulários mais complexos como formulário de contato completo com validação e formulário multi-etapas usando @jay-js/elements.
 ---
 
+# Formulários Avançados
 
-
-## 📋 Formulários Avançados
-
-### 1. Formulário de Contato Completo
+## 1. Formulário de Contato Completo
 
 ```typescript
 import { Form, TextInput, TextArea, Select, SelectItem, Checkbox, Button, Typography, Box } from '@jay-js/elements';
@@ -234,7 +232,7 @@ function criarFormularioContato() {
 document.body.appendChild(criarFormularioContato());
 ```
 
-### 2. Formulário Multi-etapas
+## 2. Formulário Multi-etapas
 
 ```typescript
 import { Box, Button, Typography, TextInput, Select, SelectItem, Radio } from '@jay-js/elements';
