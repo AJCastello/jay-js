@@ -10,7 +10,7 @@ export async function StaticSideMenu() {
 	return Section({
 		tag: "aside",
 		className: "p-4 w-64 min-w-64",
-		children: menuItems.map(item => MenuGroup(item, "static")),
+		children: menuItems.map((item) => MenuGroup(item, "static")),
 	});
 }
 

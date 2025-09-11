@@ -21,7 +21,7 @@ export function MenuGroup(item: ICollectionGrouped, dir: string) {
 			}),
 			CollapseContent({
 				className: "pb-0",
-				children: item.articles.map(article => MenuItem(article, dir)),
+				children: item.articles.map((article) => MenuItem(article, dir)),
 			}),
 		],
 	});

@@ -146,6 +146,7 @@ export default [
     "articleId": 8,
     "categoryId": 4
   },
+  {},
   {
     "title": "Integração com @jay-js/system",
     "slug": "examples-system-integration",

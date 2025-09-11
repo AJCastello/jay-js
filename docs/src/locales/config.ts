@@ -12,6 +12,6 @@ export default {
 		{
 			code: "en-us",
 			import: async () => (await import("./languages/en-us")).default,
-		}
+		},
 	],
 } as Partial<Ti18nOptions>;
