@@ -7,11 +7,9 @@ title: Elementos de Lista
 description: Documentação dos componentes List e ListItem para criação de listas ordenadas, não ordenadas e navegação.
 ---
 
+# Elementos de Lista
 
-
-## Elementos de Lista
-
-### List
+## List
 
 **Propósito**: Container para listas ordenadas (ol) ou não ordenadas (ul).
 
@@ -132,7 +130,7 @@ const dynamicList = List({
 
 ---
 
-### ListItem
+## ListItem
 
 **Propósito**: Item individual de lista (li).
 

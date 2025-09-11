@@ -7,11 +7,9 @@ title: Elementos de Formulário
 description: Documentação completa dos componentes de formulário como Form, Button, Input, TextInput, TextArea, Checkbox, Radio, Range, Select e FileInput.
 ---
 
+# Elementos de Formulário
 
-
-## Elementos de Formulário
-
-### Form
+## Form
 
 **Propósito**: Container para formulários com todas as funcionalidades nativas do elemento `<form>` HTML.
 
@@ -57,7 +55,7 @@ const loginForm = Form({
 
 ---
 
-### Button
+## Button
 
 **Propósito**: Elemento de botão interativo com todas as funcionalidades nativas do `<button>` HTML.
 
@@ -117,7 +115,7 @@ const advancedButton = Button({
 
 ---
 
-### Input
+## Input
 
 **Propósito**: Wrapper genérico para elementos de entrada com todos os tipos de input HTML suportados.
 
@@ -166,7 +164,7 @@ const numberInput = Input({
 
 ---
 
-### TextInput
+## TextInput
 
 **Propósito**: Input de texto especializado com type="text" pré-configurado.
 
@@ -227,7 +225,7 @@ const phoneInput = TextInput({
 
 ---
 
-### TextArea
+## TextArea
 
 **Propósito**: Área de texto multilinha para entrada de conteúdo extenso.
 
@@ -283,7 +281,7 @@ const autoResizeArea = TextArea({
 
 ---
 
-### Checkbox
+## Checkbox
 
 **Propósito**: Caixa de seleção para opções booleanas.
 
@@ -344,7 +342,7 @@ const parentCheckbox = Checkbox({
 
 ---
 
-### Radio
+## Radio
 
 **Propósito**: Botão de opção para seleção exclusiva entre múltiplas opções.
 
@@ -401,7 +399,7 @@ const planRadio = Radio({
 
 ---
 
-### Range
+## Range
 
 **Propósito**: Controle deslizante para seleção de valores numéricos em um intervalo.
 
@@ -489,7 +487,7 @@ const minPriceRange = Range({
 
 ---
 
-### Select
+## Select
 
 **Propósito**: Lista suspensa para seleção de opções.
 
@@ -575,7 +573,7 @@ const skillsSelect = Select({
 
 ---
 
-### SelectItem
+## SelectItem
 
 **Propósito**: Item de opção para uso dentro de elementos Select.
 
@@ -615,7 +613,7 @@ const comingSoonOption = SelectItem({
 
 ---
 
-### FileInput
+## FileInput
 
 **Propósito**: Input para upload de arquivos com suporte a múltiplos arquivos e tipos específicos.
 

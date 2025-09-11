@@ -7,11 +7,9 @@ title: Elementos de Interface
 description: Documentação dos elementos de interface como Box, Section, Link, Img, Fragment e Outlet para construção de layouts e estruturas de página.
 ---
 
+# Elementos de Interface
 
-
-## Elementos de Interface
-
-### Box
+## Box
 
 **Propósito**: Container genérico (div) para layout e agrupamento de conteúdo.
 
@@ -72,7 +70,7 @@ const animatedBox = Box({
 
 ---
 
-### Section
+## Section
 
 **Propósito**: Elemento de seção semântica para estruturação de conteúdo.
 
@@ -148,7 +146,7 @@ const servicesSection = Section({
 
 ---
 
-### Link
+## Link
 
 **Propósito**: Elemento de âncora para navegação e links externos.
 
@@ -211,7 +209,7 @@ const tooltipLink = Link({
 
 ---
 
-### Img
+## Img
 
 **Propósito**: Elemento de imagem com suporte a lazy loading e tratamento de erros.
 
@@ -296,7 +294,7 @@ const galleryImages = [
 
 ---
 
-### Fragment
+## Fragment
 
 **Propósito**: Wrapper para document fragment, útil para agrupar elementos sem criar um container HTML.
 
@@ -362,7 +360,7 @@ const asyncFragment = Fragment({
 
 ---
 
-### Outlet
+## Outlet
 
 **Propósito**: Container especial para roteamento, usado como ponto de inserção de conteúdo dinâmico.
 

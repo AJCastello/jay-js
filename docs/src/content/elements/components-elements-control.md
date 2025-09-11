@@ -7,11 +7,9 @@ title: Elementos de Controle
 description: Documentação do componente Progress para indicar andamento de operações e outros elementos de controle.
 ---
 
+# Elementos de Controle
 
-
-## Elementos de Controle
-
-### Progress
+## Progress
 
 **Propósito**: Barra de progresso para indicar o andamento de operações.
 
@@ -174,7 +172,7 @@ const stateProgress = Progress({
 
 ## Padrões de Integração
 
-### Gerenciamento de Ciclo de Vida
+## Gerenciamento de Ciclo de Vida
 
 Todos os componentes suportam callbacks `onmount` e `onunmount` para gerenciamento de recursos:
 
@@ -206,7 +204,7 @@ const managedElement = Base({
 });
 ```
 
-### Sistema de Referências
+## Sistema de Referências
 
 Use `useRef` para acesso direto a elementos:
 
@@ -231,7 +229,7 @@ const controlledButton = Button({
 });
 ```
 
-### Filhos Baseados em Promises
+## Filhos Baseados em Promises
 
 Suporte nativo para carregamento assíncrono de conteúdo:
 
@@ -254,7 +252,7 @@ const asyncContent = Box({
 });
 ```
 
-### Event Listeners Avançados
+## Event Listeners Avançados
 
 Use o objeto `listeners` para múltiplos event handlers:
 
@@ -282,7 +280,7 @@ const interactiveElement = Base({
 
 ## Boas Práticas
 
-### 1. Sempre Use TypeScript
+## 1. Sempre Use TypeScript
 ```typescript
 // ✅ Correto - com tipagem explícita
 const button = Button({
@@ -302,7 +300,7 @@ const button = Button({
 });
 ```
 
-### 2. Gerencie Recursos Adequadamente
+## 2. Gerencie Recursos Adequadamente
 ```typescript
 // ✅ Correto - cleanup adequado
 const managedComponent = Base({
@@ -322,7 +320,7 @@ const managedComponent = Base({
 });
 ```
 
-### 3. Use Referências Quando Necessário
+## 3. Use Referências Quando Necessário
 ```typescript
 // ✅ Correto - ref para controle direto
 const inputRef = useRef<HTMLInputElement>();
@@ -339,7 +337,7 @@ setTimeout(() => {
 }, 1000);
 ```
 
-### 4. Aproveite as Classes do Tailwind
+## 4. Aproveite as Classes do Tailwind
 ```typescript
 // ✅ Correto - classes responsivas e utilitárias
 const responsiveBox = Box({
@@ -347,7 +345,7 @@ const responsiveBox = Box({
 });
 ```
 
-### 5. Combine Elementos para Criar Componentes
+## 5. Combine Elementos para Criar Componentes
 ```typescript
 // ✅ Correto - componente personalizado
 function Card({ title, content, actions }) {

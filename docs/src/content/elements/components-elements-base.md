@@ -11,8 +11,6 @@ description: Documentação dos elementos base como Base, useRef e uniKey que se
 
 Este guia fornece documentação abrangente para todos os 21 componentes disponíveis no pacote `@jay-js/elements`. Cada componente oferece funcionalidades específicas com suporte completo ao TypeScript, gerenciamento de ciclo de vida e integração com Tailwind CSS.
 
----
-
 ## Elementos Base
 
 ### Base
