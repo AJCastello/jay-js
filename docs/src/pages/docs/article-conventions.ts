@@ -33,7 +33,7 @@ export async function ArticleConventions(slug?: string) {
 				children: [
 					contentFormatted.element,
 					Divider(),
-					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId),
+					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId, "conventions"),
 				],
 			}),
 			OnThisPage(contentFormatted.list),

@@ -33,7 +33,7 @@ export async function ArticleJsx(slug?: string) {
 				children: [
 					contentFormatted.element,
 					Divider(),
-					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId),
+					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId, "jsx"),
 				],
 			}),
 			OnThisPage(contentFormatted.list),

@@ -33,7 +33,7 @@ export async function ArticleCli(slug?: string) {
 				children: [
 					contentFormatted.element,
 					Divider(),
-					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId),
+					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId, "cli"),
 				],
 			}),
 			OnThisPage(contentFormatted.list),

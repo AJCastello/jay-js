@@ -33,7 +33,7 @@ export async function ArticleStatic(slug?: string) {
 				children: [
 					contentFormatted.element,
 					Divider(),
-					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId),
+					ArticleFooter(collectionData, articleData.articleId, articleData.categoryId, "static"),
 				],
 			}),
 			OnThisPage(contentFormatted.list),

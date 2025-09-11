@@ -10,6 +10,10 @@ function Icon({ icon, className }: { icon: string; className?: string }) {
 
 import type { TArticleFooter } from "../../types";
 
+export type TCardArticleFooterProps = TArticleFooter & {
+	directory: string;
+};
+
 const CARD_OPTIONS = {
 	next: {
 		icon: "ph-duotone ph-caret-right",
@@ -25,20 +29,20 @@ const CARD_OPTIONS = {
 	},
 };
 
-export function CardArticleFooter(article: TArticleFooter) {
+export function CardArticleFooter(article: TCardArticleFooterProps) {
 	if (!article.title) return Box({});
 
-	const { position, title, description } = article;
+	const { position, title, description, directory } = article;
 
 	function handleClick(e: Event) {
 		e.preventDefault();
-		Navigate(`/docs/system/${article.slug}`);
+		Navigate(`/docs/${directory}/${article.slug}`);
 		window.scrollTo(0, 0);
 	}
 
 	const card = Link({
 		className: `no-underline border border-base-300 bg-base-200/50 flex flex-row items-center p-8 rounded-lg hover:border-primary transition-all duration-500 ease-in-out group ${CARD_OPTIONS[position].justify}`,
-		href: `/docs/system/${article.slug}`,
+		href: `/docs/${directory}/${article.slug}`,
 		onclick: handleClick,
 		children: [
 			Box({
