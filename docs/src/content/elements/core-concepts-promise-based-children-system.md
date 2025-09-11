@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 4
 slug: core-concepts-promise-based-children-system
 title: Sistema de Children Baseado em Promises

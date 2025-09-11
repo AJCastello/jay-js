@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 6
 slug: core-concepts-references-system
 title: Sistema de Referências

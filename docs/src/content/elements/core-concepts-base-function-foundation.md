@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 2
 slug: core-concepts-base-function-foundation
 title: A Função Base como Fundação

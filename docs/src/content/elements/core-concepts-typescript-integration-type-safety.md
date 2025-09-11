@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 5
 slug: core-concepts-typescript-integration-type-safety
 title: Integração com TypeScript e Type Safety

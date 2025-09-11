@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 3
 slug: core-concepts-lifecycle-management-custom-elements
 title: Gerenciamento de Ciclo de Vida com Custom Elements

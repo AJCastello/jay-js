@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 7
 slug: core-concepts-event-handling-patterns
 title: Padrões de Manipulação de Eventos

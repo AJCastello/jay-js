@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 1
 slug: core-concepts-headless-design-philosophy
 title: Filosofia de Design Headless

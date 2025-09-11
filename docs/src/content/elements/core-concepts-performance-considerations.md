@@ -1,6 +1,6 @@
 ---
 category: Core Concepts
-categoryId: 2
+categoryId: 3
 articleId: 8
 slug: core-concepts-performance-considerations
 title: Considerações de Performance
