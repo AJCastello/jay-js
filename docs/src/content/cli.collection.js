@@ -3,7 +3,7 @@ export default [
     "title": "Overview",
     "slug": "overview",
     "category": "CLI",
-    "categoryId": 1,
-    "articleId": 1
+    "articleId": 1,
+    "categoryId": 1
   }
 ];

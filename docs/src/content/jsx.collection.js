@@ -3,49 +3,49 @@ export default [
     "title": "Componentes e Fragmentos",
     "slug": "jsx-componentes-fragmentos",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 4
+    "articleId": 4,
+    "categoryId": 5
   },
   {
     "title": "Configuração do JSX",
     "slug": "jsx-configuracao",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 2
+    "articleId": 2,
+    "categoryId": 5
   },
   {
     "title": "Exemplos Práticos de JSX",
     "slug": "jsx-exemplos",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 7
+    "articleId": 7,
+    "categoryId": 5
   },
   {
     "title": "Visão Geral do JSX",
     "slug": "jsx-overview",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 1
+    "articleId": 1,
+    "categoryId": 5
   },
   {
     "title": "Runtime JSX",
     "slug": "jsx-runtime",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 3
+    "articleId": 3,
+    "categoryId": 5
   },
   {
     "title": "Integração com TypeScript",
     "slug": "jsx-typescript",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 6
+    "articleId": 6,
+    "categoryId": 5
   },
   {
     "title": "Plugin Vite para JSX",
     "slug": "jsx-vite-plugin",
     "category": "JSX",
-    "categoryId": 5,
-    "articleId": 5
+    "articleId": 5,
+    "categoryId": 5
   }
 ];
