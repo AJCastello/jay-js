@@ -3,229 +3,126 @@ category: Static
 categoryId: 1
 articleId: 1
 slug: overview
-title: Overview
-description: Uma visão geral das funcionalidades de geração de sites estáticos do pacote @jay-js/static.
+title: Static Overview
+description: A powerful static site generation tool for Jay JS applications with Vite plugin integration
 ---
 
-# Static Package Overview
+# Static Overview
 
-O **@jay-js/static** é o pacote de geração de sites estáticos do Jay JS framework, oferecendo ferramentas poderosas para criar websites ultra-rápidos, otimizados para SEO e com excelente performance através de pré-renderização e geração estática.
+## Referência da API
 
-## O que é o Static Package?
+### Plugin Principal
 
-O Static package é uma solução completa para Static Site Generation (SSG) que transforma aplicações Jay JS dinâmicas em sites estáticos otimizados. Ele combina a flexibilidade do desenvolvimento dinâmico com a performance e confiabilidade de sites estáticos.
+| Função | Descrição |
+|--------|-----------|
+| `jayJsViteStatic()` | Plugin do Vite para geração de sites estáticos |
 
-## Principais Funcionalidades
+### Tipos de Interface
 
-### 🚀 **Static Site Generation**
-- Pré-renderização de todas as páginas
-- Geração de HTML, CSS e JS otimizados
-- Build-time data fetching
-- Arquivos estáticos prontos para deploy
-
-### ⚡ **Performance Optimization**
-- Code splitting automático
-- Lazy loading de recursos
-- Otimização de imagens
-- Minificação de assets
-
-### 🔍 **SEO Enhancement**
-- Meta tags otimizadas
-- Structured data support
-- Sitemap generation automático
-- Open Graph e Twitter Cards
-
-### 📊 **Build Analytics**
-- Relatórios de performance
-- Bundle size analysis
-- Core Web Vitals metrics
-- Optimization recommendations
-
-## Modos de Geração
-
-### **Full Static Generation**
 ```typescript
-import { staticBuild } from '@jay-js/static';
+interface IJayJsViteOptions {
+  contentPath: string;
+}
 
-// Gerar site completamente estático
-await staticBuild({
-  mode: 'static',
-  outputDir: './dist',
-  pages: [
-    '/',
-    '/about',
-    '/products',
-    '/contact'
+interface IBuildCollection {
+  contentPath: string;
+  dir: string;
+  format?: string;
+  metadata?: Array<string>;
+  suffix?: string;
+}
+
+interface Metadata {
+  [key: string]: any;
+}
+```
+
+## Visão Geral
+
+O @jay-js/static é uma ferramenta poderosa para geração de sites estáticos que se integra perfeitamente com o ecossistema Jay JS. Fornece um plugin do Vite que automatiza o processamento de arquivos Markdown, construção de coleções e transformação de conteúdo para aplicações web modernas.
+
+## Características Principais
+
+- **Plugin do Vite**: Integração nativa com o Vite para processamento eficiente
+- **Processamento de Markdown**: Conversão automática de arquivos `.md` para HTML
+- **Sistema de Coleções**: Construção automática de coleções de conteúdo
+- **Metadados**: Suporte completo para frontmatter YAML
+- **TypeScript**: Suporte nativo ao TypeScript com tipos bem definidos
+- **Configuração Flexível**: Opções de configuração personalizáveis
+
+## Funcionalidades
+
+### 1. Processamento de Markdown
+- Converte automaticamente arquivos `.md` em objetos JavaScript/TypeScript
+- Processa frontmatter YAML para metadados
+- Usa `gray-matter` para análise de frontmatter
+- Usa `marked` para conversão Markdown para HTML
+
+### 2. Sistema de Coleções
+- Detecta automaticamente chamadas de `useCollection`
+- Constrói coleções de conteúdo baseadas em diretórios
+- Suporte para metadados filtrados
+- Geração automática de arquivos de coleção
+
+### 3. Transformação de Arquivos
+- Processa arquivos `.ts`, `.js`, `.tsx`, `.jsx`
+- Detecta e processa chamadas de `useCollection`
+- Mantém compatibilidade com o sistema de módulos
+
+## Conceitos Básicos
+
+### Plugin do Vite
+O plugin intercepta arquivos durante o processo de build do Vite e os transforma conforme necessário.
+
+### Coleções
+Uma coleção é um conjunto de arquivos de conteúdo (geralmente Markdown) organizados em um diretório e processados como um grupo.
+
+### Metadados
+Informações estruturadas no frontmatter dos arquivos Markdown que são extraídas e disponibilizadas no JavaScript/TypeScript.
+
+### useCollection
+Uma função especial que indica ao sistema onde e como construir coleções de conteúdo.
+
+## Casos de Uso
+
+### Blogs Estáticos
+Ideal para criar sistemas de blog onde posts são escritos em Markdown e automaticamente processados.
+
+### Documentação
+Perfeito para sites de documentação com múltiplas seções e categorias.
+
+### Sites de Conteúdo
+Adequado para qualquer site que precisa gerenciar conteúdo estruturado.
+
+### Sistemas de CMS Simples
+Funciona como um CMS baseado em arquivos para projetos que não precisam de banco de dados.
+
+## Exemplo Básico
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import { jayJsViteStatic } from '@jay-js/static';
+
+export default defineConfig({
+  plugins: [
+    jayJsViteStatic({
+      contentPath: 'src/content'
+    })
   ]
 });
 ```
 
-### **Hybrid Generation**
 ```typescript
-import { staticBuild } from '@jay-js/static';
-
-// Combinar páginas estáticas com dinâmicas
-await staticBuild({
-  mode: 'hybrid',
-  staticPages: ['/', '/about'],
-  dynamicPages: ['/api/*', '/user/*'],
-  outputDir: './dist'
+// Em um arquivo de componente
+const blogCollection = useCollection({
+  dir: 'blog',
+  metadata: ['title', 'date', 'category']
 });
 ```
 
-### **Incremental Static Regeneration**
-```typescript
-import { staticBuild } from '@jay-js/static';
-
-// Regeneração incremental de páginas
-await staticBuild({
-  mode: 'isr',
-  revalidate: 3600, // 1 hora
-  pages: ['/blog/*', '/products/*']
-});
-```
-
-## Data Fetching Strategies
-
-### **Build-time Data**
-```typescript
-import { getStaticData } from '@jay-js/static';
-
-// Buscar dados no momento do build
-export const BlogPage = getStaticData(async () => {
-  const posts = await fetch('/api/posts').then(r => r.json());
-  return { posts };
-});
-```
-
-### **Static Props**
-```typescript
-import { getStaticProps } from '@jay-js/static';
-
-// Props estáticas para componentes
-export const ProductPage = getStaticProps(async ({ params }) => {
-  const product = await getProduct(params.id);
-  return {
-    props: { product },
-    revalidate: 86400 // 24 horas
-  };
-});
-```
-
-## Optimizations Features
-
-### **Asset Optimization**
-- Compressão automática de imagens
-- WebP conversion
-- CSS purging
-- JavaScript minification
-
-### **Caching Strategy**
-```typescript
-import { cacheConfig } from '@jay-js/static';
-
-cacheConfig({
-  static: '1y',      // Assets estáticos
-  html: '1h',        // Páginas HTML
-  api: '5m',         // Dados de API
-  images: '30d'      // Imagens otimizadas
-});
-```
-
-### **Bundle Analysis**
-```typescript
-import { analyzeBuild } from '@jay-js/static';
-
-// Análise detalhada do build
-const report = await analyzeBuild('./dist');
-console.log('Bundle size:', report.totalSize);
-console.log('Largest chunks:', report.largestChunks);
-```
-
-## Vantagens do Static Package
-
-- **⚡ Performance**: Sites ultra-rápidos com recursos pré-carregados
-- **🔍 SEO**: Excelente indexação em motores de busca
-- **💰 Custo**: Hospedagem barata em CDNs
-- **🛡️ Segurança**: Redução da superfície de ataque
-- **⚖️ Escalabilidade**: Suporte a milhões de visitantes
-- **🌐 Global**: Distribuição via CDN mundial
-
-## Deploy Targets
-
-### **Popular Platforms**
-```bash
-# Netlify
-npx @jay-js/static deploy --target netlify
-
-# Vercel
-npx @jay-js/static deploy --target vercel
-
-# GitHub Pages
-npx @jay-js/static deploy --target github
-
-# AWS S3 + CloudFront
-npx @jay-js/static deploy --target aws
-```
-
-### **Custom Deploy**
-```typescript
-import { deploy } from '@jay-js/static';
-
-await deploy({
-  target: 'custom',
-  uploadCommand: 'rsync -r ./dist/ user@server:/var/www/',
-  postDeploy: 'sudo systemctl reload nginx'
-});
-```
-
-## Configuração Avançada
-
-```typescript
-// jay-static.config.js
-export default {
-  build: {
-    outDir: './dist',
-    minify: true,
-    sourcemap: false
-  },
-  seo: {
-    defaultTitle: 'My Static Site',
-    defaultDescription: 'Built with Jay JS Static',
-    generateSitemap: true
-  },
-  optimization: {
-    images: true,
-    css: true,
-    fonts: true
-  }
-};
-```
-
-## Compatibilidade
-
-O Static package é compatível com:
-- **Jay JS framework** (todas as versões)
-- **Node.js** 18+
-- **Principais CDNs** e plataformas de hosting
-- **CI/CD pipelines**
-
-## Instalação e Uso
-
-Para instalar o @jay-js/static no seu projeto:
-
-```bash
-npm install @jay-js/static
-```
-
-```typescript
-import { staticBuild } from '@jay-js/static';
-
-// Build básico para produção
-await staticBuild({
-  mode: 'static',
-  outputDir: './dist'
-});
-```
-
-O @jay-js/static é a solução ideal para criar sites estáticos de alta performance com toda a flexibilidade do Jay JS framework.
+O sistema automaticamente:
+1. Detecta a chamada `useCollection`
+2. Lê todos os arquivos no diretório `src/content/blog/`
+3. Processa o Markdown e extrai metadados
+4. Gera um arquivo `blog.collection.js` com a coleção completa
