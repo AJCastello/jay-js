@@ -1,7 +1,6 @@
 import { Navigate } from "@jay-js/system";
 import { Box, Link, Typography } from "../../../../packages/elements/src";
 
-// Simple Icon function for creating icon elements
 function Icon({ icon, className }: { icon: string; className?: string }) {
 	const element = document.createElement("i");
 	element.className = `${icon} ${className || ""}`.trim();
