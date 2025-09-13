@@ -1,5 +1,5 @@
 import { Box } from "@jay-js/elements";
-import { cn } from "@shared/utils/cn";
+import { cn } from "../../utils/cn";
 import type { TAppIconOptions } from "./icon.types";
 
 export function createIcon(svg: string, options: TAppIconOptions = {}) {
