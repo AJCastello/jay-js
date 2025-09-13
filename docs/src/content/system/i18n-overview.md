@@ -1,28 +1,28 @@
 ---
-category: Internationalization
+category: Internacionalização
 categoryId: 6
 articleId: 1
 slug: i18n-overview
-title: Internationalization Overview
-description: A lightweight, type-safe internationalization system for JavaScript and TypeScript applications
+title: Visão Geral da Internacionalização
+description: Um sistema de internacionalização leve e type-safe para aplicações JavaScript e TypeScript
 ---
 
-# Internationalization (i18n)
+# Internacionalização (i18n)
 
-## API Reference
+## Referência da API
 
-### Core API
+### API Principal
 
-| Function | Description |
+| Função | Descrição |
 |----------|-------------|
-| `i18nDefineOptions()` | Configures the i18n system with languages and options |
-| `i18nProvider()` | Initializes the i18n system with a callback |
-| `initLanguage()` | Manually initializes the language system |
-| `setLanguage()` | Changes the active language |
-| `getCurrentLocale()` | Gets the current active language code |
-| `useI18n()` | React hook for accessing translations |
+| `i18nDefineOptions()` | Configura o sistema i18n com idiomas e opções |
+| `i18nProvider()` | Inicializa o sistema i18n com um callback |
+| `initLanguage()` | Inicializa manualmente o sistema de idiomas |
+| `setLanguage()` | Altera o idioma ativo |
+| `getCurrentLocale()` | Obtém o código do idioma ativo atual |
+| `useI18n()` | Hook React para acessar traduções |
 
-### Configuration Types
+### Tipos de Configuração
 
 ```typescript
 interface Ii18nOptions {
@@ -40,34 +40,34 @@ interface LanguageConfig {
 }
 ```
 
-The Jay-JS internationalization system provides a lightweight, type-safe solution for managing translations in JavaScript and TypeScript applications. It offers a simple yet powerful API that makes it easy to internationalize your applications while maintaining full type safety.
+O sistema de internacionalização do Jay-JS fornece uma solução leve e type-safe para gerenciar traduções em aplicações JavaScript e TypeScript. Oferece uma API simples, mas poderosa, que facilita a internacionalização de suas aplicações mantendo total segurança de tipos.
 
-## Features
+## Recursos
 
-- **Type-safe translations**: Full TypeScript support with type inference
-- **Flat or nested keys**: Support for both direct string keys and nested structures
-- **Variable substitution**: Dynamic content using template variables
-- **Automatic language detection**: Based on browser settings
-- **Persistent preferences**: Save language preferences to localStorage
-- **Lazy loading**: Support for dynamic loading of translation files
-- **Simple integration**: Easy to set up and use with any framework
+- **Traduções type-safe**: Suporte completo ao TypeScript com inferência de tipos
+- **Chaves planas ou aninhadas**: Suporte para chaves de string diretas e estruturas aninhadas
+- **Substituição de variáveis**: Conteúdo dinâmico usando variáveis de template
+- **Detecção automática de idioma**: Baseada nas configurações do navegador
+- **Preferências persistentes**: Salva preferências de idioma no localStorage
+- **Carregamento lazy**: Suporte para carregamento dinâmico de arquivos de tradução
+- **Integração simples**: Fácil de configurar e usar com qualquer framework
 
-## Basic Concepts
+## Conceitos Básicos
 
-1. **Translation Keys**: Can be either flat strings or nested dot-notation paths
-2. **Language Files**: JSON files containing translations for each supported language
-3. **Variables**: Template variables in translations using `{{variable}}` syntax
-4. **Type Safety**: Full TypeScript support for catching errors at compile time
-5. **State Management**: Built-in state management for language switching
-6. **Persistence**: Automatic saving and loading of language preferences
+1. **Chaves de Tradução**: Podem ser strings planas ou caminhos de notação de pontos aninhados
+2. **Arquivos de Idioma**: Arquivos JSON contendo traduções para cada idioma suportado
+3. **Variáveis**: Variáveis de template nas traduções usando a sintaxe `{{variável}}`
+4. **Segurança de Tipos**: Suporte completo ao TypeScript para detectar erros em tempo de compilação
+5. **Gerenciamento de Estado**: Gerenciamento de estado integrado para troca de idiomas
+6. **Persistência**: Salvamento e carregamento automático de preferências de idioma
 
-## Getting Started
+## Começando
 
-To get started with the internationalization system, you'll need to:
+Para começar com o sistema de internacionalização, você precisará:
 
-1. Define your translation types and files
-2. Configure the i18n system with your languages
-3. Initialize the system
-4. Use the translation hook in your components
+1. Definir seus tipos e arquivos de tradução
+2. Configurar o sistema i18n com seus idiomas
+3. Inicializar o sistema
+4. Usar o hook de tradução em seus componentes
 
-Check the subsequent documentation sections for detailed information on each aspect of the system.
+Consulte as seções de documentação subsequentes para informações detalhadas sobre cada aspecto do sistema.
