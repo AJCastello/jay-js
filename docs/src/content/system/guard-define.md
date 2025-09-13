@@ -1,15 +1,15 @@
 ---
-category: Access Control
+category: Controle de Acesso
 categoryId: 5
 articleId: 2
 slug: guard-define
-title: Defining Permissions
-description: Learn how to define permissions using the definePermissions function for role-based access control.
+title: Definindo Permissões
+description: Aprenda a definir permissões usando a função definePermissions para controle de acesso baseado em papéis (RBAC).
 ---
 
-# Defining Permissions
+# Definindo Permissões
 
-## API Reference
+## Referência da API
 
 ### definePermissions
 
@@ -19,12 +19,12 @@ function definePermissions(role: string | string[], subject: string): TDefinePer
 
 // Return type interface
 interface TDefinePermission {
-  allow(action: string | string[], attributes?: string[]): TDefinePermission;
-  forbid(action: string | string[], attributes?: string[]): TDefinePermission;
-  save(): TPermission[];
+  allow(action: string | string[], attributes?: string[]): TDefinePermission; // Permite ações
+  forbid(action: string | string[], attributes?: string[]): TDefinePermission; // Proíbe ações
+  save(): TPermission[]; // Finaliza e retorna a lista de permissões
 }
 
-// Usage examples
+// Exemplos de uso
 const userPermissions = definePermissions('user', 'articles')
   .allow(['read', 'comment'])
   .forbid(['edit', 'delete'])
@@ -35,52 +35,52 @@ const adminPermissions = definePermissions(['admin', 'superAdmin'], 'articles')
   .save();
 ```
 
-### Parameters
+### Parâmetros
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `role` | `string \| string[]` | The role or roles that the permissions apply to |
-| `subject` | `string` | The subject the permissions apply to |
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `role` | `string \| string[]` | O papel (ou lista de papéis) ao qual as permissões se aplicam |
+| `subject` | `string` | O assunto/recurso ao qual as permissões se aplicam |
 
-### Methods
+### Métodos
 
-| Method | Parameters | Description |
-|--------|------------|-------------|
-| `allow` | `action: string \| string[], attributes?: string[]` | Adds a permission rule to allow the specified actions |
-| `forbid` | `action: string \| string[], attributes?: string[]` | Adds a permission rule to forbid the specified actions |
-| `save` | None | Returns the array of defined permission objects |
+| Método | Parâmetros | Descrição |
+|--------|------------|-----------|
+| `allow` | `action: string \| string[], attributes?: string[]` | Adiciona uma regra permitindo as ações especificadas |
+| `forbid` | `action: string \| string[], attributes?: string[]` | Adiciona uma regra proibindo as ações especificadas |
+| `save` | Nenhum | Retorna o array de objetos de permissão definidos |
 
-## Overview
+## Visão Geral
 
-The `definePermissions` function provides a builder pattern for creating permission rules. This approach makes it easy to define and understand your application's access control logic in a declarative way.
+A função `definePermissions` fornece um padrão de construção (builder) para criar regras de permissão. Essa abordagem facilita definir e compreender a lógica de controle de acesso da sua aplicação de forma declarativa e legível.
 
-## Basic Usage
+## Uso Básico
 
-The most common pattern is to define what actions a specific role can perform on a subject:
+O padrão mais comum é definir quais ações um determinado papel pode realizar sobre um recurso (subject):
 
 ```typescript
 import { definePermissions } from '@jay-js/system/guard';
 
-// Define basic user permissions
+// Define permissões básicas para o usuário
 const userPermissions = definePermissions('user', 'articles')
-  .allow('read')                // Users can read articles
-  .forbid(['edit', 'delete'])   // Users cannot edit or delete articles
+  .allow('read')                // Usuários podem ler artigos
+  .forbid(['edit', 'delete'])   // Usuários não podem editar ou deletar artigos
   .save();
 ```
 
-## Multiple Roles and Actions
+## Múltiplos Papéis e Ações
 
-You can apply the same permissions to multiple roles by passing an array of roles:
+Você pode aplicar as mesmas permissões a vários papéis passando um array de papéis:
 
 ```typescript
-// Apply same permissions to multiple roles
+// Aplica as mesmas permissões a vários papéis
 const staffPermissions = definePermissions(['editor', 'contributor'], 'articles')
   .allow(['read', 'create', 'edit'])
   .forbid('delete')
   .save();
 ```
 
-Similarly, you can allow or forbid multiple actions at once:
+Da mesma forma, você pode permitir ou proibir várias ações de uma vez:
 
 ```typescript
 const adminPermissions = definePermissions('admin', 'users')
@@ -88,46 +88,46 @@ const adminPermissions = definePermissions('admin', 'users')
   .save();
 ```
 
-## Permission Attributes
+## Atributos de Permissão
 
-Attributes provide a way to apply conditional permissions, such as limiting users to only operate on their own resources:
+Atributos oferecem uma forma de aplicar permissões condicionais, como limitar o usuário a operar apenas sobre seus próprios recursos:
 
 ```typescript
-// Users can only edit and delete their own articles
+// Usuários só podem editar e deletar seus próprios artigos
 const authorPermissions = definePermissions('author', 'articles')
-  .allow('read')                               // Can read any article
-  .allow(['edit', 'delete'], ['own'])          // Can only edit/delete own articles
-  .forbid(['publish', 'feature'])              // Cannot publish or feature articles
+  .allow('read')                               // Pode ler qualquer artigo
+  .allow(['edit', 'delete'], ['own'])          // Só pode editar/deletar artigos próprios
+  .forbid(['publish', 'feature'])              // Não pode publicar ou destacar artigos
   .save();
 ```
 
-When checking permissions with attributes, you'll need to specify the relevant attribute:
+Ao verificar permissões com atributos, você precisa informar o atributo relevante:
 
 ```typescript
-// Check if an author can edit their own article
+// Verifica se um autor pode editar seu próprio artigo
 const canEditOwn = hasPermission(authorPermissions, 'author', 'articles', 'edit', 'own');
 if (canEditOwn.granted) {
-  // Allow editing of own article
+  // Permite a edição do próprio artigo
 }
 ```
 
-## Permission Precedence
+## Precedência de Permissões
 
-When defining permissions, be aware that forbid rules take precedence over allow rules. This means that if you both allow and forbid the same action for a role, the forbid rule will win:
+Ao definir permissões, lembre-se de que regras de proibição (`forbid`) têm precedência sobre regras de permissão (`allow`). Isso significa que se você permitir e também proibir a mesma ação para um papel, a proibição vence:
 
 ```typescript
 const moderatorPermissions = definePermissions('moderator', 'comments')
   .allow(['read', 'approve', 'edit', 'delete'])
-  .forbid('delete')  // This overrides the allow rule for 'delete'
+  .forbid('delete')  // Isto sobrescreve a permissão de 'delete'
   .save();
 
-// This will return { granted: false }
+// Retornará { granted: false }
 const canDelete = hasPermission(moderatorPermissions, 'moderator', 'comments', 'delete');
 ```
 
-## Chaining Permission Definitions
+## Encadeando Definições de Permissão
 
-You can chain multiple `allow` and `forbid` calls to build up a complex permission set:
+Você pode encadear múltiplas chamadas de `allow` e `forbid` para construir um conjunto complexo de permissões:
 
 ```typescript
 const editorPermissions = definePermissions('editor', 'articles')
@@ -139,12 +139,12 @@ const editorPermissions = definePermissions('editor', 'articles')
   .save();
 ```
 
-## Saving and Using Permissions
+## Salvando e Usando Permissões
 
-The `save()` method returns an array of permission objects that you can pass to other functions like `hasPermission` or combine with other permission sets:
+O método `save()` retorna um array de objetos de permissão que você pode passar para outras funções como `hasPermission` ou combinar com outros conjuntos de permissões:
 
 ```typescript
-// Define permissions for different features
+// Define permissões para diferentes funcionalidades
 const articlePermissions = definePermissions('user', 'articles')
   .allow('read')
   .save();
@@ -153,7 +153,7 @@ const commentPermissions = definePermissions('user', 'comments')
   .allow(['read', 'create'])
   .save();
 
-// Combine permissions and use them in your application
+// Combina permissões e usa na aplicação
 import { combinePermissions, hasPermission } from '@jay-js/system/guard';
 
 const allPermissions = combinePermissions(articlePermissions, commentPermissions);
@@ -168,4 +168,4 @@ function showArticle(articleId) {
 }
 ```
 
-In the next article, we'll explore how to check permissions using the `hasPermission` function. 
+No próximo artigo, veremos como verificar permissões usando a função `hasPermission`.

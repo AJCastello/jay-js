@@ -1,125 +1,125 @@
 ---
-category: Access Control
+category: Controle de Acesso
 categoryId: 5
 articleId: 1
 slug: guard-overview
-title: Guard System Overview
-description: An introduction to the Guard access control system for role-based permissions management.
+title: Visão Geral do Sistema Guard
+description: Introdução ao sistema de controle de acesso Guard para gerenciamento de permissões baseadas em papéis.
 ---
 
-# Guard System Overview
+# Visão Geral do Sistema Guard
 
-## API Reference
+## Referência da API
 
-### Core Functions
+### Funções Principais
 
 ```typescript
-// Define permissions for a role and subject
+// Define permissões para um papel (role) e um recurso (subject)
 const permissions = definePermissions(role, subject)
   .allow(actions)
   .forbid(actions)
   .save();
 
-// Check if a role has permission
+// Verifica se um papel possui a permissão
 const result = hasPermission(permissions, role, subject, action);
 if (result.granted) {
-  // Permission granted
+  // Permissão concedida
 }
 ```
 
-### Utility Functions
+### Funções Utilitárias
 
 ```typescript
-// Combine multiple permission sets
+// Combina múltiplos conjuntos de permissões
 const allPermissions = combinePermissions(
   rolePermissions,
   featurePermissions
 );
 
-// Create an individual permission
+// Cria uma permissão individual
 const permission = createPermission(role, subject, action, granted);
 ```
 
-## Overview
+## Visão Geral
 
-The Guard module provides a flexible permission management system for implementing access control in your applications. It offers a simple yet powerful API for defining permissions, checking access, and managing role-based security.
+O módulo Guard fornece um sistema flexível de gerenciamento de permissões para implementar controle de acesso em suas aplicações. Ele oferece uma API simples porém poderosa para definir permissões, verificar acesso e gerenciar segurança baseada em papéis (RBAC).
 
-Key features include:
-- Role-based permission definitions
-- Subject and action-specific rules
-- Fine-grained attribute controls
-- Flexible permission checking
+Principais recursos incluem:
+- Definição de permissões baseada em papéis
+- Regras específicas por recurso (subject) e ação
+- Controle refinado por atributos
+- Verificação de permissões flexível
 
-## Basic Concepts
+## Conceitos Básicos
 
-The Guard system is built around these core concepts:
+O sistema Guard é construído sobre estes conceitos centrais:
 
-### Roles
+### Papéis (Roles)
 
-Roles represent different types of users or entities in your system. Examples include:
+Papéis representam diferentes tipos de usuários ou entidades no sistema. Exemplos:
 - `admin`
 - `editor`
 - `user`
 - `guest`
 
-### Subjects
+### Recursos (Subjects)
 
-Subjects are the resources or entities that permissions apply to. Examples include:
+Subjects (recursos) são as entidades às quais as permissões se aplicam. Exemplos:
 - `articles`
 - `users`
 - `settings`
 - `payments`
 
-### Actions
+### Ações
 
-Actions are operations that can be performed on subjects. Common examples include:
+Ações são operações que podem ser realizadas sobre recursos. Exemplos comuns:
 - `read`
 - `create`
 - `update`
 - `delete`
 
-### Attributes
+### Atributos
 
-Optional qualifiers that further restrict permissions, such as:
+Qualificadores opcionais que restringem ainda mais as permissões, como:
 - `own` (only the user's own resources)
 - `published` (only published resources)
 - `premium` (only premium features)
 
-## Permission Structure
+## Estrutura de Permissão
 
-Permissions are defined as rules that specify whether a role is allowed or forbidden to perform an action on a subject. Each permission includes:
+Permissões são definidas como regras que especificam se um papel tem ou não autorização para executar uma ação sobre um recurso. Cada permissão inclui:
 
-- `role`: The role(s) the permission applies to
-- `subject`: The subject(s) the permission applies to
-- `action`: The action(s) being permitted or denied
-- `granted`: Whether the action is allowed (true) or denied (false)
-- `attributes`: Optional qualifiers that further restrict the permission
+- `role`: Papel(is) aos quais a permissão se aplica
+- `subject`: Recurso(s) aos quais a permissão se aplica
+- `action`: Ação(ões) permitidas ou negadas
+- `granted`: Indica se a ação é permitida (true) ou negada (false)
+- `attributes`: Qualificadores opcionais que restringem a permissão
 
-## Getting Started
+## Iniciando
 
-To start using the Guard system, you first define permissions for different roles and then check those permissions when accessing protected features or resources:
+Para começar a usar o sistema Guard, primeiro defina permissões para diferentes papéis e depois verifique essas permissões ao acessar funcionalidades ou recursos protegidos:
 
 ```typescript
 import { definePermissions, hasPermission } from '@jay-js/system/guard';
 
-// Define permissions
+// Define permissões
 const editorPermissions = definePermissions('editor', 'articles')
   .allow(['read', 'create', 'update'])
   .forbid('delete')
   .save();
 
-// Check permissions in your application
+// Verifica permissões na aplicação
 function editArticle(articleId) {
   const canEdit = hasPermission(editorPermissions, 'editor', 'articles', 'update');
-  
+
   if (canEdit.granted) {
-    // Allow editing
+  // Permite edição
     showEditor(articleId);
   } else {
-    // Show access denied message
-    showErrorMessage('You do not have permission to edit articles');
+  // Mostra mensagem de acesso negado
+  showErrorMessage('Você não tem permissão para editar artigos');
   }
 }
 ```
 
-In the following articles, we'll explore each aspect of the Guard system in detail and demonstrate advanced usage patterns. 
+Nos próximos artigos, exploraremos cada aspecto do sistema Guard em detalhe e demonstraremos padrões de uso avançados.

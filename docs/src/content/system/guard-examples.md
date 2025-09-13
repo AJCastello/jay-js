@@ -1,73 +1,73 @@
 ---
-category: Access Control
+category: Controle de Acesso
 categoryId: 5
 articleId: 5
 slug: guard-examples
-title: Guard System Examples
-description: Practical examples of implementing access control with the Guard system for common use cases.
+title: Exemplos do Sistema Guard
+description: Exemplos práticos de implementação de controle de acesso com o sistema Guard para casos de uso comuns.
 ---
 
-# Guard System Examples
+# Exemplos do Sistema Guard
 
-## API Reference
+## Referência da API
 
-The examples in this article use the following Guard system functions:
+Os exemplos deste artigo utilizam as seguintes funções do sistema Guard:
 
 ```typescript
-// Define permissions
+// Define permissões
 const permissions = definePermissions(role, subject)
   .allow(actions)
   .forbid(actions)
   .save();
 
-// Check permissions
+// Verifica permissões
 const result = hasPermission(permissions, role, subject, action);
 
-// Combine permissions
+// Combina permissões
 const allPermissions = combinePermissions(...permissionSets);
 
-// Create individual permissions
+// Cria permissões individuais
 const permission = createPermission(role, subject, action, granted, attributes);
 ```
 
-## Overview
+## Visão Geral
 
-This article provides practical examples of implementing access control for common use cases using the Guard system. These examples demonstrate how to use the Guard functionality in real-world scenarios and can serve as templates for your own applications.
+Este artigo fornece exemplos práticos de implementação de controle de acesso para casos de uso comuns usando o sistema Guard. Esses exemplos demonstram como utilizar a funcionalidade do Guard em cenários reais e podem servir como modelos para suas próprias aplicações.
 
-## Blog Platform Example
+## Exemplo: Plataforma de Blog
 
-Let's implement a permission system for a blog platform with different user roles:
+Vamos implementar um sistema de permissões para uma plataforma de blog com diferentes papéis de usuário:
 
-### Define Role Permissions
+### Definindo Permissões por Papel
 
 ```typescript
 import { definePermissions, combinePermissions, hasPermission } from '@jay-js/system/guard';
 
-// Guest permissions
+// Permissões de visitante (guest)
 const guestPermissions = definePermissions('guest', 'articles')
   .allow('read')
   .forbid(['create', 'edit', 'delete', 'publish'])
   .save();
 
-// Author permissions
+// Permissões de autor
 const authorPermissions = definePermissions('author', 'articles')
   .allow('read')
-  .allow(['create', 'edit', 'delete'], ['own'])  // Authors can only manage their own articles
-  .forbid('publish')                             // Authors cannot publish directly
+  .allow(['create', 'edit', 'delete'], ['own'])  // Autores só podem gerenciar seus próprios artigos
+  .forbid('publish')                             // Autores não podem publicar diretamente
   .save();
 
-// Editor permissions
+// Permissões de editor
 const editorPermissions = definePermissions('editor', 'articles')
-  .allow(['read', 'edit', 'publish'])            // Editors can read, edit, and publish any article
-  .forbid(['create', 'delete'])                  // Editors cannot create or delete articles
+  .allow(['read', 'edit', 'publish'])            // Editores podem ler, editar e publicar qualquer artigo
+  .forbid(['create', 'delete'])                  // Editores não podem criar nem deletar artigos
   .save();
 
-// Admin permissions
+// Permissões de administrador
 const adminPermissions = definePermissions('admin', 'articles')
-  .allow(['read', 'create', 'edit', 'delete', 'publish'])  // Admins have full access
+  .allow(['read', 'create', 'edit', 'delete', 'publish'])  // Admins têm acesso completo
   .save();
 
-// Combine all permissions
+// Combina todas as permissões
 const blogPermissions = combinePermissions(
   guestPermissions,
   authorPermissions,
@@ -76,35 +76,35 @@ const blogPermissions = combinePermissions(
 );
 ```
 
-### Using Permissions in UI Components
+### Usando Permissões em Componentes de UI
 
 ```typescript
-// Article actions component
+// Componente de ações de artigo
 function ArticleActions({ article, userRole }) {
   const actions = document.createElement('div');
   actions.className = 'article-actions';
-  
-  // View button - always shown for published articles
-  if (article.status === 'published' || 
+
+  // Botão de visualizar - sempre mostrado para artigos publicados
+  if (article.status === 'published' ||
       hasPermission(blogPermissions, userRole, 'articles', 'read').granted) {
     const viewButton = document.createElement('button');
     viewButton.textContent = 'View';
     viewButton.onclick = () => viewArticle(article.id);
     actions.appendChild(viewButton);
   }
-  
-  // Edit button - based on role and ownership
+
+  // Botão de edição - baseado no papel e na propriedade
   const canEdit = hasPermission(blogPermissions, userRole, 'articles', 'edit');
   const isOwner = article.authorId === currentUser.id;
-  
+
   if (canEdit.granted && (isOwner || !canEdit.attributes || !canEdit.attributes.includes('own'))) {
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
     editButton.onclick = () => editArticle(article.id);
     actions.appendChild(editButton);
   }
-  
-  // Delete button
+
+  // Botão de deletar
   const canDelete = hasPermission(blogPermissions, userRole, 'articles', 'delete');
   if (canDelete.granted && (isOwner || !canDelete.attributes || !canDelete.attributes.includes('own'))) {
     const deleteButton = document.createElement('button');
@@ -112,8 +112,8 @@ function ArticleActions({ article, userRole }) {
     deleteButton.onclick = () => deleteArticle(article.id);
     actions.appendChild(deleteButton);
   }
-  
-  // Publish button
+
+  // Botão de publicar
   const canPublish = hasPermission(blogPermissions, userRole, 'articles', 'publish');
   if (canPublish.granted && article.status !== 'published') {
     const publishButton = document.createElement('button');
@@ -121,15 +121,15 @@ function ArticleActions({ article, userRole }) {
     publishButton.onclick = () => publishArticle(article.id);
     actions.appendChild(publishButton);
   }
-  
+
   return actions;
 }
 ```
 
-### Permission-Based Routing
+### Roteamento Baseado em Permissões
 
 ```typescript
-// Define routes with required permissions
+// Define rotas com permissões requeridas
 const routes = [
   {
     path: '/articles',
@@ -153,37 +153,37 @@ const routes = [
   }
 ];
 
-// Router function that checks permissions
+// Função de roteador que verifica permissões
 function router(path, userRole) {
   const route = routes.find(r => r.path === path || matchPattern(r.path, path));
-  
+
   if (!route) {
     return { component: NotFound };
   }
-  
+
   if (route.permission) {
     const { subject, action } = route.permission;
     const canAccess = hasPermission(blogPermissions, userRole, subject, action);
-    
+
     if (!canAccess.granted) {
       return { component: AccessDenied };
     }
   }
-  
+
   return { component: route.component, params: extractParams(route.path, path) };
 }
 ```
 
-## E-commerce Platform Example
+## Exemplo: Plataforma de E-commerce
 
-Let's implement permissions for an e-commerce platform:
+Vamos implementar permissões para uma plataforma de e-commerce:
 
-### Define Role Permissions
+### Definindo Permissões por Papel
 
 ```typescript
 import { definePermissions, combinePermissions } from '@jay-js/system/guard';
 
-// Customer permissions
+// Permissões de cliente
 const customerPermissions = combinePermissions(
   definePermissions('customer', 'products').allow('view').save(),
   definePermissions('customer', 'cart').allow(['view', 'update']).save(),
@@ -191,7 +191,7 @@ const customerPermissions = combinePermissions(
   definePermissions('customer', 'profile').allow(['view', 'update']).save()
 );
 
-// Store manager permissions
+// Permissões de gerente de loja
 const managerPermissions = combinePermissions(
   definePermissions('manager', 'products').allow(['view', 'create', 'update']).save(),
   definePermissions('manager', 'inventory').allow(['view', 'update']).save(),
@@ -199,7 +199,7 @@ const managerPermissions = combinePermissions(
   definePermissions('manager', 'customers').allow('view').save()
 );
 
-// Admin permissions
+// Permissões de administrador
 const adminPermissions = combinePermissions(
   definePermissions('admin', 'products').allow(['view', 'create', 'update', 'delete']).save(),
   definePermissions('admin', 'inventory').allow(['view', 'update']).save(),
@@ -209,7 +209,7 @@ const adminPermissions = combinePermissions(
   definePermissions('admin', 'settings').allow(['view', 'update']).save()
 );
 
-// Combine all permissions
+// Combina todas as permissões
 const shopPermissions = combinePermissions(
   customerPermissions,
   managerPermissions,
@@ -217,48 +217,48 @@ const shopPermissions = combinePermissions(
 );
 ```
 
-### Navigation Menu Based on Permissions
+### Menu de Navegação Baseado em Permissões
 
 ```typescript
 function renderNavigation(userRole) {
   const navItems = [
-    // Items available to all users
+    // Itens disponíveis para todos os usuários
     { label: 'Home', url: '/', permission: null },
     { label: 'Products', url: '/products', permission: { subject: 'products', action: 'view' } },
-    
-    // Customer-specific items
+
+    // Itens específicos de clientes
     { label: 'My Cart', url: '/cart', permission: { subject: 'cart', action: 'view' } },
     { label: 'My Orders', url: '/orders', permission: { subject: 'orders', action: 'view' } },
     { label: 'My Profile', url: '/profile', permission: { subject: 'profile', action: 'view' } },
-    
-    // Staff items
+
+    // Itens da equipe
     { label: 'Inventory', url: '/inventory', permission: { subject: 'inventory', action: 'view' } },
     { label: 'Order Management', url: '/manage/orders', permission: { subject: 'orders', action: 'process' } },
     { label: 'Customer List', url: '/customers', permission: { subject: 'customers', action: 'view' } },
-    
-    // Admin items
+
+    // Itens de admin
     { label: 'Staff Management', url: '/staff', permission: { subject: 'staff', action: 'view' } },
     { label: 'Store Settings', url: '/settings', permission: { subject: 'settings', action: 'view' } }
   ];
-  
+
   const navElement = document.getElementById('main-nav');
   navElement.innerHTML = '';
-  
+
   navItems.forEach(item => {
-    // Skip items that require permissions the user doesn't have
+    // Pula itens cuja permissão o usuário não possui
     if (item.permission) {
       const { subject, action } = item.permission;
       const canAccess = hasPermission(shopPermissions, userRole, subject, action);
-      
+
       if (!canAccess.granted) {
         return;
       }
     }
-    
+
     const linkElement = document.createElement('a');
     linkElement.textContent = item.label;
     linkElement.href = item.url;
-    
+
     const listItem = document.createElement('li');
     listItem.appendChild(linkElement);
     navElement.appendChild(listItem);
@@ -266,28 +266,28 @@ function renderNavigation(userRole) {
 }
 ```
 
-## SaaS Application Example
+## Exemplo: Aplicação SaaS
 
-Let's implement permissions for a SaaS application with different subscription tiers:
+Vamos implementar permissões para uma aplicação SaaS com diferentes níveis de assinatura:
 
-### Define Plan-Based Permissions
+### Definindo Permissões Baseadas em Plano
 
 ```typescript
 import { definePermissions, combinePermissions, createPermission } from '@jay-js/system/guard';
 
-// Base permissions for all users
+// Permissões base para todos os usuários
 const basePermissions = definePermissions('user', 'account')
   .allow(['view', 'edit'])
   .save();
 
-// Free tier permissions
+// Permissões do plano Free
 const freePermissions = combinePermissions(
   definePermissions('free', 'projects').allow('create', ['max:2']).save(),
   definePermissions('free', 'storage').allow('use', ['max:100MB']).save(),
   definePermissions('free', 'export').allow(['pdf']).forbid(['excel', 'csv']).save()
 );
 
-// Pro tier permissions
+// Permissões do plano Pro
 const proPermissions = combinePermissions(
   definePermissions('pro', 'projects').allow('create', ['max:10']).save(),
   definePermissions('pro', 'storage').allow('use', ['max:5GB']).save(),
@@ -296,7 +296,7 @@ const proPermissions = combinePermissions(
   definePermissions('pro', 'support').allow('priority').save()
 );
 
-// Enterprise tier permissions
+// Permissões do plano Enterprise
 const enterprisePermissions = combinePermissions(
   definePermissions('enterprise', 'projects').allow('create', ['unlimited']).save(),
   definePermissions('enterprise', 'storage').allow('use', ['max:50GB']).save(),
@@ -307,15 +307,15 @@ const enterprisePermissions = combinePermissions(
   definePermissions('enterprise', 'users').allow('manage').save()
 );
 
-// Admin permissions (independent of subscription)
+// Permissões de admin (independentes da assinatura)
 const adminPermissions = definePermissions('admin', '*')
   .allow('*')
   .save();
 
-// Function to get permissions based on user subscription
+// Função para obter permissões com base na assinatura do usuário
 function getUserPermissions(user) {
   let permissions = [...basePermissions];
-  
+
   switch (user.subscription) {
     case 'free':
       permissions = permissions.concat(freePermissions);
@@ -327,28 +327,28 @@ function getUserPermissions(user) {
       permissions = permissions.concat(enterprisePermissions);
       break;
   }
-  
-  // Add admin permissions if user is an admin
+
+  // Adiciona permissões de admin se o usuário for admin
   if (user.isAdmin) {
     permissions = permissions.concat(adminPermissions);
   }
-  
+
   return permissions;
 }
 ```
 
-### Feature Toggles Based on Permissions
+### Funcionalidades Condicionais Baseadas em Permissões
 
 ```typescript
 function renderDashboard(user) {
   const permissions = getUserPermissions(user);
   const dashboard = document.getElementById('dashboard');
-  
-  // Check project creation limits
+
+  // Verifica limites de criação de projetos
   const projectPermission = hasPermission(permissions, user.subscription, 'projects', 'create');
   const projectLimits = projectPermission.attributes || [];
   let maxProjects = 0;
-  
+
   for (const attr of projectLimits) {
     if (attr.startsWith('max:')) {
       maxProjects = parseInt(attr.replace('max:', ''), 10);
@@ -356,8 +356,8 @@ function renderDashboard(user) {
       maxProjects = Infinity;
     }
   }
-  
-  // Update project creation UI
+
+  // Atualiza UI de criação de projetos
   const projectsSection = document.createElement('section');
   projectsSection.innerHTML = `
     <h2>Projects (${user.projects.length} / ${maxProjects === Infinity ? 'Unlimited' : maxProjects})</h2>
@@ -365,8 +365,8 @@ function renderDashboard(user) {
       ${user.projects.map(p => `<div class="project-card">${p.name}</div>`).join('')}
     </div>
   `;
-  
-  // Only show create button if below limit
+
+  // Mostra botão de criação somente se abaixo do limite
   if (user.projects.length < maxProjects) {
     const createButton = document.createElement('button');
     createButton.textContent = 'Create New Project';
@@ -378,36 +378,36 @@ function renderDashboard(user) {
     upgradeMsg.textContent = 'Upgrade your plan to create more projects';
     projectsSection.appendChild(upgradeMsg);
   }
-  
+
   dashboard.appendChild(projectsSection);
-  
-  // Export options based on permissions
+
+  // Opções de export conforme permissões
   const exportSection = document.createElement('section');
   exportSection.innerHTML = '<h2>Export Options</h2>';
-  
+
   const exportFormats = ['pdf', 'excel', 'csv', 'custom'];
   const exportContainer = document.createElement('div');
   exportContainer.className = 'export-options';
-  
+
   exportFormats.forEach(format => {
     const canExport = hasPermission(permissions, user.subscription, 'export', format);
     const option = document.createElement('button');
     option.textContent = format.toUpperCase();
     option.disabled = !canExport.granted;
     option.onclick = canExport.granted ? () => exportData(format) : null;
-    
+
     if (!canExport.granted) {
       option.title = 'Upgrade your plan to use this export format';
       option.className = 'disabled';
     }
-    
+
     exportContainer.appendChild(option);
   });
-  
+
   exportSection.appendChild(exportContainer);
   dashboard.appendChild(exportSection);
-  
-  // API access based on permissions
+
+  // Acesso à API conforme permissões
   const apiAccess = hasPermission(permissions, user.subscription, 'api', 'access');
   if (apiAccess.granted) {
     const apiSection = document.createElement('section');
@@ -423,8 +423,8 @@ function renderDashboard(user) {
     `;
     dashboard.appendChild(apiSection);
   }
-  
-  // SSO configuration (enterprise only)
+
+  // Configuração de SSO (apenas enterprise)
   const ssoConfig = hasPermission(permissions, user.subscription, 'sso', 'configure');
   if (ssoConfig.granted) {
     const ssoSection = document.createElement('section');
@@ -438,18 +438,18 @@ function renderDashboard(user) {
 }
 ```
 
-## Team Collaboration Example
+## Exemplo: Colaboração em Equipe
 
-Let's implement permissions for a team collaboration tool:
+Vamos implementar permissões para uma ferramenta de colaboração em equipe:
 
-### Define Team-Based Permissions
+### Definindo Permissões Baseadas em Equipe
 
 ```typescript
 import { definePermissions, combinePermissions, createPermission } from '@jay-js/system/guard';
 
-// Define permissions for different team roles
+// Define permissões para diferentes papéis na equipe
 function createTeamPermissions(teamId) {
-  // Team member permissions
+  // Permissões de membro
   const memberPermissions = combinePermissions(
     definePermissions('member', `team:${teamId}`).allow('access').save(),
     definePermissions('member', `team:${teamId}:tasks`).allow(['view', 'create']).save(),
@@ -457,8 +457,8 @@ function createTeamPermissions(teamId) {
     definePermissions('member', `team:${teamId}:files`).allow(['view', 'upload', 'download']).save(),
     definePermissions('member', `team:${teamId}:discussions`).allow(['view', 'create', 'comment']).save()
   );
-  
-  // Team manager permissions
+
+  // Permissões de gerente
   const managerPermissions = combinePermissions(
     definePermissions('manager', `team:${teamId}`).allow(['access', 'manage']).save(),
     definePermissions('manager', `team:${teamId}:tasks`).allow(['view', 'create', 'assign', 'update', 'delete']).save(),
@@ -466,8 +466,8 @@ function createTeamPermissions(teamId) {
     definePermissions('manager', `team:${teamId}:discussions`).allow(['view', 'create', 'comment', 'moderate']).save(),
     definePermissions('manager', `team:${teamId}:members`).allow(['view', 'invite']).save()
   );
-  
-  // Team admin permissions
+
+  // Permissões de admin da equipe
   const adminPermissions = combinePermissions(
     definePermissions('admin', `team:${teamId}`).allow(['access', 'manage', 'delete']).save(),
     definePermissions('admin', `team:${teamId}:tasks`).allow(['view', 'create', 'assign', 'update', 'delete']).save(),
@@ -476,46 +476,46 @@ function createTeamPermissions(teamId) {
     definePermissions('admin', `team:${teamId}:members`).allow(['view', 'invite', 'remove', 'change_role']).save(),
     definePermissions('admin', `team:${teamId}:settings`).allow('manage').save()
   );
-  
+
   return combinePermissions(memberPermissions, managerPermissions, adminPermissions);
 }
 
-// Function to get user's role in a specific team
+// Função para obter o papel do usuário em uma equipe específica
 function getUserRoleInTeam(user, teamId) {
   const teamMembership = user.teams.find(t => t.teamId === teamId);
   return teamMembership ? teamMembership.role : null;
 }
 
-// Check permissions for a specific team
+// Verifica permissões para uma equipe específica
 function checkTeamPermission(user, teamId, subject, action, attribute) {
   const role = getUserRoleInTeam(user, teamId);
   if (!role) return { granted: false };
-  
+
   const teamPermissions = createTeamPermissions(teamId);
   return hasPermission(teamPermissions, role, subject, action, attribute);
 }
 ```
 
-### Using Team Permissions in an Application
+### Usando Permissões de Equipe na Aplicação
 
 ```typescript
-// Render team dashboard
+// Renderiza dashboard da equipe
 function renderTeamDashboard(user, teamId) {
   const dashboardEl = document.getElementById('team-dashboard');
   dashboardEl.innerHTML = '';
-  
-  // Check if user has access to this team
+
+  // Verifica se o usuário tem acesso a esta equipe
   const canAccess = checkTeamPermission(user, teamId, `team:${teamId}`, 'access');
   if (!canAccess.granted) {
     dashboardEl.innerHTML = '<p>You do not have access to this team</p>';
     return;
   }
-  
-  // Render team header
+
+  // Renderiza cabeçalho da equipe
   const teamHeader = document.createElement('header');
   teamHeader.className = 'team-header';
-  
-  // Team settings button (admin only)
+
+  // Botão de configurações da equipe (somente admin)
   const canManageSettings = checkTeamPermission(user, teamId, `team:${teamId}:settings`, 'manage');
   if (canManageSettings.granted) {
     const settingsBtn = document.createElement('button');
@@ -524,15 +524,15 @@ function renderTeamDashboard(user, teamId) {
     settingsBtn.onclick = () => openTeamSettings(teamId);
     teamHeader.appendChild(settingsBtn);
   }
-  
+
   dashboardEl.appendChild(teamHeader);
-  
-  // Render task section
+
+  // Renderiza seção de tarefas
   const taskSection = document.createElement('section');
   taskSection.className = 'task-section';
   taskSection.innerHTML = '<h2>Tasks</h2>';
-  
-  // Task creation button
+
+  // Botão de criação de tarefa
   const canCreateTasks = checkTeamPermission(user, teamId, `team:${teamId}:tasks`, 'create');
   if (canCreateTasks.granted) {
     const createTaskBtn = document.createElement('button');
@@ -540,8 +540,8 @@ function renderTeamDashboard(user, teamId) {
     createTaskBtn.onclick = () => openCreateTaskModal(teamId);
     taskSection.appendChild(createTaskBtn);
   }
-  
-  // Task assignment button (managers and admins)
+
+  // Botão de atribuição de tarefa (gerentes e admins)
   const canAssignTasks = checkTeamPermission(user, teamId, `team:${teamId}:tasks`, 'assign');
   if (canAssignTasks.granted) {
     const assignTaskBtn = document.createElement('button');
@@ -549,15 +549,15 @@ function renderTeamDashboard(user, teamId) {
     assignTaskBtn.onclick = () => openAssignTaskModal(teamId);
     taskSection.appendChild(assignTaskBtn);
   }
-  
+
   dashboardEl.appendChild(taskSection);
-  
-  // Render file section
+
+  // Renderiza seção de arquivos
   const fileSection = document.createElement('section');
   fileSection.className = 'file-section';
   fileSection.innerHTML = '<h2>Files</h2>';
-  
-  // File upload button
+
+  // Botão de upload de arquivo
   const canUploadFiles = checkTeamPermission(user, teamId, `team:${teamId}:files`, 'upload');
   if (canUploadFiles.granted) {
     const uploadBtn = document.createElement('button');
@@ -565,17 +565,17 @@ function renderTeamDashboard(user, teamId) {
     uploadBtn.onclick = () => openFileUploadModal(teamId);
     fileSection.appendChild(uploadBtn);
   }
-  
+
   dashboardEl.appendChild(fileSection);
-  
-  // Render member section (visible to managers and admins)
+
+  // Renderiza seção de membros (visível para gerentes e admins)
   const canViewMembers = checkTeamPermission(user, teamId, `team:${teamId}:members`, 'view');
   if (canViewMembers.granted) {
     const memberSection = document.createElement('section');
     memberSection.className = 'member-section';
     memberSection.innerHTML = '<h2>Team Members</h2>';
-    
-    // Invite button
+
+    // Botão de convite
     const canInvite = checkTeamPermission(user, teamId, `team:${teamId}:members`, 'invite');
     if (canInvite.granted) {
       const inviteBtn = document.createElement('button');
@@ -583,10 +583,10 @@ function renderTeamDashboard(user, teamId) {
       inviteBtn.onclick = () => openInviteModal(teamId);
       memberSection.appendChild(inviteBtn);
     }
-    
+
     dashboardEl.appendChild(memberSection);
   }
 }
 ```
 
-These examples demonstrate how to implement permission-based access control for different types of applications. You can adapt these patterns to fit your specific needs and extend them with additional functionality. 
+Esses exemplos demonstram como implementar controle de acesso baseado em permissões para diferentes tipos de aplicações. Você pode adaptar esses padrões às suas necessidades específicas e estendê-los com funcionalidades adicionais.

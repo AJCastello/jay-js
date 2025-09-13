@@ -3,18 +3,18 @@ category: Access Control
 categoryId: 5
 articleId: 3
 slug: guard-check
-title: Checking Permissions
-description: Learn how to check if a role has permission to perform actions using the hasPermission function.
+title: Verificando Permissões
+description: Aprenda como verificar se um papel (role) tem permissão para executar ações usando a função hasPermission.
 ---
 
-# Checking Permissions
+# Verificando Permissões
 
-## API Reference
+## Referência da API
 
 ### hasPermission
 
 ```typescript
-// Function signature
+// Assinatura da função
 function hasPermission(
   permissions: TPermission[],
   role: string,
@@ -23,116 +23,116 @@ function hasPermission(
   attribute?: string
 ): THasPermission;
 
-// Return type
+// Tipo de retorno
 interface THasPermission {
   granted: boolean;
   attributes?: string[];
 }
 
-// Example usage
+// Exemplo de uso
 const result = hasPermission(permissions, 'editor', 'articles', 'edit');
 if (result.granted) {
   // User has permission to edit articles
 }
 ```
 
-### Parameters
+### Parâmetros
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `permissions` | `TPermission[]` | Array of permission objects to check against |
-| `role` | `string` | The role to check permissions for |
-| `subject` | `string` | The subject to check permissions on |
-| `action` | `string` | The action to check permission for |
-| `attribute` | `string` (optional) | Optional attribute to check permission for |
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `permissions` | `TPermission[]` | Array de objetos de permissão contra os quais será feita a verificação |
+| `role` | `string` | O papel (role) para o qual as permissões serão verificadas |
+| `subject` | `string` | O assunto (recurso) sobre o qual a permissão será verificada |
+| `action` | `string` | A ação para a qual se deseja verificar a permissão |
+| `attribute` | `string` (opcional) | Atributo opcional para verificação específica |
 
-### Return Value
+### Valor de Retorno
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `granted` | `boolean` | Whether the permission is granted (`true`) or denied (`false`) |
-| `attributes` | `string[]` (optional) | Available attributes for the permission, if any |
+| Propriedade | Tipo | Descrição |
+|-------------|------|-----------|
+| `granted` | `boolean` | Indica se a permissão foi concedida (`true`) ou negada (`false`) |
+| `attributes` | `string[]` (opcional) | Atributos disponíveis para a permissão, se houver |
 
-## Overview
+## Visão Geral
 
-The `hasPermission` function checks if a specific role has permission to perform an action on a subject. It evaluates all relevant permission rules and returns an object with the permission status and any applicable attributes.
+A função `hasPermission` verifica se um papel (role) específico tem permissão para executar uma ação sobre um determinado assunto (subject). Ela avalia todas as regras de permissão relevantes e retorna um objeto com o status da permissão e quaisquer atributos aplicáveis.
 
-## Basic Permission Checking
+## Verificação Básica de Permissão
 
-To check if a role has permission to perform an action:
+Para verificar se um papel tem permissão para realizar uma ação:
 
 ```typescript
 import { definePermissions, hasPermission } from '@jay-js/system/guard';
 
-// Define some permissions
+// Definindo algumas permissões
 const userPermissions = definePermissions('user', 'articles')
   .allow('read')
   .forbid(['edit', 'delete'])
   .save();
 
-// Check if a user can read articles
+// Verificar se um usuário pode ler artigos
 const canRead = hasPermission(userPermissions, 'user', 'articles', 'read');
 if (canRead.granted) {
-  // User can read articles
+  // Usuário pode ler artigos
   showArticleContent();
 } else {
-  // User cannot read articles
+  // Usuário não pode ler artigos
   showAccessDenied();
 }
 
-// Check if a user can edit articles
+// Verificar se um usuário pode editar artigos
 const canEdit = hasPermission(userPermissions, 'user', 'articles', 'edit');
 if (!canEdit.granted) {
-  // User cannot edit articles
+  // Usuário não pode editar artigos
   hideEditButton();
 }
 ```
 
-## Permission Evaluation Rules
+## Regras de Avaliação de Permissões
 
-The `hasPermission` function follows these rules when evaluating permissions:
+A função `hasPermission` segue estas regras ao avaliar permissões:
 
-1. It identifies all permission entries that match the specified role, subject, and action
-2. If any matching permission explicitly forbids the action (has `granted: false`), the function returns `{ granted: false }`
-3. If any matching permission allows the action (has `granted: true`) and no forbidding permissions are found, the function returns `{ granted: true }`
-4. If no matching permissions are found, the function returns `{ granted: false }`
+1. Identifica todas as entradas de permissão que correspondem ao papel (role), assunto (subject) e ação especificados
+2. Se qualquer permissão correspondente proibir explicitamente a ação (possuir `granted: false`), a função retorna `{ granted: false }`
+3. Se alguma permissão correspondente permitir a ação (possuir `granted: true`) e não houver permissões proibitivas, a função retorna `{ granted: true }`
+4. Se nenhuma permissão correspondente for encontrada, a função retorna `{ granted: false }`
 
-This means that explicit deny rules take precedence over allow rules, ensuring that when you specifically forbid an action, it will always be denied regardless of any other allow rules.
+Isso significa que regras de negação explícita têm precedência sobre regras de permissão, garantindo que, quando você proíbe especificamente uma ação, ela será sempre negada independentemente de outras regras que a permitam.
 
-## Checking Permissions with Attributes
+## Verificando Permissões com Atributos
 
-When permissions include attributes, you can check for a specific attribute:
+Quando permissões incluem atributos, você pode verificar um atributo específico:
 
 ```typescript
-// Define permissions with attributes
+// Definindo permissões com atributos
 const authorPermissions = definePermissions('author', 'articles')
   .allow('read')
-  .allow(['edit', 'delete'], ['own'])  // Can only edit/delete own articles
+  .allow(['edit', 'delete'], ['own'])  // Só pode editar/apagar artigos próprios
   .save();
 
-// Check if an author can edit their own article
+// Verificar se um autor pode editar seu próprio artigo
 const canEditOwn = hasPermission(authorPermissions, 'author', 'articles', 'edit', 'own');
 if (canEditOwn.granted) {
-  // Author can edit their own article
+  // Autor pode editar seu próprio artigo
   enableEditMode();
 }
 
-// Check if an author can edit any article
+// Verificar se um autor pode editar qualquer artigo
 const canEditAny = hasPermission(authorPermissions, 'author', 'articles', 'edit', 'any');
 if (!canEditAny.granted) {
-  // Author cannot edit articles they don't own
+  // Autor não pode editar artigos que não lhe pertencem
   showPermissionError('You can only edit your own articles');
 }
 ```
 
-When checking with attributes:
-1. If the permission has attributes and the attribute parameter is provided, the function checks if the requested attribute is included in the allowed attributes
-2. If the permission has attributes but no attribute parameter is provided, the function returns all available attributes in the result
-3. If the permission has no attributes, the function simply returns the granted status
+Ao verificar com atributos:
+1. Se a permissão possui atributos e o parâmetro `attribute` é fornecido, a função checa se o atributo solicitado está incluído na lista de atributos permitidos
+2. Se a permissão possui atributos mas nenhum parâmetro `attribute` é fornecido, a função retorna todos os atributos disponíveis no resultado
+3. Se a permissão não possui atributos, a função retorna apenas o status `granted`
 
-## Accessing Available Attributes
+## Acessando Atributos Disponíveis
 
-When permissions include attributes, the `hasPermission` result includes all available attributes:
+Quando permissões incluem atributos, o resultado de `hasPermission` inclui todos os atributos disponíveis:
 
 ```typescript
 const editorPermissions = definePermissions('editor', 'articles')
@@ -143,102 +143,102 @@ const editPermission = hasPermission(editorPermissions, 'editor', 'articles', 'e
 if (editPermission.granted && editPermission.attributes) {
   console.log('Editor can edit articles with these attributes:', editPermission.attributes);
   // Outputs: "Editor can edit articles with these attributes: ['draft', 'pending', 'own']"
-  
-  // You can use this to dynamically enable UI elements
+
+  // Você pode usar isto para habilitar dinamicamente elementos de UI
   if (editPermission.attributes.includes('draft')) {
     enableDraftEditing();
   }
-  
+
   if (editPermission.attributes.includes('pending')) {
     enablePendingEditing();
   }
 }
 ```
 
-## Practical Usage Patterns
+## Padrões Práticos de Uso
 
-### UI Conditional Rendering
+### Renderização Condicional de UI
 
-A common use case is to conditionally render UI elements based on permissions:
+Um caso comum é renderizar elementos de interface condicionalmente com base nas permissões:
 
 ```typescript
 function renderArticleActions(permissions, userRole, article) {
   const actionsContainer = document.getElementById('article-actions');
   actionsContainer.innerHTML = '';
-  
-  // Check read permission
+
+  // Verificar permissão de leitura
   const canRead = hasPermission(permissions, userRole, 'articles', 'read');
   if (canRead.granted) {
     const viewButton = document.createElement('button');
-    viewButton.textContent = 'View';
+  viewButton.textContent = 'Visualizar';
     viewButton.onclick = () => viewArticle(article.id);
     actionsContainer.appendChild(viewButton);
   }
-  
-  // Check edit permission with attributes
+
+  // Verificar permissão de edição com atributos
   const canEdit = hasPermission(permissions, userRole, 'articles', 'edit', 'own');
   if (canEdit.granted && article.authorId === currentUser.id) {
     const editButton = document.createElement('button');
-    editButton.textContent = 'Edit';
+  editButton.textContent = 'Editar';
     editButton.onclick = () => editArticle(article.id);
     actionsContainer.appendChild(editButton);
   }
-  
-  // Check delete permission
+
+  // Verificar permissão de exclusão
   const canDelete = hasPermission(permissions, userRole, 'articles', 'delete');
   if (canDelete.granted) {
     const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
+  deleteButton.textContent = 'Excluir';
     deleteButton.onclick = () => deleteArticle(article.id);
     actionsContainer.appendChild(deleteButton);
   }
 }
 ```
 
-### Function Guards
+### Guardas de Função
 
-You can use permissions to guard function execution:
+Você pode usar permissões para proteger a execução de funções:
 
 ```typescript
 function deleteArticle(articleId, userRole, permissions) {
   const canDelete = hasPermission(permissions, userRole, 'articles', 'delete');
-  
+
   if (!canDelete.granted) {
     throw new Error('Permission denied: You cannot delete articles');
   }
-  
-  // Continue with deletion if permission is granted
+
+  // Prosseguir com a exclusão se a permissão for concedida
   performArticleDeletion(articleId);
 }
 ```
 
-### Middleware for API Routes
+### Middleware para Rotas de API
 
-In a server environment, you might use permissions as middleware:
+Em um ambiente de servidor, você pode usar permissões como middleware:
 
 ```typescript
 function permissionMiddleware(permissions) {
   return (req, res, next) => {
     const { role } = req.user;
     const { resource, action } = req.params;
-    
+
     const hasAccess = hasPermission(permissions, role, resource, action);
-    
+
     if (hasAccess.granted) {
-      next(); // Continue to the actual route handler
+  next(); // Continuar para o handler real da rota
     } else {
-      res.status(403).json({ error: 'Permission denied' });
+  res.status(403).json({ error: 'Permissão negada' });
     }
   };
 }
 
-// Usage
+// Uso
 app.delete('/api/articles/:id',
   permissionMiddleware(articlePermissions),
   (req, res) => {
-    // Handle article deletion
+  // Lógica de exclusão do artigo
   }
 );
 ```
 
-In the next article, we'll explore utility functions for creating and combining permissions. 
+No próximo artigo, exploraremos funções utilitárias para criar e combinar permissões.
