@@ -1,171 +1,171 @@
 export default [
-  {
-    "title": "Elementos Base",
-    "slug": "components-elements-base",
-    "category": "Components",
-    "categoryId": 2,
-    "articleId": 1
-  },
-  {
-    "title": "Elementos de Controle",
-    "slug": "components-elements-control",
-    "category": "Components",
-    "categoryId": 2,
-    "articleId": 6
-  },
-  {
-    "title": "Elementos de Formulário",
-    "slug": "components-elements-form",
-    "category": "Components",
-    "categoryId": 2,
-    "articleId": 2
-  },
-  {
-    "title": "Elementos de Interface",
-    "slug": "components-elements-interface",
-    "category": "Components",
-    "categoryId": 2,
-    "articleId": 3
-  },
-  {
-    "title": "Elementos de Lista",
-    "slug": "components-elements-lists",
-    "category": "Components",
-    "categoryId": 2,
-    "articleId": 5
-  },
-  {
-    "title": "Tipografia",
-    "slug": "components-elements-typography",
-    "category": "Components",
-    "categoryId": 2,
-    "articleId": 4
-  },
-  {
-    "title": "A Função Base como Fundação",
-    "slug": "core-concepts-base-function-foundation",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 2
-  },
-  {
-    "title": "Padrões de Manipulação de Eventos",
-    "slug": "core-concepts-event-handling-patterns",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 7
-  },
-  {
-    "title": "Filosofia de Design Headless",
-    "slug": "core-concepts-headless-design-philosophy",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 1
-  },
-  {
-    "title": "Gerenciamento de Ciclo de Vida com Custom Elements",
-    "slug": "core-concepts-lifecycle-management-custom-elements",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 3
-  },
-  {
-    "title": "Considerações de Performance",
-    "slug": "core-concepts-performance-considerations",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 8
-  },
-  {
-    "title": "Sistema de Children Baseado em Promises",
-    "slug": "core-concepts-promise-based-children-system",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 4
-  },
-  {
-    "title": "Sistema de Referências",
-    "slug": "core-concepts-references-system",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 6
-  },
-  {
-    "title": "Integração com TypeScript e Type Safety",
-    "slug": "core-concepts-typescript-integration-type-safety",
-    "category": "Core Concepts",
-    "categoryId": 3,
-    "articleId": 5
-  },
-  {
-    "title": "Formulários Avançados",
-    "slug": "examples-advanced-forms",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 2
-  },
-  {
-    "title": "Conteúdo Assíncrono",
-    "slug": "examples-async",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 4
-  },
-  {
-    "title": "Exemplos Básicos",
-    "slug": "examples-basic",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 1
-  },
-  {
-    "title": "Conclusão",
-    "slug": "examples-conclusion",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 10
-  },
-  {
-    "title": "Componentes Interativos",
-    "slug": "examples-interactive",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 5
-  },
-  {
-    "title": "Gerenciamento de Ciclo de Vida",
-    "slug": "examples-lifecycle",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 3
-  },
-  {
-    "title": "Padrões de Performance",
-    "slug": "examples-performance",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 8
-  },
-  {},
-  {
-    "title": "Integração com @jay-js/system",
-    "slug": "examples-system-integration",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 7
-  },
-  {
-    "title": "Padrões de Teste",
-    "slug": "examples-testing",
-    "category": "Examples",
-    "categoryId": 4,
-    "articleId": 9
-  },
-  {
-    "title": "Visão Geral do Elements",
-    "slug": "overview",
-    "category": "Elements",
-    "categoryId": 1,
-    "articleId": 1
-  }
+	{
+		title: "Elementos Base",
+		slug: "components-elements-base",
+		category: "Components",
+		categoryId: 2,
+		articleId: 1,
+	},
+	{
+		title: "Elementos de Controle",
+		slug: "components-elements-control",
+		category: "Components",
+		categoryId: 2,
+		articleId: 6,
+	},
+	{
+		title: "Elementos de Formulário",
+		slug: "components-elements-form",
+		category: "Components",
+		categoryId: 2,
+		articleId: 2,
+	},
+	{
+		title: "Elementos de Interface",
+		slug: "components-elements-interface",
+		category: "Components",
+		categoryId: 2,
+		articleId: 3,
+	},
+	{
+		title: "Elementos de Lista",
+		slug: "components-elements-lists",
+		category: "Components",
+		categoryId: 2,
+		articleId: 5,
+	},
+	{
+		title: "Tipografia",
+		slug: "components-elements-typography",
+		category: "Components",
+		categoryId: 2,
+		articleId: 4,
+	},
+	{
+		title: "A Função Base como Fundação",
+		slug: "core-concepts-base-function-foundation",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 2,
+	},
+	{
+		title: "Padrões de Manipulação de Eventos",
+		slug: "core-concepts-event-handling-patterns",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 7,
+	},
+	{
+		title: "Filosofia de Design Headless",
+		slug: "core-concepts-headless-design-philosophy",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 1,
+	},
+	{
+		title: "Gerenciamento de Ciclo de Vida com Custom Elements",
+		slug: "core-concepts-lifecycle-management-custom-elements",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 3,
+	},
+	{
+		title: "Considerações de Performance",
+		slug: "core-concepts-performance-considerations",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 8,
+	},
+	{
+		title: "Sistema de Children Baseado em Promises",
+		slug: "core-concepts-promise-based-children-system",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 4,
+	},
+	{
+		title: "Sistema de Referências",
+		slug: "core-concepts-references-system",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 6,
+	},
+	{
+		title: "Integração com TypeScript e Type Safety",
+		slug: "core-concepts-typescript-integration-type-safety",
+		category: "Core Concepts",
+		categoryId: 3,
+		articleId: 5,
+	},
+	{
+		title: "Formulários Avançados",
+		slug: "examples-advanced-forms",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 2,
+	},
+	{
+		title: "Conteúdo Assíncrono",
+		slug: "examples-async",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 4,
+	},
+	{
+		title: "Exemplos Básicos",
+		slug: "examples-basic",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 1,
+	},
+	{
+		title: "Conclusão",
+		slug: "examples-conclusion",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 10,
+	},
+	{
+		title: "Componentes Interativos",
+		slug: "examples-interactive",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 5,
+	},
+	{
+		title: "Gerenciamento de Ciclo de Vida",
+		slug: "examples-lifecycle",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 3,
+	},
+	{
+		title: "Padrões de Performance",
+		slug: "examples-performance",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 8,
+	},
+	{},
+	{
+		title: "Integração com @jay-js/system",
+		slug: "examples-system-integration",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 7,
+	},
+	{
+		title: "Padrões de Teste",
+		slug: "examples-testing",
+		category: "Examples",
+		categoryId: 4,
+		articleId: 9,
+	},
+	{
+		title: "Visão Geral do Elements",
+		slug: "overview",
+		category: "Elements",
+		categoryId: 1,
+		articleId: 1,
+	},
 ];
