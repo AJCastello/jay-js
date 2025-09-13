@@ -2,7 +2,7 @@ import { Box, Section } from "../../../../packages/elements/src";
 import { ExplorePackages } from "../../components/docs/explore-packages";
 import { Introduction } from "../../components/docs/introduction";
 import { UnleashPotential } from "../../components/docs/unleash-potential";
-import { WhyChoose } from "../../components/docs/WhyChoose";
+import { WhyChoose } from "../../components/docs/why-choose";
 import { DocsFooter } from "../../components/footer/docs-footer";
 import { DocsNavBar } from "../../components/navbar/docs-nav-bar";
 
