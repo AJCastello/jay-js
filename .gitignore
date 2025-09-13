@@ -11,4 +11,4 @@ builder
 firebase.json
 .ai
 llm
-.console
+console
