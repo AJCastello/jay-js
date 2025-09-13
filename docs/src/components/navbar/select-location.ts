@@ -1,6 +1,6 @@
 import { Box, Typography } from "../../../../packages/elements/src";
-import { Dropdown, DropdownContent, DropdownLabel } from "../ui";
-import { Icon, Menu, MenuItem } from "../ui/";
+import { IconTranslateDuotone } from "../icons";
+import { Dropdown, DropdownContent, DropdownLabel, Menu, MenuItem } from "../ui";
 
 export function SelectLocation() {
 	return Box({
@@ -9,10 +9,7 @@ export function SelectLocation() {
 			children: [
 				DropdownLabel({
 					className: "btn",
-					children: Icon({
-						className: "text-xl",
-						icon: "ph-duotone ph-translate",
-					}),
+					children: IconTranslateDuotone({ className: "text-xl" }),
 				}),
 				DropdownContent({
 					className: "p-4 shadow-lg bg-base-200 rounded-box w-52",

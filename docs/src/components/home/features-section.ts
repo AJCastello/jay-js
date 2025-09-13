@@ -1,37 +1,44 @@
 import { Box, Section, Typography } from "../../../../packages/elements/src";
-import { Icon } from "../ui";
+import {
+	IconBracketsCurlyDuotone,
+	IconCodeDuotone,
+	IconFeatherDuotone,
+	IconGitBranchDuotone,
+	IconLayoutDuotone,
+	IconMapDuotone,
+} from "../icons";
 
 export function FeaturesSection() {
 	const featuresList = [
 		{
 			title: "Lightweight",
 			description: "Minimal footprint with no heavy dependencies, ensuring fast load times",
-			icon: "ph-duotone ph-feather",
+			icon: IconFeatherDuotone,
 		},
 		{
 			title: "Flexible UI",
 			description: "Build interfaces your way with or without Tailwind CSS",
-			icon: "ph-duotone ph-layout",
+			icon: IconLayoutDuotone,
 		},
 		{
 			title: "Smart State Management",
 			description: "Simple yet powerful state management without the complexity",
-			icon: "ph-duotone ph-git-branch",
+			icon: IconGitBranchDuotone,
 		},
 		{
 			title: "Modern Routing",
 			description: "Client-side routing that's easy to configure and highly adaptable",
-			icon: "ph-duotone ph-map",
+			icon: IconMapDuotone,
 		},
 		{
 			title: "JSX Support",
 			description: "Optional JSX runtime for a familiar development experience",
-			icon: "ph-duotone ph-brackets-curly",
+			icon: IconBracketsCurlyDuotone,
 		},
 		{
 			title: "Intuitive API",
 			description: "Clean and consistent API design that feels natural to use",
-			icon: "ph-duotone ph-code",
+			icon: IconCodeDuotone,
 		},
 	];
 
@@ -70,10 +77,7 @@ export function FeaturesSection() {
 								children: [
 									Box({
 										className: "flex items-center justify-center w-12 h-12 rounded-md bg-primary/10 text-primary",
-										children: Icon({
-											className: "text-2xl",
-											icon: icon,
-										}),
+										children: icon({ className: "text-2xl" }),
 									}),
 									Typography({
 										tag: "h3",

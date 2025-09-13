@@ -1,5 +1,11 @@
 import { Box, Link, Section, Typography } from "../../../../packages/elements/src";
-import { Icon } from "../ui";
+import {
+	IconArrowRightDuotone,
+	IconBracketsCurlyDuotone,
+	IconCheckCircleDuotone,
+	IconGearDuotone,
+	IconPaletteDuotone,
+} from "../icons";
 
 export function Packages() {
 	const packagesList = [
@@ -7,19 +13,19 @@ export function Packages() {
 			name: "system",
 			description: "Core utilities for state management, routing, drag-and-drop, and lazy loading",
 			features: ["State management", "Client-side routing", "Draggable elements", "Lazy-loaded modules"],
-			icon: "ph-duotone ph-gear",
+			icon: IconGearDuotone,
 		},
 		{
 			name: "ui",
 			description: "Flexible UI components that can be used with or without Tailwind CSS",
 			features: ["Customizable components", "Headless or styled options", "DaisyUI integration", "Responsive design"],
-			icon: "ph-duotone ph-palette",
+			icon: IconPaletteDuotone,
 		},
 		{
 			name: "jsx",
 			description: "JSX runtime for writing declarative components with familiar syntax",
 			features: ["JSX development", "Vite plugin", "TypeScript declarations", "Fragment support"],
-			icon: "ph-duotone ph-brackets-curly",
+			icon: IconBracketsCurlyDuotone,
 		},
 	];
 
@@ -58,10 +64,7 @@ export function Packages() {
 								children: [
 									Box({
 										className: "flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-content",
-										children: Icon({
-											className: "text-2xl",
-											icon: icon,
-										}),
+										children: icon({ className: "text-2xl" }),
 									}),
 									Typography({
 										tag: "h3",
@@ -85,10 +88,7 @@ export function Packages() {
 												tag: "li",
 												className: "flex items-start",
 												children: [
-													Icon({
-														className: "w-5 h-5 mr-2 text-primary flex-shrink-0 mt-0.5",
-														icon: "ph-duotone ph-check-circle",
-													}),
+													IconCheckCircleDuotone({ className: "w-5 h-5 mr-2 text-primary flex-shrink-0 mt-0.5" }),
 													Typography({
 														children: feature,
 													}),
@@ -103,13 +103,7 @@ export function Packages() {
 								children: Link({
 									href: `/docs/packages/${name}`,
 									className: "text-primary font-medium hover:underline flex items-center",
-									children: [
-										"View documentation",
-										Icon({
-											className: "ml-2 w-4 h-4",
-											icon: "ph-duotone ph-arrow-right",
-										}),
-									],
+									children: ["View documentation", IconArrowRightDuotone({ className: "ml-2 w-4 h-4" })],
 								}),
 							}),
 						],

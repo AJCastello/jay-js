@@ -10,7 +10,6 @@ export * from "./dropdown";
 export * from "./dropdown-content";
 export * from "./dropdown-label";
 export * from "./footer";
-export * from "./icon";
 export * from "./kbd";
 export * from "./loading";
 export * from "./menu";

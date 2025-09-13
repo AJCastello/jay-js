@@ -1,6 +1,6 @@
 import jayjs from "/jayjs.svg";
 import { Box, Img, Link, Section, Typography } from "../../../../packages/elements/src";
-import { Icon } from "../ui";
+import { IconDiscordLogoDuotone, IconGithubLogoDuotone } from "../icons";
 // import { Logo } from "./Logo";
 // import { SearchForm } from "./SearchForm";
 // import { SelectLocation } from "./SelectLocation";
@@ -65,21 +65,11 @@ export function DocsFooter() {
 						}),
 						Link({
 							href: "https://discord.gg/5u3f3f2",
-							children: [
-								Icon({
-									icon: "ph-duotone ph-discord-logo",
-								}),
-								" Join our Discord",
-							],
+							children: [IconDiscordLogoDuotone({}), " Join our Discord"],
 						}),
 						Link({
 							href: "https://github.com/jay-js/jay-js",
-							children: [
-								Icon({
-									icon: "ph-duotone ph-github-logo",
-								}),
-								" GitHub",
-							],
+							children: [IconGithubLogoDuotone({}), " GitHub"],
 						}),
 					],
 				}),

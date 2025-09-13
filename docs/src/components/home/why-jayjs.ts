@@ -1,11 +1,5 @@
 import { Box, Section, Typography } from "../../../../packages/elements/src";
-
-// Simple Icon function for creating icon elements
-function Icon({ icon, className }: { icon: string; className?: string }) {
-	const element = document.createElement("i");
-	element.className = `${icon} ${className || ""}`.trim();
-	return element;
-}
+import { IconCheckCircleDuotone } from "../icons";
 
 export function WhyJayJS() {
 	const reasonsList = [
@@ -59,10 +53,7 @@ export function WhyJayJS() {
 										children: [
 											Box({
 												className: "flex-shrink-0 mt-1",
-												children: Icon({
-													className: "w-5 h-5 text-primary",
-													icon: "ph-duotone ph-check-circle",
-												}),
+												children: IconCheckCircleDuotone({ className: "w-5 h-5 text-primary" }),
 											}),
 											Box({
 												className: "ml-4",
