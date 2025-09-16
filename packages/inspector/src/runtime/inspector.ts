@@ -21,6 +21,7 @@ export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadat
 export class JayJsInspectorRuntime {
 	private overlay: HTMLElement | null = null;
 	private elementMap = new WeakMap<HTMLElement, ComponentMetadata>();
+	private isEnabled = false;
 
 	constructor(private config: Required<JayJsInspectorOptions>) {
 		this.init();
