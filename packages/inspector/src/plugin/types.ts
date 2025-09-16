@@ -1,25 +1,25 @@
 export interface JayJsInspectorOptions {
-	/** Enable/disable the inspector (default: NODE_ENV === 'development') */
-	enabled?: boolean;
+  /** Enable/disable the inspector (default: NODE_ENV === 'development') */
+  enabled?: boolean;
 
-	/** Editor to open files in (default: 'code') */
-	editor?: "vscode" | "code" | "cursor" | "webstorm" | "atom";
+  /** Editor to open files in (default: 'code') */
+  editor?: 'vscode' | 'code' | 'vscode-insiders' | 'cursor' | 'webstorm' | 'atom';
 
-	/** Custom overlay styles */
-	overlayStyles?: {
-		backgroundColor?: string;
-		borderColor?: string;
-		borderWidth?: string;
-		borderStyle?: string;
-		opacity?: number;
-	};
+  /** Custom overlay styles */
+  overlayStyles?: {
+    backgroundColor?: string;
+    borderColor?: string;
+    borderWidth?: string;
+    borderStyle?: string;
+    opacity?: number;
+  };
 
-	/** Include/exclude patterns for files to instrument */
-	include?: string[];
-	exclude?: string[];
+  /** Include/exclude patterns for files to instrument */
+  include?: string[];
+  exclude?: string[];
 
-	/** Custom key combination to enable inspector (default: 'shift+click') */
-	activationKey?: "click" | "shift+click" | "ctrl+click" | "alt+click";
+  /** Custom key combination to enable inspector (default: 'shift+click') */
+  activationKey?: 'click' | 'shift+click' | 'ctrl+click' | 'alt+click';
 }
 
 export interface ComponentMetadata {

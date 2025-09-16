@@ -82,6 +82,10 @@ export class EditorIntegration {
 			command: "code",
 			args: (file: string, line: number, column: number) => ["--goto", `${file}:${line}:${column}`],
 		},
+		"vscode-insiders": {
+			command: "code-insiders",
+			args: (file: string, line: number, column: number) => ["--goto", `${file}:${line}:${column}`],
+		},
 		cursor: {
 			command: "cursor",
 			args: (file: string, line: number, column: number) => ["--goto", `${file}:${line}:${column}`],

@@ -37,10 +37,10 @@ export class JayJsInspectorRuntime {
 		// Bind event listeners
 		this.bindEvents();
 
-		console.log("[Jay JS Inspector] Runtime initialized");
-	}
-
-	/**
+		console.log('[Jay JS Inspector] Runtime initialized');
+		console.log('[Jay JS Inspector] Config:', this.config);
+		console.log('[Jay JS Inspector] Press Shift+Cmd+I (Mac) or Shift+Ctrl+I (Windows) to toggle inspector mode');
+	}	/**
 	 * Register an element with its component metadata
 	 */
 	registerElement(element: HTMLElement, metadata: ComponentMetadata) {
@@ -50,9 +50,9 @@ export class JayJsInspectorRuntime {
 		element.dataset.jayjsComponent = metadata.component;
 		element.dataset.jayjsFile = metadata.file;
 		element.dataset.jayjsLine = metadata.line.toString();
-	}
 
-	/**
+		console.log(`[Jay JS Inspector] Registered ${metadata.component} from ${metadata.file}:${metadata.line}`, element);
+	}	/**
 	 * Create the visual overlay element
 	 */
 	private createOverlay() {

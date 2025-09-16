@@ -62,6 +62,26 @@ export function getLineAndColumn(source: string, position: number): { line: numb
 }
 
 /**
+ * Convert glob pattern to regex pattern
+ */
+function globToRegex(pattern: string): RegExp {
+	// Handle brace expansion like {ts,tsx}
+	let processed = pattern.replace(/\{([^}]+)\}/g, (match, content) => {
+		return `(${content.split(',').join('|')})`;
+	});
+
+	// Escape special regex characters except * and ?
+	processed = processed
+		.replace(/[.+^$|[\]\\]/g, '\\$&')  // Don't escape parentheses since we use them for groups
+		.replace(/\*\*/g, '___DOUBLESTAR___')
+		.replace(/\*/g, '[^/]*')
+		.replace(/___DOUBLESTAR___/g, '.*')
+		.replace(/\?/g, '[^/]');
+
+	return new RegExp(`^${processed}$`);
+}
+
+/**
  * Create filter function for include/exclude patterns
  */
 export function createFileFilter(include?: string[], exclude?: string[]): (id: string) => boolean {
@@ -70,13 +90,13 @@ export function createFileFilter(include?: string[], exclude?: string[]): (id: s
 		if (id.includes("node_modules")) return false;
 
 		// Check exclude patterns first
-		if (exclude?.some((pattern) => new RegExp(pattern).test(id))) {
+		if (exclude?.some((pattern) => globToRegex(pattern).test(id))) {
 			return false;
 		}
 
 		// Check include patterns (if specified)
 		if (include?.length) {
-			return include.some((pattern) => new RegExp(pattern).test(id));
+			return include.some((pattern) => globToRegex(pattern).test(id));
 		}
 
 		// Default: include .ts, .tsx, .js, .jsx files
