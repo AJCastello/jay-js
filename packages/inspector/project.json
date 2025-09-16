@@ -1,0 +1,46 @@
+{
+  "name": "@jay-js/inspector",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/inspector/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npm run build"
+        ],
+        "cwd": "packages/inspector"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands", 
+      "options": {
+        "commands": [
+          "npm run test"
+        ],
+        "cwd": "packages/inspector"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npm run lint"
+        ],
+        "cwd": "packages/inspector"
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npm run pub"
+        ],
+        "cwd": "packages/inspector"
+      },
+      "dependsOn": ["build"]
+    }
+  },
+  "tags": ["scope:inspector", "type:library"]
+}
