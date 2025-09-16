@@ -40,13 +40,13 @@ export default defineConfig({
 jayJsInspector({
   // Ativar/desativar o inspector (padrão: NODE_ENV === 'development')
   enabled: boolean;
-  
+
   // Editor para abrir arquivos (padrão: 'code')
   editor: 'vscode' | 'code' | 'cursor' | 'webstorm' | 'atom';
-  
+
   // Combinação de teclas para ativar inspetor (padrão: 'shift+click')
   activationKey: 'click' | 'shift+click' | 'ctrl+click' | 'alt+click';
-  
+
   // Estilos personalizados do overlay
   overlayStyles?: {
     backgroundColor?: string;    // Cor de fundo
@@ -55,7 +55,7 @@ jayJsInspector({
     borderStyle?: string;       // Estilo da borda
     opacity?: number;           // Opacidade
   };
-  
+
   // Padrões de inclusão/exclusão de arquivos
   include?: string[];          // Padrões para incluir
   exclude?: string[];          // Padrões para excluir
@@ -106,7 +106,7 @@ function MyComponent() {
       column: 15
     })
   }), {
-    component: 'Box', 
+    component: 'Box',
     file: '/src/MyComponent.ts',
     line: 2,
     column: 10

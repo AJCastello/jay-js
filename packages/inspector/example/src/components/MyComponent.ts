@@ -19,7 +19,7 @@ export function MyComponent() {
           margin: '0 0 10px 0'
         }
       }),
-      
+
       Typography({
         tag: 'p',
         children: 'This is a custom component built with Jay JS elements. Try clicking on it with inspector mode enabled!',
@@ -28,7 +28,7 @@ export function MyComponent() {
           lineHeight: '1.5'
         }
       }),
-      
+
       Button({
         children: 'Component Action',
         style: {

@@ -14,7 +14,7 @@
       }
     },
     "test": {
-      "executor": "nx:run-commands", 
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "npm run test"

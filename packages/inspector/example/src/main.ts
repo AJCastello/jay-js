@@ -14,13 +14,13 @@ function App() {
         children: 'Jay JS Inspector Example',
         style: { color: '#333', marginBottom: '20px' }
       }),
-      
+
       Typography({
         tag: 'p',
         children: 'Press Shift+Cmd+I to enable inspector mode, then Shift+Click on components to open them in your editor.',
         style: { marginBottom: '20px', color: '#666' }
       }),
-      
+
       Box({
         className: 'components-demo',
         style: {
@@ -30,7 +30,7 @@ function App() {
         },
         children: [
           MyComponent(),
-          
+
           Button({
             children: 'Click me!',
             style: {
@@ -45,7 +45,7 @@ function App() {
               click: () => alert('Button clicked!')
             }
           }),
-          
+
           Box({
             className: 'info-card',
             style: {

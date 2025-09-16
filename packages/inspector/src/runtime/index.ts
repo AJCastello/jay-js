@@ -1,1 +1,1 @@
-export { JayJsInspectorRuntime, __jayjs_debug__ } from './inspector.js';
+export { __jayjs_debug__, JayJsInspectorRuntime } from "./inspector.js";
