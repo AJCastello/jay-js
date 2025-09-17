@@ -3,6 +3,7 @@ import type { ComponentMetadata, JayJsInspectorOptions } from "../plugin/types.j
 /**
  * Debug function that gets injected into instrumented components
  * This function is called at runtime for each Jay JS component
+ * It's attached to the global window object for easy access from transformed code
  */
 export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadata): HTMLElement {
 	if (typeof window === "undefined" || !window.__JAYJS_INSPECTOR__) {
@@ -15,13 +16,18 @@ export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadat
 	return element;
 }
 
+// Ensure the debug function is available globally
+if (typeof window !== "undefined") {
+	window.__jayjs_debug__ = __jayjs_debug__;
+}
+
 /**
  * Runtime inspector that handles element detection and overlay
  */
 export class JayJsInspectorRuntime {
 	private overlay: HTMLElement | null = null;
 	private elementMap = new WeakMap<HTMLElement, ComponentMetadata>();
-	private isEnabled = false;
+	private isInspecting = false;
 
 	constructor(private config: Required<JayJsInspectorOptions>) {
 		this.init();
@@ -37,11 +43,11 @@ export class JayJsInspectorRuntime {
 		// Bind event listeners
 		this.bindEvents();
 
-		console.log('[Jay JS Inspector] Runtime initialized');
-		console.log('[Jay JS Inspector] Config:', this.config);
-		console.log('[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode');
-		console.log('[Jay JS Inspector] Then use Shift+Click on components to open in editor');
-	}	/**
+		console.log("[Jay JS Inspector] Runtime initialized");
+		console.log("[Jay JS Inspector] Config:", this.config);
+		console.log("[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode");
+		console.log("[Jay JS Inspector] Then use Shift+Click on components to open in editor");
+	} /**
 	 * Register an element with its component metadata
 	 */
 	registerElement(element: HTMLElement, metadata: ComponentMetadata) {
@@ -53,7 +59,7 @@ export class JayJsInspectorRuntime {
 		element.dataset.jayjsLine = metadata.line.toString();
 
 		console.log(`[Jay JS Inspector] Registered ${metadata.component} from ${metadata.file}:${metadata.line}`, element);
-	}	/**
+	} /**
 	 * Create the visual overlay element
 	 */
 	private createOverlay() {
@@ -197,7 +203,7 @@ export class JayJsInspectorRuntime {
 	 * Toggle inspector mode
 	 */
 	private setInspecting(enabled: boolean) {
-		this.isEnabled = enabled;
+		this.isInspecting = enabled;
 
 		if (enabled) {
 			document.body.style.cursor = "crosshair";
@@ -242,5 +248,6 @@ declare global {
 	interface Window {
 		__JAYJS_INSPECTOR__?: JayJsInspectorRuntime;
 		__JAYJS_INSPECTOR_CONFIG__?: Required<JayJsInspectorOptions>;
+		__jayjs_debug__?: typeof __jayjs_debug__;
 	}
 }

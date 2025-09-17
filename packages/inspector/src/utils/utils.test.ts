@@ -1,4 +1,4 @@
-import { getDebugFunctionName, getLineAndColumn, isJayJsComponent, createFileFilter } from "./index";
+import { createFileFilter, getDebugFunctionName, getLineAndColumn, isJayJsComponent } from "./index";
 
 describe("Inspector Utils", () => {
 	describe("isJayJsComponent", () => {

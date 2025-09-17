@@ -7,6 +7,8 @@ import type { ComponentMetadata, InstrumentedCallExpression } from "./types.js";
 
 /**
  * Transform source code to instrument Jay JS component calls with debug metadata
+ * JayJS uses factory functions that return HTMLElements, so we need to wrap the call
+ * and instrument the returned element.
  */
 export function transformSource(source: string, filename: string): string | null {
 	try {
@@ -56,14 +58,16 @@ export function transformSource(source: string, filename: string): string | null
 		instrumentedCalls.sort((a, b) => b.start - a.start);
 
 		// Replace each component call with instrumented version
+		// JayJS factory functions return HTMLElement, so we need to instrument the result
 		for (const call of instrumentedCalls) {
-			const debugCode = `${getDebugFunctionName()}(${call.originalCall}, ${JSON.stringify(call.metadata)})`;
+			const debugCode = `(() => {
+	const __element = ${call.originalCall};
+	return (typeof window !== 'undefined' && window.${getDebugFunctionName()})
+		? window.${getDebugFunctionName()}(__element, ${JSON.stringify(call.metadata)})
+		: __element;
+})()`;
 			magicString.overwrite(call.start, call.end, debugCode);
 		}
-
-		// Add debug function import at the top of the file
-		const importStatement = `import { ${getDebugFunctionName()} } from '@jay-js/inspector/runtime';\n`;
-		magicString.prepend(importStatement);
 
 		return magicString.toString();
 	} catch (error) {

@@ -2,6 +2,7 @@ import type { ComponentMetadata } from "../plugin/types.js";
 
 /**
  * List of Jay JS component names to instrument
+ * These are the factory functions that return HTMLElements
  */
 export const JAYJS_COMPONENTS = [
 	"Base",
@@ -26,13 +27,27 @@ export const JAYJS_COMPONENTS = [
 	"FileInput",
 	"Fragment",
 	"Outlet",
+	// Custom components should also be detectable
+	// Users can extend this list or we can use heuristics
 ] as const;
 
 /**
  * Check if a function name is a Jay JS component
+ * Enhanced to detect custom components using naming conventions
  */
 export function isJayJsComponent(name: string): boolean {
-	return JAYJS_COMPONENTS.includes(name as any);
+	// First check against known components
+	if (JAYJS_COMPONENTS.includes(name as any)) {
+		return true;
+	}
+
+	// Heuristic: PascalCase names that look like components
+	// This helps detect custom user components
+	if (/^[A-Z][a-zA-Z0-9]*$/.test(name) && name.length > 1) {
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -66,17 +81,17 @@ export function getLineAndColumn(source: string, position: number): { line: numb
  */
 function globToRegex(pattern: string): RegExp {
 	// Handle brace expansion like {ts,tsx}
-	let processed = pattern.replace(/\{([^}]+)\}/g, (match, content) => {
-		return `(${content.split(',').join('|')})`;
+	let processed = pattern.replace(/\{([^}]+)\}/g, (_match, content) => {
+		return `(${content.split(",").join("|")})`;
 	});
 
 	// Escape special regex characters except * and ?
 	processed = processed
-		.replace(/[.+^$|[\]\\]/g, '\\$&')  // Don't escape parentheses since we use them for groups
-		.replace(/\*\*/g, '___DOUBLESTAR___')
-		.replace(/\*/g, '[^/]*')
-		.replace(/___DOUBLESTAR___/g, '.*')
-		.replace(/\?/g, '[^/]');
+		.replace(/[.+^$|[\]\\]/g, "\\$&") // Don't escape parentheses since we use them for groups
+		.replace(/\*\*/g, "___DOUBLESTAR___")
+		.replace(/\*/g, "[^/]*")
+		.replace(/___DOUBLESTAR___/g, ".*")
+		.replace(/\?/g, "[^/]");
 
 	return new RegExp(`^${processed}$`);
 }

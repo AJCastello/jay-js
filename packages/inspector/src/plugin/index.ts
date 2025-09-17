@@ -108,16 +108,17 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 				}
 			});
 
-			// Inject runtime script into HTML pages
+			// Inject runtime script into HTML pages using proper module loading
 			server.middlewares.use((req: any, res: any, next: any) => {
-				if (req.url && req.url.endsWith('.html') || req.url === '/') {
+				if (req.url && (req.url.endsWith(".html") || req.url === "/")) {
 					const originalEnd = res.end;
-					res.end = function(chunk: any, encoding: any) {
-						if (chunk && typeof chunk === 'string' && chunk.includes('<head>')) {
-							const inspectorScript = `<script>
+					res.end = function (chunk: any, encoding: any) {
+						if (chunk && typeof chunk === "string" && chunk.includes("<head>")) {
+							const inspectorScript = `<script type="module">
+								// Load inspector runtime
 								${generateInspectorRuntime(config)}
 							</script>`;
-							chunk = chunk.replace('<head>', `<head>${inspectorScript}`);
+							chunk = chunk.replace("<head>", `<head>${inspectorScript}`);
 						}
 						return originalEnd.call(this, chunk, encoding);
 					};
@@ -180,6 +181,7 @@ async function handleOpenInEditor(req: any, res: any, editor: string) {
 
 /**
  * Generate runtime script for inspector overlay
+ * This creates a self-contained runtime that doesn't rely on external imports
  */
 function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): string {
 	return `
@@ -212,11 +214,15 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
     }
 
     registerElement(element, metadata) {
+      if (!element || !metadata) return element;
+
       this.elementMap.set(element, metadata);
       element.dataset.jayjsComponent = metadata.component;
       element.dataset.jayjsFile = metadata.file;
       element.dataset.jayjsLine = metadata.line.toString();
-      console.log('[Jay JS Inspector] Registered ' + metadata.component + ' from ' + metadata.file + ':' + metadata.line, element);
+
+      console.debug('[Jay JS Inspector] Registered ' + metadata.component + ' from ' + metadata.file + ':' + metadata.line, element);
+      return element;
     }
 
     createOverlay() {
@@ -286,7 +292,7 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
 
     findComponentMetadata(element) {
       let current = element;
-      while (current) {
+      while (current && current !== document.body) {
         const metadata = this.elementMap.get(current);
         if (metadata) return metadata;
         current = current.parentElement;
@@ -352,17 +358,29 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
     }
   }
 
-  // Define the debug function
+  // Define the debug function globally - this is what transformed code will call
   window.__jayjs_debug__ = function(element, metadata) {
-    if (window.__JAYJS_INSPECTOR__) {
-      window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
+    if (!element) return element;
+
+    // Only register if inspector is available
+    if (window.__JAYJS_INSPECTOR__ && typeof window.__JAYJS_INSPECTOR__.registerElement === 'function') {
+      try {
+        return window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
+      } catch (error) {
+        console.debug('[Jay JS Inspector] Registration error:', error);
+      }
     }
+
     return element;
   };
 
   // Initialize inspector when DOM is ready
   function initializeInspector() {
-    new JayJsInspectorRuntime(window.__JAYJS_INSPECTOR_CONFIG__);
+    try {
+      new JayJsInspectorRuntime(window.__JAYJS_INSPECTOR_CONFIG__);
+    } catch (error) {
+      console.error('[Jay JS Inspector] Failed to initialize:', error);
+    }
   }
 
   if (document.readyState === 'loading') {
