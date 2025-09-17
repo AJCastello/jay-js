@@ -1,4 +1,5 @@
 import type { ComponentMetadata, JayJsInspectorOptions } from "../plugin/types.js";
+import { DebugReporter } from "../utils/debug-reporter.js";
 
 /**
  * Debug function that gets injected into instrumented components
@@ -10,8 +11,21 @@ export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadat
 		return element;
 	}
 
-	// Register element with inspector
-	window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
+	try {
+		// Register element with inspector
+		window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
+
+		// Report element registration
+		if (window.__JAYJS_DEBUG_REPORTER__) {
+			window.__JAYJS_DEBUG_REPORTER__.addElementRegistration();
+		}
+	} catch (error) {
+		// Report debug function error
+		if (window.__JAYJS_DEBUG_REPORTER__) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Debug Function', errorMessage);
+		}
+	}
 
 	return element;
 }
@@ -51,14 +65,29 @@ export class JayJsInspectorRuntime {
 	 * Register an element with its component metadata
 	 */
 	registerElement(element: HTMLElement, metadata: ComponentMetadata) {
-		this.elementMap.set(element, metadata);
+		try {
+			this.elementMap.set(element, metadata);
 
-		// Add data attributes for debugging
-		element.dataset.jayjsComponent = metadata.component;
-		element.dataset.jayjsFile = metadata.file;
-		element.dataset.jayjsLine = metadata.line.toString();
+			// Add data attributes for debugging
+			element.dataset.jayjsComponent = metadata.component;
+			element.dataset.jayjsFile = metadata.file;
+			element.dataset.jayjsLine = metadata.line.toString();
 
-		console.log(`[Jay JS Inspector] Registered ${metadata.component} from ${metadata.file}:${metadata.line}`, element);
+			console.debug(`[Jay JS Inspector] Registered ${metadata.component} from ${metadata.file}:${metadata.line}`, element);
+
+			// Report element registration
+			if (typeof window !== "undefined" && window.__JAYJS_DEBUG_REPORTER__) {
+				window.__JAYJS_DEBUG_REPORTER__.addElementRegistration();
+			}
+		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			console.error(`[Jay JS Inspector] Failed to register element:`, error);
+
+			// Report registration error
+			if (typeof window !== "undefined" && window.__JAYJS_DEBUG_REPORTER__) {
+				window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Element Registration', errorMessage);
+			}
+		}
 	} /**
 	 * Create the visual overlay element
 	 */
@@ -249,5 +278,6 @@ declare global {
 		__JAYJS_INSPECTOR__?: JayJsInspectorRuntime;
 		__JAYJS_INSPECTOR_CONFIG__?: Required<JayJsInspectorOptions>;
 		__jayjs_debug__?: typeof __jayjs_debug__;
+		__JAYJS_DEBUG_REPORTER__?: any;
 	}
 }

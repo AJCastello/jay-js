@@ -1,6 +1,7 @@
 import type { Plugin, ResolvedConfig, ViteDevServer } from "vite";
 import { EditorIntegration } from "../utils/bridge.js";
 import { createFileFilter } from "../utils/index.js";
+import { DebugReporter } from "../utils/debug-reporter.js";
 import { transformSource } from "./transformer.js";
 import type { JayJsInspectorOptions } from "./types.js";
 
@@ -29,7 +30,11 @@ const DEFAULT_OPTIONS: Required<JayJsInspectorOptions> = {
 export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 	const config = { ...DEFAULT_OPTIONS, ...options };
 	const fileFilter = createFileFilter(config.include, config.exclude);
+	const reporter = DebugReporter.getInstance();
 	let transformedFiles = 0;
+
+	// Configure the debug reporter
+	reporter.setConfiguration(config);
 
 	return {
 		name: "jayjs-inspector",
@@ -89,20 +94,26 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 			console.log("   • POST /__jayjs-inspector/open-in-editor");
 			console.log("   • GET  /__jayjs-inspector/health");
 			console.log("   • GET  /__jayjs-inspector/runtime.js");
+			console.log("   • GET  /__jayjs-inspector/debug-report");
 
 			// Add middleware to handle inspector requests
 			server.middlewares.use("/__jayjs-inspector", (req: any, res: any, next: any) => {
 				if (req.method === "POST" && req.url === "/__jayjs-inspector/open-in-editor") {
 					// Handle open-in-editor requests
-					handleOpenInEditor(req, res, config.editor);
+					handleOpenInEditor(req, res, config.editor, reporter);
 				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/health") {
 					// Health check endpoint
+					reporter.setHealthCheck(true);
 					res.writeHead(200, { "Content-Type": "application/json" });
-					res.end(JSON.stringify({ status: "ok" }));
+					res.end(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }));
 				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/runtime.js") {
 					// Serve the runtime script
 					res.writeHead(200, { "Content-Type": "application/javascript" });
 					res.end(generateInspectorRuntime(config));
+				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/debug-report") {
+					// Serve debug report
+					res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+					res.end(reporter.generateReport());
 				} else {
 					next();
 				}
@@ -143,7 +154,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 /**
  * Handle open-in-editor requests from the browser
  */
-async function handleOpenInEditor(req: any, res: any, editor: string) {
+async function handleOpenInEditor(req: any, res: any, editor: string, reporter: DebugReporter) {
 	try {
 		let body = "";
 		req.on("data", (chunk: Buffer) => {
@@ -158,6 +169,9 @@ async function handleOpenInEditor(req: any, res: any, editor: string) {
 			// Use EditorIntegration to open file
 			const result = await EditorIntegration.openFile(file, line, column, editor);
 
+			// Report the editor request
+			reporter.addEditorRequest(file, result.success, result.error);
+
 			if (result.success) {
 				console.log(`✅ Jay JS Inspector: Successfully opened file in ${editor}`);
 			} else {
@@ -168,12 +182,17 @@ async function handleOpenInEditor(req: any, res: any, editor: string) {
 			res.end(JSON.stringify(result));
 		});
 	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : "Unknown error";
 		console.error("❌ Jay JS Inspector: Error handling open-in-editor request:", error);
+
+		// Report the error
+		reporter.addEditorRequest("unknown", false, errorMessage);
+
 		res.writeHead(500, { "Content-Type": "application/json" });
 		res.end(
 			JSON.stringify({
 				success: false,
-				error: error instanceof Error ? error.message : "Unknown error",
+				error: errorMessage,
 			}),
 		);
 	}
@@ -191,6 +210,55 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
   console.log('[Jay JS Inspector] Runtime script loaded');
 
   window.__JAYJS_INSPECTOR_CONFIG__ = ${JSON.stringify(config)};
+
+  // Initialize Debug Reporter inline to avoid import issues
+  function createDebugReporter() {
+    const reporter = {
+      configuration: ${JSON.stringify(config)},
+      transformation: { totalFiles: 0, transformedFiles: 0, skippedFiles: 0, errors: [], detectedComponents: [] },
+      runtime: { initialized: false, inspectorAvailable: false, debugFunctionAvailable: false, overlayCreated: false, registeredElements: 0, errors: [] },
+      network: { healthCheck: false, editorRequests: [] },
+
+      setRuntimeInitialized() { this.runtime.initialized = true; },
+      setInspectorAvailable(available) { this.runtime.inspectorAvailable = available; },
+      setDebugFunctionAvailable(available) { this.runtime.debugFunctionAvailable = available; },
+      setOverlayCreated(created) { this.runtime.overlayCreated = created; },
+      addElementRegistration() { this.runtime.registeredElements++; },
+      addRuntimeError(context, error) {
+        this.runtime.errors.push({ timestamp: new Date().toISOString(), context, error });
+      },
+
+      generateReport() {
+        return \`=== JAYJS INSPECTOR DEBUG REPORT ===
+Generated: \${new Date().toISOString()}
+
+CONFIGURATION:
+- Enabled: \${this.configuration.enabled}
+- Editor: \${this.configuration.editor}
+- Activation Key: \${this.configuration.activationKey}
+
+RUNTIME STATUS:
+- Initialized: \${this.runtime.initialized}
+- Inspector Available: \${this.runtime.inspectorAvailable}
+- Debug Function Available: \${this.runtime.debugFunctionAvailable}
+- Overlay Created: \${this.runtime.overlayCreated}
+- Registered Elements: \${this.runtime.registeredElements}
+
+RUNTIME ERRORS:
+\${this.runtime.errors.map(e => \`  - [\${e.timestamp}] \${e.context}: \${e.error}\`).join('\\n') || '  (none)'}
+
+DETECTED ELEMENTS:
+\${Array.from(document.querySelectorAll('[data-jayjs-component]')).map((el, i) =>
+  \`  \${i+1}. \${el.dataset.jayjsComponent} (\${el.dataset.jayjsFile}:\${el.dataset.jayjsLine})\`
+).join('\\n') || '  (none found)'}
+
+=== END REPORT ===\`;
+      }
+    };
+    return reporter;
+  }
+
+  window.__JAYJS_DEBUG_REPORTER__ = createDebugReporter();
 
   // Define the inspector class inline to avoid import issues
   class JayJsInspectorRuntime {
@@ -374,12 +442,78 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
     return element;
   };
 
+  // Define global debug report functions
+  window.jayjsDebugReport = function() {
+    if (window.__JAYJS_DEBUG_REPORTER__ && typeof window.__JAYJS_DEBUG_REPORTER__.generateReport === 'function') {
+      console.log(window.__JAYJS_DEBUG_REPORTER__.generateReport());
+    } else {
+      console.error('Debug reporter not available. Make sure inspector plugin is properly configured.');
+    }
+  };
+
+  window.jayjsDebugCommands = function() {
+    if (window.__JAYJS_DEBUG_REPORTER__ && typeof window.__JAYJS_DEBUG_REPORTER__.generateConsoleReport === 'function') {
+      console.log(window.__JAYJS_DEBUG_REPORTER__.generateConsoleReport());
+    } else {
+      console.log(\`
+// COPY THIS ENTIRE BLOCK AND PASTE IT
+console.group('🔍 JayJS Inspector Debug Report - Basic');
+console.log('Report generated at:', new Date().toISOString());
+
+// Test inspector availability
+console.log('🧪 Testing Inspector Components:');
+console.log('window.__JAYJS_INSPECTOR__:', typeof window.__JAYJS_INSPECTOR__);
+console.log('window.__jayjs_debug__:', typeof window.__jayjs_debug__);
+console.log('window.__JAYJS_INSPECTOR_CONFIG__:', typeof window.__JAYJS_INSPECTOR_CONFIG__);
+console.log('window.__JAYJS_DEBUG_REPORTER__:', typeof window.__JAYJS_DEBUG_REPORTER__);
+
+// Test health endpoint
+fetch('/__jayjs-inspector/health')
+  .then(r => r.json())
+  .then(data => console.log('🏥 Health check:', data))
+  .catch(err => console.error('❌ Health check failed:', err));
+
+// Show registered elements
+if (window.__JAYJS_INSPECTOR__) {
+  console.log('📊 Inspector instance:', window.__JAYJS_INSPECTOR__);
+  const overlay = document.getElementById('jayjs-inspector-overlay');
+  console.log('🎯 Overlay element:', overlay);
+
+  const jayjsElements = document.querySelectorAll('[data-jayjs-component]');
+  console.log('📋 JayJS elements found:', jayjsElements.length);
+  jayjsElements.forEach((el, i) => {
+    console.log(\\\`  \\\${i+1}. \\\${el.dataset.jayjsComponent} (\\\${el.dataset.jayjsFile}:\\\${el.dataset.jayjsLine})\\\`, el);
+  });
+}
+
+console.log('⌨️ Inspector Controls:');
+console.log('Press: Shift + Alt + J to toggle inspector mode');
+console.log('Then: Shift + Click on components to open in editor');
+
+console.groupEnd();
+      \`);
+    }
+  };
+
   // Initialize inspector when DOM is ready
   function initializeInspector() {
     try {
       new JayJsInspectorRuntime(window.__JAYJS_INSPECTOR_CONFIG__);
+
+      // Report successful initialization
+      if (window.__JAYJS_DEBUG_REPORTER__) {
+        window.__JAYJS_DEBUG_REPORTER__.setRuntimeInitialized();
+        window.__JAYJS_DEBUG_REPORTER__.setInspectorAvailable(!!window.__JAYJS_INSPECTOR__);
+        window.__JAYJS_DEBUG_REPORTER__.setDebugFunctionAvailable(!!window.__jayjs_debug__);
+        window.__JAYJS_DEBUG_REPORTER__.setOverlayCreated(!!document.getElementById('jayjs-inspector-overlay'));
+      }
     } catch (error) {
       console.error('[Jay JS Inspector] Failed to initialize:', error);
+
+      // Report initialization failure
+      if (window.__JAYJS_DEBUG_REPORTER__) {
+        window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Initialization', error.message || String(error));
+      }
     }
   }
 

@@ -85,9 +85,9 @@ function globToRegex(pattern: string): RegExp {
 		return `(${content.split(",").join("|")})`;
 	});
 
-	// Escape special regex characters except * and ?
+	// Escape special regex characters except * and ? and () and |
 	processed = processed
-		.replace(/[.+^$|[\]\\]/g, "\\$&") // Don't escape parentheses since we use them for groups
+		.replace(/[.+^$[\]\\]/g, "\\$&") // Don't escape parentheses and pipes since we use them for groups
 		.replace(/\*\*/g, "___DOUBLESTAR___")
 		.replace(/\*/g, "[^/]*")
 		.replace(/___DOUBLESTAR___/g, ".*")
