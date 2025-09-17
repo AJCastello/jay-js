@@ -3,7 +3,7 @@ export interface JayJsInspectorOptions {
   enabled?: boolean;
 
   /** Editor to open files in (default: 'code') */
-  editor?: 'vscode' | 'code' | 'vscode-insiders' | 'cursor' | 'webstorm' | 'atom';
+  editor?: 'vscode' | 'code' | 'code-insiders' | 'cursor' | 'webstorm' | 'atom';
 
   /** Custom overlay styles */
   overlayStyles?: {

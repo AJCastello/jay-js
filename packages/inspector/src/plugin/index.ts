@@ -88,6 +88,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 			console.log("🔗 Endpoints available:");
 			console.log("   • POST /__jayjs-inspector/open-in-editor");
 			console.log("   • GET  /__jayjs-inspector/health");
+			console.log("   • GET  /__jayjs-inspector/runtime.js");
 
 			// Add middleware to handle inspector requests
 			server.middlewares.use("/__jayjs-inspector", (req: any, res: any, next: any) => {
@@ -98,9 +99,30 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 					// Health check endpoint
 					res.writeHead(200, { "Content-Type": "application/json" });
 					res.end(JSON.stringify({ status: "ok" }));
+				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/runtime.js") {
+					// Serve the runtime script
+					res.writeHead(200, { "Content-Type": "application/javascript" });
+					res.end(generateInspectorRuntime(config));
 				} else {
 					next();
 				}
+			});
+
+			// Inject runtime script into HTML pages
+			server.middlewares.use((req: any, res: any, next: any) => {
+				if (req.url && req.url.endsWith('.html') || req.url === '/') {
+					const originalEnd = res.end;
+					res.end = function(chunk: any, encoding: any) {
+						if (chunk && typeof chunk === 'string' && chunk.includes('<head>')) {
+							const inspectorScript = `<script>
+								${generateInspectorRuntime(config)}
+							</script>`;
+							chunk = chunk.replace('<head>', `<head>${inspectorScript}`);
+						}
+						return originalEnd.call(this, chunk, encoding);
+					};
+				}
+				next();
 			});
 		},
 
@@ -161,23 +183,193 @@ async function handleOpenInEditor(req: any, res: any, editor: string) {
  */
 function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): string {
 	return `
-    (function() {
-      if (typeof window === 'undefined') return;
+(function() {
+  if (typeof window === 'undefined') return;
 
-      window.__JAYJS_INSPECTOR_CONFIG__ = ${JSON.stringify(config)};
+  console.log('[Jay JS Inspector] Runtime script loaded');
 
-      // Initialize inspector when DOM is ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeInspector);
+  window.__JAYJS_INSPECTOR_CONFIG__ = ${JSON.stringify(config)};
+
+  // Define the inspector class inline to avoid import issues
+  class JayJsInspectorRuntime {
+    constructor(config) {
+      this.config = config;
+      this.overlay = null;
+      this.elementMap = new WeakMap();
+      this.isEnabled = false;
+      this.init();
+    }
+
+    init() {
+      window.__JAYJS_INSPECTOR__ = this;
+      this.createOverlay();
+      this.bindEvents();
+
+      console.log('[Jay JS Inspector] Runtime initialized');
+      console.log('[Jay JS Inspector] Config:', this.config);
+      console.log('[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode');
+      console.log('[Jay JS Inspector] Then use Shift+Click on components to open in editor');
+    }
+
+    registerElement(element, metadata) {
+      this.elementMap.set(element, metadata);
+      element.dataset.jayjsComponent = metadata.component;
+      element.dataset.jayjsFile = metadata.file;
+      element.dataset.jayjsLine = metadata.line.toString();
+      console.log('[Jay JS Inspector] Registered ' + metadata.component + ' from ' + metadata.file + ':' + metadata.line, element);
+    }
+
+    createOverlay() {
+      this.overlay = document.createElement('div');
+      this.overlay.id = 'jayjs-inspector-overlay';
+
+      Object.assign(this.overlay.style, {
+        position: 'absolute',
+        pointerEvents: 'none',
+        zIndex: '999999',
+        display: 'none',
+        backgroundColor: this.config.overlayStyles.backgroundColor,
+        border: this.config.overlayStyles.borderWidth + ' ' + this.config.overlayStyles.borderStyle + ' ' + this.config.overlayStyles.borderColor,
+        opacity: this.config.overlayStyles.opacity.toString(),
+        borderRadius: '4px',
+        transition: 'all 0.1s ease'
+      });
+
+      const tooltip = document.createElement('div');
+      tooltip.style.cssText = 'position: absolute; top: -30px; left: 0; background: #333; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: monospace; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);';
+
+      this.overlay.appendChild(tooltip);
+      document.body.appendChild(this.overlay);
+    }
+
+    bindEvents() {
+      let isInspecting = false;
+      const self = this;
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key.toLowerCase() === 'j' && e.shiftKey && e.altKey) {
+          e.preventDefault();
+          isInspecting = !isInspecting;
+          self.setInspecting(isInspecting);
+        }
+      });
+
+      document.addEventListener('mouseover', function(e) {
+        if (!isInspecting) return;
+        const metadata = self.findComponentMetadata(e.target);
+        if (metadata) {
+          self.showOverlay(e.target, metadata);
+        }
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        if (!isInspecting) return;
+        self.hideOverlay();
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!isInspecting) return;
+
+        if (self.config.activationKey === 'shift+click' && !e.shiftKey) return;
+        if (self.config.activationKey === 'ctrl+click' && !e.ctrlKey) return;
+        if (self.config.activationKey === 'alt+click' && !e.altKey) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const metadata = self.findComponentMetadata(e.target);
+        if (metadata) {
+          self.openInEditor(metadata);
+        }
+      });
+    }
+
+    findComponentMetadata(element) {
+      let current = element;
+      while (current) {
+        const metadata = this.elementMap.get(current);
+        if (metadata) return metadata;
+        current = current.parentElement;
+      }
+      return null;
+    }
+
+    showOverlay(element, metadata) {
+      if (!this.overlay) return;
+
+      const rect = element.getBoundingClientRect();
+      const tooltip = this.overlay.firstElementChild;
+
+      this.overlay.style.display = 'block';
+      this.overlay.style.left = rect.left + window.scrollX + 'px';
+      this.overlay.style.top = rect.top + window.scrollY + 'px';
+      this.overlay.style.width = rect.width + 'px';
+      this.overlay.style.height = rect.height + 'px';
+
+      const fileName = metadata.file.split('/').pop() || metadata.file;
+      tooltip.textContent = '<' + metadata.component + '> ' + fileName + ':' + metadata.line;
+    }
+
+    hideOverlay() {
+      if (this.overlay) {
+        this.overlay.style.display = 'none';
+      }
+    }
+
+    setInspecting(enabled) {
+      this.isEnabled = enabled;
+
+      if (enabled) {
+        document.body.style.cursor = 'crosshair';
+        console.log('[Jay JS Inspector] Inspector mode enabled. Click on components to open in editor.');
       } else {
-        initializeInspector();
+        document.body.style.cursor = '';
+        this.hideOverlay();
+        console.log('[Jay JS Inspector] Inspector mode disabled.');
       }
+    }
 
-      function initializeInspector() {
-        import('/@jayjs-inspector/runtime').then(({ JayJsInspectorRuntime }) => {
-          new JayJsInspectorRuntime(window.__JAYJS_INSPECTOR_CONFIG__);
+    async openInEditor(metadata) {
+      try {
+        const response = await fetch('/__jayjs-inspector/open-in-editor', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            file: metadata.file,
+            line: metadata.line,
+            column: metadata.column
+          })
         });
+
+        if (response.ok) {
+          console.log('[Jay JS Inspector] Opening ' + metadata.file + ':' + metadata.line);
+        } else {
+          console.error('[Jay JS Inspector] Failed to open file in editor');
+        }
+      } catch (error) {
+        console.error('[Jay JS Inspector] Error opening file:', error);
       }
-    })();
+    }
+  }
+
+  // Define the debug function
+  window.__jayjs_debug__ = function(element, metadata) {
+    if (window.__JAYJS_INSPECTOR__) {
+      window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
+    }
+    return element;
+  };
+
+  // Initialize inspector when DOM is ready
+  function initializeInspector() {
+    new JayJsInspectorRuntime(window.__JAYJS_INSPECTOR_CONFIG__);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeInspector);
+  } else {
+    initializeInspector();
+  }
+})();
   `;
 }
