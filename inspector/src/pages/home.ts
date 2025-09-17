@@ -2,11 +2,6 @@ import { MyComponent } from "@/components/my-component";
 import { Box, Typography, Button } from "@jay-js/elements";
 
 export function Home() {
-	// Debug simples no carregamento
-	setTimeout(() => {
-		checkInspector();
-	}, 1000);
-
 	return Box({
 		style: { padding: "20px", fontFamily: "Arial" },
 		children: [
@@ -31,6 +26,7 @@ export function Home() {
 			Typography({
 				tag: "div",
 				id: "status",
+				onmount: checkInspector,
 				style: {
 					background: "#f5f5f5",
 					padding: "10px",

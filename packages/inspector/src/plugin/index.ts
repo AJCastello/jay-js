@@ -57,6 +57,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 			console.log("💡 Press Shift+Alt+J to toggle inspector mode, then Shift+Click on components\n");
 		},
 
+
 		transform(code: string, id: string) {
 			// Skip if not enabled or not a target file
 			if (!config.enabled || !fileFilter(id)) {
@@ -98,19 +99,19 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 
 			// Add middleware to handle inspector requests
 			server.middlewares.use("/__jayjs-inspector", (req: any, res: any, next: any) => {
-				if (req.method === "POST" && req.url === "/__jayjs-inspector/open-in-editor") {
+				if (req.method === "POST" && req.url === "/open-in-editor") {
 					// Handle open-in-editor requests
 					handleOpenInEditor(req, res, config.editor, reporter);
-				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/health") {
+				} else if (req.method === "GET" && req.url === "/health") {
 					// Health check endpoint
 					reporter.setHealthCheck(true);
 					res.writeHead(200, { "Content-Type": "application/json" });
 					res.end(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }));
-				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/runtime.js") {
+				} else if (req.method === "GET" && req.url === "/runtime.js") {
 					// Serve the runtime script
 					res.writeHead(200, { "Content-Type": "application/javascript" });
 					res.end(generateInspectorRuntime(config));
-				} else if (req.method === "GET" && req.url === "/__jayjs-inspector/debug-report") {
+				} else if (req.method === "GET" && req.url === "/debug-report") {
 					// Serve debug report
 					res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
 					res.end(reporter.generateReport());
