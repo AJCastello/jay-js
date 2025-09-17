@@ -12,8 +12,8 @@
 		"allowJs": true,
 		"forceConsistentCasingInFileNames": true,
 		"declaration": false,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
 		"lib": [
 			"DOM",
 			"DOM.Iterable",

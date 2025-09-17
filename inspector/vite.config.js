@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import path from "path";
-import { jayJsInspector } from "@jay-js/inspector";
+import { jayJsInspector } from "@jay-js/inspector/plugin";
 
 export default defineConfig({
 	base: "/",
