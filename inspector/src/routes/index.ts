@@ -7,5 +7,7 @@ export function Routes() {
 			path: "/",
 			element: Home,
 		}
-	])
+	], {
+		target: document.getElementById("app") || undefined
+	})
 }

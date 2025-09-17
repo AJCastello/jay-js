@@ -1,3 +1,4 @@
+import { MyComponent } from "@/components/my-component";
 import { Box, Typography, Button } from "@jay-js/elements";
 
 export function Home() {
@@ -36,7 +37,8 @@ export function Home() {
 					marginTop: "20px"
 				},
 				children: "Loading..."
-			})
+			}),
+			MyComponent()
 		]
 	});
 }
