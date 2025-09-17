@@ -39,7 +39,8 @@ export class JayJsInspectorRuntime {
 
 		console.log('[Jay JS Inspector] Runtime initialized');
 		console.log('[Jay JS Inspector] Config:', this.config);
-		console.log('[Jay JS Inspector] Press Shift+Cmd+I (Mac) or Shift+Ctrl+I (Windows) to toggle inspector mode');
+		console.log('[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode');
+		console.log('[Jay JS Inspector] Then use Shift+Click on components to open in editor');
 	}	/**
 	 * Register an element with its component metadata
 	 */
@@ -100,7 +101,8 @@ export class JayJsInspectorRuntime {
 
 		// Toggle inspector with keyboard shortcut
 		document.addEventListener("keydown", (e) => {
-			if (e.key === "i" && e.shiftKey && e.metaKey) {
+			// Use Shift + Alt + J to avoid conflicts with browser shortcuts
+			if (e.key.toLowerCase() === "j" && e.shiftKey && e.altKey) {
 				e.preventDefault();
 				isInspecting = !isInspecting;
 				this.setInspecting(isInspecting);
