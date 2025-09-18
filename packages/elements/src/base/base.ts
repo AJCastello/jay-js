@@ -93,6 +93,25 @@ export function Base<T extends TBaseTagMap = "div">(
 				}
 			}
 		});
+
+	// Development-only: Register element with inspector if available
+	if (process.env.NODE_ENV === "development" && typeof window !== "undefined" && window.__jayjs_debug__) {
+		// Get caller information for better debugging (fallback metadata)
+		const metadata = {
+			component: (tag || "div").charAt(0).toUpperCase() + (tag || "div").slice(1),
+			file: "unknown",
+			line: 0,
+			column: 0,
+		};
+
+		try {
+			window.__jayjs_debug__(base, metadata);
+		} catch (error) {
+			// Silently ignore inspector errors in production-like scenarios
+			console.debug("Inspector registration failed:", error);
+		}
+	}
+
 	return base as HTMLElementTagNameMap[T];
 }
 

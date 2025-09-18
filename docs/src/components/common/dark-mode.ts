@@ -1,18 +1,24 @@
 import { setTheme } from "@jay-js/system";
 import { Box, Button } from "../../../../packages/elements/src";
+import { IconMoonDuotone } from "../icons/duotone/moon";
+import { IconSunDuotone } from "../icons/duotone/sun";
 
 export function DarkModeToggle() {
-	const iconTheme = Box();
-	// Icon({
-	//   icon: `ph-duotone ph-${document.documentElement.dataset.theme === "dark" ? "moon" : "sun"}`,
-	//   className: "text-primary text-xl"
-	// });
+	const initialIsDark = document.documentElement.dataset.theme === "dark";
+	const currentIcon = initialIsDark
+		? IconMoonDuotone({ className: "text-primary text-xl" })
+		: IconSunDuotone({ className: "text-primary text-xl" });
+	const iconWrapper = Box({ children: currentIcon });
 
 	function handleThemeChange() {
 		const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-		iconTheme.classList.remove(theme === "dark" ? "ph-sun" : "ph-moon");
-		iconTheme.classList.add(theme === "dark" ? "ph-moon" : "ph-sun");
 		setTheme(theme);
+		// swap icon
+		const newIcon =
+			theme === "dark"
+				? IconMoonDuotone({ className: "text-primary text-xl" })
+				: IconSunDuotone({ className: "text-primary text-xl" });
+		iconWrapper.replaceChildren(newIcon);
 	}
 
 	return Box({
@@ -20,7 +26,7 @@ export function DarkModeToggle() {
 		children: [
 			Button({
 				className: "btn btn-ghost btn-circle btn-sm",
-				children: iconTheme,
+				children: iconWrapper,
 				onclick: handleThemeChange,
 			}),
 		],

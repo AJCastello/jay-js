@@ -1,23 +1,22 @@
----
-category: Access Control
+category: Controle de Acesso
 categoryId: 5
 articleId: 4
 slug: guard-utils
-title: Permission Utilities
-description: Learn about utility functions for creating, combining, and managing permissions.
+title: Utilitários de Permissão
+description: Aprenda sobre funções utilitárias para criar, combinar e gerenciar permissões.
 ---
 
-# Permission Utilities
+# Utilitários de Permissão
 
-## API Reference
+## Referência da API
 
 ### combinePermissions
 
 ```typescript
-// Function signature
+// Assinatura da função
 function combinePermissions(...permissionSets: TPermission[][]): TPermission[];
 
-// Example usage
+// Exemplo de uso
 const userPermissions = definePermissions('user', 'articles').allow('read').save();
 const editorPermissions = definePermissions('editor', 'articles').allow('edit').save();
 
@@ -27,7 +26,7 @@ const allPermissions = combinePermissions(userPermissions, editorPermissions);
 ### createPermission
 
 ```typescript
-// Function signature
+// Assinatura da função
 function createPermission(
   role: string | string[],
   subject: string | string[],
@@ -36,29 +35,29 @@ function createPermission(
   attributes?: string | string[]
 ): TPermission;
 
-// Example usage
+// Exemplo de uso
 const viewPermission = createPermission('user', 'articles', 'read', true);
 const editPermission = createPermission('editor', 'articles', 'edit', true, 'own');
 ```
 
-## Overview
+## Visão Geral
 
-The Guard system provides utility functions to help you create and combine permissions in different ways. These utilities are especially useful for more dynamic permission scenarios or when managing permissions from multiple sources.
+O sistema Guard fornece funções utilitárias para ajudar você a criar e combinar permissões de diferentes maneiras. Esses utilitários são especialmente úteis em cenários de permissões dinâmicas ou quando é necessário gerenciar permissões provenientes de múltiplas fontes.
 
-## Combining Permissions
+## Combinando Permissões
 
-The `combinePermissions` function allows you to merge multiple sets of permissions into a single array. This is useful when:
+A função `combinePermissions` permite mesclar múltiplos conjuntos de permissões em um único array. Isso é útil quando:
 
-- Permissions come from different parts of your application
-- You want to separate permissions by feature or module
-- You need to merge permissions from different sources (e.g., role-based and feature-based)
+- As permissões vêm de diferentes partes da aplicação
+- Você quer separar permissões por funcionalidade ou módulo
+- É necessário juntar permissões de diferentes origens (ex.: baseadas em papéis e baseadas em funcionalidades)
 
-### Basic Usage
+### Uso Básico
 
 ```typescript
 import { definePermissions, combinePermissions } from '@jay-js/system/guard';
 
-// Define permissions for different roles
+// Define permissões para diferentes papéis
 const userPermissions = definePermissions('user', 'articles')
   .allow('read')
   .save();
@@ -71,42 +70,42 @@ const adminPermissions = definePermissions('admin', 'articles')
   .allow(['read', 'edit', 'delete', 'publish'])
   .save();
 
-// Combine all permissions into a single array
+// Combina todas as permissões em um único array
 const allPermissions = combinePermissions(
   userPermissions,
   editorPermissions,
   adminPermissions
 );
 
-// Use the combined permissions for checking
+// Usa as permissões combinadas para verificação
 const canPublish = hasPermission(allPermissions, 'admin', 'articles', 'publish');
 ```
 
-### Merging Feature-based Permissions
+### Mesclando Permissões Baseadas em Funcionalidades
 
-You can organize permissions by feature and then combine them:
+Você pode organizar permissões por funcionalidade e então combiná-las:
 
 ```typescript
-// Article-related permissions
+// Permissões relacionadas a artigos
 const articlePermissions = combinePermissions(
   definePermissions('user', 'articles').allow('read').save(),
   definePermissions('editor', 'articles').allow(['read', 'edit']).save(),
   definePermissions('admin', 'articles').allow(['read', 'edit', 'delete']).save()
 );
 
-// Comment-related permissions
+// Permissões relacionadas a comentários
 const commentPermissions = combinePermissions(
   definePermissions('user', 'comments').allow(['read', 'create']).save(),
   definePermissions('editor', 'comments').allow(['read', 'create', 'edit']).save(),
   definePermissions('admin', 'comments').allow(['read', 'create', 'edit', 'delete']).save()
 );
 
-// User-related permissions
+// Permissões relacionadas a usuários
 const userPermissions = combinePermissions(
   definePermissions('admin', 'users').allow(['read', 'create', 'edit', 'delete']).save()
 );
 
-// Combine all feature permissions into one array
+// Combina todas as permissões de funcionalidades em um único array
 const applicationPermissions = combinePermissions(
   articlePermissions,
   commentPermissions,
@@ -114,40 +113,40 @@ const applicationPermissions = combinePermissions(
 );
 ```
 
-## Creating Individual Permissions
+## Criando Permissões Individuais
 
-The `createPermission` function provides a direct way to create permission objects without using the builder pattern. This is useful for:
+A função `createPermission` oferece uma maneira direta de criar objetos de permissão sem usar o padrão de builder. Isso é útil para:
 
-- Dynamic permission creation
-- Programmatically generating permissions
-- Simplifying permission creation when you only need a single rule
+- Criação dinâmica de permissões
+- Geração programática de permissões
+- Simplificar a criação quando você precisa apenas de uma única regra
 
-### Basic Usage
+### Uso Básico
 
 ```typescript
 import { createPermission, hasPermission } from '@jay-js/system/guard';
 
-// Create individual permissions
+// Cria permissões individuais
 const readPermission = createPermission('user', 'articles', 'read', true);
 const editPermission = createPermission('editor', 'articles', 'edit', true);
 const deletePermission = createPermission('admin', 'articles', 'delete', true);
 
-// Combine them into an array
+// Combina em um array
 const permissions = [readPermission, editPermission, deletePermission];
 
-// Check permissions
+// Verifica permissões
 const canUserRead = hasPermission(permissions, 'user', 'articles', 'read');
 if (canUserRead.granted) {
-  // User can read articles
+  // Usuário pode ler artigos
 }
 ```
 
-### Supporting Multiple Values
+### Suporte a Múltiplos Valores
 
-All parameters that accept arrays can be used with multiple values:
+Todos os parâmetros que aceitam arrays podem ser usados com múltiplos valores:
 
 ```typescript
-// Permission for multiple roles
+// Permissão para múltiplos papéis
 const viewDashboardPermission = createPermission(
   ['admin', 'manager', 'analyst'],
   'dashboard',
@@ -155,7 +154,7 @@ const viewDashboardPermission = createPermission(
   true
 );
 
-// Permission for multiple subjects
+// Permissão para múltiplos assuntos (subjects)
 const manageContentPermission = createPermission(
   'editor',
   ['articles', 'pages', 'media'],
@@ -163,7 +162,7 @@ const manageContentPermission = createPermission(
   true
 );
 
-// Permission for multiple actions
+// Permissão para múltiplas ações
 const contentAdminPermission = createPermission(
   'content-admin',
   'content',
@@ -172,12 +171,12 @@ const contentAdminPermission = createPermission(
 );
 ```
 
-### Adding Attributes
+### Adicionando Atributos
 
-You can add attributes to limit the scope of permissions:
+Você pode adicionar atributos para limitar o escopo das permissões:
 
 ```typescript
-// Permission limited to 'own' resources
+// Permissão limitada a recursos 'own' (próprios)
 const editOwnArticlesPermission = createPermission(
   'writer',
   'articles',
@@ -186,7 +185,7 @@ const editOwnArticlesPermission = createPermission(
   'own'
 );
 
-// Permission with multiple attributes
+// Permissão com múltiplos atributos
 const moderationPermission = createPermission(
   'moderator',
   'comments',
@@ -196,28 +195,28 @@ const moderationPermission = createPermission(
 );
 ```
 
-## Dynamic Permission Generation
+## Geração Dinâmica de Permissões
 
-These utility functions are particularly useful for generating permissions dynamically:
+Essas funções utilitárias são particularmente úteis para gerar permissões dinamicamente:
 
 ```typescript
 function generateRolePermissions(role, permissionConfig) {
   const permissions = [];
-  
+
   for (const [subject, actions] of Object.entries(permissionConfig)) {
     for (const action of Object.keys(actions)) {
       const { granted, attributes } = actions[action];
-      
+
       permissions.push(
         createPermission(role, subject, action, granted, attributes)
       );
     }
   }
-  
+
   return permissions;
 }
 
-// Usage
+// Uso
 const editorConfig = {
   articles: {
     read: { granted: true },
@@ -234,15 +233,15 @@ const editorConfig = {
 const editorPermissions = generateRolePermissions('editor', editorConfig);
 ```
 
-## Loading Permissions from External Sources
+## Carregando Permissões de Fontes Externas
 
-The utility functions make it easy to load permissions from configuration files or databases:
+As funções utilitárias facilitam carregar permissões a partir de arquivos de configuração ou bancos de dados:
 
 ```typescript
 async function loadPermissionsFromDatabase() {
   // Fetch permission records from database
   const records = await db.query('SELECT role, subject, action, granted, attributes FROM permissions');
-  
+
   // Convert records to permission objects
   const permissions = records.map(record => {
     const { role, subject, action, granted, attributes } = record;
@@ -254,60 +253,60 @@ async function loadPermissionsFromDatabase() {
       attributes ? JSON.parse(attributes) : undefined
     );
   });
-  
+
   return permissions;
 }
 
-// Usage
+// Uso
 const dbPermissions = await loadPermissionsFromDatabase();
 const configPermissions = loadPermissionsFromConfig();
 
-// Combine all permission sources
+// Combina todas as fontes de permissão
 const allPermissions = combinePermissions(dbPermissions, configPermissions);
 ```
 
-## Working with Permission Groups
+## Trabalhando com Grupos de Permissões
 
-You can create logical groups of permissions for different aspects of your application:
+Você pode criar grupos lógicos de permissões para diferentes aspectos da sua aplicação:
 
 ```typescript
-// Base permissions that all authenticated users have
+// Permissões base que todos usuários autenticados possuem
 const basePermissions = [
   createPermission('user', 'profile', 'read', true),
   createPermission('user', 'profile', 'edit', true, 'own'),
   createPermission('user', 'settings', ['read', 'update'], true)
 ];
 
-// Feature-specific permissions
+// Permissões específicas de funcionalidade
 const forumPermissions = [
   createPermission('user', 'topics', ['read', 'create'], true),
   createPermission('user', 'posts', ['read', 'create'], true),
   createPermission('user', 'posts', ['edit', 'delete'], true, 'own')
 ];
 
-// Premium feature permissions
+// Permissões de funcionalidades premium
 const premiumPermissions = [
   createPermission('premium', 'exclusiveContent', 'access', true),
   createPermission('premium', 'downloads', 'unlimited', true)
 ];
 
-// Combine all relevant permissions based on user status
+// Combina as permissões relevantes com base no status do usuário
 function getUserPermissions(user) {
   const permissions = [...basePermissions];
-  
+
   if (user.forumAccess) {
     permissions.push(...forumPermissions);
   }
-  
+
   if (user.subscription === 'premium') {
     permissions.push(...premiumPermissions);
   }
-  
+
   return permissions;
 }
 
-// Usage
+// Uso
 const userPermissions = getUserPermissions(currentUser);
 ```
 
-In the next article, we'll look at real-world examples of implementing access control using the Guard system. 
+No próximo artigo, veremos exemplos reais de implementação de controle de acesso usando o sistema Guard.

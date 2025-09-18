@@ -1,11 +1,5 @@
 import { Box, Link, Section, Typography } from "../../../../packages/elements/src";
-
-// Simple Icon function for creating icon elements
-function Icon({ icon, className }: { icon: string; className?: string }) {
-	const element = document.createElement("i");
-	element.className = `${icon} ${className || ""}`.trim();
-	return element;
-}
+import { IconArrowRightDuotone } from "../icons";
 
 export function GettingStarted() {
 	const steps = [
@@ -134,13 +128,7 @@ incrementButton.onclick = () => {
 				children: Link({
 					href: "/docs/getting-started",
 					className: "btn btn-primary btn-lg gap-2",
-					children: [
-						"Explore Full Documentation",
-						Icon({
-							className: "w-5 h-5",
-							icon: "ph-duotone ph-arrow-right",
-						}),
-					],
+					children: ["Explore Full Documentation", IconArrowRightDuotone({ className: "w-5 h-5" })],
 				}),
 			}),
 		],

@@ -3,7 +3,7 @@ category: Examples
 categoryId: 4
 articleId: 6
 slug: examples-shopping-cart
-title: Aplicação Completa: Carrinho de Compras
+title: Aplicação Completa Carrinho de Compras
 description: Implementação de um carrinho de compras completo com adição, remoção e atualização de itens usando @jay-js/elements.
 ---
 
@@ -28,7 +28,7 @@ function criarCarrinhoCompras() {
     className: 'w-full px-4 py-2 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500',
     oninput: (e) => {
       const termo = e.target.value.toLowerCase();
-      produtosFiltrados = produtos.filter(produto => 
+      produtosFiltrados = produtos.filter(produto =>
         produto.nome.toLowerCase().includes(termo)
       );
       renderizarProdutos();
@@ -147,7 +147,7 @@ function criarCarrinhoCompras() {
 
   function adicionarAoCarrinho(produto) {
     const itemExistente = carrinho.find(item => item.produto.id === produto.id);
-    
+
     if (itemExistente) {
       if (itemExistente.quantidade < produto.estoque) {
         itemExistente.quantidade++;
@@ -158,7 +158,7 @@ function criarCarrinhoCompras() {
     } else {
       carrinho.push({ produto, quantidade: 1 });
     }
-    
+
     atualizarCarrinho();
   }
 
@@ -167,7 +167,7 @@ function criarCarrinhoCompras() {
     if (!item) return;
 
     const novaQuantidade = item.quantidade + delta;
-    
+
     if (novaQuantidade <= 0) {
       removerDoCarrinho(produtoId);
     } else if (novaQuantidade <= item.produto.estoque) {
@@ -184,7 +184,7 @@ function criarCarrinhoCompras() {
   }
 
   function calcularTotal() {
-    return carrinho.reduce((total, item) => 
+    return carrinho.reduce((total, item) =>
       total + (item.produto.preco * item.quantidade), 0
     );
   }
@@ -198,7 +198,7 @@ function criarCarrinhoCompras() {
 
   function atualizarCarrinho() {
     listaCarrinho.innerHTML = '';
-    
+
     if (carrinho.length === 0) {
       listaCarrinho.appendChild(Typography({
         children: 'Seu carrinho está vazio',
@@ -209,7 +209,7 @@ function criarCarrinhoCompras() {
         listaCarrinho.appendChild(criarItemCarrinho(item));
       });
     }
-    
+
     const total = calcularTotal();
     totalDisplay.textContent = `Total: ${formatarPreco(total)}`;
   }
@@ -222,7 +222,7 @@ function criarCarrinhoCompras() {
 
     const total = calcularTotal();
     const itens = carrinho.length;
-    
+
     if (confirm(`Finalizar compra de ${itens} item(ns) por ${formatarPreco(total)}?`)) {
       alert('Compra realizada com sucesso!');
       carrinho = [];
@@ -241,7 +241,7 @@ function criarCarrinhoCompras() {
         children: 'Loja Virtual',
         className: 'text-3xl font-bold text-center mb-8'
       }),
-      
+
       // Seção de produtos
       Box({
         children: [
@@ -255,7 +255,7 @@ function criarCarrinhoCompras() {
         ],
         className: 'bg-white p-6 rounded-lg shadow-lg mb-8'
       }),
-      
+
       // Seção do carrinho
       Box({
         children: [

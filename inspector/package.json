@@ -1,0 +1,24 @@
+{
+  "name": "inspector-test",
+  "version": "1.0.0",
+	"type": "module",
+  "scripts": {
+		"dev": "vite --mode development --host",
+		"build": "tsc && vite build --mode production",
+		"preview": "vite preview --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+		"@jay-js/elements": "file:../packages/elements/dist",
+		"@jay-js/system": "file:../packages/system/dist",
+    "vite": "^7.1.5"
+  },
+	"devDependencies": {
+		"@jay-js/inspector": "file:../packages/inspector/dist",
+		"typescript": "^5.7.3"
+	}
+}

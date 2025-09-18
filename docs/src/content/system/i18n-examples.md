@@ -1,19 +1,19 @@
 ---
-category: Internationalization
-categoryId: 6
-articleId: 6
-slug: i18n-examples
-title: I18n Examples and Patterns
-description: Common usage patterns and examples for the internationalization system
+categoria: Internacionalização
+categoriaId: 6
+artigoId: 6
+slug: exemplos-i18n
+titulo: Exemplos e Padrões de I18n
+descricao: Padrões de uso comuns e exemplos para o sistema de internacionalização
 ---
 
-# I18n Examples and Patterns
+# Exemplos e Padrões de I18n
 
-This guide provides practical examples and common patterns for using the internationalization system in different scenarios.
+Este guia fornece exemplos práticos e padrões comuns para usar o sistema de internacionalização em diferentes cenários.
 
-## Complete Application Setup
+## Configuração Completa da Aplicação
 
-Here's a complete example of setting up i18n in a typical application:
+Aqui está um exemplo completo de configuração do i18n em uma aplicação típica:
 
 ```typescript
 // types/i18n.ts
@@ -36,17 +36,17 @@ export interface Translations {
 // locales/en.ts
 export default {
   common: {
-    welcome: 'Welcome to our app',
-    loading: 'Loading...',
-    error: 'An error occurred'
+    welcome: 'Bem-vindo ao nosso aplicativo',
+    loading: 'Carregando...',
+    error: 'Ocorreu um erro'
   },
   auth: {
-    login: 'Log In',
-    logout: 'Log Out',
-    'email.label': 'Email Address',
-    'email.placeholder': 'Enter your email',
-    'password.label': 'Password',
-    'password.placeholder': 'Enter your password'
+    login: 'Entrar',
+    logout: 'Sair',
+    'email.label': 'Endereço de Email',
+    'email.placeholder': 'Digite seu email',
+    'password.label': 'Senha',
+    'password.placeholder': 'Digite sua senha'
   }
 };
 
@@ -82,9 +82,9 @@ i18nProvider(() => {
 }, i18nConfig);
 ```
 
-## Common Components Pattern
+## Padrão de Componentes Comuns
 
-Example of creating reusable internationalized components:
+Exemplo de criação de componentes reutilizáveis internacionalizados:
 
 ```typescript
 // components/LoginForm.ts
@@ -95,14 +95,14 @@ export function LoginForm() {
     <form>
       <div>
         <label>${i18n('auth.email.label')}</label>
-        <input 
-          type="email" 
+        <input
+          type="email"
           placeholder="${i18n('auth.email.placeholder')}"
         />
       </div>
       <div>
         <label>${i18n('auth.password.label')}</label>
-        <input 
+        <input
           type="password"
           placeholder="${i18n('auth.password.placeholder')}"
         />
@@ -113,9 +113,9 @@ export function LoginForm() {
 }
 ```
 
-## Language Switcher Component
+## Componente de Troca de Idioma
 
-A practical example of a language switcher:
+Um exemplo prático de um componente de troca de idioma:
 
 ```typescript
 import { setLanguage, getCurrentLocale } from '@jay-js/system';
@@ -123,22 +123,22 @@ import { i18n } from '../i18n';
 
 export function LanguageSwitcher() {
   const currentLocale = getCurrentLocale();
-  
+
   const languages = [
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Español' },
-    { code: 'fr', label: 'Français' }
+    { code: 'en', label: 'Inglês' },
+    { code: 'es', label: 'Espanhol' },
+    { code: 'fr', label: 'Francês' }
   ];
-  
+
   return `
     <div class="language-switcher">
       <label>${i18n('common.language')}</label>
-      <select 
+      <select
         onchange="handleLanguageChange(event)"
         value="${currentLocale}"
       >
         ${languages.map(lang => `
-          <option 
+          <option
             value="${lang.code}"
             ${currentLocale === lang.code ? 'selected' : ''}
           >
@@ -156,9 +156,9 @@ function handleLanguageChange(event: Event) {
 }
 ```
 
-## Dynamic Content Loading
+## Carregamento Dinâmico de Conteúdo
 
-Example of loading translations based on user interaction:
+Exemplo de carregamento de traduções com base na interação do usuário:
 
 ```typescript
 import { setLanguage } from '@jay-js/system';
@@ -166,13 +166,13 @@ import { i18n } from '../i18n';
 
 async function loadLanguageContent(code: string) {
   try {
-    // Show loading state
+    // Mostrar estado de carregamento
     showLoading(i18n('common.loading'));
-    
-    // Change language - this will trigger dynamic import
+
+    // Alterar idioma - isso acionará o carregamento dinâmico
     await setLanguage(code);
-    
-    // Update UI
+
+    // Atualizar UI
     hideLoading();
     showSuccess(i18n('common.language.changed'));
   } catch (error) {
@@ -182,9 +182,9 @@ async function loadLanguageContent(code: string) {
 }
 ```
 
-## Formatting with Variables
+## Formatação com Variáveis
 
-Advanced example of using translation variables:
+Exemplo avançado de uso de variáveis em traduções:
 
 ```typescript
 // types/i18n.ts
@@ -197,18 +197,18 @@ interface Translations {
   };
 }
 
-// Usage in component
+// Uso no componente
 function NotificationBadge({ count, lastUpdate }: Props) {
   const message = count === 0
     ? i18n('notifications.count.none')
     : count === 1
       ? i18n('notifications.count.one', { count })
       : i18n('notifications.count.many', { count });
-      
+
   const updated = i18n('notifications.last.updated', {
     time: new Date(lastUpdate).toLocaleTimeString()
   });
-  
+
   return `
     <div>
       <span>${message}</span>
@@ -216,3 +216,4 @@ function NotificationBadge({ count, lastUpdate }: Props) {
     </div>
   `;
 }
+```

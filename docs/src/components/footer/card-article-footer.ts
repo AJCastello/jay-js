@@ -1,32 +1,15 @@
 import { Navigate } from "@jay-js/system";
 import { Box, Link, Typography } from "../../../../packages/elements/src";
-
-// Simple Icon function for creating icon elements
-function Icon({ icon, className }: { icon: string; className?: string }) {
-	const element = document.createElement("i");
-	element.className = `${icon} ${className || ""}`.trim();
-	return element;
-}
-
 import type { TArticleFooter } from "../../types";
+import { IconCaretLeftDuotone, IconCaretRightDuotone } from "../icons";
 
 export type TCardArticleFooterProps = TArticleFooter & {
 	directory: string;
 };
 
 const CARD_OPTIONS = {
-	next: {
-		icon: "ph-duotone ph-caret-right",
-		text: "Next",
-		justify: "justify-end",
-		translate: "translate-x-2",
-	},
-	previous: {
-		icon: "ph-duotone ph-caret-left",
-		text: "Previous",
-		justify: "justify-start",
-		translate: "-translate-x-2",
-	},
+	next: { icon: IconCaretRightDuotone, text: "Next", justify: "justify-end", translate: "translate-x-2" },
+	previous: { icon: IconCaretLeftDuotone, text: "Previous", justify: "justify-start", translate: "-translate-x-2" },
 };
 
 export function CardArticleFooter(article: TCardArticleFooterProps) {
@@ -65,8 +48,7 @@ export function CardArticleFooter(article: TCardArticleFooterProps) {
 		],
 	});
 
-	const icon = Icon({
-		icon: CARD_OPTIONS[position].icon,
+	const icon = CARD_OPTIONS[position].icon({
 		className: `text-primary text-3xl group-hover:${CARD_OPTIONS[position].translate} transition-all duration-500 ease-in-out`,
 	});
 

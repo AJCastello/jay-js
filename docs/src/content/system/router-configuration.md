@@ -31,8 +31,8 @@ routerDefineOptions(options: Partial<TRouterOptions>): void
 |-------------|------|-----------|
 | `prefix` | `string` | Prefixo de URL a ser adicionado a todas as rotas |
 | `target` | `HTMLElement \| string` | Elemento DOM ou seletor padrão onde as rotas serão renderizadas |
-| `onError` | `(error: Error) => void` | Função de tratamento de erros |
-| `beforeResolve` | `(route: TRouteInstance) => boolean \| Promise<boolean>` | Função chamada antes de resolver uma rota, pode cancelar a navegação retornando false |
+| `onError` | `(error: Error) => void` | Função para tratamento de erros |
+| `beforeResolve` | `(route: TRouteInstance) => boolean \| Promise<boolean>` | Função chamada antes de resolver uma rota. Pode cancelar a navegação retornando false |
 
 ## Configuração Básica
 
@@ -175,4 +175,4 @@ routerDefineOptions({
 Router([
   // Rotas definidas aqui
 ]);
-``` 
+```

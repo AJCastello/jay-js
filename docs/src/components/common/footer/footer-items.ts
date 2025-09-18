@@ -1,6 +1,6 @@
 import { Navigate } from "@jay-js/system";
 import { Link } from "../../../../../packages/elements/src";
-import { Icon } from "../../ui";
+import { IconDiscordLogoDuotone, IconGithubLogoDuotone, IconPackageDuotone, IconTwitterLogoDuotone } from "../../icons";
 import { Logo } from "../logo";
 import type { MenuItem } from "../shared/menu-items";
 import { NavigationLink } from "../shared/navigation-link";
@@ -32,16 +32,21 @@ export function FooterLegalItem({ label, href }: MenuItem) {
 	});
 }
 
+const socialIconMap: Record<string, (o?: any) => HTMLElement> = {
+	"ph-duotone ph-github-logo": IconGithubLogoDuotone,
+	"ph-duotone ph-twitter-logo": IconTwitterLogoDuotone,
+	"ph-duotone ph-discord-logo": IconDiscordLogoDuotone,
+	"ph-duotone ph-package": IconPackageDuotone,
+};
+
 export function FooterSocialItem({ href, icon }: { label: string; href: string; icon: string }) {
+	const IconComponent = socialIconMap[icon] || IconGithubLogoDuotone;
 	return Link({
-		href: href,
+		href,
 		target: "_blank",
 		rel: "noopener",
 		role: "button",
 		className: "btn btn-circle btn-ghost no-underline",
-		children: Icon({
-			className: "text-2xl",
-			icon: icon,
-		}),
+		children: IconComponent({ className: "text-2xl" }),
 	});
 }

@@ -30,7 +30,7 @@ description: Conheça o sistema de roteamento para aplicações de página únic
 
 ## O que é o Router?
 
-O Router do @jay-js/system é uma biblioteca leve e flexível para roteamento do lado do cliente em aplicações de página única (SPA). Ele permite a navegação baseada em caminhos sem recarregar a página, potencializado pela biblioteca path-to-regexp para capacidades avançadas de correspondência de caminhos.
+O Router do @jay-js/system é uma biblioteca leve e flexível para roteamento do lado do cliente em aplicações de página única (SPA). Ele permite navegação baseada em caminhos sem recarregar a página, utilizando a biblioteca path-to-regexp para recursos avançados de correspondência de caminhos.
 
 ## Funcionamento Básico
 
@@ -39,7 +39,7 @@ O Router funciona interceptando eventos de navegação e renderizando componente
 - Transições suaves entre páginas
 - Melhor experiência do usuário
 - Gerenciamento de estado simplificado
-- Rotas aninhadas e layouts
+- Suporte a rotas aninhadas e layouts
 
 ## Instalação
 
@@ -93,4 +93,4 @@ document.querySelectorAll('a').forEach(link => {
 - **Layouts**: Suporte para layouts compartilhados entre várias rotas
 - **Carregamento preguiçoso (lazy loading)**: Carregue componentes sob demanda para melhorar o desempenho
 - **Guardas de rota**: Controle de acesso baseado em lógica personalizada
-- **Navegação programática**: API para navegar entre rotas a partir do código 
+- **Navegação programática**: API para navegar entre rotas a partir do código

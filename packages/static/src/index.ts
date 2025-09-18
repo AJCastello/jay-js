@@ -1,1 +1,1 @@
-export default {};
+export * from "./vite-plugin/index.js";

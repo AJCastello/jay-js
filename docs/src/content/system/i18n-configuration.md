@@ -1,24 +1,24 @@
 ---
-category: Internationalization
-categoryId: 6
-articleId: 2
-slug: i18n-configuration
-title: I18n Configuration
-description: Complete guide to configuring the internationalization system
+categoria: Internacionalização
+categoriaId: 6
+artigoId: 2
+slug: configuracao-i18n
+titulo: Configuração de I18n
+descricao: Guia completo para configurar o sistema de internacionalização
 ---
 
-# I18n Configuration
+# Configuração de I18n
 
-## API Reference
+## Referência da API
 
-### Configuration Function
+### Função de Configuração
 
 ```typescript
-// Basic configuration syntax
+// Sintaxe básica de configuração
 i18nDefineOptions(options: Ii18nOptions);
 ```
 
-### Configuration Type
+### Tipo de Configuração
 
 ```typescript
 interface Ii18nOptions {
@@ -36,151 +36,151 @@ interface LanguageConfig {
 }
 ```
 
-### Parameters
+### Parâmetros
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `languages` | `LanguageConfig[]` | Required | Array of language configurations |
-| `defaultLocale` | `string` | `'en'` | Default language code |
-| `saveToLocalStorage` | `boolean` | `true` | Save language preference |
-| `localStorageKey` | `string` | `'jayjs-i18n-default-locale'` | Storage key name |
-| `nestedKeys` | `boolean` | `false` | Enable nested translation keys |
+| Opção | Tipo | Padrão | Descrição |
+|-------|------|--------|-----------|
+| `languages` | `LanguageConfig[]` | Obrigatório | Array de configurações de idiomas |
+| `defaultLocale` | `string` | `'en'` | Código do idioma padrão |
+| `saveToLocalStorage` | `boolean` | `true` | Salvar preferência de idioma |
+| `localStorageKey` | `string` | `'jayjs-i18n-default-locale'` | Nome da chave de armazenamento |
+| `nestedKeys` | `boolean` | `false` | Habilitar chaves de tradução aninhadas |
 
-### Usage Patterns
+### Padrões de Uso
 
-- **Basic Configuration**: Direct configuration with static translations
-- **Dynamic Loading**: Configuration with lazy-loaded translations
-- **Mixed Approach**: Static data for critical translations with dynamic loading for others
-- **Framework Integration**: Configuration as part of framework initialization
+- **Configuração Básica**: Configuração direta com traduções estáticas
+- **Carregamento Dinâmico**: Configuração com traduções carregadas sob demanda
+- **Abordagem Mista**: Dados estáticos para traduções críticas com carregamento dinâmico para outras
+- **Integração com Frameworks**: Configuração como parte da inicialização do framework
 
-The i18n system offers a flexible configuration API through the `i18nDefineOptions` function. This guide covers all available configuration options and their use cases.
+O sistema de i18n oferece uma API de configuração flexível através da função `i18nDefineOptions`. Este guia cobre todas as opções de configuração disponíveis e seus casos de uso.
 
-## Configuration Options
+## Opções de Configuração
 
-Here are all available configuration options:
+Aqui estão todas as opções de configuração disponíveis:
 
 ```typescript
 import { i18nDefineOptions } from '@jay-js/system';
 
 i18nDefineOptions({
-  // Array of supported languages
+  // Array de idiomas suportados
   languages: [
     {
-      code: 'en',          // Language code
-      data?: {...},        // Optional immediate data
-      import?: () => {...} // Optional dynamic import
+      code: 'en',          // Código do idioma
+      data?: {...},        // Dados imediatos opcionais
+      import?: () => {...} // Importação dinâmica opcional
     }
   ],
-  
-  defaultLocale: 'en',     // Default language code
-  saveToLocalStorage: true,// Save language preference
-  localStorageKey: 'lang', // Storage key name
-  nestedKeys: false        // Enable nested keys
+
+  defaultLocale: 'en',     // Código do idioma padrão
+  saveToLocalStorage: true,// Salvar preferência de idioma
+  localStorageKey: 'lang', // Nome da chave de armazenamento
+  nestedKeys: false        // Habilitar chaves aninhadas
 });
 ```
 
-## Languages Configuration
+## Configuração de Idiomas
 
-The `languages` array defines all supported languages:
+O array `languages` define todos os idiomas suportados:
 
 ```typescript
 i18nDefineOptions({
   languages: [
-    // Immediate data loading
+    // Carregamento imediato de dados
     {
       code: 'en',
       data: {
-        'Hello': 'Hello',
-        'Welcome': 'Welcome'
+        'Hello': 'Olá',
+        'Welcome': 'Bem-vindo'
       }
     },
-    
-    // Dynamic loading
+
+    // Carregamento dinâmico
     {
       code: 'es',
       import: () => import('./locales/es.json')
     },
-    
-    // Mixed approach
+
+    // Abordagem mista
     {
       code: 'fr',
-      data: { /* critical translations */ },
+      data: { /* traduções críticas */ },
       import: () => import('./locales/fr-extended.json')
     }
   ]
 });
 ```
 
-## Storage Options
+## Opções de Armazenamento
 
-Configure how language preferences are stored:
+Configure como as preferências de idioma são armazenadas:
 
 ```typescript
 i18nDefineOptions({
-  // Enable/disable localStorage
+  // Habilitar/desabilitar localStorage
   saveToLocalStorage: true,
-  
-  // Custom storage key (default: 'jayjs-i18n-default-locale')
-  localStorageKey: 'my-app-language',
-  
-  // Other options...
+
+  // Chave de armazenamento personalizada (padrão: 'jayjs-i18n-default-locale')
+  localStorageKey: 'meu-app-idioma',
+
+  // Outras opções...
 });
 ```
 
-## Translation Structure
+## Estrutura de Tradução
 
-Choose between flat or nested translation keys:
+Escolha entre chaves de tradução planas ou aninhadas:
 
 ```typescript
-// Flat structure (default)
+// Estrutura plana (padrão)
 i18nDefineOptions({
   nestedKeys: false,
   languages: [{
     code: 'en',
     data: {
-      'welcome.title': 'Welcome',
-      'welcome.message': 'Hello there'
+      'welcome.title': 'Bem-vindo',
+      'welcome.message': 'Olá'
     }
   }]
 });
 
-// Nested structure
+// Estrutura aninhada
 i18nDefineOptions({
   nestedKeys: true,
   languages: [{
     code: 'en',
     data: {
       welcome: {
-        title: 'Welcome',
-        message: 'Hello there'
+        title: 'Bem-vindo',
+        message: 'Olá'
       }
     }
   }]
 });
 ```
 
-## Default Language
+## Idioma Padrão
 
-Configure the default and fallback behavior:
+Configure o comportamento padrão e de fallback:
 
 ```typescript
 i18nDefineOptions({
-  // Default language if no preference is found
+  // Idioma padrão se nenhuma preferência for encontrada
   defaultLocale: 'en',
-  
+
   languages: [
     {
       code: 'en',
-      data: { /* English translations */ }
+      data: { /* Traduções em inglês */ }
     },
-    // Other languages...
+    // Outros idiomas...
   ]
 });
 ```
 
-## TypeScript Configuration
+## Configuração com TypeScript
 
-Type-safe configuration with TypeScript:
+Configuração com segurança de tipo usando TypeScript:
 
 ```typescript
 import type { Ti18nOptions, Ti18nLanguages } from '@jay-js/system';
@@ -195,8 +195,8 @@ const config: Ti18nOptions = {
     {
       code: 'en',
       data: {
-        'Hello': 'Hello',
-        'Welcome': 'Welcome'
+        'Hello': 'Olá',
+        'Welcome': 'Bem-vindo'
       }
     }
   ] as Array<Ti18nLanguages>,
@@ -208,20 +208,20 @@ const config: Ti18nOptions = {
 i18nDefineOptions(config);
 ```
 
-## Configuration Best Practices
+## Melhores Práticas de Configuração
 
-1. **Default Language**
-   - Always include a default language with immediate data
-   - Use a widely supported language as default (e.g., 'en')
+1. **Idioma Padrão**
+   - Sempre inclua um idioma padrão com dados imediatos
+   - Use um idioma amplamente suportado como padrão (por exemplo, 'en')
 
-2. **Dynamic Loading**
-   - Use dynamic imports for non-default languages
-   - Consider bundling critical translations with default language
+2. **Carregamento Dinâmico**
+   - Use imports dinâmicos para idiomas não padrão
+   - Considere agrupar traduções críticas com o idioma padrão
 
-3. **Storage**
-   - Use custom storage keys in multi-app environments
-   - Consider disabling storage in SSR environments
+3. **Armazenamento**
+   - Use chaves de armazenamento personalizadas em ambientes multi-aplicativos
+   - Considere desabilitar o armazenamento em ambientes SSR
 
-4. **Structure**
-   - Choose between flat or nested based on project size
-   - Stay consistent with the chosen structure throughout
+4. **Estrutura**
+   - Escolha entre estrutura plana ou aninhada com base no tamanho do projeto
+   - Mantenha consistência com a estrutura escolhida em todo o projeto

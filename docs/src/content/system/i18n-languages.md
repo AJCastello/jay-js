@@ -1,52 +1,52 @@
 ---
-category: Internationalization
+category: Internacionalização
 categoryId: 6
 articleId: 3
 slug: i18n-languages
-title: Defining Languages
-description: Learn how to configure and manage languages in your internationalized application
+title: Definindo Idiomas
+description: Aprenda como configurar e gerenciar idiomas na sua aplicação internacionalizada
 ---
 
-# Defining Languages
+# Definindo Idiomas
 
-## API Reference
+## Referência da API
 
-### Language Configuration
+### Configuração de Idioma
 
 ```typescript
-// Language configuration type
+// Tipo de configuração de idioma
 interface LanguageConfig {
-  code: string;            // Language identifier (e.g., 'en', 'es')
-  data?: Record<string, any>; // Direct translation data
-  import?: () => Promise<Record<string, any>>; // Lazy loading function
+  code: string;            // Identificador do idioma (ex: 'en', 'es')
+  data?: Record<string, any>; // Dados de tradução diretos
+  import?: () => Promise<Record<string, any>>; // Função de carregamento lazy
 }
 
-// In i18nDefineOptions
+// Em i18nDefineOptions
 {
   languages: LanguageConfig[];
-  // ...other options
+  // ...outras opções
 }
 ```
 
-### Language Management Functions
+### Funções de Gerenciamento de Idioma
 
-| Function | Description |
+| Função | Descrição |
 |----------|-------------|
-| `setLanguage(code)` | Changes the active language to the specified code |
-| `getCurrentLocale()` | Returns the current active language code |
-| `initLanguage()` | Initializes the language system with configured languages |
+| `setLanguage(code)` | Altera o idioma ativo para o código especificado |
+| `getCurrentLocale()` | Retorna o código do idioma ativo atual |
+| `initLanguage()` | Inicializa o sistema de idiomas com os idiomas configurados |
 
-### Loading Patterns
+### Padrões de Carregamento
 
-- **Direct Loading**: Provide translations directly in the `data` property
-- **Dynamic Import**: Use the `import` function to load translations on demand
-- **Hybrid Loading**: Combine both approaches for critical vs. additional translations
+- **Carregamento Direto**: Fornece traduções diretamente na propriedade `data`
+- **Importação Dinâmica**: Use a função `import` para carregar traduções sob demanda
+- **Carregamento Híbrido**: Combine ambas as abordagens para traduções críticas vs. adicionais
 
-The i18n system supports multiple approaches to defining and managing your application's languages. This guide covers the different ways to set up your language configurations.
+O sistema i18n suporta múltiplas abordagens para definir e gerenciar os idiomas da sua aplicação. Este guia cobre as diferentes maneiras de configurar suas configurações de idioma.
 
-## Static Language Data
+## Dados de Idioma Estáticos
 
-The simplest approach is to include language data directly in your configuration:
+A abordagem mais simples é incluir dados de idioma diretamente na sua configuração:
 
 ```typescript
 import { i18nDefineOptions } from '@jay-js/system';
@@ -74,20 +74,20 @@ i18nDefineOptions({
 });
 ```
 
-## Dynamic Loading
+## Carregamento Dinâmico
 
-For better performance, you can lazy load language files:
+Para melhor desempenho, você pode carregar arquivos de idioma de forma lazy:
 
 ```typescript
 i18nDefineOptions({
   languages: [
     {
       code: 'en',
-      data: enTranslations  // Base language loaded immediately
+      data: enTranslations  // Idioma base carregado imediatamente
     },
     {
       code: 'es',
-      import: () => import('./locales/es.json')  // Loaded on demand
+      import: () => import('./locales/es.json')  // Carregado sob demanda
     },
     {
       code: 'fr',
@@ -98,9 +98,9 @@ i18nDefineOptions({
 });
 ```
 
-## Language File Structure
+## Estrutura de Arquivos de Idioma
 
-### Flat Structure
+### Estrutura Plana
 ```typescript
 // en-us.ts
 const translations = {
@@ -112,7 +112,7 @@ const translations = {
 export default translations;
 ```
 
-### Nested Structure
+### Estrutura Aninhada
 ```typescript
 // en-us.ts
 const translations = {
@@ -130,18 +130,18 @@ const translations = {
 export default translations;
 ```
 
-## TypeScript Integration
+## Integração com TypeScript
 
-Define types for your translations to ensure type safety:
+Defina tipos para suas traduções para garantir segurança de tipos:
 
 ```typescript
 // i18n.types.ts
 export interface Translations {
-  // Flat structure
+  // Estrutura plana
   'Hello': string;
   'Welcome, {{name}}!': string;
-  
-  // Or nested structure
+
+  // Ou estrutura aninhada
   common: {
     hello: string;
     welcome: string;
@@ -152,25 +152,25 @@ export interface Translations {
   };
 }
 
-// Use with your configuration
+// Use com sua configuração
 import { useI18n } from '@jay-js/system';
 export const i18n = useI18n<Translations>();
 ```
 
-## Language Detection
+## Detecção de Idioma
 
-The system automatically:
-1. Checks browser language settings
-2. Looks for stored preferences in localStorage
-3. Falls back to the default locale
+O sistema automaticamente:
+1. Verifica as configurações de idioma do navegador
+2. Procura por preferências armazenadas no localStorage
+3. Retorna ao idioma padrão
 
-You can override this behavior in your configuration:
+Você pode sobrescrever esse comportamento na sua configuração:
 
 ```typescript
 i18nDefineOptions({
   languages: [...],
   defaultLocale: 'en',
-  saveToLocalStorage: true,  // Enable/disable persistence
-  localStorageKey: 'app-language'  // Custom storage key
+  saveToLocalStorage: true,  // Habilita/desabilita persistência
+  localStorageKey: 'app-language'  // Chave de armazenamento personalizada
 });
 ```

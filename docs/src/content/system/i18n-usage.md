@@ -1,62 +1,62 @@
 ---
-category: Internationalization
+category: Internacionalização
 categoryId: 6
 articleId: 5
 slug: i18n-usage
-title: Using Translations
-description: Learn how to use translations in your components with type safety
+title: Usando Traduções
+description: Aprenda como usar traduções nos seus componentes com segurança de tipos
 ---
 
-# Using Translations
+# Usando Traduções
 
-## API Reference
+## Referência da API
 
-### Core Function
+### Função Principal
 
 ```typescript
-// Basic usage syntax
+// Sintaxe básica de uso
 const t = useI18n<TranslationsType>();
 const translatedText = t(key, variables?, options?);
 ```
 
-### Parameters
+### Parâmetros
 
-| Parameter | Type | Description |
+| Parâmetro | Tipo | Descrição |
 |-----------|------|-------------|
-| `key` | `string` | Translation key to lookup |
-| `variables` | `Record<string, string \| number>` | Optional variables to inject into the translation |
-| `options` | `{ default?: string }` | Optional configuration with default fallback text |
+| `key` | `string` | Chave de tradução para buscar |
+| `variables` | `Record<string, string \| number>` | Variáveis opcionais para injetar na tradução |
+| `options` | `{ default?: string }` | Configuração opcional com texto de fallback padrão |
 
-### Return Value
+### Valor de Retorno
 
-| Type | Description |
+| Tipo | Descrição |
 |------|-------------|
-| `string` | The translated text with any variables replaced |
+| `string` | O texto traduzido com quaisquer variáveis substituídas |
 
-### Type Parameters
+### Parâmetros de Tipo
 
-| Parameter | Description |
+| Parâmetro | Descrição |
 |-----------|-------------|
-| `T` | TypeScript type representing your translation structure |
+| `T` | Tipo TypeScript representando sua estrutura de traduções |
 
-### Special Features
+### Recursos Especiais
 
-- **Type Safety**: Full TypeScript support for translation keys
-- **Variable Injection**: Support for `{{variableName}}` syntax in translations
-- **Default Values**: Fallback text for missing translations
-- **Nested Keys**: Support for dot notation with nested translations (when enabled)
-- **Auto-detection**: No need to specify current language, handled internally
+- **Segurança de Tipos**: Suporte completo ao TypeScript para chaves de tradução
+- **Injeção de Variáveis**: Suporte para sintaxe `{{nomeVariavel}}` nas traduções
+- **Valores Padrão**: Texto de fallback para traduções ausentes
+- **Chaves Aninhadas**: Suporte para notação de pontos com traduções aninhadas (quando habilitado)
+- **Detecção Automática**: Não é necessário especificar o idioma atual, gerenciado internamente
 
-The i18n system provides a simple hook-based API for accessing translations in your components. This guide covers the basic usage patterns and advanced features.
+O sistema i18n fornece uma API simples baseada em hooks para acessar traduções nos seus componentes. Este guia cobre os padrões básicos de uso e recursos avançados.
 
-## Basic Usage
+## Uso Básico
 
-The `useI18n` hook is the primary way to access translations in your components. Here's how to use it:
+O hook `useI18n` é a maneira principal de acessar traduções nos seus componentes. Veja como usá-lo:
 
 ```typescript
 import { useI18n } from '@jay-js/system';
 
-// Define your translations type
+// Defina seu tipo de traduções
 type Translations = {
   'Hello': string;
   'Welcome to our app': string;
@@ -64,7 +64,7 @@ type Translations = {
 
 function MyComponent() {
   const t = useI18n<Translations>();
-  
+
   return (
     <div>
       <h1>{t('Hello')}</h1>
@@ -74,9 +74,9 @@ function MyComponent() {
 }
 ```
 
-## Using Variables
+## Usando Variáveis
 
-You can include dynamic content in your translations using variables:
+Você pode incluir conteúdo dinâmico nas suas traduções usando variáveis:
 
 ```typescript
 type Translations = {
@@ -86,8 +86,8 @@ type Translations = {
 
 function MyComponent() {
   const t = useI18n<Translations>();
-  const user = { name: 'John', messageCount: 5 };
-  
+  const user = { name: 'João', messageCount: 5 };
+
   return (
     <div>
       <p>{t('Welcome, {{name}}!', { name: user.name })}</p>
@@ -97,9 +97,9 @@ function MyComponent() {
 }
 ```
 
-## Using Nested Keys
+## Usando Chaves Aninhadas
 
-When working with nested translations (requires `nestedKeys: true` in config):
+Ao trabalhar com traduções aninhadas (requer `nestedKeys: true` na configuração):
 
 ```typescript
 type Translations = {
@@ -115,7 +115,7 @@ type Translations = {
 
 function MyComponent() {
   const t = useI18n<Translations>();
-  
+
   return (
     <div>
       <h1>{t('greeting.hello')}</h1>
@@ -129,35 +129,35 @@ function MyComponent() {
 }
 ```
 
-## Default Values
+## Valores Padrão
 
-You can provide default values for missing translations:
+Você pode fornecer valores padrão para traduções ausentes:
 
 ```typescript
 function MyComponent() {
   const t = useI18n<Translations>();
-  
+
   return (
     <div>
-      {t('missing.key', {}, { default: 'Fallback Text' })}
+      {t('missing.key', {}, { default: 'Texto de Fallback' })}
     </div>
   );
 }
 ```
 
-## Type Safety
+## Segurança de Tipos
 
-The system provides full type safety for your translations:
+O sistema fornece segurança de tipos completa para suas traduções:
 
-- Keys must exist in your translations type
-- Variables are type-checked
-- Nested paths are validated
-- TypeScript will catch errors at compile time
+- As chaves devem existir no seu tipo de traduções
+- Variáveis são verificadas quanto ao tipo
+- Caminhos aninhados são validados
+- O TypeScript detectará erros em tempo de compilação
 
 ```typescript
-// This will cause a TypeScript error
+// Isso causará um erro do TypeScript
 t('non.existent.key');
 
-// This will cause a TypeScript error if 'name' is not defined in the translations
-t('Welcome', { wrongVariable: 'John' });
+// Isso causará um erro do TypeScript se 'name' não estiver definido nas traduções
+t('Welcome', { wrongVariable: 'João' });
 ```

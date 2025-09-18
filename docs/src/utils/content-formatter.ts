@@ -2,14 +2,8 @@ import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { Link } from "../../../packages/elements/src";
+import { IconLinkDuotone } from "../components/icons";
 import type { TContentFormatter, TOnThisPageList } from "../types";
-
-// Simple Icon function for creating icon elements
-function Icon({ icon, className }: { icon: string; className?: string }) {
-	const element = document.createElement("i");
-	element.className = `${icon} ${className || ""}`.trim();
-	return element;
-}
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("typescript", typescript);
@@ -30,10 +24,7 @@ export function contentFormatter(element: HTMLElement): TContentFormatter {
 			const anchor = Link({
 				href: `#${id}`,
 				className: "no-underline group-hover:text-primary transition-colors duration-500 ease-in-out",
-				children: Icon({
-					icon: "ph-duotone ph-link",
-					className: "text-sm ml-2 cursor-pointer",
-				}),
+				children: IconLinkDuotone({ className: "text-sm ml-2 cursor-pointer" }),
 			});
 			list.push({ textContent, id });
 			h2.append(anchor);

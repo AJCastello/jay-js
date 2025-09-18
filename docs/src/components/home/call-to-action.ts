@@ -1,11 +1,5 @@
 import { Box, Link, Section, Typography } from "../../../../packages/elements/src";
-
-// Simple Icon function for creating icon elements
-function Icon({ icon, className }: { icon: string; className?: string }) {
-	const element = document.createElement("i");
-	element.className = `${icon} ${className || ""}`.trim();
-	return element;
-}
+import { IconArrowRightDuotone, IconStarDuotone } from "../icons";
 
 export function CallToAction() {
 	return Section({
@@ -30,26 +24,14 @@ export function CallToAction() {
 						Link({
 							href: "/docs/getting-started",
 							className: "btn bg-white text-primary hover:bg-base-200 border-none",
-							children: [
-								"Get Started",
-								Icon({
-									className: "ml-2",
-									icon: "ph-duotone ph-arrow-right",
-								}),
-							],
+							children: ["Get Started", IconArrowRightDuotone({ className: "ml-2" })],
 						}),
 						Link({
 							href: "https://github.com/jay-js/jay-js",
 							target: "_blank",
 							rel: "noopener noreferrer",
 							className: "btn btn-outline border-white text-white hover:bg-white hover:text-primary",
-							children: [
-								"Star on GitHub",
-								Icon({
-									className: "ml-2",
-									icon: "ph-duotone ph-star",
-								}),
-							],
+							children: ["Star on GitHub", IconStarDuotone({ className: "ml-2" })],
 						}),
 					],
 				}),

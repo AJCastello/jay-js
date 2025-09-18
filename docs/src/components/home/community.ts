@@ -1,32 +1,26 @@
 import { Box, Link, Section, Typography } from "../../../../packages/elements/src";
-
-// Simple Icon function for creating icon elements
-function Icon({ icon, className }: { icon: string; className?: string }) {
-	const element = document.createElement("i");
-	element.className = `${icon} ${className || ""}`.trim();
-	return element;
-}
+import { IconDiscordLogoDuotone, IconGithubLogoDuotone, IconTwitterLogoDuotone } from "../icons";
 
 export function Community() {
 	const communityLinks = [
 		{
 			title: "GitHub",
 			description: "Star the repository, submit issues, and contribute code",
-			icon: "ph-duotone ph-github-logo",
+			icon: IconGithubLogoDuotone,
 			url: "https://github.com/jay-js/jay-js",
 			linkText: "Visit GitHub",
 		},
 		{
 			title: "Discord",
 			description: "Join our community for discussions and help",
-			icon: "ph-duotone ph-discord-logo",
+			icon: IconDiscordLogoDuotone,
 			url: "https://discord.gg/jayjs",
 			linkText: "Join Discord",
 		},
 		{
 			title: "Twitter",
 			description: "Follow us for news and updates",
-			icon: "ph-duotone ph-twitter-logo",
+			icon: IconTwitterLogoDuotone,
 			url: "https://twitter.com/jay_js_dev",
 			linkText: "Follow @jay_js_dev",
 		},
@@ -64,10 +58,7 @@ export function Community() {
 							Box({
 								className:
 									"inline-flex items-center justify-center w-16 h-16 mx-auto rounded-full bg-primary/10 text-primary mb-4",
-								children: Icon({
-									className: "text-3xl",
-									icon: icon,
-								}),
+								children: icon({ className: "text-3xl" }),
 							}),
 							Typography({
 								tag: "h3",
