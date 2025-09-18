@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/system",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
