@@ -17,7 +17,6 @@
 	"nxConsole.generateAiAgentRules": true,
 	"explorer.fileNesting.enabled": true,
 	"explorer.fileNesting.patterns": {
-		"Cargo.toml": "Cargo.lock",
 		"*.ts": "${capture}.js, ${capture}.test.ts, ${capture}.spec.ts",
 		"*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
 		"*.jsx": "${capture}.js",
@@ -27,24 +26,9 @@
 		"tsconfig.json": "tsconfig.*.json",
 		"package.json": "package-lock.json, yarn.loc, pnpm-lock.yaml, pnpm-workspace.yaml, .npmrc",
 		"package.json5": "package-lock.json, yarn.loc, pnpm-lock.yaml, pnpm-workspace.yaml, .npmrc",
-		"firebase.json": ".firebaserc, firestore.rules, firestore.indexes.json, storage.rules, database.rules.json, hosting.*.json, firestore-debug.log, database-debug.log, firebase-debug.log",
-		"*.sqlite": "${capture}.${extname}-*",
-		"*.db": "${capture}.${extname}-*",
-		"*.sqlite3": "${capture}.${extname}-*",
-		"*.db3": "${capture}.${extname}-*",
-		"*.sdb": "${capture}.${extname}-*",
-		"*.s3db": "${capture}.${extname}-*"
+		"firebase.json": ".firebaserc, firestore.rules, firestore.indexes.json, storage.rules, database.rules.json, hosting.*.json, firestore-debug.log, database-debug.log, firebase-debug.log"
 	},
 	"terminal.integrated.profiles.linux": {
-		"------------------------": {
-			"overrideName": true,
-			"icon": "dash",
-			"path": "/bin/bash",
-			"args": [
-				"-c",
-				"exec bash"
-			]
-		},
 		"CLAUDE": {
 			"color": "terminal.ansiRed",
 			"icon": "robot",
@@ -53,6 +37,35 @@
 			"args": [
 				"-c",
 				"claude && exec bash"
+			]
+		},
+		"CODEX": {
+			"color": "terminal.ansiMagenta",
+			"icon": "robot",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"codex && exec bash"
+			]
+		},
+		"GEMINI": {
+			"color": "terminal.ansiCyan",
+			"icon": "robot",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"gemini && exec bash"
+			]
+		},
+		"------------------------": {
+			"overrideName": true,
+			"icon": "dash",
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"exec bash"
 			]
 		},
 		"DOCUMENTATION": {
