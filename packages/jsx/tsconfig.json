@@ -13,6 +13,7 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
+    "types": ["jest", "node"],
     "paths": {
       "@jay-js/elements": [
         "../elements/src"
