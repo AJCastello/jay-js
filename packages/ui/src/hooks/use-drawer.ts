@@ -5,10 +5,10 @@ type TUseDrawer = {
 	/**
 	 * ID of the drawer element to control
 	 */
-	id?: string;
+	drawerId?: string;
 	/**
 	 * Optional ID of the drawer element to control
-	 * @deprecated Use `id` instead
+	 * @deprecated Use `drawerId` instead
 	 */
 	for?: string;
 	/**
@@ -46,7 +46,7 @@ export type TDrawerControls = {
  * @returns Object with methods to open, close, or toggle the drawer
  */
 export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
-	const drawerId = props.id || props.for;
+	const drawerId = props.drawerId || props.for;
 
 	const getElements = () => {
 		const drawer = document.querySelector(`#${drawerId}`);

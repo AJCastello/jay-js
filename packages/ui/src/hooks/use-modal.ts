@@ -5,7 +5,7 @@ type TUseModal = {
 	/**
 	 * ID of the modal element to control
 	 */
-	id?: string;
+	modalId?: string;
 	/**
 	 * Callback function triggered when modal is closed
 	 */
@@ -41,7 +41,7 @@ export type TModalControls = {
  * @returns Object with methods to open, close, or toggle the modal
  */
 export function useModal({ ...props }: TUseModal): TModalControls {
-	const modalId = props.id;
+	const modalId = props.modalId;
 
 	const getModal = () => {
 		const dialogModal = document.querySelector(`#${modalId}`) as HTMLDialogElement;

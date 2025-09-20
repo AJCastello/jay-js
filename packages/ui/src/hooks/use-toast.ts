@@ -8,6 +8,10 @@ type TUseToast = {
 	 * Optional ID of the toast container element
 	 * If provided, toast will be rendered in the element with this ID
 	 */
+	toastId?: string;
+	/**
+	 * @deprecated Use toastId instead
+	 */
 	for?: string;
 };
 
@@ -19,7 +23,8 @@ type TUseToast = {
  * @throws Error if no toast container element is found
  */
 export function useToast({ ...props }: TUseToast = {}) {
-	const selector = props.for ? `#${props.for}` : ".toast-container";
+	const toastContainerId = props.toastId || props.for;
+	const selector = toastContainerId ? `#${toastContainerId}` : ".toast-container";
 	const toastContainer = document.querySelector(selector);
 
 	if (!toastContainer) {
