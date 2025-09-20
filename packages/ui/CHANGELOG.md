@@ -10,8 +10,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### ⚠️ BREAKING CHANGES
 
 - **Lifecycle API**: `ondismount` renomeado para `onunmount` em todos os componentes e interface `TLifecycleElement`
-- **useDrawer Hook**: Propriedade `for` depreciada em favor de `id`
+- **useDrawer Hook**: Propriedade `for` depreciada em favor de `drawerId` (anteriormente `id`)
 - **useDrawer Hook**: Retorno alterado de função simples para objeto com métodos `{open, close, toggle}`
+- **useModal Hook**: Propriedade `id` renomeada para `modalId` para maior clareza semântica
+- **useToast Hook**: Propriedade `for` renomeada para `toastId` para maior clareza semântica
 - **DrawerOverlay**: Interface `TDrawerOverlay` alterada - `for` substituído por `id`
 - **Hooks Removidos**: `useListener`, `useRef`, `useToast` (versões antigas) removidos completamente
 - **className System**: Sistema `mergeClasses` completamente substituído por utilitário `cn` com `clsx` e `tailwind-merge`
@@ -33,6 +35,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - DrawerOverlay com melhor manipulação de eventos e prevenção de comportamento padrão
 - Simplificação dos componentes TextArea e TextInput
 - Callback `onClose` e `onOpen` no useDrawer agora incluem elementos do drawer
+- **Nomenclatura dos Hooks**: Propriedades renomeadas para maior clareza semântica:
+  - `useDrawer`: `id` → `drawerId` (mais claro que se refere ao elemento drawer)
+  - `useModal`: `id` → `modalId` (mais claro que se refere ao elemento modal)
+  - `useToast`: `for` → `toastId` (mais claro que se refere ao container de toast)
 
 ### Removido
 - Componente RippleEffect descontinuado
