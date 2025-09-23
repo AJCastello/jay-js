@@ -14,17 +14,8 @@ export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadat
 	try {
 		// Register element with inspector
 		window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
-
-		// Report element registration
-		if (window.__JAYJS_DEBUG_REPORTER__) {
-			window.__JAYJS_DEBUG_REPORTER__.addElementRegistration();
-		}
 	} catch (error) {
-		// Report debug function error
-		if (window.__JAYJS_DEBUG_REPORTER__) {
-			const errorMessage = error instanceof Error ? error.message : String(error);
-			window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Debug Function', errorMessage);
-		}
+		// Silent fail - no logging needed
 	}
 
 	return element;
@@ -57,10 +48,7 @@ export class JayJsInspectorRuntime {
 		// Bind event listeners
 		this.bindEvents();
 
-		console.log("[Jay JS Inspector] Runtime initialized");
-		console.log("[Jay JS Inspector] Config:", this.config);
-		console.log("[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode");
-		console.log("[Jay JS Inspector] Then use Shift+Click on components to open in editor");
+		// Runtime initialized - ready for use
 	} /**
 	 * Register an element with its component metadata
 	 */
@@ -73,20 +61,9 @@ export class JayJsInspectorRuntime {
 			element.dataset.jayjsFile = metadata.file;
 			element.dataset.jayjsLine = metadata.line.toString();
 
-			console.debug(`[Jay JS Inspector] Registered ${metadata.component} from ${metadata.file}:${metadata.line}`, element);
-
-			// Report element registration
-			if (typeof window !== "undefined" && window.__JAYJS_DEBUG_REPORTER__) {
-				window.__JAYJS_DEBUG_REPORTER__.addElementRegistration();
-			}
+			// Element registered successfully
 		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : String(error);
 			console.error(`[Jay JS Inspector] Failed to register element:`, error);
-
-			// Report registration error
-			if (typeof window !== "undefined" && window.__JAYJS_DEBUG_REPORTER__) {
-				window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Element Registration', errorMessage);
-			}
 		}
 	} /**
 	 * Create the visual overlay element
@@ -236,11 +213,9 @@ export class JayJsInspectorRuntime {
 
 		if (enabled) {
 			document.body.style.cursor = "crosshair";
-			console.log("[Jay JS Inspector] Inspector mode enabled. Click on components to open in editor.");
 		} else {
 			document.body.style.cursor = "";
 			this.hideOverlay();
-			console.log("[Jay JS Inspector] Inspector mode disabled.");
 		}
 	}
 
@@ -261,11 +236,7 @@ export class JayJsInspectorRuntime {
 				}),
 			});
 
-			if (response.ok) {
-				console.log(`[Jay JS Inspector] Opening ${metadata.file}:${metadata.line}`);
-			} else {
-				console.error("[Jay JS Inspector] Failed to open file in editor");
-			}
+			// Request sent to editor
 		} catch (error) {
 			console.error("[Jay JS Inspector] Error opening file:", error);
 		}

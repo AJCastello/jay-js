@@ -34,6 +34,7 @@ export function transformSource(source: string, filename: string): string | null
 
 				// Check if this is a direct function call to a Jay JS component
 				if (t.isIdentifier(node.callee) && isJayJsComponent(node.callee.name)) {
+
 					const { line, column } = getLineAndColumn(source, node.start || 0);
 
 					const metadata: ComponentMetadata = {
@@ -71,27 +72,44 @@ export function transformSource(source: string, filename: string): string | null
 		// Use MagicString to modify the source code
 		const magicString = new MagicString(source);
 
-		// Sort by position (descending) to avoid offset issues
-		instrumentedCalls.sort((a, b) => b.start - a.start);
+		// Sort by position (ascending) to transform innermost components first
+		// This ensures child components are instrumented before parent components
+		instrumentedCalls.sort((a, b) => a.start - b.start);
+
+		// instrumentedCalls.sort((a, b) => b.start - a.start);
+
+		let offsetAccumulator = 0;
 
 		// Replace each component call with instrumented version
 		// JayJS factory functions return HTMLElement, so we need to instrument the result
 		for (const call of instrumentedCalls) {
-			try {
-				const debugCode = `(() => {
-	const __element = ${call.originalCall};
-	return (typeof window !== 'undefined' && window.${getDebugFunctionName()})
-		? window.${getDebugFunctionName()}(__element, ${JSON.stringify(call.metadata)})
-		: __element;
-})()`;
-				magicString.overwrite(call.start, call.end, debugCode);
-			} catch (replaceError) {
-				reporter.addTransformationError(
-					filename,
-					`Failed to replace call for ${call.metadata.component}: ${replaceError}`,
-					call.metadata.line
-				);
-			}
+				try {
+// 					const debugCode = `(() => {
+// 	const __element = ${call.originalCall};
+// 	return (typeof window !== 'undefined' && window.${getDebugFunctionName()})
+// 		? window.${getDebugFunctionName()}(__element, ${JSON.stringify(call.metadata)})
+// 		: __element;
+// })()`;
+// 					magicString.overwrite(call.start, call.end, debugCode);
+					// Adjust positions based on previous transformations
+					const adjustedStart = call.start + offsetAccumulator;
+					const adjustedEnd = call.end + offsetAccumulator;
+
+					// Use direct inline instrumentation to avoid IIFE conflicts
+					const debugCode = `((typeof window !== 'undefined' && window.${getDebugFunctionName()}) ? window.${getDebugFunctionName()}(${call.originalCall}, ${JSON.stringify(call.metadata)}) : ${call.originalCall})`;
+
+					// Calculate offset for next iteration
+					const lengthDiff = debugCode.length - call.originalCall.length;
+					offsetAccumulator += lengthDiff;
+
+					magicString.overwrite(adjustedStart, adjustedEnd, debugCode);
+				} catch (replaceError) {
+					reporter.addTransformationError(
+						filename,
+						`Failed to replace call for ${call.metadata.component}: ${replaceError}`,
+						call.metadata.line
+					);
+				}
 		}
 
 		const transformedCode = magicString.toString();
@@ -115,7 +133,6 @@ export function transformSource(source: string, filename: string): string | null
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		reporter.addTransformationError(filename, `Parse/transform error: ${errorMessage}`);
-		console.warn(`[jayjs-inspector] Failed to transform ${filename}:`, error);
 		return null;
 	}
 }
