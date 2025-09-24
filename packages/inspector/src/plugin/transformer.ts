@@ -73,36 +73,34 @@ export function transformSource(source: string, filename: string): string | null
 		const magicString = new MagicString(source);
 
 		// Sort by position (ascending) to transform innermost components first
-		// This ensures child components are instrumented before parent components
-		instrumentedCalls.sort((a, b) => a.start - b.start);
-
-		// instrumentedCalls.sort((a, b) => b.start - a.start);
-
-		let offsetAccumulator = 0;
+		instrumentedCalls.sort((a, b) => b.start - a.start);
 
 		// Replace each component call with instrumented version
 		// JayJS factory functions return HTMLElement, so we need to instrument the result
 		for (const call of instrumentedCalls) {
 				try {
-// 					const debugCode = `(() => {
-// 	const __element = ${call.originalCall};
-// 	return (typeof window !== 'undefined' && window.${getDebugFunctionName()})
-// 		? window.${getDebugFunctionName()}(__element, ${JSON.stringify(call.metadata)})
-// 		: __element;
-// })()`;
-// 					magicString.overwrite(call.start, call.end, debugCode);
-					// Adjust positions based on previous transformations
-					const adjustedStart = call.start + offsetAccumulator;
-					const adjustedEnd = call.end + offsetAccumulator;
+					const debugCode = `${getDebugFunctionName()}(${call.originalCall}, ${JSON.stringify(call.metadata)})`;
+					magicString.overwrite(call.start, call.end, debugCode);
+					const nextCall = instrumentedCalls[instrumentedCalls.indexOf(call) + 1];
+					if (nextCall) {
+						//console.log("⚠️", call.originalCall);
+						//nextCall.originalCall = nextCall.originalCall.replace(call.originalCall, debugCode);
+						const teste = nextCall.originalCall.replace(call.originalCall, debugCode);
+						console.log("===============================");
+						console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+						console.log("⚠️", nextCall.originalCall);
+						console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+						console.log("⚠️", teste);
+						console.log("===============================");
 
-					// Use direct inline instrumentation to avoid IIFE conflicts
-					const debugCode = `((typeof window !== 'undefined' && window.${getDebugFunctionName()}) ? window.${getDebugFunctionName()}(${call.originalCall}, ${JSON.stringify(call.metadata)}) : ${call.originalCall})`;
+						// nextCall.originalCall = nextCall.originalCall.replace("dentro", "testes");
 
-					// Calculate offset for next iteration
-					const lengthDiff = debugCode.length - call.originalCall.length;
-					offsetAccumulator += lengthDiff;
-
-					magicString.overwrite(adjustedStart, adjustedEnd, debugCode);
+						// nextCall.end += debugCode.length - call.originalCall.length;
+						instrumentedCalls[instrumentedCalls.indexOf(call) + 1] = nextCall;
+					}
+					// console.log("============================");
+					// console.log("🚀", magicString.toString());
+					// console.log("============================");
 				} catch (replaceError) {
 					reporter.addTransformationError(
 						filename,
@@ -111,6 +109,9 @@ export function transformSource(source: string, filename: string): string | null
 					);
 				}
 		}
+
+		const importStatement = `import { ${getDebugFunctionName()} } from '@jay-js/inspector/runtime';\n`;
+		magicString.prepend(importStatement);
 
 		const transformedCode = magicString.toString();
 
