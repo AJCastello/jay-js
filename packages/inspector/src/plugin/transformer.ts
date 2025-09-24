@@ -77,30 +77,21 @@ export function transformSource(source: string, filename: string): string | null
 
 		// Replace each component call with instrumented version
 		// JayJS factory functions return HTMLElement, so we need to instrument the result
-		for (const call of instrumentedCalls) {
+		for (let i = 0; i < instrumentedCalls.length; i++) {
+			const call = instrumentedCalls[i];
 				try {
 					const debugCode = `${getDebugFunctionName()}(${call.originalCall}, ${JSON.stringify(call.metadata)})`;
 					magicString.overwrite(call.start, call.end, debugCode);
-					const nextCall = instrumentedCalls[instrumentedCalls.indexOf(call) + 1];
-					if (nextCall) {
-						//console.log("⚠️", call.originalCall);
-						//nextCall.originalCall = nextCall.originalCall.replace(call.originalCall, debugCode);
-						const teste = nextCall.originalCall.replace(call.originalCall, debugCode);
-						console.log("===============================");
-						console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-						console.log("⚠️", nextCall.originalCall);
-						console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-						console.log("⚠️", teste);
-						console.log("===============================");
-
-						// nextCall.originalCall = nextCall.originalCall.replace("dentro", "testes");
-
-						// nextCall.end += debugCode.length - call.originalCall.length;
-						instrumentedCalls[instrumentedCalls.indexOf(call) + 1] = nextCall;
-					}
-					// console.log("============================");
-					// console.log("🚀", magicString.toString());
-					// console.log("============================");
+					 for(let j = 0; j < instrumentedCalls.length; j++) {
+						 if(j===i) continue;
+					 	if(instrumentedCalls[j].originalCall.includes(call.originalCall)) {
+					 		instrumentedCalls[j].originalCall = instrumentedCalls[j].originalCall.replace(call.originalCall, debugCode);
+					// 		const diff = debugCode.length - call.originalCall.length;
+					// 		instrumentedCalls[j].start += diff;
+					// 		instrumentedCalls[j].end += diff;
+					//    nextCall.end += debugCode.length - call.originalCall.length;
+					 	}
+					 }
 				} catch (replaceError) {
 					reporter.addTransformationError(
 						filename,
