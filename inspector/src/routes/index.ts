@@ -1,16 +1,16 @@
+import { DemoDatePicker } from "@/pages/demo-date-picker";
 import { Home } from "@/pages/home";
-import { DemoUI } from "@/pages/demo-ui";
 import { Router } from "@jay-js/system";
 
 export function Routes() {
 	return Router([
 		{
-			path: "/demo",
-			element: DemoUI,
+			path: "/",
+			element: Home,
 		},
 		{
-			path: "/home",
-			element: Home,
+			path: "/date-picker",
+			element: DemoDatePicker,
 		}
 	], {
 		target: document.getElementById("app") || undefined
