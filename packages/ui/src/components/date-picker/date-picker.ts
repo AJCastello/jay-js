@@ -57,6 +57,13 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		tag: "div",
 		...props,
 		className: cn("w-full max-w-sm", props.className),
+		onunmount: () => {
+			currentDate.clear();
+			selectedDate.clear();
+			currentView.clear();
+			selectedHour.clear();
+			selectedMinute.clear();
+		},
 	}) as HTMLDivElement;
 
 	function previousMonth() {

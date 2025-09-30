@@ -42,6 +42,12 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 			"w-full",
 			props.className,
 		),
+		onunmount: () => {
+			startDate.clear();
+			endDate.clear();
+			startError.clear();
+			endError.clear();
+		},
 	}) as HTMLDivElement;
 
 	function checkAndTriggerRange() {

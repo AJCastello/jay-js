@@ -35,6 +35,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Melhorado
 - Adicionada peer dependency `@jay-js/system` para suporte ao sistema de reatividade
+- **Lifecycle Management**: DatePicker e DateRangePicker agora implementam `onunmount` para cleanup determinístico
+  - Libera todos os states criados (currentDate, selectedDate, currentView, selectedHour, selectedMinute, startDate, endDate, startError, endError)
+  - Previne vazamentos de memória em SPAs com componentes dinâmicos
+  - Segue as melhores práticas do framework Jay JS para gerenciamento de ciclo de vida
 
 ## [4.0.0] - 18/09/2025
 
