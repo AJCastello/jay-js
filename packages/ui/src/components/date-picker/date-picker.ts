@@ -1,5 +1,5 @@
 import { Base, Box, Button, Typography, type TBaseTagMap } from "@jay-js/elements";
-import { Effect, State } from "@jay-js/system";
+import { Effect, State, render } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TDatePicker } from "./date-picker.types";
 
@@ -158,8 +158,6 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 			const hour = selectedHour.value;
 			const minute = selectedMinute.value;
 
-			timeContainer.innerHTML = "";
-
 			const hourColumn = createTimeColumn("hour", hour);
 			const minuteColumn = createTimeColumn("minute", minute);
 			const separator = Box({
@@ -172,9 +170,7 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 				}),
 			});
 
-			timeContainer.appendChild(hourColumn);
-			timeContainer.appendChild(separator);
-			timeContainer.appendChild(minuteColumn);
+			render(timeContainer, [hourColumn, separator, minuteColumn]);
 		});
 
 		return Box({
@@ -234,13 +230,13 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 			const current = currentDate.value;
 			const selected = selectedDate.value;
 
-			calendarDaysElement.innerHTML = "";
-
 			const firstDay = new Date(current.getFullYear(), current.getMonth(), 1);
 			const lastDay = new Date(current.getFullYear(), current.getMonth() + 1, 0);
 
+			const days: HTMLElement[] = [];
+
 			for (let i = 0; i < firstDay.getDay(); i++) {
-				calendarDaysElement.appendChild(Box({ className: "p-2" }));
+				days.push(Box({ className: "p-2" }));
 			}
 
 			for (let day = 1; day <= lastDay.getDate(); day++) {
@@ -266,8 +262,10 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					onclick: () => selectDate(day),
 				});
 
-				calendarDaysElement.appendChild(dayElement);
+				days.push(dayElement);
 			}
+
+			render(calendarDaysElement, days);
 		});
 
 		return Box({
@@ -307,6 +305,22 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		});
 	}
 
+	const contentContainer = Box({
+		className: "w-full",
+	});
+
+	Effect(() => {
+		const view = currentView.value;
+
+		if (view === "calendar") {
+			render(contentContainer, createCalendar());
+		} else {
+			render(contentContainer, createTimeSelector());
+		}
+	});
+
+	const children: HTMLElement[] = [contentContainer];
+
 	if (label) {
 		const labelElement = Typography({
 			tag: "label",
@@ -317,25 +331,10 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 				children: label,
 			}),
 		});
-		container.appendChild(labelElement);
+		children.unshift(labelElement);
 	}
 
-	const contentContainer = Box({
-		className: "w-full",
-	});
-
-	Effect(() => {
-		const view = currentView.value;
-		contentContainer.innerHTML = "";
-
-		if (view === "calendar") {
-			contentContainer.appendChild(createCalendar());
-		} else {
-			contentContainer.appendChild(createTimeSelector());
-		}
-	});
-
-	container.appendChild(contentContainer);
+	render(container, children);
 
 	return container as HTMLElementTagNameMap[T];
 }

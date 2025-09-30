@@ -1,5 +1,5 @@
 import { Base, Box, Typography, type TBaseTagMap } from "@jay-js/elements";
-import { Effect, State } from "@jay-js/system";
+import { Effect, State, render } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import { DatePicker } from "../date-picker/date-picker";
 import type { TDateRangePicker } from "./date-range-picker.types";
@@ -107,8 +107,7 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		showToday,
 	});
 
-	startPickerContainer.appendChild(startPicker);
-	startPickerContainer.appendChild(startErrorElement);
+	render(startPickerContainer, [startPicker, startErrorElement]);
 
 	const endPickerContainer = Box({
 		className: cn("flex-1", "flex flex-col"),
@@ -159,11 +158,8 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		showToday,
 	});
 
-	endPickerContainer.appendChild(endPicker);
-	endPickerContainer.appendChild(endErrorElement);
-
-	container.appendChild(startPickerContainer);
-	container.appendChild(endPickerContainer);
+	render(endPickerContainer, [endPicker, endErrorElement]);
+	render(container, [startPickerContainer, endPickerContainer]);
 
 	return container as HTMLElementTagNameMap[T];
 }
