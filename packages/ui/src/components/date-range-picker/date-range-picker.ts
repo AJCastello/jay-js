@@ -84,36 +84,42 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		}
 	});
 
-	const startPicker = DatePicker({
-		label: startLabel,
-		defaultDate: startValue || new Date(),
-		value: startValue,
-		onSelect: (date) => {
-			startDate.set(date);
-			if (onStartChange) {
-				onStartChange(new Date(date));
-			}
+	Effect(() => {
+		const end = endDate.value;
 
-			const end = endDate.value;
-			if (validateRange && end && date > end) {
-				startError.set("Data inicial não pode ser maior que a final");
-				return;
-			}
+		const startPicker = DatePicker({
+			label: startLabel,
+			defaultDate: startValue || new Date(),
+			value: startValue,
+			onSelect: (date) => {
+				startDate.set(date);
+				if (onStartChange) {
+					onStartChange(new Date(date));
+				}
 
-			startError.set(null);
-			checkAndTriggerRange();
-		},
-		withTime,
-		minDate,
-		maxDate: validateRange && endDate.value ? endDate.value : maxDate,
-		color,
-		size,
-		disabled,
-		locale,
-		showToday,
+				const end = endDate.value;
+				if (validateRange && end && date > end) {
+					startError.set("Data inicial não pode ser maior que a final");
+					return;
+				}
+
+				startError.set(null);
+				checkAndTriggerRange();
+			},
+			withTime,
+			minDate,
+			maxDate: validateRange && end ? end : maxDate,
+			color,
+			size,
+			disabled,
+			locale,
+			showToday,
+			rangeStart: startDate.value,
+			rangeEnd: end,
+		});
+
+		render(startPickerContainer, [startPicker, startErrorElement]);
 	});
-
-	render(startPickerContainer, [startPicker, startErrorElement]);
 
 	const endPickerContainer = Box({
 		className: cn("flex-1", "flex flex-col"),
@@ -135,36 +141,42 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		}
 	});
 
-	const endPicker = DatePicker({
-		label: endLabel,
-		defaultDate: endValue || new Date(),
-		value: endValue,
-		onSelect: (date) => {
-			endDate.set(date);
-			if (onEndChange) {
-				onEndChange(new Date(date));
-			}
+	Effect(() => {
+		const start = startDate.value;
 
-			const start = startDate.value;
-			if (validateRange && start && date < start) {
-				endError.set("Data final não pode ser menor que a inicial");
-				return;
-			}
+		const endPicker = DatePicker({
+			label: endLabel,
+			defaultDate: endValue || new Date(),
+			value: endValue,
+			onSelect: (date) => {
+				endDate.set(date);
+				if (onEndChange) {
+					onEndChange(new Date(date));
+				}
 
-			endError.set(null);
-			checkAndTriggerRange();
-		},
-		withTime,
-		minDate: validateRange && startDate.value ? startDate.value : minDate,
-		maxDate,
-		color,
-		size,
-		disabled,
-		locale,
-		showToday,
+				const start = startDate.value;
+				if (validateRange && start && date < start) {
+					endError.set("Data final não pode ser menor que a inicial");
+					return;
+				}
+
+				endError.set(null);
+				checkAndTriggerRange();
+			},
+			withTime,
+			minDate: validateRange && start ? start : minDate,
+			maxDate,
+			color,
+			size,
+			disabled,
+			locale,
+			showToday,
+			rangeStart: start,
+			rangeEnd: endDate.value,
+		});
+
+		render(endPickerContainer, [endPicker, endErrorElement]);
 	});
-
-	render(endPickerContainer, [endPicker, endErrorElement]);
 	render(container, [startPickerContainer, endPickerContainer]);
 
 	return container as HTMLElementTagNameMap[T];

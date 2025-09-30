@@ -38,6 +38,8 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		disabled = false,
 		locale = "pt-BR",
 		showToday = true,
+		rangeStart,
+		rangeEnd,
 		...props
 	}: TDatePicker<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
@@ -256,12 +258,17 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					selected.getFullYear() === current.getFullYear();
 				const isToday = showToday && new Date().toDateString() === dayDate.toDateString();
 
+				const isInRange = rangeStart && rangeEnd &&
+					dayDate >= rangeStart &&
+					dayDate <= rangeEnd &&
+					!isSelected;
+
 				const dayElement = Button({
 					type: "button",
 					className: cn(
 						"btn btn-square",
 						size,
-						isSelected ? color : "btn-ghost",
+						isSelected ? color : isInRange ? "btn-ghost bg-primary/10" : "btn-ghost",
 						isToday && !isSelected && "border border-primary",
 					),
 					children: String(day),

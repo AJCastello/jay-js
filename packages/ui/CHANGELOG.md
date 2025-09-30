@@ -43,6 +43,11 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Remove `btn-ghost` quando data está selecionada para exibir background colorido
   - Aplica cor do botão (btn-primary, btn-secondary, etc.) automaticamente no estado selecionado
   - Melhora contraste e feedback visual da data atualmente selecionada
+- **DateRangePicker com destaque de intervalo**: Datas entre início e fim agora exibem fundo semi-transparente
+  - Adiciona propriedades `rangeStart` e `rangeEnd` ao DatePicker para suporte a intervalos
+  - Aplica `bg-primary/10` nas datas dentro do intervalo selecionado
+  - DateRangePicker recria DatePickers reativamente quando datas mudam para atualizar destaque visual
+  - Melhora feedback visual do intervalo de datas selecionado
 
 ## [4.0.0] - 18/09/2025
 

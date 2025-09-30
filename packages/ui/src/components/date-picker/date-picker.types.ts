@@ -20,4 +20,6 @@ export type TDatePicker<T extends TBaseTagMap> = {
 	disabled?: boolean;
 	locale?: "pt-BR" | "en-US" | "es-ES";
 	showToday?: boolean;
+	rangeStart?: Date | null;
+	rangeEnd?: Date | null;
 } & TBase<T>;
