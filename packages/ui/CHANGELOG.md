@@ -45,9 +45,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Melhora contraste e feedback visual da data atualmente selecionada
 - **DateRangePicker com destaque de intervalo**: Datas entre início e fim agora exibem fundo semi-transparente
   - Adiciona propriedades `rangeStart` e `rangeEnd` ao DatePicker para suporte a intervalos
-  - Aplica `bg-primary/10` nas datas dentro do intervalo selecionado
+  - Datas inicial e final (bordas do intervalo) recebem cor cheia para melhor destaque
+  - Datas intermediárias recebem `bg-primary/10` (fundo semi-transparente)
   - DateRangePicker recria DatePickers reativamente quando datas mudam para atualizar destaque visual
-  - Melhora feedback visual do intervalo de datas selecionado
+  - Melhora feedback visual do intervalo de datas selecionado com contraste adequado
 
 ## [4.0.0] - 18/09/2025
 

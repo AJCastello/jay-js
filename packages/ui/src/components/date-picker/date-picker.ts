@@ -258,9 +258,12 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					selected.getFullYear() === current.getFullYear();
 				const isToday = showToday && new Date().toDateString() === dayDate.toDateString();
 
+				const isRangeEdge = (rangeStart && dayDate.toDateString() === rangeStart.toDateString()) ||
+					(rangeEnd && dayDate.toDateString() === rangeEnd.toDateString());
+
 				const isInRange = rangeStart && rangeEnd &&
-					dayDate >= rangeStart &&
-					dayDate <= rangeEnd &&
+					dayDate > rangeStart &&
+					dayDate < rangeEnd &&
 					!isSelected;
 
 				const dayElement = Button({
@@ -268,8 +271,8 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					className: cn(
 						"btn btn-square",
 						size,
-						isSelected ? color : isInRange ? "btn-ghost bg-primary/10" : "btn-ghost",
-						isToday && !isSelected && "border border-primary",
+						isSelected || isRangeEdge ? color : isInRange ? "btn-ghost bg-primary/10" : "btn-ghost",
+						isToday && !isSelected && !isRangeEdge && "border border-primary",
 					),
 					children: String(day),
 					disabled: isDisabled,
