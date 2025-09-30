@@ -259,9 +259,9 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 				const dayElement = Button({
 					type: "button",
 					className: cn(
-						"btn btn-ghost btn-square",
+						"btn btn-square",
 						size,
-						isSelected && `${color} text-primary-content`,
+						isSelected ? color : "btn-ghost",
 						isToday && !isSelected && "border border-primary",
 					),
 					children: String(day),

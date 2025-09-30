@@ -39,6 +39,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Libera todos os states criados (currentDate, selectedDate, currentView, selectedHour, selectedMinute, startDate, endDate, startError, endError)
   - Previne vazamentos de memória em SPAs com componentes dinâmicos
   - Segue as melhores práticas do framework Jay JS para gerenciamento de ciclo de vida
+- **DatePicker visual aprimorado**: Data selecionada agora exibe fundo colorido com cor primária configurada
+  - Remove `btn-ghost` quando data está selecionada para exibir background colorido
+  - Aplica cor do botão (btn-primary, btn-secondary, etc.) automaticamente no estado selecionado
+  - Melhora contraste e feedback visual da data atualmente selecionada
 
 ## [4.0.0] - 18/09/2025
 
