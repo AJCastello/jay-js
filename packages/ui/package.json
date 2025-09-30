@@ -63,6 +63,7 @@
   },
   "peerDependencies": {
     "@jay-js/elements": "^1.0.0",
+    "@jay-js/system": "^4.0.0",
     "tailwind-merge": "^2.3.0",
     "clsx": "^2.1.1"
   }

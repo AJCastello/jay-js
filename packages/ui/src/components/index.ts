@@ -15,6 +15,8 @@ export * from "./chat-component/index.js";
 export * from "./collapse/index.js";
 export * from "./collapse-content/index.js";
 export * from "./collapse-title/index.js";
+export * from "./date-picker/index.js";
+export * from "./date-range-picker/index.js";
 export * from "./diff/index.js";
 export * from "./diff-item/index.js";
 export * from "./diff-resizer/index.js";

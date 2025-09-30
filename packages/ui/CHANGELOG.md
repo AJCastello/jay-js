@@ -5,6 +5,37 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [Unreleased]
+
+### Adicionado
+- **Componente DatePicker** para seleção individual de data com calendário interativo
+  - Calendário visual completo com navegação mês/ano
+  - Suporte para seleção de horário (withTime) com interface de rolagem de horas/minutos
+  - Validação de intervalo de datas (minDate/maxDate)
+  - Indicação visual de data selecionada e data atual
+  - Suporte multi-idioma (pt-BR, en-US, es-ES)
+  - Tamanhos personalizáveis (btn-xs, btn-sm, btn-md, btn-lg, btn-xl)
+  - Cores DaisyUI (btn-primary, btn-secondary, btn-accent, etc.)
+  - Estados disabled
+  - Callbacks onSelect para captura de data selecionada
+  - **Sistema de reatividade**: Usa `State` e `Effect` do @jay-js/system para gerenciamento reativo de estado
+
+- **Componente DateRangePicker** aprimorado para seleção de intervalo de datas
+  - Utiliza dois componentes DatePicker para início e fim
+  - Validação automática de intervalo (data final >= data inicial)
+  - Mensagens de erro contextuais quando intervalo inválido
+  - Callbacks individuais (onStartChange, onEndChange) e combinado (onSelectRange)
+  - Opções de layout: horizontal ou vertical
+  - Suporte para seleção de horário (withTime)
+  - Validação dinâmica de intervalo configurável (validateRange)
+  - Espaçamento configurável entre campos (gap-1 até gap-6)
+  - Suporte multi-idioma herdado do DatePicker
+  - Cores e tamanhos personalizáveis
+  - **Sistema de reatividade**: Usa `State` e `Effect` do @jay-js/system para validação reativa e mensagens de erro
+
+### Melhorado
+- Adicionada peer dependency `@jay-js/system` para suporte ao sistema de reatividade
+
 ## [4.0.0] - 18/09/2025
 
 ### ⚠️ BREAKING CHANGES
