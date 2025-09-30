@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import { jayJsInspector } from "@jay-js/inspector/plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
 	base: "/",
@@ -10,6 +11,7 @@ export default defineConfig({
 		},
 	},
 	plugins: [
+		tailwindcss(),
 		jayJsInspector({
 			enabled: true,
 			editor: 'code-insiders', // Seu editor
