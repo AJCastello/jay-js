@@ -43,7 +43,7 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		...props
 	}: TDatePicker<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const strings = LOCALES[locale];
+	const strings = LOCALES[locale] || LOCALES["pt-BR"];
 
 	const currentDate = State(new Date(defaultDate));
 	const selectedDate = State<Date | null>(value ? new Date(value) : null);

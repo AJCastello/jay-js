@@ -50,6 +50,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - DateRangePicker recria DatePickers reativamente quando datas mudam para atualizar destaque visual
   - Melhora feedback visual do intervalo de datas selecionado com contraste adequado
 
+### Corrigido
+- **DatePicker locale fallback**: Adiciona fallback para pt-BR quando locale não é fornecido ou é inválido
+  - Previne erros quando `locale` está undefined ou não existe no objeto LOCALES
+  - Usa pt-BR como idioma padrão em caso de locale inválido
+  - Melhora robustez do componente para diferentes configurações
+
 ## [4.0.0] - 18/09/2025
 
 ### ⚠️ BREAKING CHANGES
