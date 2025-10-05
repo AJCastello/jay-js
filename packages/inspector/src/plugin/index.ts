@@ -1,7 +1,7 @@
 import type { Plugin, ResolvedConfig, ViteDevServer } from "vite";
 import { EditorIntegration } from "../utils/bridge.js";
-import { createFileFilter } from "../utils/index.js";
 import { DebugReporter } from "../utils/debug-reporter.js";
+import { createFileFilter } from "../utils/index.js";
 import { transformSource } from "./transformer.js";
 import type { JayJsInspectorOptions } from "./types.js";
 
@@ -31,7 +31,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 	const config = { ...DEFAULT_OPTIONS, ...options };
 	const fileFilter = createFileFilter(config.include, config.exclude);
 	const reporter = DebugReporter.getInstance();
-	let transformedFiles = 0;
+	let _transformedFiles = 0;
 
 	// Configure the debug reporter
 	reporter.setConfiguration(config);
@@ -49,7 +49,6 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 			console.log("🔍 Jay JS Inspector: Active");
 		},
 
-
 		transform(code: string, id: string) {
 			// Skip if not enabled or not a target file
 			if (!config.enabled || !fileFilter(id)) {
@@ -60,7 +59,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 			const transformedCode = transformSource(code, id);
 
 			if (transformedCode) {
-				transformedFiles++;
+				_transformedFiles++;
 
 				return {
 					code: transformedCode,
@@ -99,7 +98,26 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 
 			// Inject runtime script into HTML pages using proper module loading
 			server.middlewares.use((req: any, res: any, next: any) => {
-				if (req.url && (req.url.endsWith(".html") || req.url === "/")) {
+				// Skip static assets and API calls
+				const skipPaths = [
+					"/__jayjs-inspector",
+					"/@vite",
+					"/@fs",
+					"/node_modules",
+					"/src",
+					".js",
+					".css",
+					".json",
+					".png",
+					".jpg",
+					".svg",
+					".ico",
+					".woff",
+					".ttf",
+				];
+				const shouldSkip = skipPaths.some((path) => req.url.includes(path));
+
+				if (!shouldSkip) {
 					const originalEnd = res.end;
 					res.end = function (chunk: any, encoding: any) {
 						if (chunk && typeof chunk === "string" && chunk.includes("<head>")) {
@@ -177,6 +195,7 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
   if (typeof window === 'undefined') return;
 
   console.log('[Jay JS Inspector] Ready - Press Shift+Alt+J to toggle inspector mode');
+  console.log('[Jay JS Inspector] Commands: Shift+Click = Open in editor | Ctrl/Alt+Click = Copy file path');
 
   window.__JAYJS_INSPECTOR_CONFIG__ = ${JSON.stringify(config)};
 
@@ -307,15 +326,18 @@ DETECTED ELEMENTS:
       document.addEventListener('click', function(e) {
         if (!isInspecting) return;
 
-        if (self.config.activationKey === 'shift+click' && !e.shiftKey) return;
-        if (self.config.activationKey === 'ctrl+click' && !e.ctrlKey) return;
-        if (self.config.activationKey === 'alt+click' && !e.altKey) return;
+        const metadata = self.findComponentMetadata(e.target);
+        if (!metadata) return;
 
         e.preventDefault();
         e.stopPropagation();
 
-        const metadata = self.findComponentMetadata(e.target);
-        if (metadata) {
+        // Ctrl+Click or Alt+Click: Copy file path to clipboard
+        if (e.ctrlKey || e.altKey) {
+          self.copyFilePath(metadata);
+        }
+        // Shift+Click: Open in editor
+        else if (e.shiftKey) {
           self.openInEditor(metadata);
         }
       });
@@ -361,6 +383,36 @@ DETECTED ELEMENTS:
       } else {
         document.body.style.cursor = '';
         this.hideOverlay();
+      }
+    }
+
+    async copyFilePath(metadata) {
+      try {
+        const filePath = metadata.file + ':' + metadata.line + ':' + metadata.column;
+        await navigator.clipboard.writeText(filePath);
+
+        // Show feedback
+        const notification = document.createElement('div');
+        notification.textContent = 'Copied: ' + filePath;
+        Object.assign(notification.style, {
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#333',
+          color: 'white',
+          padding: '12px 24px',
+          borderRadius: '4px',
+          zIndex: '1000000',
+          fontFamily: 'monospace',
+          fontSize: '14px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        });
+
+        document.body.appendChild(notification);
+        setTimeout(function() { notification.remove(); }, 2000);
+      } catch (error) {
+        console.error('[Jay JS Inspector] Error copying file path:', error);
       }
     }
 
