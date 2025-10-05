@@ -1,5 +1,4 @@
 import type { ComponentMetadata, JayJsInspectorOptions } from "../plugin/types.js";
-import { DebugReporter } from "../utils/debug-reporter.js";
 
 /**
  * Debug function that gets injected into instrumented components
@@ -14,7 +13,7 @@ export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadat
 	try {
 		// Register element with inspector
 		window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
-	} catch (error) {
+	} catch (_error) {
 		// Silent fail - no logging needed
 	}
 
@@ -32,7 +31,6 @@ if (typeof window !== "undefined") {
 export class JayJsInspectorRuntime {
 	private overlay: HTMLElement | null = null;
 	private elementMap = new WeakMap<HTMLElement, ComponentMetadata>();
-	private isInspecting = false;
 
 	constructor(private config: Required<JayJsInspectorOptions>) {
 		this.init();
@@ -141,18 +139,20 @@ export class JayJsInspectorRuntime {
 		document.addEventListener("click", (e) => {
 			if (!isInspecting) return;
 
-			// Check activation key
-			if (this.config.activationKey === "shift+click" && !e.shiftKey) return;
-			if (this.config.activationKey === "ctrl+click" && !e.ctrlKey) return;
-			if (this.config.activationKey === "alt+click" && !e.altKey) return;
+			const target = e.target as HTMLElement;
+			const metadata = this.findComponentMetadata(target);
+
+			if (!metadata) return;
 
 			e.preventDefault();
 			e.stopPropagation();
 
-			const target = e.target as HTMLElement;
-			const metadata = this.findComponentMetadata(target);
-
-			if (metadata) {
+			// Ctrl+Click or Alt+Click: Copy file path to clipboard
+			if (e.ctrlKey || e.altKey) {
+				this.copyFilePath(metadata);
+			}
+			// Shift+Click: Open in editor
+			else if (e.shiftKey) {
 				this.openInEditor(metadata);
 			}
 		});
@@ -209,8 +209,6 @@ export class JayJsInspectorRuntime {
 	 * Toggle inspector mode
 	 */
 	private setInspecting(enabled: boolean) {
-		this.isInspecting = enabled;
-
 		if (enabled) {
 			document.body.style.cursor = "crosshair";
 		} else {
@@ -220,11 +218,44 @@ export class JayJsInspectorRuntime {
 	}
 
 	/**
+	 * Copy file path to clipboard
+	 */
+	private async copyFilePath(metadata: ComponentMetadata) {
+		try {
+			const filePath = `${metadata.file}:${metadata.line}:${metadata.column}`;
+			await navigator.clipboard.writeText(filePath);
+
+			// Show feedback
+			const notification = document.createElement("div");
+			notification.textContent = `Copied: ${filePath}`;
+			Object.assign(notification.style, {
+				position: "fixed",
+				top: "20px",
+				left: "50%",
+				transform: "translateX(-50%)",
+				backgroundColor: "#333",
+				color: "white",
+				padding: "12px 24px",
+				borderRadius: "4px",
+				zIndex: "1000000",
+				fontFamily: "monospace",
+				fontSize: "14px",
+				boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+			});
+
+			document.body.appendChild(notification);
+			setTimeout(() => notification.remove(), 2000);
+		} catch (error) {
+			console.error("[Jay JS Inspector] Error copying file path:", error);
+		}
+	}
+
+	/**
 	 * Send request to open file in editor
 	 */
 	private async openInEditor(metadata: ComponentMetadata) {
 		try {
-			const response = await fetch("/__jayjs-inspector/open-in-editor", {
+			const _response = await fetch("/__jayjs-inspector/open-in-editor", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
