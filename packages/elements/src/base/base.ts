@@ -106,12 +106,16 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	props &&
 		Object.entries(props).forEach(([key, value]) => {
-			try {
-				(base as any)[key] = value;
-			} catch (error) {
-				if (error instanceof TypeError) {
-					console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
-					throw error;
+			if (isReactiveValue(value)) {
+				(value as unknown as Function)(base, key);
+			} else {
+				try {
+					(base as any)[key] = value;
+				} catch (error) {
+					if (error instanceof TypeError) {
+						console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
+						throw error;
+					}
 				}
 			}
 		});
