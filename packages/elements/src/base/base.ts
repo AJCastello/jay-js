@@ -1,6 +1,10 @@
 import { TBaseTagMap, TBase, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
+function isReactiveValue(value: any): boolean {
+	return typeof value === "function" && (value as Function).name.includes("_set_value_effect");
+}
+
 export function Base<T extends TBaseTagMap = "div">(
 	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
@@ -28,8 +32,8 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (className) {
-		if (typeof className === "function" && (className as Function).name.includes("_set_value_effect")) {
-			(className as Function)(base, "className");
+		if (isReactiveValue(className)) {
+			(className as unknown as Function)(base, "className");
 		} else {
 			base.className = className;
 		}
@@ -40,16 +44,34 @@ export function Base<T extends TBaseTagMap = "div">(
 			base.addEventListener(key, value as EventListener);
 		});
 
-	style &&
-		Object.entries(style).forEach(([key, value]: [string, any]) => {
-			if (key === "parentRule" || key === "length") return;
-			base.style[key as keyof TStyle] = value;
-		});
+	if (style) {
+		if (isReactiveValue(style)) {
+			(style as unknown as Function)(base, "style");
+		} else {
+			Object.entries(style).forEach(([key, value]: [string, any]) => {
+				if (key === "parentRule" || key === "length") return;
+				if (isReactiveValue(value)) {
+					(value as unknown as Function)(base.style, key);
+				} else {
+					base.style[key as keyof TStyle] = value;
+				}
+			});
+		}
+	}
 
-	dataset &&
-		Object.entries(dataset).forEach(([key, value]) => {
-			base.dataset[key] = value as string;
-		});
+	if (dataset) {
+		if (isReactiveValue(dataset)) {
+			(dataset as unknown as Function)(base, "dataset");
+		} else {
+			Object.entries(dataset).forEach(([key, value]) => {
+				if (isReactiveValue(value)) {
+					(value as unknown as Function)(base.dataset, key);
+				} else {
+					base.dataset[key] = value as string;
+				}
+			});
+		}
+	}
 
 
 	if (children) {
