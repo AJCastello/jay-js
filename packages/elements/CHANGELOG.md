@@ -5,6 +5,17 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [1.2.0] - 25/10/2025
+
+### Alterado
+- Componente Radio refatorado para seguir o padrão headless do pacote
+- Removidas propriedades de estilo do tipo TRadio (color, size, position, label, formControl)
+- Radio agora estende apenas TBase, consistente com outros componentes do pacote
+
+### Melhorado
+- Simplificação da função Base para atribuição de ID
+- Remoção de registro de inspetor exclusivo para desenvolvimento
+
 ## [1.1.0] - 18/09/2025
 
 ### Adicionado
