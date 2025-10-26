@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TProgress } from "./progress.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TProgress } from "./progress.types";
 
 export function Progress<T extends TBaseTagMap = "progress">(
 	props: TProgress<T> = { tag: "progress" },

@@ -1,6 +1,6 @@
 import { Base } from "../base/base.js";
-import { TBaseTagMap } from "../base/base.types.js";
-import { TFileInput } from "./file-input.types.js";
+import type { TBaseTagMap } from "../base/base.types.js";
+import type { TFileInput } from "./file-input.types.js";
 
 export function FileInput<T extends TBaseTagMap = "div">(
 	props: TFileInput<T> = { tag: "div" },

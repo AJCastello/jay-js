@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TCheckbox } from "./checkbox.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TCheckbox } from "./checkbox.types";
 
 export function Checkbox<T extends TBaseTagMap = "input">(
 	props: TCheckbox<T> = { tag: "input" },

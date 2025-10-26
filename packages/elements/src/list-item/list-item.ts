@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TListItem } from "./list-item.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TListItem } from "./list-item.types";
 
 export function ListItem<T extends TBaseTagMap = "li">(
 	{ ...props }: TListItem<T> = { tag: "li" },

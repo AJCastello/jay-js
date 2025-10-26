@@ -42,8 +42,8 @@ describe("Base Function", () => {
 				style: {
 					color: "red",
 					backgroundColor: "blue",
-					fontSize: "16px"
-				}
+					fontSize: "16px",
+				},
 			});
 			expect(element.style.color).toBe("red");
 			expect(element.style.backgroundColor).toBe("blue");
@@ -54,8 +54,8 @@ describe("Base Function", () => {
 			const element = Base({
 				dataset: {
 					testId: "test-value",
-					customAttr: "custom-value"
-				}
+					customAttr: "custom-value",
+				},
 			});
 			expect(element.dataset.testId).toBe("test-value");
 			expect(element.dataset.customAttr).toBe("custom-value");
@@ -65,7 +65,7 @@ describe("Base Function", () => {
 			const element = Base({
 				tag: "input",
 				type: "text",
-				placeholder: "Enter text"
+				placeholder: "Enter text",
 			});
 			expect((element as HTMLInputElement).type).toBe("text");
 			expect((element as HTMLInputElement).placeholder).toBe("Enter text");
@@ -77,8 +77,8 @@ describe("Base Function", () => {
 			const clickHandler = jest.fn();
 			const element = Base({
 				listeners: {
-					click: clickHandler
-				}
+					click: clickHandler,
+				},
 			});
 
 			element.click();
@@ -92,19 +92,19 @@ describe("Base Function", () => {
 				tag: "input",
 				listeners: {
 					click: clickHandler,
-					focus: focusHandler
-				}
+					focus: focusHandler,
+				},
 			});
 
 			// Add to DOM to ensure element can receive focus
 			document.body.appendChild(element);
-			
+
 			element.click();
 			(element as HTMLInputElement).focus();
 
 			expect(clickHandler).toHaveBeenCalledTimes(1);
 			expect(focusHandler).toHaveBeenCalledTimes(1);
-			
+
 			element.remove();
 		});
 	});
@@ -112,7 +112,7 @@ describe("Base Function", () => {
 	describe("Children Handling", () => {
 		it("should handle string children", () => {
 			const element = Base({
-				children: "Hello World"
+				children: "Hello World",
 			});
 			expect(element.textContent).toBe("Hello World");
 		});
@@ -120,11 +120,11 @@ describe("Base Function", () => {
 		it("should handle Node children", () => {
 			const childElement = document.createElement("span");
 			childElement.textContent = "Child Node";
-			
+
 			const element = Base({
-				children: childElement
+				children: childElement,
 			});
-			
+
 			expect(element.children.length).toBe(1);
 			expect(element.children[0]).toBe(childElement);
 			expect(element.textContent).toBe("Child Node");
@@ -133,11 +133,11 @@ describe("Base Function", () => {
 		it("should handle array of children", () => {
 			const child1 = document.createElement("span");
 			child1.textContent = "Child 1";
-			
+
 			const element = Base({
-				children: ["Text child", child1, "Another text"]
+				children: ["Text child", child1, "Another text"],
 			});
-			
+
 			expect(element.childNodes.length).toBe(3);
 			expect(element.childNodes[0].textContent).toBe("Text child");
 			expect(element.childNodes[1]).toBe(child1);
@@ -146,9 +146,9 @@ describe("Base Function", () => {
 
 		it("should filter out boolean and null children", () => {
 			const element = Base({
-				children: ["Valid text", false, null, undefined, true]
+				children: ["Valid text", false, null, undefined, true],
 			});
-			
+
 			expect(element.childNodes.length).toBe(1);
 			expect(element.textContent).toBe("Valid text");
 		});
@@ -158,7 +158,7 @@ describe("Base Function", () => {
 		it("should assign element to ref.current", () => {
 			const ref = { current: null };
 			const element = Base({ ref });
-			
+
 			expect(ref.current).toBe(element);
 		});
 	});
@@ -166,40 +166,37 @@ describe("Base Function", () => {
 	describe("Promise Children", () => {
 		it("should handle Promise children with lazy slot", async () => {
 			const promiseChild = Promise.resolve("Resolved content");
-			
+
 			const element = Base({
-				children: promiseChild
+				children: promiseChild,
 			});
-			
+
 			// Initially should have a lazy slot
 			expect(element.children.length).toBe(1);
 			expect(element.children[0].tagName.toLowerCase()).toBe("jayjs-lazy-slot");
-			
+
 			// Wait for promise resolution
 			await promiseChild;
-			
+
 			// Allow for async DOM update
-			await new Promise(resolve => setTimeout(resolve, 0));
-			
+			await new Promise((resolve) => setTimeout(resolve, 0));
+
 			expect(element.textContent).toBe("Resolved content");
 		});
 
 		it("should handle rejected Promise children", async () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 			const rejectedPromise = Promise.reject(new Error("Test error"));
-			
-			const element = Base({
-				children: rejectedPromise
+
+			Base({
+				children: rejectedPromise,
 			});
-			
+
 			// Wait for promise rejection
-			await new Promise(resolve => setTimeout(resolve, 0));
-			
-			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				"Failed to resolve child promise:",
-				expect.any(Error)
-			);
-			
+			await new Promise((resolve) => setTimeout(resolve, 0));
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to resolve child promise:", expect.any(Error));
+
 			consoleErrorSpy.mockRestore();
 		});
 	});
@@ -209,26 +206,26 @@ describe("Base Function", () => {
 			const element = Base({
 				tag: "input",
 				value: "test value",
-				disabled: true
+				disabled: true,
 			});
-			
+
 			expect((element as HTMLInputElement).value).toBe("test value");
 			expect((element as HTMLInputElement).disabled).toBe(true);
 		});
 
 		it("should handle property assignment errors gracefully", () => {
 			const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
-			
+
 			// Test with a property that will actually cause an error
 			const element = Base({
-				tag: "input"
+				tag: "input",
 			});
-			
+
 			// Try to set a readonly property directly
 			expect(() => {
 				(element as any).readOnly = "invalid";
 			}).not.toThrow(); // Most readonly properties just ignore invalid assignments
-			
+
 			consoleWarnSpy.mockRestore();
 		});
 	});
@@ -250,10 +247,10 @@ describe("Base Function", () => {
 			const element = Base({
 				style: {
 					color: "red",
-					...(({ parentRule: null, length: 10 } as any))
-				}
+					...({ parentRule: null, length: 10 } as any),
+				},
 			});
-			
+
 			expect(element.style.color).toBe("red");
 			// parentRule and length should be skipped
 		});

@@ -1,31 +1,36 @@
-import { TBaseTagMap, TBase, TLifecycleElement, TStyle } from "./base.types.js";
+import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
+type ReactiveEffect = (target: any, prop: string) => void;
+
 function isReactiveValue(value: any): boolean {
-	return typeof value === "function" && (value as Function).name.includes("_set_value_effect");
+	return typeof value === "function" && (value as ReactiveEffect).name.includes("_set_value_effect");
 }
 
 export function Base<T extends TBaseTagMap = "div">(
-	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = { tag: "div" },
+	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = {
+		tag: "div",
+	},
 ): HTMLElementTagNameMap[T] {
-
 	const hasLifecycle = Boolean(onmount || onunmount);
 
 	if (hasLifecycle) {
 		registerJayJsElement(tag || "div");
 	}
 
-	let elementOptions = hasLifecycle ? { is: `jayjs-${tag || "div"}` } : undefined;
+	const elementOptions = hasLifecycle ? { is: `jayjs-${tag || "div"}` } : undefined;
 
 	const base = document.createElement(tag || "div", elementOptions);
 
 	if (hasLifecycle) {
-		const lyfercycleElement = base as unknown as TLifecycleElement
+		const lyfercycleElement = base as unknown as TLifecycleElement;
 		if (onmount) lyfercycleElement.onmount = onmount;
 		if (onunmount) lyfercycleElement.onunmount = onunmount;
 	}
 
-	ref && (ref.current = base);
+	if (ref) {
+		ref.current = base;
+	}
 
 	if (id) {
 		base.id = id;
@@ -33,7 +38,7 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	if (className) {
 		if (isReactiveValue(className)) {
-			(className as unknown as Function)(base, "className");
+			(className as unknown as ReactiveEffect)(base, "className");
 		} else {
 			base.className = className;
 		}
@@ -46,12 +51,12 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	if (style) {
 		if (isReactiveValue(style)) {
-			(style as unknown as Function)(base, "style");
+			(style as unknown as ReactiveEffect)(base, "style");
 		} else {
 			Object.entries(style).forEach(([key, value]: [string, any]) => {
 				if (key === "parentRule" || key === "length") return;
 				if (isReactiveValue(value)) {
-					(value as unknown as Function)(base.style, key);
+					(value as unknown as ReactiveEffect)(base.style, key);
 				} else {
 					base.style[key as keyof TStyle] = value;
 				}
@@ -61,18 +66,17 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	if (dataset) {
 		if (isReactiveValue(dataset)) {
-			(dataset as unknown as Function)(base, "dataset");
+			(dataset as unknown as ReactiveEffect)(base, "dataset");
 		} else {
 			Object.entries(dataset).forEach(([key, value]) => {
 				if (isReactiveValue(value)) {
-					(value as unknown as Function)(base.dataset, key);
+					(value as unknown as ReactiveEffect)(base.dataset, key);
 				} else {
 					base.dataset[key] = value as string;
 				}
 			});
 		}
 	}
-
 
 	if (children) {
 		if (children instanceof Promise) {
@@ -107,7 +111,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	props &&
 		Object.entries(props).forEach(([key, value]) => {
 			if (isReactiveValue(value)) {
-				(value as unknown as Function)(base, key);
+				(value as unknown as ReactiveEffect)(base, key);
 			} else {
 				try {
 					(base as any)[key] = value;

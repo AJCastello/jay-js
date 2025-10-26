@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TButton } from "./button.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TButton } from "./button.types";
 
 export function Button<T extends TBaseTagMap = "button">(
 	props: TButton<T> = { tag: "button" },

@@ -1,6 +1,6 @@
-import { TBaseTagMap } from "../base";
+import type { TBaseTagMap } from "../base";
 import { Input } from "../input";
-import { TTextInput } from "./text-input.types";
+import type { TTextInput } from "./text-input.types";
 
 export function TextInput<T extends TBaseTagMap = "input">(
 	props: TTextInput<T> = { tag: "input" },

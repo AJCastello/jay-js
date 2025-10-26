@@ -1,10 +1,8 @@
-import { TBaseTagMap } from "../base";
+import type { TBaseTagMap } from "../base";
 import { Input } from "../input";
-import { TRange } from "./range.types";
+import type { TRange } from "./range.types";
 
-export function Range<T extends TBaseTagMap = "input">(
-	props: TRange<T> = { tag: "input" },
-): HTMLElementTagNameMap[T] {
+export function Range<T extends TBaseTagMap = "input">(props: TRange<T> = { tag: "input" }): HTMLElementTagNameMap[T] {
 	return Input<"input">({
 		...props,
 		tag: "input",
