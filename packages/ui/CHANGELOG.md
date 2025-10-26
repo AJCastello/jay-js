@@ -5,6 +5,36 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [4.1.0] - 26/10/2025
+
+### Adicionado
+- **Componente Checkbox** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - Suporte a estado indeterminado (indeterminate)
+  - Baseado no Input primitivo do @jay-js/elements
+
+- **Componente Radio** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - Baseado no Input primitivo do @jay-js/elements
+
+- **Componente FileInput** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - Variante ghost (file-input-ghost)
+  - Suporte a largura total (fullWidth)
+  - Baseado no Input primitivo do @jay-js/elements
+
+- **Componente Range** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - Baseado no Input primitivo do @jay-js/elements
+
+### Melhorado
+- Componentes de formulário agora seguem padrão consistente de estilização
+- Melhor separação de responsabilidades entre @jay-js/elements (primitivos) e @jay-js/ui (estilizados)
+
 ## [Unreleased]
 
 ### Adicionado
