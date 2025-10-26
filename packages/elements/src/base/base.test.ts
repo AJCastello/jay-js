@@ -17,12 +17,11 @@ describe("Base Function", () => {
 			expect(element.tagName.toLowerCase()).toBe("button");
 		});
 
-		it("should generate unique id when not provided", () => {
+		it("should not generate id when not provided", () => {
 			const element1 = Base();
 			const element2 = Base();
-			expect(element1.id).toBeTruthy();
-			expect(element2.id).toBeTruthy();
-			expect(element1.id).not.toBe(element2.id);
+			expect(element1.id).toBe("");
+			expect(element2.id).toBe("");
 		});
 
 		it("should use provided id", () => {
@@ -234,13 +233,13 @@ describe("Base Function", () => {
 		it("should handle empty props object", () => {
 			const element = Base({});
 			expect(element.tagName.toLowerCase()).toBe("div");
-			expect(element.id).toBeTruthy();
+			expect(element.id).toBe("");
 		});
 
 		it("should handle undefined props", () => {
 			const element = Base();
 			expect(element.tagName.toLowerCase()).toBe("div");
-			expect(element.id).toBeTruthy();
+			expect(element.id).toBe("");
 		});
 
 		it("should skip parentRule and length properties in style", () => {
