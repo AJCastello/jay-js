@@ -34,7 +34,7 @@ export async function renderHTMLFiles(): Promise<void> {
 		throw new Error("Could not find script tag in index.html");
 	}
 
-	const { script, src } = scriptAndSrc;
+	const { script } = scriptAndSrc;
 	const index: string = indexRef.replace(script, "");
 	const indexDom = new JSDOM(index, {
 		url: "http://localhost/",

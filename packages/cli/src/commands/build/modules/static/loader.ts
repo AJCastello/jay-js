@@ -37,7 +37,7 @@ export async function resolve(
 	if (typeof specifier === "string" && !PACKAGES.includes(specifier)) {
 		const extname = path.extname(specifier);
 
-		if (ASSETS_EXTENSIONS.includes(extname!)) {
+		if (ASSETS_EXTENSIONS.includes(extname)) {
 			const imageUrl = encodeURIComponent(specifier);
 			const modifiedProxyPath = `${imageProxyPath}?path=${imageUrl}`;
 			return await Promise.resolve({
@@ -46,7 +46,7 @@ export async function resolve(
 			});
 		}
 
-		if (!DEFAULT_EXTENSIONS.includes(extname!)) {
+		if (!DEFAULT_EXTENSIONS.includes(extname)) {
 			const dirName = path.dirname(fileURLToPath(context.parentURL as string));
 			const resolvedPath = path.resolve(dirName, specifier);
 
