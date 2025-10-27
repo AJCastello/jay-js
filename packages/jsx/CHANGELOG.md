@@ -16,6 +16,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Suporte para UI de testes com `@vitest/ui`
 - Cobertura de testes com `@vitest/coverage-v8`
 - Novos scripts: `test:ui` para interface visual de testes
+- Novo arquivo `src/types/jsx-intrinsic-elements.d.ts` com definições JSX compartilhadas
 
 ### Melhorado
 - TypeScript: Adicionado `esModuleInterop` e `allowSyntheticDefaultImports` para melhor compatibilidade de módulos
@@ -25,6 +26,14 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Peer dependencies atualizadas:
   - `@jay-js/ui`: ^3.1.1 → ^4.2.0
   - `@jay-js/elements`: ^1.1.0 → ^1.2.0
+
+### Refatorado
+- **Eliminada duplicação massiva de código**: 115 linhas de definições JSX.IntrinsicElements extraídas para arquivo compartilhado
+  - Arquivo `jsx-runtime.ts`: 177 → 57 linhas (-68%)
+  - Arquivo `jsx-dev-runtime.ts`: 177 → 57 linhas (-68%)
+  - Total: Redução de 110 linhas (31% do código)
+  - Melhoria: Manutenção simplificada (alterações feitas em um único lugar)
+  - Princípio DRY (Don't Repeat Yourself) agora aplicado corretamente
 
 ### Removido
 - Dependências do Jest:
