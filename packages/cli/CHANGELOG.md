@@ -5,6 +5,25 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [3.0.0] - 27/10/2025
+
+### ⚠️ BREAKING CHANGES
+- **Removidos comandos legados**: Os seguintes comandos foram removidos da CLI:
+  - `jayjs run` - Execução de arquivos Jay JS
+  - `jayjs ctx` / `jayjs context` - Criação de contextos estruturados
+  - `jayjs i18n` / `jayjs intl` - Gerenciamento de internacionalização
+  - `jayjs md` / `jayjs module` - Criação de módulos estruturados
+- A CLI agora foca em 3 comandos essenciais: `init`, `build` e `ui`
+
+### Melhorado
+- Refatoração completa dos imports do Node.js para padrão moderno
+- Remoção de non-null assertions desnecessários no loader de assets
+- Código mais limpo e manutenível com melhor organização de imports
+
+### Corrigido
+- Correções de linting em todo o pacote
+- Remoção de variável não utilizada em staticCompiler
+
 ## [2.1.1] - 18/09/2025
 
 ### Melhorado
