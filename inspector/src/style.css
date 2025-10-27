@@ -1,3 +1,0 @@
-@import "tailwindcss";
-@plugin "daisyui";
-@source "../../packages/ui/src/**/*.ts";
