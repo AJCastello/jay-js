@@ -5,9 +5,9 @@
 
 // Export the JSX namespace for TypeScript
 declare namespace JSX {
-  interface IntrinsicElements {
-    [elemName: string]: any;
-  }
+	interface IntrinsicElements {
+		[elemName: string]: any;
+	}
 }
 
 // Re-export all JSX runtime components
