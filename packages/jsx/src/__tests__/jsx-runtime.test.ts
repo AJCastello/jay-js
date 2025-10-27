@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { Fragment, jsx } from "../runtime/jsx-runtime.js";
 
 describe("JSX Runtime", () => {
@@ -47,7 +44,7 @@ describe("JSX Runtime", () => {
 	});
 
 	test("handles event listeners", async () => {
-		const clickHandler = jest.fn();
+		const clickHandler = vi.fn();
 		const result = jsx("button", {
 			onClick: clickHandler,
 		});

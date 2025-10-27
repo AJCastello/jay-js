@@ -1,7 +1,4 @@
-/**
- * Test for the Jay JSX Vite plugin
- */
-
+import { describe, expect, test } from "vitest";
 import jayJsxPlugin from "../vite-plugin/index.js";
 
 describe("Vite Plugin", () => {
