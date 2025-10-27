@@ -1,5 +1,5 @@
-import { Base, Box, Typography, type TBaseTagMap } from "@jay-js/elements";
-import { Effect, State, render } from "@jay-js/system";
+import { Base, Box, type TBaseTagMap, Typography } from "@jay-js/elements";
+import { Effect, render, State } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import { DatePicker } from "../date-picker/date-picker";
 import type { TDateRangePicker } from "./date-range-picker.types";
@@ -35,13 +35,7 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 	const container = Base({
 		tag: "div",
 		...props,
-		className: cn(
-			"flex",
-			layout === "horizontal" ? "flex-row" : "flex-col",
-			gap,
-			"w-full",
-			props.className,
-		),
+		className: cn("flex", layout === "horizontal" ? "flex-row" : "flex-col", gap, "w-full", props.className),
 		onunmount: () => {
 			startDate.clear();
 			endDate.clear();

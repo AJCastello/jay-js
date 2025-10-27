@@ -1,23 +1,62 @@
-import { Base, Box, Button, Typography, type TBaseTagMap } from "@jay-js/elements";
-import { Effect, State, render } from "@jay-js/system";
+import { Base, Box, Button, type TBaseTagMap, Typography } from "@jay-js/elements";
+import { Effect, render, State } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TDatePicker } from "./date-picker.types";
 
 const LOCALES = {
 	"pt-BR": {
-		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+		months: [
+			"Janeiro",
+			"Fevereiro",
+			"Março",
+			"Abril",
+			"Maio",
+			"Junho",
+			"Julho",
+			"Agosto",
+			"Setembro",
+			"Outubro",
+			"Novembro",
+			"Dezembro",
+		],
 		weekDays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
 		back: "Voltar",
 		confirm: "Confirmar",
 	},
 	"en-US": {
-		months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+		months: [
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		],
 		weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 		back: "Back",
 		confirm: "Confirm",
 	},
 	"es-ES": {
-		months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+		months: [
+			"Enero",
+			"Febrero",
+			"Marzo",
+			"Abril",
+			"Mayo",
+			"Junio",
+			"Julio",
+			"Agosto",
+			"Septiembre",
+			"Octubre",
+			"Noviembre",
+			"Diciembre",
+		],
 		weekDays: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
 		back: "Volver",
 		confirm: "Confirmar",
@@ -258,13 +297,11 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					selected.getFullYear() === current.getFullYear();
 				const isToday = showToday && new Date().toDateString() === dayDate.toDateString();
 
-				const isRangeEdge = (rangeStart && dayDate.toDateString() === rangeStart.toDateString()) ||
+				const isRangeEdge =
+					(rangeStart && dayDate.toDateString() === rangeStart.toDateString()) ||
 					(rangeEnd && dayDate.toDateString() === rangeEnd.toDateString());
 
-				const isInRange = rangeStart && rangeEnd &&
-					dayDate > rangeStart &&
-					dayDate < rangeEnd &&
-					!isSelected;
+				const isInRange = rangeStart && rangeEnd && dayDate > rangeStart && dayDate < rangeEnd && !isSelected;
 
 				const dayElement = Button({
 					type: "button",

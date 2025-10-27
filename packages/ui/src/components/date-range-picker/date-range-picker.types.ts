@@ -11,14 +11,7 @@ export type TDateRangePicker<T extends TBaseTagMap> = {
 	withTime?: boolean;
 	minDate?: Date;
 	maxDate?: Date;
-	color?:
-		| "btn-primary"
-		| "btn-secondary"
-		| "btn-accent"
-		| "btn-success"
-		| "btn-warning"
-		| "btn-info"
-		| "btn-error";
+	color?: "btn-primary" | "btn-secondary" | "btn-accent" | "btn-success" | "btn-warning" | "btn-info" | "btn-error";
 	size?: "btn-xl" | "btn-lg" | "btn-md" | "btn-sm" | "btn-xs";
 	disabled?: boolean;
 	locale?: "pt-BR" | "en-US" | "es-ES";

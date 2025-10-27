@@ -1,13 +1,7 @@
 import type { TBase, TBaseTagMap } from "@jay-js/elements";
 
 export type TButton<T extends TBaseTagMap = "button"> = {
-	variant?:
-		| "btn-outline"
-		| "btn-dash"
-		| "btn-soft"
-		| "btn-ghost"
-		| "btn-link"
-		| "btn-active";
+	variant?: "btn-outline" | "btn-dash" | "btn-soft" | "btn-ghost" | "btn-link" | "btn-active";
 	color?:
 		| "btn-primary"
 		| "btn-secondary"
