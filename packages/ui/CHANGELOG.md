@@ -5,6 +5,46 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [4.2.0] - 27/10/2025
+
+### Adicionado
+- **Componente Button** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - 6 variantes (outline, dash, soft, ghost, link, active)
+  - Modifiers: wide, block, square, circle, disabled
+  - Baseado no Button primitivo do @jay-js/elements
+
+- **Componente Select** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - Variante ghost (select-ghost)
+  - Suporte a largura total (fullWidth)
+  - Baseado no Select primitivo do @jay-js/elements
+
+- **Componente Textarea** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - 5 tamanhos disponíveis (xs, sm, md, lg, xl)
+  - Variante ghost (textarea-ghost)
+  - Suporte a largura total (fullWidth)
+  - Baseado no TextArea primitivo do @jay-js/elements
+
+- **Componente Link** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - Variante hover (link-hover) para underline apenas no hover
+  - Adiciona classe link do DaisyUI para sublinhado
+  - Baseado no Link primitivo do @jay-js/elements
+
+- **Componente Progress** com estilização DaisyUI completa
+  - Suporte a 8 cores (primary, secondary, accent, neutral, success, warning, info, error)
+  - Suporte a indeterminate (sem valor)
+  - Baseado no Progress primitivo do @jay-js/elements
+
+### Melhorado
+- Biblioteca agora possui cobertura completa dos componentes básicos de formulário DaisyUI
+- Padrão consistente entre todos os componentes estilizados
+- Melhor separação entre elementos primitivos (@jay-js/elements) e estilizados (@jay-js/ui)
+
 ## [4.1.0] - 26/10/2025
 
 ### Adicionado
