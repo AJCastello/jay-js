@@ -9,6 +9,7 @@
     "moduleResolution": "Bundler",
     "sourceMap": true,
     "declaration": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": true,
@@ -18,10 +19,10 @@
     "types": ["node"],
     "paths": {
       "@jay-js/elements": [
-        "../elements/src"
+        "../elements/dist"
       ],
       "@jay-js/elements/*": [
-        "../elements/src/*"
+        "../elements/dist/*"
       ]
     }
   },
