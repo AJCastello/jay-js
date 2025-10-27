@@ -1,5 +1,5 @@
 export function cssFile(): string {
-  return `@tailwind base;
+	return `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 `;

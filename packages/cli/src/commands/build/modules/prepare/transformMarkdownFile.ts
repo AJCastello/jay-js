@@ -1,6 +1,7 @@
-// node 
-import fs from "fs/promises";
+// node
+
 import path from "node:path";
+import fs from "fs/promises";
 
 // terminal
 import { face, faceChalk } from "../../../../utils/terminal";
@@ -9,10 +10,10 @@ import { face, faceChalk } from "../../../../utils/terminal";
 import { parseMarkdown } from "./parseMarkdown";
 
 export async function transformMarkdownFile(filePath: string) {
-  const markdownContent = await fs.readFile(filePath, "utf8");
-  const transformedContent = await parseMarkdown(markdownContent);
-  const transformedJsContent = `export default ${JSON.stringify(transformedContent, null, 2)};`;
-  const newFilePath = filePath.replace(/\.mdx?$/, ".js");
-  await fs.writeFile(newFilePath, transformedJsContent);
-  face.setMessage(`{gray Transforming:} ${path.basename(filePath)}`);  
+	const markdownContent = await fs.readFile(filePath, "utf8");
+	const transformedContent = await parseMarkdown(markdownContent);
+	const transformedJsContent = `export default ${JSON.stringify(transformedContent, null, 2)};`;
+	const newFilePath = filePath.replace(/\.mdx?$/, ".js");
+	await fs.writeFile(newFilePath, transformedJsContent);
+	face.setMessage(`{gray Transforming:} ${path.basename(filePath)}`);
 }
