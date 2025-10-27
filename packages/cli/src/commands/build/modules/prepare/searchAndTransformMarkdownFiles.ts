@@ -1,7 +1,7 @@
 // node
 
+import fs from "node:fs/promises";
 import path from "node:path";
-import fs from "fs/promises";
 
 // modules
 import { transformMarkdownFile } from "./transformMarkdownFile";

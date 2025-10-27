@@ -15,7 +15,7 @@ export async function validateComponent(componentName: string): Promise<boolean>
 		const data = await response.json();
 
 		return Array.isArray(data) && data.length > 0;
-	} catch (error) {
+	} catch {
 		return false;
 	}
 }

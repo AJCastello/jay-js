@@ -1,5 +1,5 @@
+import path from "node:path";
 import fs from "fs-extra";
-import path from "path";
 import { faceChalk, log } from "../../../utils/terminal.js";
 import { downloadFromGithub } from "../services/github-downloader.js";
 import { validateComponent } from "../utils/validate-component.js";

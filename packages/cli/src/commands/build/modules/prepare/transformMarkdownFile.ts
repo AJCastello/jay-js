@@ -1,10 +1,10 @@
 // node
 
+import fs from "node:fs/promises";
 import path from "node:path";
-import fs from "fs/promises";
 
 // terminal
-import { face, faceChalk } from "../../../../utils/terminal";
+import { face } from "../../../../utils/terminal";
 
 // modules
 import { parseMarkdown } from "./parseMarkdown";

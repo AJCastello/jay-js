@@ -1,7 +1,7 @@
+import path from "node:path";
 import degit from "degit";
 import fs from "fs-extra";
 import os from "os";
-import path from "path";
 import { toKebabCase } from "../../../utils/case";
 import { face, log } from "../../../utils/terminal";
 
@@ -24,7 +24,7 @@ export async function downloadTemplateFiles(templateId: string, projectName: str
 		});
 
 		emitter.on("info", (info) => {
-			face.setMessage(info.message.substring(0, 50) + "...");
+			face.setMessage(`${info.message.substring(0, 50)}...`);
 		});
 
 		const projectPath = path.join(process.cwd(), toKebabCase(projectName));

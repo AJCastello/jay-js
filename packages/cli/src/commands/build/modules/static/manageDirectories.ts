@@ -1,5 +1,5 @@
+import path from "node:path";
 import fs from "fs-extra";
-import path from "path";
 import { jayJsOptions } from "../../../../options/jayJsDefineOptions";
 import { face, log } from "../../../../utils/terminal";
 

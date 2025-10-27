@@ -1,6 +1,6 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import fs from "fs-extra";
-import path from "path";
-import { fileURLToPath } from "url";
 import { face, log } from "./terminal";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,7 +10,7 @@ export async function checkFileExists(filePath: string) {
 	try {
 		await fs.access(filePath);
 		return true;
-	} catch (error) {
+	} catch {
 		return false;
 	}
 }

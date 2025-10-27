@@ -1,7 +1,8 @@
 // Node.js built-in modules
+
+import fs from "node:fs/promises";
 import path, { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import fs from "fs/promises";
 // External libraries
 import fsEx from "fs-extra";
 import { JSDOM } from "jsdom";
@@ -12,7 +13,7 @@ import "./register-loader.js";
 import { jayJsOptions } from "../../../../options/jayJsDefineOptions.js";
 // Local type definitions
 import type { Route } from "../../../../types/index.js";
-import { Face, faceChalk, log } from "../../../../utils/terminal.js";
+import { Face, log } from "../../../../utils/terminal.js";
 import { findScriptAndSrc } from "../../utils/findScriptAndSrc.js";
 import { finalizeOutDirectory } from "./finalizeOutDirectory.js";
 // output
@@ -78,7 +79,7 @@ export async function renderHTMLFiles(): Promise<void> {
 	});
 
 	if (resolvedRoutes.size > 0) {
-		for (const [key, value] of resolvedRoutes.entries()) {
+		for (const [_key, value] of resolvedRoutes.entries()) {
 			indexDom.window.document.documentElement.innerHTML = index;
 			const indexDocument = indexDom.window.document;
 			const head = indexDocument.querySelector("head") as HTMLHeadElement;
@@ -108,7 +109,7 @@ export async function renderHTMLFiles(): Promise<void> {
 	}
 
 	if (dynamicRoutes.size > 0) {
-		for (const [key, value] of dynamicRoutes.entries()) {
+		for (const [_key, value] of dynamicRoutes.entries()) {
 			const useContent = value.element.content;
 			useContent.fileExt = "js";
 			const contentPath = path.join(CWD, outDir as string, contentDir, useContent.dir);

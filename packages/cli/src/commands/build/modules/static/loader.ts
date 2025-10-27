@@ -1,7 +1,8 @@
 // node
+
+import { readFile } from "node:fs/promises";
 import path, { dirname, resolve as resolvePath } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { readFile } from "fs/promises";
 
 // types
 import type { ResolveContext, ResolveResult } from "../../../../types/index.js";

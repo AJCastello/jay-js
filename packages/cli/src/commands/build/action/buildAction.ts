@@ -1,7 +1,7 @@
 // types
 
 import inquirer, { type QuestionCollection } from "inquirer";
-import { face, faceChalk, log } from "../../../utils/terminal";
+import { faceChalk } from "../../../utils/terminal";
 import { initPrepare } from "../modules/prepare/initPrepare";
 import { initStatic } from "../modules/static/initStatic";
 import type { TBuildCommandOptions } from "../types";

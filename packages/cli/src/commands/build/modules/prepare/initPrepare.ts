@@ -7,7 +7,7 @@ import fs from "fs-extra";
 import { jayJsOptions } from "../../../../options/jayJsDefineOptions.js";
 
 // terminal
-import { face, faceChalk, log } from "../../../../utils/terminal.js";
+import { face, log } from "../../../../utils/terminal.js";
 import { searchAndTransformMarkdownFiles } from "./searchAndTransformMarkdownFiles.js";
 
 export async function initPrepare() {
