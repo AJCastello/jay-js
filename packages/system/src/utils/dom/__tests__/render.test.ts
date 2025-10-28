@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { render } from "../render.js";
 
 describe("Render Utility", () => {

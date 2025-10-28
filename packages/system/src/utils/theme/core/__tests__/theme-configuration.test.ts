@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type { TThemeDefinition } from "../../types";
 import { themeDefineOptions, themeOptions } from "../configuration";
 

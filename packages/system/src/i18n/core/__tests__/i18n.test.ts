@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { i18nOptions, i18nState } from "../../core/configuration.js";
 import { getCurrentLocale, initLanguage, setLanguage } from "../../core/language-manager.js";
 import { i18nDefineOptions, useI18n } from "../../index.js";

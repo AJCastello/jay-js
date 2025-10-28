@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { selector, selectors } from "../query.js";
 
 describe("DOM Query Utilities", () => {

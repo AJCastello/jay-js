@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { State } from "../../core/state";
 import { CombineStates } from "../helpers";
 

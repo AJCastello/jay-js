@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type { TRoute } from "../../types";
 import { resolvedRoutes, routerOptions } from "../configuration";
 import { Navigate } from "../navigation/navigate";

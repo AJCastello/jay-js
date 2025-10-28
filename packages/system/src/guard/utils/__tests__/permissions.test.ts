@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type { TPermission } from "../../types";
 /**
  * Tests for the permission utility functions

@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type { TRoute } from "../../types";
 import { routerOptions } from "../configuration";
 import { Routes } from "../route-registry";

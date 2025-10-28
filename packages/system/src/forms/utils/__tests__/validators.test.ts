@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type { TFormValidateResult } from "../../types.js";
 import { combineValidationResults, formatError, isValidResult } from "../validators.js";
 

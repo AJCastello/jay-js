@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { lazyOptions, moduleCache, setLazyOptions } from "../configuration.js";
 
 describe("Lazy Configuration", () => {

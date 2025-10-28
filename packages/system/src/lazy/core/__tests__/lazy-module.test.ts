@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { moduleCache } from "../configuration.js";
 import { LazyModule } from "../lazy-module.js";
 import * as moduleLoader from "../module-loader.js";

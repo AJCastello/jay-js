@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { formatError, isValidResult } from "../../utils/validators.js";
 import { useForm } from "../use-form.js";
 
@@ -56,7 +56,9 @@ describe("useForm", () => {
 			constructor(callback: any) {}
 			observe() {}
 			disconnect() {}
-			takeRecords() { return []; }
+			takeRecords() {
+				return [];
+			}
 		} as any;
 
 		global.document = {

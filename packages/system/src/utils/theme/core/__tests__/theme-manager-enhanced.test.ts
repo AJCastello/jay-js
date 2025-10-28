@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type { TThemeDefinition, TThemeMode } from "../../types";
 import { themeDefineOptions, themeOptions } from "../configuration";
 import * as themeManagerModule from "../theme-manager";
