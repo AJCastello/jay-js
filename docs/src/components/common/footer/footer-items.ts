@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Link } from "../../../../../packages/elements/src";
+import { Link } from "@jay-js/elements";
 import { IconDiscordLogoDuotone, IconGithubLogoDuotone, IconPackageDuotone, IconTwitterLogoDuotone } from "../../icons";
 import { Logo } from "../logo";
 import type { MenuItem } from "../shared/menu-items";

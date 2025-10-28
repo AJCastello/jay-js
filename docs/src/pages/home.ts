@@ -1,4 +1,4 @@
-import { Section } from "../../../packages/elements/src";
+import { Section } from "@jay-js/elements";
 import {
 	CallToAction,
 	CodeExamples,

@@ -1,4 +1,4 @@
-import { Input, Typography } from "../../../../packages/elements/src";
+import { Input, Typography } from "@jay-js/elements";
 import type { ICollectionGrouped } from "../../types";
 import { Collapse, CollapseContent, CollapseTitle } from "../ui";
 import { MenuItem } from "./menu-item";

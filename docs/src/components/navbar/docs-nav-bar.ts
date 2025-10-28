@@ -1,4 +1,4 @@
-import { Box, Section } from "../../../../packages/elements/src";
+import { Box, Section } from "@jay-js/elements";
 import { Logo } from "../common/logo";
 import { SearchForm } from "./search-form";
 import { SelectLocation } from "./select-location";

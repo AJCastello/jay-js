@@ -1,4 +1,4 @@
-import { Box } from "../../../../packages/elements/src";
+import { Box } from "@jay-js/elements";
 
 export function DocsScrollBullet() {
 	return Box({

@@ -1,4 +1,4 @@
-import { Link, Typography } from "../../../../packages/elements/src";
+import { Link, Typography } from "@jay-js/elements";
 import type { IJayJSPackage } from "../../types";
 import { Card, CardActions, CardBody, CardTitle, Kbd } from "../ui";
 

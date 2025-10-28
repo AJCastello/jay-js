@@ -1,4 +1,4 @@
-import { Box, Link, Section, Typography } from "../../../../../packages/elements/src";
+import { Box, Link, Section, Typography } from "@jay-js/elements";
 import { intl } from "../../../locales";
 import { legalItems, navigationItems, socialItems } from "../shared/menu-items";
 import { FooterLegalItem, FooterLogo, FooterNavItem, FooterSocialItem } from "./footer-items";

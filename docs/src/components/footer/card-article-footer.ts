@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Box, Link, Typography } from "../../../../packages/elements/src";
+import { Box, Link, Typography } from "@jay-js/elements";
 import type { TArticleFooter } from "../../types";
 import { IconCaretLeftDuotone, IconCaretRightDuotone } from "../icons";
 

@@ -1,5 +1,5 @@
 import { setTheme } from "@jay-js/system";
-import { Box, Button } from "../../../../packages/elements/src";
+import { Box, Button } from "@jay-js/elements";
 import { IconMoonDuotone } from "../icons/duotone/moon";
 import { IconSunDuotone } from "../icons/duotone/sun";
 

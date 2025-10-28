@@ -1,5 +1,5 @@
 import jayjs from "/jayjs.svg";
-import { Box, Img, Link, Section, Typography } from "../../../../packages/elements/src";
+import { Box, Img, Link, Section, Typography } from "@jay-js/elements";
 import { IconDiscordLogoDuotone, IconGithubLogoDuotone } from "../icons";
 // import { Logo } from "./Logo";
 // import { SearchForm } from "./SearchForm";

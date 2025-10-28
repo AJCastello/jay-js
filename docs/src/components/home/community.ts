@@ -1,4 +1,4 @@
-import { Box, Link, Section, Typography } from "../../../../packages/elements/src";
+import { Box, Link, Section, Typography } from "@jay-js/elements";
 import { IconDiscordLogoDuotone, IconGithubLogoDuotone, IconTwitterLogoDuotone } from "../icons";
 
 export function Community() {

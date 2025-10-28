@@ -1,5 +1,5 @@
 import { Navigate, selector } from "@jay-js/system";
-import { Link } from "../../../../../packages/elements/src";
+import { Link } from "@jay-js/elements";
 import type { MenuItem } from "./menu-items";
 
 export function NavigationLink({

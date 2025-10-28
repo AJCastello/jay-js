@@ -1,4 +1,4 @@
-import { Box, Outlet, Section } from "../../../packages/elements/src";
+import { Box, Outlet, Section } from "@jay-js/elements";
 import { StaticSideMenu } from "../components/aside/static-side-menu";
 import { DocsFooter } from "../components/footer/docs-footer";
 import { DocsNavBar } from "../components/navbar/docs-nav-bar";

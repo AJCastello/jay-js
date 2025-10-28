@@ -1,4 +1,4 @@
-import { Box, Input } from "../../../../packages/elements/src";
+import { Box, Input } from "@jay-js/elements";
 
 export function SearchForm() {
 	return Box({

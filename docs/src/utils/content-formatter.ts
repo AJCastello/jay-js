@@ -1,7 +1,7 @@
 import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
-import { Link } from "../../../packages/elements/src";
+import { Link } from "@jay-js/elements";
 import { IconLinkDuotone } from "../components/icons";
 import type { TContentFormatter, TOnThisPageList } from "../types";
 
