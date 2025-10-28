@@ -5,7 +5,7 @@ import { downloadFromGithub } from "../services/github-downloader.js";
 import { validateComponent } from "../utils/validate-component.js";
 
 const GITHUB_REPO = "AJCastello/jay-js";
-const GITHUB_BRANCH = "development";
+const GITHUB_BRANCH = "main";
 const COMPONENTS_PATH = "packages/ui/src/components";
 
 export async function downloadComponents(components: string[]) {
