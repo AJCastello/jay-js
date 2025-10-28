@@ -1,8 +1,7 @@
 import { vi } from "vitest";
-import type { TThemeDefinition, TThemeMode } from "../../types";
+import type { TThemeDefinition } from "../../types";
 import { themeDefineOptions, themeOptions } from "../configuration";
-import * as themeManagerModule from "../theme-manager";
-import { getCurrentTheme, initTheme, prefersColorSchemeDark, setTheme, toggleThemeMode } from "../theme-manager";
+import { getCurrentTheme, initTheme, setTheme, toggleThemeMode } from "../theme-manager";
 
 // Mock localStorage for testing
 const localStorageMock = (() => {

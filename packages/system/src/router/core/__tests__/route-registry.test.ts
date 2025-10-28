@@ -14,12 +14,12 @@ describe("Routes - route registration", () => {
 	}));
 
 	// Save route IDs for testing relationships
-	let routeIds: string[] = [];
+	let _routeIds: string[] = [];
 
 	beforeEach(() => {
 		// Reset mocks and data
 		mockSelector.mockReset();
-		routeIds = [];
+		_routeIds = [];
 
 		// Reset router options
 		Object.assign(routerOptions, {

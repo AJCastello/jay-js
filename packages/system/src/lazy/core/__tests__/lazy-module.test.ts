@@ -30,7 +30,7 @@ describe("LazyModule", () => {
 		});
 
 		// Mock implementation of loadModule
-		(moduleLoader.loadModule as ReturnType<typeof vi.fn>).mockImplementation((lazy, moduleSection) => {
+		(moduleLoader.loadModule as ReturnType<typeof vi.fn>).mockImplementation((_lazy, _moduleSection) => {
 			const element = document.createElement("div");
 			element.textContent = "Loaded Module";
 			return element;

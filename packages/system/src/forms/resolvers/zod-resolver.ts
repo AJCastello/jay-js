@@ -27,7 +27,7 @@ export function zodResolver<TSchema extends ZodSchema>(schema: TSchema): TResolv
 					return { errors: [] };
 				} catch (error: any) {
 					// Filtra apenas os erros do campo específico
-					if (error && error.issues && Array.isArray(error.issues)) {
+					if (error?.issues && Array.isArray(error.issues)) {
 						const fieldErrors = error.issues
 							.map((issue: any) => ({
 								path: Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path || "unknown"),
@@ -44,7 +44,7 @@ export function zodResolver<TSchema extends ZodSchema>(schema: TSchema): TResolv
 				return { errors: [] };
 			}
 		} catch (error: any) {
-			if (error && error.issues && Array.isArray(error.issues)) {
+			if (error?.issues && Array.isArray(error.issues)) {
 				const errors = error.issues.map((issue: any) => ({
 					path: Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path || "unknown"),
 					message: issue.message || "Validation error",

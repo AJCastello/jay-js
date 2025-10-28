@@ -1,5 +1,4 @@
 import { vi } from "vitest";
-import { formatError, isValidResult } from "../../utils/validators.js";
 import { useForm } from "../use-form.js";
 
 // Mock for the DOM since we are running in a test environment
@@ -53,7 +52,6 @@ describe("useForm", () => {
 
 		// Mock MutationObserver
 		global.MutationObserver = class MutationObserver {
-			constructor(callback: any) {}
 			observe() {}
 			disconnect() {}
 			takeRecords() {

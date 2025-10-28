@@ -370,5 +370,5 @@ export function toggleThemeMode(): TThemeModeResult {
  * }
  */
 export function prefersColorSchemeDark(): boolean {
-	return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+	return window.matchMedia?.("(prefers-color-scheme: dark)").matches;
 }

@@ -3,7 +3,7 @@
  * @description Configuration options and setup for the theme management system.
  */
 
-import type { TThemeDefinition, TThemeOptions } from "../types.js";
+import type { TThemeOptions } from "../types.js";
 import { initTheme } from "./theme-manager.js";
 
 /**

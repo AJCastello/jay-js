@@ -1,4 +1,3 @@
-import { vi } from "vitest";
 import * as yup from "yup";
 import { z } from "zod";
 import { yupResolver, zodResolver } from "../index.js";

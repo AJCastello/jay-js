@@ -1,4 +1,4 @@
-import type { TRenderContent, TRenderContentItem, TRenderOptions, TRenderTarget } from "../types.js";
+import type { TRenderContent, TRenderOptions, TRenderTarget } from "../types.js";
 import { selector } from "./query.js";
 
 /**

@@ -1,5 +1,5 @@
 import type { TPotentialMatch, TRouteInstance } from "../../types";
-import { createMatcher, pathToRegex } from "../../utils/helpers";
+import { createMatcher } from "../../utils/helpers";
 import { resolvedRoutes } from "../configuration";
 
 export function getPotentialMatch(pathName: string): TPotentialMatch {

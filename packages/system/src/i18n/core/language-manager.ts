@@ -12,7 +12,7 @@ import { i18nDefineOptions, i18nOptions, i18nState } from "./configuration.js";
  * @throws Error if the default language cannot be loaded
  */
 export function initLanguage() {
-	if (navigator && navigator.language) {
+	if (navigator?.language) {
 		const locale = navigator.language || i18nOptions.defaultLocale;
 		i18nOptions.defaultLocale = locale.toLowerCase();
 	}
