@@ -1,7 +1,7 @@
 import { setLanguage } from "@jay-js/system";
 import BrazilFlag from "/assets/images/br.svg";
 import USFlag from "/assets/images/us.svg";
-import { Box, Fragment, Img, Typography } from "../../../../packages/elements/src";
+import { Box, Fragment, Img, Typography } from "@jay-js/elements";
 import { intl } from "../../locales";
 import { Divider, Dropdown, DropdownContent, DropdownLabel } from "../ui";
 

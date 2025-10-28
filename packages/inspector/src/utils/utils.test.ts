@@ -2,18 +2,24 @@ import { createFileFilter, getDebugFunctionName, getLineAndColumn, isJayJsCompon
 
 describe("Inspector Utils", () => {
 	describe("isJayJsComponent", () => {
-		it("should identify Jay JS components", () => {
+		it("should identify built-in Jay JS components", () => {
 			expect(isJayJsComponent("Box")).toBe(true);
 			expect(isJayJsComponent("Button")).toBe(true);
 			expect(isJayJsComponent("Typography")).toBe(true);
 			expect(isJayJsComponent("Input")).toBe(true);
 		});
 
-		it("should reject non-Jay JS components", () => {
+		it("should identify custom components using PascalCase convention", () => {
+			expect(isJayJsComponent("MyComponent")).toBe(true);
+			expect(isJayJsComponent("CustomElement")).toBe(true);
+			expect(isJayJsComponent("UserProfile")).toBe(true);
+		});
+
+		it("should reject non-component names", () => {
 			expect(isJayJsComponent("div")).toBe(false);
-			expect(isJayJsComponent("MyComponent")).toBe(false);
-			expect(isJayJsComponent("CustomElement")).toBe(false);
+			expect(isJayJsComponent("span")).toBe(false);
 			expect(isJayJsComponent("")).toBe(false);
+			expect(isJayJsComponent("myFunction")).toBe(false);
 		});
 	});
 

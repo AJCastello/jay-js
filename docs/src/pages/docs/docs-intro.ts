@@ -1,4 +1,4 @@
-import { Box, Section } from "../../../../packages/elements/src";
+import { Box, Section } from "@jay-js/elements";
 import { ExplorePackages } from "../../components/docs/explore-packages";
 import { Introduction } from "../../components/docs/introduction";
 import { UnleashPotential } from "../../components/docs/unleash-potential";

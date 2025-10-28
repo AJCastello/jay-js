@@ -93,7 +93,7 @@ describe("Module Loader", () => {
 			};
 
 			const moduleSection = document.createElement("div");
-			const consoleSpy = vi.spyOn(console, "warn").mockImplementation();
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			await loadModule(config, moduleSection);
 
@@ -135,7 +135,7 @@ describe("Module Loader", () => {
 			};
 
 			const moduleSection = document.createElement("div");
-			const consoleSpy = vi.spyOn(console, "error").mockImplementation();
+			const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
 			await loadModule(config, moduleSection);
 

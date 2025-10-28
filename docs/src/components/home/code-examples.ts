@@ -1,4 +1,4 @@
-import { Box, Section, Typography } from "../../../../packages/elements/src";
+import { Box, Section, Typography } from "@jay-js/elements";
 
 // Simple Icon function for creating icon elements
 function _Icon({ icon, className }: { icon: string; className?: string }) {

@@ -1,4 +1,4 @@
-import { Box, Link, Section } from "../../../../../packages/elements/src";
+import { Box, Link, Section } from "@jay-js/elements";
 import { intl } from "../../../locales";
 import { DarkModeToggle } from "../dark-mode";
 import { LocaleSelector } from "../locale-selector";

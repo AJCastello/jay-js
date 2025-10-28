@@ -1,4 +1,4 @@
-import { Section } from "../../../../packages/elements/src";
+import { Section } from "@jay-js/elements";
 import type { TCollection } from "../../types";
 import { groupByCategory } from "../../utils/group-by-category";
 import { useCollection } from "../../utils/use-collection";

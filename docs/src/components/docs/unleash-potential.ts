@@ -1,4 +1,4 @@
-import { Box, Typography } from "../../../../packages/elements/src";
+import { Box, Typography } from "@jay-js/elements";
 
 export function UnleashPotential() {
 	return Box({

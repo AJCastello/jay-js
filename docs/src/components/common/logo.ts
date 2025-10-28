@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Box } from "../../../../packages/elements/src";
+import { Box } from "@jay-js/elements";
 
 export function Logo(className?: string) {
 	return Box({

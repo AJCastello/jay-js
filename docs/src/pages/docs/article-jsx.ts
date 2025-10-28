@@ -1,5 +1,5 @@
 import { getParams } from "@jay-js/system";
-import { Box, Section } from "../../../../packages/elements/src";
+import { Box, Section } from "@jay-js/elements";
 import { OnThisPage } from "../../components/aside/on-this-page";
 import { DocsScrollBullet } from "../../components/docs/docs-scroll-bullet";
 import { ArticleFooter } from "../../components/footer/article-footer";

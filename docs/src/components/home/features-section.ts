@@ -1,4 +1,4 @@
-import { Box, Section, Typography } from "../../../../packages/elements/src";
+import { Box, Section, Typography } from "@jay-js/elements";
 import {
 	IconBracketsCurlyDuotone,
 	IconCodeDuotone,

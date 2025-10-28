@@ -1,4 +1,4 @@
-import { Link, Typography } from "../../../../../packages/elements/src";
+import { Link, Typography } from "@jay-js/elements";
 import { Logo } from "../logo";
 import type { MenuItem } from "../shared/menu-items";
 import { NavigationLink } from "../shared/navigation-link";

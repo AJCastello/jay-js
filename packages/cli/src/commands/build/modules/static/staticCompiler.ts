@@ -54,6 +54,7 @@ export async function renderHTMLFiles(): Promise<void> {
 	const mainPath = path.join(relativePath, outDir as string, "main.js");
 	const validPath = mainPath.replace(/\\/g, "/");
 	const main = await import(validPath);
+	await new Promise((resolve) => setTimeout(resolve, 2000));
 	const { resolvedRoutes }: { resolvedRoutes: Map<string, Route> } = main.default;
 	const layoutsMap = new Map<string, Route>();
 	const dynamicRoutes = new Map<string, Route>();
