@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { uniKey } from "./uni-key";
 import { type TRefObject, useRef } from "./use-ref";
 
@@ -63,7 +64,7 @@ describe("Utility Functions", () => {
 
 		it("should be deterministic with same random seed", () => {
 			// Mock Math.random to test deterministic behavior
-			const mockRandom = jest.spyOn(Math, "random");
+			const mockRandom = vi.spyOn(Math, "random");
 			mockRandom.mockReturnValue(0.5);
 
 			const key1 = uniKey(5);

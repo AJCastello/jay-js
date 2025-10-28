@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import { Base } from "./base";
 
 describe("Lifecycle Components", () => {
 	beforeEach(() => {
 		document.body.innerHTML = "";
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 
 		// Clear any existing custom elements
 		const existingElements = Array.from(document.querySelectorAll("[is^='jayjs-']"));
@@ -14,7 +15,7 @@ describe("Lifecycle Components", () => {
 
 	describe("onmount Lifecycle", () => {
 		it("should register custom element when onmount is provided", () => {
-			const onmount = jest.fn();
+			const onmount = vi.fn();
 
 			Base({
 				tag: "div",
@@ -26,7 +27,7 @@ describe("Lifecycle Components", () => {
 		});
 
 		it("should call onmount when element is connected to DOM", () => {
-			const onmount = jest.fn();
+			const onmount = vi.fn();
 
 			const element = Base({
 				tag: "div",
@@ -52,7 +53,7 @@ describe("Lifecycle Components", () => {
 
 	describe("onunmount Lifecycle", () => {
 		it("should call onunmount when element is disconnected from DOM", () => {
-			const onunmount = jest.fn();
+			const onunmount = vi.fn();
 
 			const element = Base({
 				tag: "div",
@@ -70,7 +71,7 @@ describe("Lifecycle Components", () => {
 		});
 
 		it("should register custom element when onunmount is provided", () => {
-			const onunmount = jest.fn();
+			const onunmount = vi.fn();
 
 			Base({
 				tag: "span",
@@ -83,8 +84,8 @@ describe("Lifecycle Components", () => {
 
 	describe("Combined Lifecycle Hooks", () => {
 		it("should call both onmount and onunmount", () => {
-			const onmount = jest.fn();
-			const onunmount = jest.fn();
+			const onmount = vi.fn();
+			const onunmount = vi.fn();
 
 			const element = Base({
 				tag: "div",
@@ -104,8 +105,8 @@ describe("Lifecycle Components", () => {
 		});
 
 		it("should handle multiple elements with same tag", () => {
-			const onmount1 = jest.fn();
-			const onmount2 = jest.fn();
+			const onmount1 = vi.fn();
+			const onmount2 = vi.fn();
 
 			const element1 = Base({
 				tag: "div",
@@ -127,8 +128,8 @@ describe("Lifecycle Components", () => {
 
 	describe("Custom Element Registration", () => {
 		it("should not re-register existing custom element", () => {
-			const onmount1 = jest.fn();
-			const onmount2 = jest.fn();
+			const onmount1 = vi.fn();
+			const onmount2 = vi.fn();
 
 			// Create first element
 			Base({
@@ -153,7 +154,7 @@ describe("Lifecycle Components", () => {
 		it("should create element with is attribute when lifecycle hooks exist", () => {
 			const element = Base({
 				tag: "section",
-				onmount: jest.fn(),
+				onmount: vi.fn(),
 			});
 
 			// The element should be created with lifecycle support
@@ -164,7 +165,7 @@ describe("Lifecycle Components", () => {
 		it("should extend proper HTML element class", () => {
 			const element = Base({
 				tag: "button",
-				onmount: jest.fn(),
+				onmount: vi.fn(),
 			});
 
 			expect(element instanceof HTMLButtonElement).toBe(true);

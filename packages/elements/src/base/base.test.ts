@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import { Base } from "./base";
 
 describe("Base Function", () => {
 	beforeEach(() => {
 		document.body.innerHTML = "";
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("Element Creation", () => {
@@ -73,7 +74,7 @@ describe("Base Function", () => {
 
 	describe("Event Listeners", () => {
 		it("should attach event listeners", () => {
-			const clickHandler = jest.fn();
+			const clickHandler = vi.fn();
 			const element = Base({
 				listeners: {
 					click: clickHandler,
@@ -85,8 +86,8 @@ describe("Base Function", () => {
 		});
 
 		it("should attach multiple event listeners", () => {
-			const clickHandler = jest.fn();
-			const focusHandler = jest.fn();
+			const clickHandler = vi.fn();
+			const focusHandler = vi.fn();
 			const element = Base({
 				tag: "input",
 				listeners: {
@@ -184,7 +185,7 @@ describe("Base Function", () => {
 		});
 
 		it("should handle rejected Promise children", async () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			const rejectedPromise = Promise.reject(new Error("Test error"));
 
 			Base({
@@ -213,7 +214,7 @@ describe("Base Function", () => {
 		});
 
 		it("should handle property assignment errors gracefully", () => {
-			const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
+			const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			// Test with a property that will actually cause an error
 			const element = Base({

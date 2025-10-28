@@ -1,20 +1,18 @@
+import { vi } from 'vitest';
 import { Box } from "./box";
 import { Button } from "./button";
-import { Checkbox } from "./checkbox";
 import { Form } from "./form";
 import { Img } from "./img";
 import { Input } from "./input";
 import { Link } from "./link";
-import { Radio } from "./radio";
 import { Select } from "./select";
 import { TextArea } from "./text-area";
-import { TextInput } from "./text-input";
 import { Typography } from "./typography";
 
 describe("Component Functions", () => {
 	beforeEach(() => {
 		document.body.innerHTML = "";
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("Button Component", () => {
@@ -36,7 +34,7 @@ describe("Component Functions", () => {
 		});
 
 		it("should handle click events", () => {
-			const clickHandler = jest.fn();
+			const clickHandler = vi.fn();
 			const button = Button({
 				listeners: {
 					click: clickHandler,
@@ -69,26 +67,6 @@ describe("Component Functions", () => {
 		});
 	});
 
-	describe("TextInput Component", () => {
-		it("should create input with text type", () => {
-			const textInput = TextInput();
-			expect(textInput.tagName.toLowerCase()).toBe("input");
-			expect(textInput.type).toBe("text");
-		});
-
-		it("should apply text input properties", () => {
-			const textInput = TextInput({
-				placeholder: "Enter text",
-				maxLength: 50,
-				value: "Sample text",
-			});
-
-			expect(textInput.placeholder).toBe("Enter text");
-			expect(textInput.maxLength).toBe(50);
-			expect(textInput.value).toBe("Sample text");
-		});
-	});
-
 	describe("TextArea Component", () => {
 		it("should create textarea element", () => {
 			const textarea = TextArea();
@@ -107,46 +85,6 @@ describe("Component Functions", () => {
 			expect(textarea.rows).toBe(5);
 			expect(textarea.cols).toBe(40);
 			expect(textarea.value).toBe("Multi-line\ntext content");
-		});
-	});
-
-	describe("Checkbox Component", () => {
-		it("should create checkbox input", () => {
-			const checkbox = Checkbox();
-			expect(checkbox.tagName.toLowerCase()).toBe("input");
-			expect(checkbox.type).toBe("checkbox");
-		});
-
-		it("should apply checkbox properties", () => {
-			const checkbox = Checkbox({
-				checked: true,
-				value: "option1",
-				name: "options",
-			});
-
-			expect(checkbox.checked).toBe(true);
-			expect(checkbox.value).toBe("option1");
-			expect(checkbox.name).toBe("options");
-		});
-	});
-
-	describe("Radio Component", () => {
-		it("should create radio input", () => {
-			const radio = Radio();
-			expect(radio.tagName.toLowerCase()).toBe("input");
-			expect(radio.type).toBe("radio");
-		});
-
-		it("should apply radio properties", () => {
-			const radio = Radio({
-				name: "gender",
-				value: "male",
-				checked: true,
-			});
-
-			expect(radio.name).toBe("gender");
-			expect(radio.value).toBe("male");
-			expect(radio.checked).toBe(true);
 		});
 	});
 
@@ -188,7 +126,7 @@ describe("Component Functions", () => {
 		});
 
 		it("should handle form submission", () => {
-			const submitHandler = jest.fn((e) => e.preventDefault());
+			const submitHandler = vi.fn((e) => e.preventDefault());
 			const form = Form({
 				listeners: {
 					submit: submitHandler,
@@ -293,8 +231,8 @@ describe("Component Functions", () => {
 		});
 
 		it("should handle image loading events", () => {
-			const loadHandler = jest.fn();
-			const errorHandler = jest.fn();
+			const loadHandler = vi.fn();
+			const errorHandler = vi.fn();
 
 			const img = Img({
 				src: "/test-image.jpg",
@@ -316,9 +254,10 @@ describe("Component Functions", () => {
 		it("should compose components together", () => {
 			const form = Form({
 				children: [
-					TextInput({
+					Input({
 						placeholder: "Name",
 						name: "name",
+						type: "text",
 					}),
 					Input({
 						placeholder: "Email",
