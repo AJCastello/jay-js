@@ -8,22 +8,20 @@
  */
 
 /**
- * React hook for accessing internationalized strings with type safety
- * @see ./hooks/use-i18n.js for detailed documentation
- */
-export { useI18n } from "./hooks/use-i18n.js";
-
-/**
  * Configures the internationalization system with provided options
  * @see ./core/configuration.js for detailed documentation
  */
 export { i18nDefineOptions } from "./core/configuration.js";
-
 /**
  * Functions for managing the active language
  * @see ./core/language-manager.js for detailed documentation
  */
-export { setLanguage, initLanguage, i18nProvider, getCurrentLocale } from "./core/language-manager.js";
+export { getCurrentLocale, i18nProvider, initLanguage, setLanguage } from "./core/language-manager.js";
+/**
+ * React hook for accessing internationalized strings with type safety
+ * @see ./hooks/use-i18n.js for detailed documentation
+ */
+export { useI18n } from "./hooks/use-i18n.js";
 
 /**
  * Type definitions for the internationalization system

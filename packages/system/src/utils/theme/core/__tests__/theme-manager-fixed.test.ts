@@ -1,6 +1,6 @@
 import { themeDefineOptions, themeOptions } from "../configuration";
-import { initTheme, prefersColorSchemeDark, setTheme } from "../theme-manager";
 import * as themeManagerModule from "../theme-manager";
+import { initTheme, prefersColorSchemeDark, setTheme } from "../theme-manager";
 
 // Mock localStorage for testing
 const localStorageMock = (() => {

@@ -1,8 +1,7 @@
-import type { TRouteInstance } from "../../types";
-import { resolvedRoutes, routerOptions } from "../configuration";
-
 // Import LazyModule functionality
 import { LazyModule } from "../../../lazy/core/lazy-module.js";
+import type { TRouteInstance } from "../../types";
+import { resolvedRoutes, routerOptions } from "../configuration";
 
 export async function renderRoute(route: TRouteInstance): Promise<HTMLElement | undefined> {
 	const target = await getTarget(route);
