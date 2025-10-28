@@ -1,10 +1,10 @@
-import { IJayJsViteOptions } from "../types/index.js";
+import type { IJayJsViteOptions } from "../types/index.js";
 
 export let jayJsViteOptions: IJayJsViteOptions = {
-  contentPath: "/src/content",
+	contentPath: "/src/content",
 };
 
 export function jayJsViteDefineOptions(options: IJayJsViteOptions) {
-  jayJsViteOptions = { ...jayJsViteOptions, ...options };
-  return jayJsViteOptions;
+	jayJsViteOptions = { ...jayJsViteOptions, ...options };
+	return jayJsViteOptions;
 }
