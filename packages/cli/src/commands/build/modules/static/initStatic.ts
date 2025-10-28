@@ -1,4 +1,4 @@
 export async function initStatic() {
-  const { staticCompiler } = await import("./staticCompiler.js");
-  await staticCompiler();
+	const { staticCompiler } = await import("./staticCompiler.js");
+	await staticCompiler();
 }

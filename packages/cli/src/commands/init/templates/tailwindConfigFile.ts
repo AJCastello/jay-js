@@ -1,5 +1,5 @@
 export function tailwindConfigFile(ui: boolean, plugin?: string): string {
-  return `/** @type {import("tailwindcss").Config} */
+	return `/** @type {import("tailwindcss").Config} */
 export default {
   content: [
     "./src/**/*.{html,js,ts,tsx,jsx,md,mdx}",
@@ -9,8 +9,12 @@ export default {
     extend: {}
   },
   plugins: [${plugin === "daisyui" ? 'require("daisyui")' : ""}],
-  ${plugin === "daisyui" ? `daisyui: {
+  ${
+		plugin === "daisyui"
+			? `daisyui: {
     themes: ["light", "dark"]
-  }` : ""}
+  }`
+			: ""
+	}
 }`;
 }

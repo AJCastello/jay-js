@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/system",
-  "version": "2.10.6",
+  "version": "4.0.0",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -15,11 +15,15 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "swc src -d dist  --strip-leading-paths && pnpm run build:types",
+    "build": "swc src -d dist --strip-leading-paths && npm run build:types",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ./src/**/*.{js,ts}"
+    "lint": "biome check --write ./src",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:cover": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "publishConfig": {
     "access": "public"
@@ -39,8 +43,7 @@
     "components",
     "state management",
     "lazy loading",
-    "routing",
-    "draggable"
+    "routing"
   ],
   "author": "AJ Castello",
   "license": "MIT",
@@ -49,16 +52,17 @@
   },
   "homepage": "https://github.com/AJCastello/jay-js#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.10.0",
-    "@typescript-eslint/parser": "^7.10.0",
-    "eslint": "^9.3.0",
+    "@biomejs/biome": "^2.2.3",
+    "@vitest/ui": "^4.0.4",
+    "jsdom": "^27.0.1",
     "typescript": "^5.4.5",
+    "vitest": "^4.0.4",
     "yup": "^1.6.1",
-    "zod": "^3.24.1"
+    "zod": "^4.1.5"
   },
   "peerDependencies": {
     "yup": "^1.6.1",
-    "zod": "^3.24.1"
+    "zod": "^4.1.5"
   },
   "peerDependenciesMeta": {
     "yup": {
@@ -67,5 +71,8 @@
     "zod": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "path-to-regexp": "^8.2.0"
   }
 }

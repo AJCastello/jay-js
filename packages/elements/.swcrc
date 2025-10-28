@@ -1,0 +1,26 @@
+{
+  "module": {
+    "type": "es6",
+    "resolveFully": true
+  },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "dynamicImport": true,
+      "decorators": true
+    },
+    "baseUrl": "./src",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    "transform": {},
+    "target": "es2015",
+    "loose": false,
+    "externalHelpers": false,
+    "keepClassNames": false,
+    "experimental": {
+      "emitIsolatedDts": true
+    }
+  },
+  "minify": false
+}

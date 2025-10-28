@@ -1,0 +1,147 @@
+import { vi } from "vitest";
+import type { TLazyModule } from "../../types.js";
+import { lazyOptions, moduleCache } from "../configuration.js";
+import { loadFromCache, loadModule } from "../module-loader.js";
+
+const mockReplaceWith = vi.fn();
+
+describe("Module Loader", () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+		moduleCache.clear();
+
+		Object.assign(lazyOptions, {
+			gcThreshold: 300000,
+			gcInterval: 60000,
+		});
+	});
+
+	describe("loadFromCache", () => {
+		it("should load a module from cache", () => {
+			const mockModule = vi.fn(() => document.createElement("div"));
+			moduleCache.set("TestModule", {
+				module: mockModule,
+				lastUsed: 5,
+				collect: true,
+			});
+
+			const config: TLazyModule = {
+				module: "TestModule",
+				import: vi.fn(),
+				params: { test: "value" },
+			};
+
+			const result = loadFromCache(config);
+
+			expect(mockModule).toHaveBeenCalledWith({ test: "value" });
+			expect(moduleCache.get("TestModule")?.lastUsed).toBe(0);
+			expect(result).toBeInstanceOf(HTMLElement);
+		});
+
+		it("should throw an error when module is not found in cache", () => {
+			const config: TLazyModule = {
+				module: "NonExistentModule",
+				import: vi.fn(),
+			};
+
+			expect(() => loadFromCache(config)).toThrow("Module NonExistentModule not found in cache");
+		});
+	});
+
+	describe("loadModule", () => {
+		beforeEach(() => {
+			Element.prototype.replaceWith = mockReplaceWith;
+		});
+
+		it("should load a named export module successfully", async () => {
+			const mockModuleFn = vi.fn(() => document.createElement("div"));
+			const mockImportFn = vi.fn(() =>
+				Promise.resolve({
+					TestModule: mockModuleFn,
+				}),
+			);
+
+			const config: TLazyModule = {
+				module: "TestModule",
+				import: mockImportFn,
+				params: { test: "value" },
+			};
+
+			const moduleSection = document.createElement("div");
+
+			await loadModule(config, moduleSection);
+
+			expect(mockImportFn).toHaveBeenCalled();
+			expect(moduleCache.has("TestModule")).toBe(true);
+			expect(moduleCache.get("TestModule")?.module).toBe(mockModuleFn);
+			expect(moduleCache.get("TestModule")?.lastUsed).toBe(0);
+			expect(moduleCache.get("TestModule")?.collect).toBe(true);
+			expect(mockReplaceWith).toHaveBeenCalled();
+		});
+
+		it("should handle default export when named export is not found", async () => {
+			const mockDefaultFn = vi.fn(() => document.createElement("div"));
+			const mockImportFn = vi.fn(() =>
+				Promise.resolve({
+					default: mockDefaultFn,
+				}),
+			);
+
+			const config: TLazyModule = {
+				module: "TestModule",
+				import: mockImportFn,
+			};
+
+			const moduleSection = document.createElement("div");
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+			await loadModule(config, moduleSection);
+
+			expect(consoleSpy).toHaveBeenCalledWith("Named export 'TestModule' not found, using default export instead.");
+			expect(moduleCache.has("TestModule")).toBe(true);
+			expect(moduleCache.get("TestModule")?.module).toBe(mockDefaultFn);
+
+			consoleSpy.mockRestore();
+		});
+
+		it("should respect collect property from config", async () => {
+			const mockModuleFn = vi.fn(() => document.createElement("div"));
+			const mockImportFn = vi.fn(() =>
+				Promise.resolve({
+					TestModule: mockModuleFn,
+				}),
+			);
+
+			const config: TLazyModule = {
+				module: "TestModule",
+				import: mockImportFn,
+				collect: false,
+			};
+
+			const moduleSection = document.createElement("div");
+
+			await loadModule(config, moduleSection);
+
+			expect(moduleCache.get("TestModule")?.collect).toBe(false);
+		});
+
+		it("should log error when module loading fails", async () => {
+			const mockError = new Error("Import failed");
+			const mockImportFn = vi.fn(() => Promise.reject(mockError));
+
+			const config: TLazyModule = {
+				module: "TestModule",
+				import: mockImportFn,
+			};
+
+			const moduleSection = document.createElement("div");
+			const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+			await loadModule(config, moduleSection);
+
+			expect(consoleSpy).toHaveBeenCalledWith("Error importing module TestModule:", mockError);
+
+			consoleSpy.mockRestore();
+		});
+	});
+});

@@ -9,3 +9,6 @@ dist
 pnpm-lock.yaml
 builder
 firebase.json
+.ai
+llm
+console

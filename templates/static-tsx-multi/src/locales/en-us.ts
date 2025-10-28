@@ -1,7 +1,7 @@
 import { Ii18nBase } from "./i18n.types";
 
 const enUs: Ii18nBase = {
-  "Welcome do Jay JS!": "Welcome do Jay JS!",
+  "Welcome to Jay JS!": "Welcome to Jay JS!",
   "Home": "Home",
   "About": "About",
   "Blog": "Blog",

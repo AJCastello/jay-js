@@ -1,4 +1,4 @@
-import { Button, Section } from "@jay-js/ui";
+import { Button, Section } from "@jay-js/elements";
 
 export function Home() {
   let count = 0;
@@ -6,7 +6,7 @@ export function Home() {
   function handleCount(event: MouseEvent) {
     count++;
     const target = event.target as HTMLButtonElement;
-    target.innerHTML = `Count is ${count}`;    
+    target.innerHTML = `Count is ${count}`;
   }
 
   return Section({
@@ -14,8 +14,7 @@ export function Home() {
     className: "flex flex-col justify-center items-center",
     children: [
       Button({
-        color: "btn-primary",
-        className: "normal-case",
+        className: "btn btn-primary normal-case",
         children: `Count is ${count}`,
         onclick: handleCount
       })

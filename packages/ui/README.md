@@ -1,97 +1,115 @@
 # @jay-js/ui
 
-Jay-JS UI is a modern, lightweight, and fully customizable UI component library for building responsive and scalable web applications. It is built with simplicity and flexibility in mind, making it easy to use and adapt to various web projects.
+A comprehensive collection of reusable UI components for Jay-JS framework. This package serves as a component registry that can be consumed via the **Jay-JS CLI** to add individual components to your projects, similar to how shadcn/ui works.
 
-You can use it headless or with Tailwind CSS with daisyUI plugin (already included in the package) to create stunning user interfaces for your web applications.
+## 📦 About This Package
 
-## Installation
+This package contains **60+ UI components** built with:
+- **@jay-js/elements** - Core element creation library
+- **Tailwind CSS** - Utility-first CSS framework  
+- **daisyUI** - Component library for Tailwind CSS
+- **TypeScript** - Full type safety
 
-To install Jay-JS UI, simply run the following command in your project directory:
+## 🚀 Installation via CLI
 
-**Using npm:**
-
-```bash
-npm install @jay-js/ui
-```
-
-**Using yarn:**
+Instead of installing this package directly, use the **Jay-JS CLI** to add specific components to your project:
 
 ```bash
-yarn add @jay-js/ui
+# Install the Jay-JS CLI globally
+npm install -g @jay-js/cli
+
+# Add individual components to your project
+jayjs ui add alert
+jayjs ui add card
+jayjs ui add button modal
+
+# Components will be downloaded to src/components/ui/
 ```
 
-## Usage
+## 📁 How It Works
 
-To start using Jay-JS UI components in your application, simply import the desired components and their respective interfaces. Here's a basic example of using the Button component:
+1. **Component Registry**: This package acts as a centralized registry of all available UI components
+2. **CLI Integration**: The `@jay-js/cli` downloads components directly from the GitHub repository
+3. **Local Installation**: Components are copied to your `src/components/ui/` directory
+4. **Full Control**: You own the components and can customize them as needed
+
+## 📚 Available Components
+
+### Layout & Structure
+- **Card** (+ card-actions, card-body, card-description, card-figure, card-title)
+- **Divider**
+- **Footer** 
+- **Join**
+- **Stack**
+
+### Navigation
+- **Breadcrumbs**
+- **Bottom Navigation** (+ bottom-navigation-item)
+- **Navbar** (+ navbar-component)
+- **Menu** (+ menu-item, menu-title)
+- **Tabs** (+ tab-item)
+- **Steps** (+ step-item)
+
+### Data Display
+- **Alert**
+- **Avatar**
+- **Badge**
+- **Tooltip**
+- **Timeline** (+ timeline-item, timeline-items)
+- **Rating**
+- **Radial Progress**
+- **Loading**
+
+### Feedback
+- **Toast** (+ toast-container)
+- **Modal** (+ modal-action, modal-backdrop, modal-box)
+- **Drawer** (+ drawer-content, drawer-overlay)
+
+### Form Controls
+- **Text Input**
+- **Toggle**
+- **Kbd** (Keyboard shortcuts display)
+
+### Utilities
+- **Dropdown** (+ dropdown-content, dropdown-label)
+- **Collapse** (+ collapse-content, collapse-title)
+- **Swap** (+ swap-item)
+- **Chat** (+ chat-component)
+- **Diff** (+ diff-item, diff-resizer)
+- **Indicator** (+ indicator-item)
+- **Resizable Splitter**
+
+## 🎯 Component Usage Example
+
+After adding a component via CLI:
 
 ```javascript
-import { Button, IButton } from "@jay-js/ui";
+import { Alert } from './src/components/ui/alert';
 
-const myButton = Button({
-  content: "Click me",
-  color: "btn-primary",
-  onclick: () => {
-    console.log("Button clicked!");
-  },
+const alertElement = Alert({
+  severity: 'alert-info',
+  content: 'This is an info alert!'
 });
 
-document.body.appendChild(myButton);
+document.body.appendChild(alertElement);
 ```
 
-## Components
+## 🧠 Built-in Hooks
 
-Jay-JS UI offers a wide range of components that can be easily customized to fit your application's style and requirements. Here are some of the available components:
+The package also includes useful React-like hooks for vanilla JavaScript:
+- `useToast` - Toast notification management
+- `useModal` - Modal state management  
+- `useDrawer` - Drawer state management
+- `useRef` - Element reference management
+- `useListener` - Event listener management
 
-- Alert
-- BaseElement
-- Button
-- Card
-- Checkbox
-- Divider
-- Dropdown
-- Form
-- Icon
-- IconButton
-- Img
-- Input
-- Link
-- ResizableSplitter
-- RippleEffect
-- Section
-- Select
-- Space
-- Tabs
-- TextArea
-- Toggle
-- Typography
+## 🎨 Styling
 
-Each component comes with its own set of customizable properties and optional event listeners. To learn more about each component and its available options, please refer to the respective component documentation.
-
-## Customization
-
-Jay-JS UI components are designed to be easily customizable through the use of CSS classes, inline styles, and JavaScript style objects. You can control the appearance and behavior of each component to match your application's design system or personal preferences.
-
-Here's an example of customizing the appearance of a Button component using inline styles and a custom CSS class:
-
-```javascript
-const myButton = Button({
-  content: "Custom Button",
-  className: "my-custom-button",
-  style: {
-    backgroundColor: "#007BFF",
-    borderRadius: "5px",
-    padding: "10px 20px",
-  },
-});
-```
-
-In your CSS file, you can target the custom class to apply additional styles:
-
-```css
-.my-custom-button:hover {
-  background-color: #0056b3;
-}
-```
+All components use:
+- **Tailwind CSS classes** for styling
+- **daisyUI components** for consistent design
+- **Customizable CSS classes** via `className` prop
+- **Tailwind Merge** for intelligent class merging
 
 ## Contributing
 

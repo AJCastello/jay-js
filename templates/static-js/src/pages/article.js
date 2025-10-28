@@ -1,5 +1,5 @@
 import { getParams } from "@jay-js/system";
-import { Box, Divider, Section, Typography } from "@jay-js/ui";
+import { Box, Section, Typography } from "@jay-js/elements";
 
 export async function Article(slug) {
   if (!slug) {
@@ -26,7 +26,6 @@ export async function Article(slug) {
             className: "mt-5 text-sm",
             children: articleData.description
           }),
-          Divider(),
           Box({
             className: "mt-5",
             innerHTML: articleData.content

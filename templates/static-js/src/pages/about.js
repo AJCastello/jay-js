@@ -1,4 +1,4 @@
-import { Section } from "@jay-js/ui";
+import { Section } from "@jay-js/elements";
 
 export function About() {
   return Section({

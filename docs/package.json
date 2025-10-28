@@ -1,0 +1,33 @@
+{
+	"name": "docs",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc",
+		"prebuild": "jayjs build --prepare && npm run build:css",
+		"build:css": "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css",
+		"postbuild": "jayjs build --static",
+		"preview": "vite preview",
+		"lint": "biome check --write ./src",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@jay-js/elements": "file:../packages/elements/dist",
+		"@jay-js/static": "file:../packages/static/dist",
+		"@jay-js/system": "file:../packages/system/dist",
+		"highlight.js": "^11.9.0"
+	},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.1.16",
+		"@biomejs/biome": "^2.2.3",
+		"@jay-js/cli": "file:../packages/cli/dist",
+		"@tailwindcss/typography": "^0.5.13",
+		"@tailwindcss/vite": "^4.0.16",
+		"daisyui": "^5.0.0",
+		"tailwindcss": "^4.0.3",
+		"typescript": "latest",
+		"vite": "^6.0.11"
+	}
+}

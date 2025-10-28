@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/ui",
-  "version": "3.7.0",
+  "version": "4.2.0",
   "description": "A library of UI components for Jay JS with Tailwind CSS and daisyUI.",
   "type": "module",
   "main": "dist/index.js",
@@ -19,7 +19,11 @@
     "postbuild": "cpy ./src/**/*.{css,styled} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ./src/**/*.{js,ts}"
+    "lint": "biome check --write ./src",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:cover": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "publishConfig": {
     "access": "public"
@@ -48,13 +52,18 @@
   },
   "homepage": "https://github.com/AJCastello/jay-js#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.10.0",
-    "@typescript-eslint/parser": "^7.10.0",
-    "eslint": "^9.3.0",
-    "typescript": "^5.4.5"
+    "@biomejs/biome": "^2.2.3",
+    "@vitest/ui": "^4.0.4",
+    "clsx": "^2.1.1",
+    "jsdom": "^27.0.1",
+    "typescript": "^5.4.5",
+    "vitest": "^4.0.4",
+    "tailwind-merge": "^2.3.0"
   },
-  "dependencies": {
+  "peerDependencies": {
+    "@jay-js/elements": "^1.0.0",
+    "@jay-js/system": "^4.0.0",
     "tailwind-merge": "^2.3.0",
-    "yup": "^1.4.0"
+    "clsx": "^2.1.1"
   }
 }

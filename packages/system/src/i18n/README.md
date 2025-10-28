@@ -1,104 +1,243 @@
-# @jay-js/system - i18n
+# Internationalization - @jay-js/system
 
-Internationalization (i18n) support for your Jay-JS applications, offering a flexible and modular approach to manage and switch between different languages.
+A lightweight, type-safe internationalization system for JavaScript and TypeScript applications.
+
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+  - [Basic Setup with Flat Keys](#basic-setup-with-flat-keys)
+  - [Using Variables in Translations](#using-variables-in-translations)
+  - [Setup with Nested Keys](#setup-with-nested-keys)
+  - [Changing Languages](#changing-languages)
+- [API Reference](#api-reference)
+  - [Core Functions](#core-functions)
+  - [Hooks](#hooks)
+  - [Configuration Options](#configuration-options)
 
 ## Features
 
-- 🌍 **Internationalization (i18n) Support**: Easily add multi-language support to your applications.
-- 📦 **Dynamic Imports**: Load language files on-the-fly using dynamic imports to reduce initial load time.
-- 🔌 **Hooks & Modules**: Integrated hooks and modular functions for enhanced customization.
-- 🚀 **Type Support**: Built with TypeScript for static type checking.
-
-## Installation
-
-You can install the `@jay-js/system` package using npm or yarn:
-
-```bash
-npm install @jay-js/system
-```
-
-Or, using Yarn:
-
-```bash
-yarn add @jay-js/system
-```
+- Type-safe translations with TypeScript support
+- Direct string keys with variable substitution (flat approach)
+- Optional nested translation keys using dot notation
+- Automatic language detection based on browser settings
+- Persistent language preferences using localStorage
+- Lazy loading of translation files
+- React hooks for easy integration
 
 ## Usage
 
-### Provider Setup
-
-First, import the `i18nProvider` from the package:
+### Basic Setup with Flat Keys
 
 ```typescript
-import { i18nProvider } from "@jay-js/system";
-```
+import { i18nDefineOptions, initLanguage, useI18n } from '@jay-js/system';
 
-This provider allows you to initialize the internationalization system and optionsure it according to your needs.
+// Define your translations type with flat keys
+type Translations = {
+  'Hello': string;
+  'Welcome to our app': string;
+  'Home': string;
+  'About': string;
+  'Contact': string;
+};
 
-### Optionsuration
-
-To set up the i18n system, you need to define your language optionsurations. Here's an example:
-
-```typescript
-import { useI18n } from "@jay-js/system";
-import { Ii18nBase } from "./i18nbase.interface";
-
-export const i18nOptions = {
-  defaultLocale: "pt-BR",
+// Configure the i18n system
+i18nDefineOptions({
   languages: [
     {
-      code: "pt-BR",
-      import: async () => (await import("./lang/pt-br")).i18nPtBr
+      code: 'en',
+      data: {
+        'Hello': 'Hello',
+        'Welcome to our app': 'Welcome to our app',
+        'Home': 'Home',
+        'About': 'About',
+        'Contact': 'Contact'
+      }
     },
     {
-      code: "en-US",
-      import: async () => (await import("./lang/en-us")).i18nEnUs
+      code: 'es',
+      import: () => import('./locales/es.json')
     }
-  ]
+  ],
+  defaultLocale: 'en',
+  saveToLocalStorage: true,
+  localStorageKey: 'app-language',
+  // Flat keys is the default (nestedKeys: false)
+});
+
+// Initialize the language system
+initLanguage();
+
+// Use translations in your components
+function MyComponent() {
+  const t = useI18n<Translations>();
+  
+  return (
+    <div>
+      <h1>{t('Hello')}</h1>
+      <p>{t('Welcome to our app')}</p>
+      <nav>
+        <a href="/">{t('Home')}</a>
+        <a href="/about">{t('About')}</a>
+        <a href="/contact">{t('Contact')}</a>
+      </nav>
+    </div>
+  );
 }
-
-export const i18n = useI18n<Ii18nBase>();
 ```
 
-In this optionsuration:
-
-- **defaultLocale**: Specifies the default language to be used.
-- **saveToLocalStorage**: Whether to save the current language to local storage.
-- **languages**: An array of languages you want to support. Each language has a:
-  - **code**: The locale code.
-  - **import**: A function that dynamically imports the language file.
-
-### Using the i18n Hook
-
-The `useI18n` hook allows you to translate text based on the current language. Here's how you can use it:
+### Using Variables in Translations
 
 ```typescript
-const translatedText = i18n("path.to.translation");
+import { i18nDefineOptions, initLanguage, useI18n } from '@jay-js/system';
+
+// Define your translations type with variables in the keys
+type Translations = {
+  'Hello': string;
+  'Welcome, {{name}}!': string;
+  'You have {{count}} messages': string;
+};
+
+// Configure the i18n system
+i18nDefineOptions({
+  languages: [
+    {
+      code: 'en',
+      data: {
+        'Hello': 'Hello',
+        'Welcome, {{name}}!': 'Welcome, {{name}}!',
+        'You have {{count}} messages': 'You have {{count}} messages'
+      }
+    },
+    {
+      code: 'es',
+      data: {
+        'Hello': 'Hola',
+        'Welcome, {{name}}!': '¡Bienvenido, {{name}}!',
+        'You have {{count}} messages': 'Tienes {{count}} mensajes'
+      }
+    }
+  ],
+  defaultLocale: 'en'
+});
+
+// Initialize the language system
+initLanguage();
+
+// Use translations with variables
+function MyComponent() {
+  const t = useI18n<Translations>();
+  const user = { name: 'John', messageCount: 5 };
+  
+  return (
+    <div>
+      <h1>{t('Hello')}</h1>
+      <p>{t('Welcome, {{name}}!', { name: user.name })}</p>
+      <p>{t('You have {{count}} messages', { count: user.messageCount })}</p>
+    </div>
+  );
+}
 ```
 
-## Examples
+### Setup with Nested Keys
 
-### Dynamically Switching Languages
-
-Using the provided utilities, you can easily switch between different languages:
+If you prefer organizing translations in a nested structure, you can enable the `nestedKeys` option:
 
 ```typescript
-import { setLanguage } from "@jay-js/system";
+import { i18nDefineOptions, initLanguage, useI18n } from '@jay-js/system';
 
-// Switch to English
-setLanguage("en-US");
+// Define your translations type with nested structure
+type Translations = {
+  greeting: {
+    welcome: string;
+    hello: string;
+  };
+  navigation: {
+    home: string;
+    about: string;
+    contact: string;
+  };
+};
+
+// Configure the i18n system with nested keys
+i18nDefineOptions({
+  languages: [
+    {
+      code: 'en',
+      data: {
+        greeting: {
+          welcome: 'Welcome to our app, {{name}}!',
+          hello: 'Hello'
+        },
+        navigation: {
+          home: 'Home',
+          about: 'About',
+          contact: 'Contact'
+        }
+      }
+    },
+    {
+      code: 'es',
+      import: () => import('./locales/es.json')
+    }
+  ],
+  defaultLocale: 'en',
+  saveToLocalStorage: true,
+  localStorageKey: 'app-language',
+  nestedKeys: true  // Enable nested keys
+});
+
+// Initialize the language system
+initLanguage();
+
+// Use nested translations in your components
+function MyComponent() {
+  const t = useI18n<Translations>();
+  
+  return (
+    <div>
+      <h1>{t('greeting.hello')}</h1>
+      <p>{t('greeting.welcome', { name: 'User' })}</p>
+      <nav>
+        <a href="/">{t('navigation.home')}</a>
+        <a href="/about">{t('navigation.about')}</a>
+        <a href="/contact">{t('navigation.contact')}</a>
+      </nav>
+    </div>
+  );
+}
 ```
 
-### Translating Text with Data
-
-You can also insert data into your translations:
+### Changing Languages
 
 ```typescript
-const welcomeMessage = i18n("greetings.welcome", { name: "John" });
+import { setLanguage } from '@jay-js/system';
+
+// Switch to Spanish
+setLanguage('es');
 ```
 
-If your translation is `"greetings": { "welcome": "Hello, {{name}}" }`, this would output: `Hello, John`.
+## API Reference
 
-## Conclusion
+### Core Functions
 
-With the `@jay-js/system`'s i18n functionalities, internationalizing your application is straightforward and modular. You can easily support multiple languages, leverage the power of TypeScript, and ensure a smooth user experience by loading languages on demand.
+- `i18nDefineOptions(options)` - Configure the internationalization system
+- `initLanguage()` - Initialize the language system with the appropriate language based on preferences
+- `setLanguage(code)` - Change the active language
+- `getCurrentLocale()` - Get the current active locale code
+
+### Hooks
+
+- `useI18n<T>()` - React hook for accessing internationalized strings with type safety
+
+### Configuration Options
+
+The `i18nDefineOptions` function accepts an object with the following properties:
+
+| Property | Type | Description | Default |
+|----------|------|-------------|---------|
+| `languages` | `Array<Ii18nLanguages>` | Array of available languages | `[]` |
+| `defaultLocale` | `string` | Default locale to use if no preference is found | `'en'` |
+| `saveToLocalStorage` | `boolean` | Whether to save language preference to localStorage | `true` |
+| `localStorageKey` | `string` | Key to use for storing language preference | `'jayjs-i18n-default-locale'` |
+| `nestedKeys` | `boolean` | Whether to support nested translation keys | `false` |

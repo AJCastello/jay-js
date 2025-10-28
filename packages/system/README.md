@@ -1,6 +1,6 @@
 # @jay-js/system
 
-`@jay-js/system` is a versatile and lightweight JavaScript library designed to help streamline your front-end development with useful utilities and components. It includes functionality for handling drag and drop, lazy-loading modules, managing application state, and client-side routing.
+`@jay-js/system` is a versatile and lightweight JavaScript library designed to help streamline your front-end development with useful utilities and components. It includes functionality for lazy-loading modules, managing application state, client-side routing, forms management, internationalization, and theming.
 
 ## Installation
 
@@ -19,24 +19,6 @@ yarn add @jay-js/system
 ```
 
 ## Usage
-
-### Draggable
-
-Easily enable drag and drop functionality for your elements:
-
-```javascript
-import { Draggable } from "@jay-js/system";
-
-const element = document.getElementById("my-draggable-element");
-Draggable(element,{
-  onDragStart: (event) => {
-    console.log("drag started", event);
-  },
-  onDrop: (event, element) => {
-    console.log("dropped", event, element);
-  }
-});
-```
 
 ### LazyModule (Lazy Loading)
 

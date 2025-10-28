@@ -1,10 +1,5 @@
-// jay
 import { Navigate, Router } from "@jay-js/system";
-
-// layout
 import { Layout } from "../layouts/layout";
-
-// page
 import { Home } from "../pages/home";
 import { Article } from "../pages/article";
 import { Blog } from "../pages/blog";

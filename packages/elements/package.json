@@ -1,0 +1,61 @@
+{
+  "name": "@jay-js/elements",
+  "version": "1.2.0",
+  "description": "A headless library of basic elements for Jay JS framework.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/"
+  },
+  "scripts": {
+    "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
+    "prebuild": "rimraf ./dist",
+    "build": "swc src -d dist --strip-leading-paths",
+    "postbuild": "cpy ./src/**/*.{css,styled} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
+    "pub": "cd ./dist && npm publish --access public",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check --write ./src",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:cover": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "clean-package": "../../clean-package.config.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AJCastello/jay-js.git",
+    "directory": "packages/elements"
+  },
+  "keywords": [
+    "Jay",
+    "js",
+    "single page application",
+    "library",
+    "elements",
+    "components",
+    "headless",
+    "ui-components",
+    "web-components"
+  ],
+  "author": "AJ Castello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AJCastello/jay-js/issues"
+  },
+  "homepage": "https://github.com/AJCastello/jay-js#readme",
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.3",
+    "@vitest/ui": "^4.0.4",
+    "jsdom": "^27.0.1",
+    "typescript": "^5.4.5",
+    "vitest": "^4.0.4"
+  }
+}

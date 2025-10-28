@@ -1,4 +1,4 @@
-import { Section } from "@jay-js/ui";
+import { Section } from "@jay-js/elements";
 import { i18n } from "../locales/i18n";
 
 export function About() {

@@ -1,5 +1,5 @@
 const enUs = {
-  "Welcome do Jay JS!": "Welcome do Jay JS!",
+  "Welcome to Jay JS!": "Welcome to Jay JS!",
   "Home": "Home",
   "About": "About",
   "Blog": "Blog",

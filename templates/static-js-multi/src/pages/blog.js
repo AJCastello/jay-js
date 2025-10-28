@@ -1,4 +1,4 @@
-import { Link, Section, Typography } from "@jay-js/ui";
+import { Link, Section, Typography } from "@jay-js/elements";
 import { Navigate } from "@jay-js/system";
 
 export async function Blog() {

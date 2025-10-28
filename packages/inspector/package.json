@@ -1,0 +1,81 @@
+{
+  "name": "@jay-js/inspector",
+  "version": "1.1.0",
+  "description": "Development inspector plugin for Jay JS components - click-to-source functionality",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./plugin": {
+      "import": "./dist/plugin/index.js",
+      "types": "./dist/plugin/index.d.ts"
+    },
+    "./runtime": {
+      "import": "./dist/runtime/index.js",
+      "types": "./dist/runtime/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
+    "prebuild": "rimraf ./dist",
+    "build": "swc src -d dist --strip-leading-paths && npm run build:types",
+    "postbuild": "cpy ./src/**/*.{css,html} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
+    "pub": "cd ./dist && npm publish --access public",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check --write ./src",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:cover": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "clean-package": "../../clean-package.config.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AJCastello/jay-js.git",
+    "directory": "packages/inspector"
+  },
+  "keywords": [
+    "Jay",
+    "js",
+    "inspector",
+    "devtools",
+    "click-to-source",
+    "vite-plugin",
+    "development-tools",
+    "debugging"
+  ],
+  "author": "AJ Castello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AJCastello/jay-js/issues"
+  },
+  "homepage": "https://github.com/AJCastello/jay-js#readme",
+  "peerDependencies": {
+    "vite": "^4.0.0 || ^5.0.0"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0",
+    "magic-string": "^0.30.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.3",
+    "@types/babel__traverse": "^7.20.4",
+    "@vitest/ui": "^4.0.4",
+    "jsdom": "^27.0.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.0.0",
+    "vitest": "^4.0.4"
+  }
+}

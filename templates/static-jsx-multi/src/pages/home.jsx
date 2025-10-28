@@ -1,5 +1,3 @@
-import { Button } from "@jay-js/ui";
-
 export function Home() {
   let count = 0;
 
@@ -11,9 +9,9 @@ export function Home() {
 
   return (
     <section className="flex flex-col justify-center items-center">
-      <Button color="btn-primary" className="normal-case" onclick={handleCount}>
+      <button className="btn btn-primary normal-case" onclick={handleCount}>
         Count is {count}
-      </Button>
+      </button>
     </section>
   )
 }

@@ -1,0 +1,102 @@
+{
+	"editor.insertSpaces": false,
+	"editor.tabSize": 2,
+	"editor.detectIndentation": false,
+	"editor.defaultFormatter": "vscode.typescript-language-features",
+	"editor.formatOnSave": false,
+	"editor.rulers": [
+		320
+	],
+	"editor.codeActionsOnSave": {
+		"source.organizeImports.biome": "always",
+		"source.fixAll.biome": "always"
+	},
+	"files.eol": "\n",
+	"files.trimTrailingWhitespace": true,
+	"editor.formatOnPaste": true,
+	"nxConsole.generateAiAgentRules": true,
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.patterns": {
+		"*.ts": "${capture}.js, ${capture}.test.ts, ${capture}.spec.ts",
+		"*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+		"*.jsx": "${capture}.js",
+		"*.tsx": "${capture}.ts, ${capture}.spec.tsx, ${capture}.module.css",
+		"index.tsx": "styles.ts, store.ts",
+		"index.ts": "${dirname}.ts, ${dirname}-worker.ts, ${dirname}-types.ts, ${dirname}-shared.ts, ${dirname}.tsx",
+		"tsconfig.json": "tsconfig.*.json",
+		"package.json": "package-lock.json, yarn.loc, pnpm-lock.yaml, pnpm-workspace.yaml, .npmrc",
+		"package.json5": "package-lock.json, yarn.loc, pnpm-lock.yaml, pnpm-workspace.yaml, .npmrc",
+		"firebase.json": ".firebaserc, firestore.rules, firestore.indexes.json, storage.rules, database.rules.json, hosting.*.json, firestore-debug.log, database-debug.log, firebase-debug.log"
+	},
+	"terminal.integrated.profiles.linux": {
+		"CLAUDE": {
+			"color": "terminal.ansiRed",
+			"icon": "robot",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"claude && exec bash"
+			]
+		},
+		"CODEX": {
+			"color": "terminal.ansiMagenta",
+			"icon": "robot",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"codex && exec bash"
+			]
+		},
+		"GEMINI": {
+			"color": "terminal.ansiCyan",
+			"icon": "robot",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"gemini && exec bash"
+			]
+		},
+		"------------------------": {
+			"overrideName": true,
+			"icon": "dash",
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"exec bash"
+			]
+		},
+		"DOCUMENTATION": {
+			"color": "terminal.ansiBlue",
+			"icon": "book",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"cd docs && npm run dev; exec bash"
+			]
+		},
+		"CONSOLE: SERVER": {
+			"color": "terminal.ansiMagenta",
+			"icon": "server",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"cd console/server && npm run start; exec bash"
+			]
+		},
+		"CONSOLE: WEB": {
+			"color": "terminal.ansiBlue",
+			"icon": "layout",
+			"overrideName": true,
+			"path": "/bin/bash",
+			"args": [
+				"-c",
+				"cd console/web && npm run dev; exec bash"
+			]
+		},
+	}
+}
