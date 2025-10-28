@@ -1,6 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Link, Section } from "@jay-js/ui";
-import { i18n } from "../../locales/i18n";
+import { Link, Section } from "@jay-js/elements";
 
 export function NavBar() {
   function handleNavigate(ev, path) {
@@ -14,17 +13,17 @@ export function NavBar() {
     children: [
       Link({
         href: "/",
-        children: i18n("Home"),
+        children: "Home",
         onclick: (ev) => handleNavigate(ev, "/")
       }),
       Link({
         href: "/about",
-        children: i18n("About"),
+        children: "About",
         onclick: (ev) => handleNavigate(ev, "/about")
       }),
       Link({
         href: "/blog",
-        children: i18n("Blog"),
+        children: "Blog",
         onclick: (ev) => handleNavigate(ev, "/blog")
       })
     ]

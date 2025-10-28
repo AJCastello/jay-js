@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Link, Section } from "@jay-js/ui";
+import { Link, Section } from "@jay-js/elements";
 
 export function NavBar() {
   function handleNavigate(ev, path) {
@@ -20,11 +20,6 @@ export function NavBar() {
         href: "/about",
         children: "About",
         onclick: (ev) => handleNavigate(ev, "/about")
-      }),
-      Link({
-        href: "/blog",
-        children: "Blog",
-        onclick: (ev) => handleNavigate(ev, "/blog")
       })
     ]
   })

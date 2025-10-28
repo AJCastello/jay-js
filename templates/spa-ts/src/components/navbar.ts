@@ -1,8 +1,8 @@
 import { Navigate } from "@jay-js/system";
-import { Link, Section } from "@jay-js/ui";
+import { Link, Section } from "@jay-js/elements";
 
 export function NavBar() {
-  function handleNavigate(ev, path) {
+  function handleNavigate(ev: MouseEvent, path: string) {
     ev.preventDefault();
     Navigate(path);
   }

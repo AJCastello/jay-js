@@ -1,10 +1,8 @@
-import { Section, Outlet, Typography, Divider, Img } from "@jay-js/ui";
+import { Section, Outlet, Typography, Img } from "@jay-js/elements";
 
 // image
 import jayjs from "/jayjs.svg";
-
-// components
-import { NavBar } from "../components/common/NavBar";
+import { NavBar } from "../components/navbar";
 
 // i18n
 import { i18n } from "../locales/i18n";
@@ -25,7 +23,6 @@ export function Layout() {
         children: i18n("Welcome do Jay JS!")
       }),
       NavBar(),
-      Divider(),
       Outlet()
     ]
   })

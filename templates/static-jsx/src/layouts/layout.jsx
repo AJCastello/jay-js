@@ -1,9 +1,5 @@
-import { Outlet, Divider, Img } from "@jay-js/ui";
-
-// components
-import { NavBar } from "../components/common/NavBar";
-
-// logo
+import { Outlet, Img } from "@jay-js/elements";
+import { NavBar } from "../components/navbar";
 import jayjs from "/jayjs.svg";
 
 export function Layout() {
@@ -14,7 +10,6 @@ export function Layout() {
         Welcome to Jay JS!
       </h1>
       <NavBar />
-      <Divider />
       <Outlet />
     </section>
   )

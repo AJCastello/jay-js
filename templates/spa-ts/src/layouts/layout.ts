@@ -1,10 +1,8 @@
-import { Section, Outlet, Typography, Divider, Img } from "@jay-js/ui";
+import { Section, Outlet, Typography, Img } from "@jay-js/elements";
 
 // image
 import jayjs from "/jayjs.svg";
-
-// components
-import { NavBar } from "../components/common/NavBar";
+import { NavBar } from "../components/navbar";
 
 export function Layout() {
   return Section({
@@ -22,7 +20,6 @@ export function Layout() {
         children: "Welcome to Jay JS!"
       }),
       NavBar(),
-      Divider(),
       Outlet()
     ]
   })

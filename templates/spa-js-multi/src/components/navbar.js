@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { Link, Section } from "@jay-js/ui";
+import { Link, Section } from "@jay-js/elements";
 import { i18n } from "../../locales/i18n";
 
 export function NavBar() {

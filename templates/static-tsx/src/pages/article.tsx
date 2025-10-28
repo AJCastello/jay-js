@@ -1,5 +1,4 @@
 import { getParams } from "@jay-js/system";
-import { Divider } from "@jay-js/ui";
 
 interface IArticle {
   title: string;
@@ -12,9 +11,9 @@ export async function Article(slug?: string) {
   if (!slug) {
     slug = getParams().slug;
   }
-  
+
   const articleData = await Article.useContent.get<IArticle>("blog", slug);
-  
+
   return (
     <article className="container mx-auto">
       <div className="flex flex-col">
@@ -24,7 +23,6 @@ export async function Article(slug?: string) {
         <p className="mt-5 text-sm">
           {articleData.description}
         </p>
-        <Divider />
         <div className="mt-5" innerHTML={articleData.content} />
       </div>
     </article>
