@@ -8,7 +8,3 @@ initTheme();
 i18nProvider(Routes, i18nConfig);
 
 export default { resolvedRoutes };
-
-setTimeout(() => {
-	console.log(resolvedRoutes);
-}, 3000);
