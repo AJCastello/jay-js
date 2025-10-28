@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
+  "exclude": [".*__tests__.*", ".*\\.test\\.tsx?$", ".*\\.spec\\.tsx?$"],
   "module": {
     "type": "es6",
     "resolveFully": true

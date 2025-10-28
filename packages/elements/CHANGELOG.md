@@ -5,6 +5,23 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [1.2.0] - 26/10/2025
+
+### Removido
+- Componente TextInput - redundante, use `Input({ type: "text" })` diretamente
+- Componente Checkbox - redundante, use `Input({ type: "checkbox" })` diretamente
+- Componente Radio - redundante, use `Input({ type: "radio" })` diretamente
+- Componente FileInput - redundante, use `Input({ type: "file" })` diretamente
+- Componente Range - redundante, use `Input({ type: "range" })` diretamente
+
+### Alterado
+- Pacote mais enxuto focado apenas em elementos primitivos HTML
+- Componentes específicos de input movidos para @jay-js/ui com estilização DaisyUI
+
+### Melhorado
+- Simplificação da função Base para atribuição de ID
+- Remoção de registro de inspetor exclusivo para desenvolvimento
+
 ## [1.1.0] - 18/09/2025
 
 ### Adicionado

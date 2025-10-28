@@ -1,7 +1,7 @@
 import type { Plugin, ResolvedConfig, ViteDevServer } from "vite";
 import { EditorIntegration } from "../utils/bridge.js";
-import { createFileFilter } from "../utils/index.js";
 import { DebugReporter } from "../utils/debug-reporter.js";
+import { createFileFilter } from "../utils/index.js";
 import { transformSource } from "./transformer.js";
 import type { JayJsInspectorOptions } from "./types.js";
 
@@ -31,7 +31,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 	const config = { ...DEFAULT_OPTIONS, ...options };
 	const fileFilter = createFileFilter(config.include, config.exclude);
 	const reporter = DebugReporter.getInstance();
-	let transformedFiles = 0;
+	let _transformedFiles = 0;
 
 	// Configure the debug reporter
 	reporter.setConfiguration(config);
@@ -42,21 +42,12 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 		configResolved(resolvedConfig: ResolvedConfig) {
 			// Only enable in development mode
 			if (resolvedConfig.command !== "serve" || !config.enabled) {
-				if (!config.enabled) {
-					console.log("🔍 Jay JS Inspector: Disabled");
-				}
 				return;
 			}
 
-			// Show startup message
-			console.log("\n🔍 Jay JS Inspector: Active");
-			console.log(`📝 Editor: ${config.editor}`);
-			console.log(`⌨️  Activation: ${config.activationKey}`);
-			console.log(`📁 Include: ${config.include.join(", ")}`);
-			console.log(`🚫 Exclude: ${config.exclude.join(", ")}`);
-			console.log("💡 Press Shift+Alt+J to toggle inspector mode, then Shift+Click on components\n");
+			// Simple startup message
+			console.log("🔍 Jay JS Inspector: Active");
 		},
-
 
 		transform(code: string, id: string) {
 			// Skip if not enabled or not a target file
@@ -68,15 +59,7 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 			const transformedCode = transformSource(code, id);
 
 			if (transformedCode) {
-				transformedFiles++;
-				if (transformedFiles === 1) {
-					console.log("🔧 Jay JS Inspector: Started instrumenting components...");
-				}
-
-				// Show occasional progress
-				if (transformedFiles % 10 === 0) {
-					console.log(`🔧 Jay JS Inspector: Instrumented ${transformedFiles} files so far`);
-				}
+				_transformedFiles++;
 
 				return {
 					code: transformedCode,
@@ -89,13 +72,6 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 
 		configureServer(server: ViteDevServer) {
 			if (!config.enabled) return;
-
-			console.log("🌐 Jay JS Inspector: Server middleware configured");
-			console.log("🔗 Endpoints available:");
-			console.log("   • POST /__jayjs-inspector/open-in-editor");
-			console.log("   • GET  /__jayjs-inspector/health");
-			console.log("   • GET  /__jayjs-inspector/runtime.js");
-			console.log("   • GET  /__jayjs-inspector/debug-report");
 
 			// Add middleware to handle inspector requests
 			server.middlewares.use("/__jayjs-inspector", (req: any, res: any, next: any) => {
@@ -122,7 +98,26 @@ export function jayJsInspector(options: JayJsInspectorOptions = {}): Plugin {
 
 			// Inject runtime script into HTML pages using proper module loading
 			server.middlewares.use((req: any, res: any, next: any) => {
-				if (req.url && (req.url.endsWith(".html") || req.url === "/")) {
+				// Skip static assets and API calls
+				const skipPaths = [
+					"/__jayjs-inspector",
+					"/@vite",
+					"/@fs",
+					"/node_modules",
+					"/src",
+					".js",
+					".css",
+					".json",
+					".png",
+					".jpg",
+					".svg",
+					".ico",
+					".woff",
+					".ttf",
+				];
+				const shouldSkip = skipPaths.some((path) => req.url.includes(path));
+
+				if (!shouldSkip) {
 					const originalEnd = res.end;
 					res.end = function (chunk: any, encoding: any) {
 						if (chunk && typeof chunk === "string" && chunk.includes("<head>")) {
@@ -165,26 +160,17 @@ async function handleOpenInEditor(req: any, res: any, editor: string, reporter: 
 		req.on("end", async () => {
 			const { file, line, column } = JSON.parse(body);
 
-			console.log(`🚀 Jay JS Inspector: Opening ${file}:${line}:${column} in ${editor}`);
-
 			// Use EditorIntegration to open file
 			const result = await EditorIntegration.openFile(file, line, column, editor);
 
 			// Report the editor request
 			reporter.addEditorRequest(file, result.success, result.error);
 
-			if (result.success) {
-				console.log(`✅ Jay JS Inspector: Successfully opened file in ${editor}`);
-			} else {
-				console.error(`❌ Jay JS Inspector: Failed to open file - ${result.error}`);
-			}
-
 			res.writeHead(result.success ? 200 : 500, { "Content-Type": "application/json" });
 			res.end(JSON.stringify(result));
 		});
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : "Unknown error";
-		console.error("❌ Jay JS Inspector: Error handling open-in-editor request:", error);
 
 		// Report the error
 		reporter.addEditorRequest("unknown", false, errorMessage);
@@ -208,7 +194,8 @@ function generateInspectorRuntime(config: Required<JayJsInspectorOptions>): stri
 (function() {
   if (typeof window === 'undefined') return;
 
-  console.log('[Jay JS Inspector] Runtime script loaded');
+  console.log('[Jay JS Inspector] Ready - Press Shift+Alt+J to toggle inspector mode');
+  console.log('[Jay JS Inspector] Commands: Shift+Click = Open in editor | Ctrl/Alt+Click = Copy file path');
 
   window.__JAYJS_INSPECTOR_CONFIG__ = ${JSON.stringify(config)};
 
@@ -275,11 +262,6 @@ DETECTED ELEMENTS:
       window.__JAYJS_INSPECTOR__ = this;
       this.createOverlay();
       this.bindEvents();
-
-      console.log('[Jay JS Inspector] Runtime initialized');
-      console.log('[Jay JS Inspector] Config:', this.config);
-      console.log('[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode');
-      console.log('[Jay JS Inspector] Then use Shift+Click on components to open in editor');
     }
 
     registerElement(element, metadata) {
@@ -290,7 +272,6 @@ DETECTED ELEMENTS:
       element.dataset.jayjsFile = metadata.file;
       element.dataset.jayjsLine = metadata.line.toString();
 
-      console.debug('[Jay JS Inspector] Registered ' + metadata.component + ' from ' + metadata.file + ':' + metadata.line, element);
       return element;
     }
 
@@ -345,15 +326,18 @@ DETECTED ELEMENTS:
       document.addEventListener('click', function(e) {
         if (!isInspecting) return;
 
-        if (self.config.activationKey === 'shift+click' && !e.shiftKey) return;
-        if (self.config.activationKey === 'ctrl+click' && !e.ctrlKey) return;
-        if (self.config.activationKey === 'alt+click' && !e.altKey) return;
+        const metadata = self.findComponentMetadata(e.target);
+        if (!metadata) return;
 
         e.preventDefault();
         e.stopPropagation();
 
-        const metadata = self.findComponentMetadata(e.target);
-        if (metadata) {
+        // Ctrl+Click or Alt+Click: Copy file path to clipboard
+        if (e.ctrlKey || e.altKey) {
+          self.copyFilePath(metadata);
+        }
+        // Shift+Click: Open in editor
+        else if (e.shiftKey) {
           self.openInEditor(metadata);
         }
       });
@@ -396,11 +380,39 @@ DETECTED ELEMENTS:
 
       if (enabled) {
         document.body.style.cursor = 'crosshair';
-        console.log('[Jay JS Inspector] Inspector mode enabled. Click on components to open in editor.');
       } else {
         document.body.style.cursor = '';
         this.hideOverlay();
-        console.log('[Jay JS Inspector] Inspector mode disabled.');
+      }
+    }
+
+    async copyFilePath(metadata) {
+      try {
+        const filePath = metadata.file + ':' + metadata.line + ':' + metadata.column;
+        await navigator.clipboard.writeText(filePath);
+
+        // Show feedback
+        const notification = document.createElement('div');
+        notification.textContent = 'Copied: ' + filePath;
+        Object.assign(notification.style, {
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#333',
+          color: 'white',
+          padding: '12px 24px',
+          borderRadius: '4px',
+          zIndex: '1000000',
+          fontFamily: 'monospace',
+          fontSize: '14px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        });
+
+        document.body.appendChild(notification);
+        setTimeout(function() { notification.remove(); }, 2000);
+      } catch (error) {
+        console.error('[Jay JS Inspector] Error copying file path:', error);
       }
     }
 
@@ -417,12 +429,12 @@ DETECTED ELEMENTS:
         });
 
         if (response.ok) {
-          console.log('[Jay JS Inspector] Opening ' + metadata.file + ':' + metadata.line);
+          // File opened successfully
         } else {
-          console.error('[Jay JS Inspector] Failed to open file in editor');
+          // Failed to open file
         }
       } catch (error) {
-        console.error('[Jay JS Inspector] Error opening file:', error);
+        // Error opening file - silent fail
       }
     }
   }
@@ -436,7 +448,7 @@ DETECTED ELEMENTS:
       try {
         return window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
       } catch (error) {
-        console.debug('[Jay JS Inspector] Registration error:', error);
+        // Silent fail
       }
     }
 
@@ -509,9 +521,7 @@ console.groupEnd();
         window.__JAYJS_DEBUG_REPORTER__.setOverlayCreated(!!document.getElementById('jayjs-inspector-overlay'));
       }
     } catch (error) {
-      console.error('[Jay JS Inspector] Failed to initialize:', error);
-
-      // Report initialization failure
+      // Initialization failed - silent fail
       if (window.__JAYJS_DEBUG_REPORTER__) {
         window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Initialization', error.message || String(error));
       }

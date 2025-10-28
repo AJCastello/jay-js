@@ -77,14 +77,14 @@ class DebugReporter {
 		return {
 			timestamp: new Date().toISOString(),
 			environment: {
-				nodeEnv: process.env.NODE_ENV || 'unknown',
-				userAgent: typeof window !== 'undefined' ? window.navigator?.userAgent : undefined,
-				inspectorVersion: '1.0.0',
+				nodeEnv: process.env.NODE_ENV || "unknown",
+				userAgent: typeof window !== "undefined" ? window.navigator?.userAgent : undefined,
+				inspectorVersion: "1.0.0",
 			},
 			configuration: {
 				enabled: false,
-				editor: 'unknown',
-				activationKey: 'unknown',
+				editor: "unknown",
+				activationKey: "unknown",
 				include: [],
 				exclude: [],
 			},
@@ -111,18 +111,18 @@ class DebugReporter {
 	}
 
 	private setupGlobalErrorHandling() {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			// Capture unhandled errors related to inspector
-			window.addEventListener('error', (event) => {
-				if (event.error?.message?.includes('jayjs') || event.error?.stack?.includes('inspector')) {
-					this.addRuntimeError('Unhandled Error', event.error.message);
+			window.addEventListener("error", (event) => {
+				if (event.error?.message?.includes("jayjs") || event.error?.stack?.includes("inspector")) {
+					this.addRuntimeError("Unhandled Error", event.error.message);
 				}
 			});
 
 			// Capture unhandled promise rejections
-			window.addEventListener('unhandledrejection', (event) => {
-				if (event.reason?.message?.includes('jayjs') || event.reason?.stack?.includes('inspector')) {
-					this.addRuntimeError('Unhandled Promise Rejection', event.reason.message);
+			window.addEventListener("unhandledrejection", (event) => {
+				if (event.reason?.message?.includes("jayjs") || event.reason?.stack?.includes("inspector")) {
+					this.addRuntimeError("Unhandled Promise Rejection", event.reason.message);
 				}
 			});
 		}
@@ -132,12 +132,12 @@ class DebugReporter {
 	setConfiguration(config: any) {
 		this.report.configuration = {
 			enabled: config.enabled ?? false,
-			editor: config.editor ?? 'unknown',
-			activationKey: config.activationKey ?? 'unknown',
+			editor: config.editor ?? "unknown",
+			activationKey: config.activationKey ?? "unknown",
 			include: config.include ?? [],
 			exclude: config.exclude ?? [],
 		};
-		this.log('Configuration set', config);
+		this.log("Configuration set", config);
 	}
 
 	// Transformation methods
@@ -173,7 +173,7 @@ class DebugReporter {
 	// Runtime methods
 	setRuntimeInitialized() {
 		this.report.runtime.initialized = true;
-		this.log('Runtime initialized');
+		this.log("Runtime initialized");
 	}
 
 	setInspectorAvailable(available: boolean) {
@@ -208,7 +208,7 @@ class DebugReporter {
 	// Network methods
 	setHealthCheck(success: boolean) {
 		this.report.network.healthCheck = success;
-		this.log(`Health check: ${success ? 'passed' : 'failed'}`);
+		this.log(`Health check: ${success ? "passed" : "failed"}`);
 	}
 
 	addEditorRequest(file: string, success: boolean, error?: string) {
@@ -218,7 +218,7 @@ class DebugReporter {
 			file,
 			error,
 		});
-		this.log(`Editor request for ${file}: ${success ? 'success' : 'failed'}`, { error });
+		this.log(`Editor request for ${file}: ${success ? "success" : "failed"}`, { error });
 	}
 
 	// Report generation
@@ -234,7 +234,7 @@ Generated: ${report.timestamp}
 
 ENVIRONMENT:
 - Node ENV: ${report.environment.nodeEnv}
-- User Agent: ${report.environment.userAgent || 'N/A'}
+- User Agent: ${report.environment.userAgent || "N/A"}
 - Inspector Version: ${report.environment.inspectorVersion}
 
 CONFIGURATION:
@@ -251,14 +251,17 @@ TRANSFORMATION STATS:
 - Errors: ${report.transformation.errors.length}
 
 DETECTED COMPONENTS:
-${report.transformation.detectedComponents.map(c =>
-	`  - ${c.component} (${c.file}:${c.line}:${c.column})`
-).join('\n') || '  (none detected)'}
+${
+	report.transformation.detectedComponents
+		.map((c) => `  - ${c.component} (${c.file}:${c.line}:${c.column})`)
+		.join("\n") || "  (none detected)"
+}
 
 TRANSFORMATION ERRORS:
-${report.transformation.errors.map(e =>
-	`  - ${e.file}${e.line ? `:${e.line}` : ''}: ${e.error}`
-).join('\n') || '  (none)'}
+${
+	report.transformation.errors.map((e) => `  - ${e.file}${e.line ? `:${e.line}` : ""}: ${e.error}`).join("\n") ||
+	"  (none)"
+}
 
 RUNTIME STATUS:
 - Initialized: ${report.runtime.initialized}
@@ -268,18 +271,19 @@ RUNTIME STATUS:
 - Registered Elements: ${report.runtime.registeredElements}
 
 RUNTIME ERRORS:
-${report.runtime.errors.map(e =>
-	`  - [${e.timestamp}] ${e.context}: ${e.error}`
-).join('\n') || '  (none)'}
+${report.runtime.errors.map((e) => `  - [${e.timestamp}] ${e.context}: ${e.error}`).join("\n") || "  (none)"}
 
 NETWORK STATUS:
-- Health Check: ${report.network.healthCheck ? 'PASS' : 'FAIL'}
+- Health Check: ${report.network.healthCheck ? "PASS" : "FAIL"}
 - Editor Requests: ${report.network.editorRequests.length}
 
 RECENT EDITOR REQUESTS:
-${report.network.editorRequests.slice(-5).map(r =>
-	`  - [${r.timestamp}] ${r.file}: ${r.success ? 'SUCCESS' : 'FAILED'}${r.error ? ` (${r.error})` : ''}`
-).join('\n') || '  (none)'}
+${
+	report.network.editorRequests
+		.slice(-5)
+		.map((r) => `  - [${r.timestamp}] ${r.file}: ${r.success ? "SUCCESS" : "FAILED"}${r.error ? ` (${r.error})` : ""}`)
+		.join("\n") || "  (none)"
+}
 
 === END REPORT ===
 		`.trim();
@@ -325,8 +329,8 @@ if (window.__JAYJS_INSPECTOR__) {
 	}
 
 	private log(message: string, data?: any) {
-		if (process.env.NODE_ENV === 'development') {
-			console.debug(`[JayJS Inspector Debug] ${message}`, data || '');
+		if (process.env.NODE_ENV === "development") {
+			// console.debug(`[JayJS Inspector Debug] ${message}`, data || '');
 		}
 	}
 
@@ -343,7 +347,7 @@ if (window.__JAYJS_INSPECTOR__) {
 }
 
 // Global access
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
 	(window as any).__JAYJS_DEBUG_REPORTER__ = DebugReporter.getInstance();
 	(window as any).jayjsDebugReport = () => DebugReporter.logReport();
 	(window as any).jayjsDebugCommands = () => DebugReporter.getConsoleCommands();

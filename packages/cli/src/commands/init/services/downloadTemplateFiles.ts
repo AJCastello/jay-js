@@ -1,41 +1,40 @@
-import fs from "fs-extra";
-import path from "path";
-import os from "os";
-import { face, log } from "../../../utils/terminal";
+import path from "node:path";
 import degit from "degit";
+import fs from "fs-extra";
+import os from "os";
 import { toKebabCase } from "../../../utils/case";
+import { face, log } from "../../../utils/terminal";
 
 export async function downloadTemplateFiles(templateId: string, projectName: string) {
-  const templatePath = `templates/${templateId}`;
-  const tempDir = path.join(os.tmpdir(), toKebabCase(projectName));
+	const templatePath = `templates/${templateId}`;
+	const tempDir = path.join(os.tmpdir(), toKebabCase(projectName));
 
-  if (fs.existsSync(tempDir)) {
-    fs.removeSync(tempDir);
-  }
+	if (fs.existsSync(tempDir)) {
+		fs.removeSync(tempDir);
+	}
 
-  try {
-    fs.ensureDirSync(toKebabCase(projectName));
-    face.setMessage(`Cloning template (${templateId})...`);
+	try {
+		fs.ensureDirSync(toKebabCase(projectName));
+		face.setMessage(`Cloning template (${templateId})...`);
 
-    const emitter = degit(`AJCastello/jay-js/${templatePath}`, {
-      cache: false,
-      force: true,
-      verbose: true,
-    });
+		const emitter = degit(`AJCastello/jay-js/${templatePath}`, {
+			cache: false,
+			force: true,
+			verbose: true,
+		});
 
-    emitter.on("info", info => {
-      face.setMessage(info.message.substring(0, 50) + "...");      
-    });
+		emitter.on("info", (info) => {
+			face.setMessage(`${info.message.substring(0, 50)}...`);
+		});
 
-    const projectPath = path.join(process.cwd(), toKebabCase(projectName))
-    await emitter.clone(projectPath);
+		const projectPath = path.join(process.cwd(), toKebabCase(projectName));
+		await emitter.clone(projectPath);
 
-    fs.removeSync(tempDir);
-  } catch (err) {
-    log`{red Error setting up the project: ${err}}`;
-  }
+		fs.removeSync(tempDir);
+	} catch (err) {
+		log`{red Error setting up the project: ${err}}`;
+	}
 }
-
 
 // import fs from "fs-extra";
 // import path from "path";

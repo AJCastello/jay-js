@@ -1,10 +1,10 @@
+import { vi } from "vitest";
 import type { TRoute } from "../../types";
 import { resolvedRoutes, routerOptions } from "../configuration";
-import { Navigate } from "../navigation/navigate";
 import { Router } from "../router";
 
 // Mock the history API
-const mockPushState = jest.fn();
+const mockPushState = vi.fn();
 const originalPushState = window.history.pushState;
 const originalLocation = window.location;
 
@@ -75,7 +75,7 @@ describe("Router - nested routes with same path", () => {
 		});
 
 		// Limpar mocks
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should register routes with index child correctly", () => {
@@ -110,18 +110,18 @@ describe("Router - nested routes with same path", () => {
 		// Encontrar a rota de layout (primeira rota registrada)
 		const layoutRoute = routesArray.find((route) => route.layout === true);
 		expect(layoutRoute).toBeDefined();
-		expect(layoutRoute!.path === "" || layoutRoute!.path === "/").toBeTruthy();
+		expect(layoutRoute?.path === "" || layoutRoute?.path === "/").toBeTruthy();
 
 		// Encontrar a rota inicial (com o mesmo caminho que o layout)
 		const indexRoute = routesArray.find(
-			(route) => !route.layout && (route.path === "" || route.path === "/") && route.parentLayoutId === layoutRoute!.id,
+			(route) => !route.layout && (route.path === "" || route.path === "/") && route.parentLayoutId === layoutRoute?.id,
 		);
 		expect(indexRoute).toBeDefined();
 
 		// Encontrar a rota about
 		const aboutRoute = routesArray.find((route) => route.path === "/about");
 		expect(aboutRoute).toBeDefined();
-		expect(aboutRoute!.parentLayoutId).toBe(layoutRoute!.id);
+		expect(aboutRoute?.parentLayoutId).toBe(layoutRoute?.id);
 	});
 
 	it("should register catalog routes with index and detail correctly", () => {
@@ -156,17 +156,17 @@ describe("Router - nested routes with same path", () => {
 		// Encontrar a rota de layout
 		const layoutRoute = routesArray.find((route) => route.layout === true);
 		expect(layoutRoute).toBeDefined();
-		expect(layoutRoute!.path === "" || layoutRoute!.path === "/").toBeTruthy();
+		expect(layoutRoute?.path === "" || layoutRoute?.path === "/").toBeTruthy();
 
 		// Encontrar a rota de catálogo (com o mesmo caminho que o layout)
 		const catalogRoute = routesArray.find(
-			(route) => !route.layout && (route.path === "" || route.path === "/") && route.parentLayoutId === layoutRoute!.id,
+			(route) => !route.layout && (route.path === "" || route.path === "/") && route.parentLayoutId === layoutRoute?.id,
 		);
 		expect(catalogRoute).toBeDefined();
 
 		// Encontrar a rota de produto
 		const productRoute = routesArray.find((route) => route.path.includes("/product/"));
 		expect(productRoute).toBeDefined();
-		expect(productRoute!.parentLayoutId).toBe(layoutRoute!.id);
+		expect(productRoute?.parentLayoutId).toBe(layoutRoute?.id);
 	});
 });

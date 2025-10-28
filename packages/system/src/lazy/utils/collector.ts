@@ -4,7 +4,7 @@ import {
 	moduleCache,
 	removeConfigChangeListener,
 } from "../core/configuration.js";
-import { TImportedModule, type TLazyOptions } from "../types.js";
+import type { TLazyOptions } from "../types.js";
 
 /**
  * Singleton class responsible for managing the lifecycle of lazy-loaded modules.
@@ -51,7 +51,7 @@ export class ModuleCollector {
 	 * @param {TLazyOptions} options - New configuration options
 	 * @private
 	 */
-	private handleConfigChange(options: TLazyOptions): void {
+	private handleConfigChange(_options: TLazyOptions): void {
 		if (this.collectorInterval) {
 			clearInterval(this.collectorInterval);
 			this.startCollector();

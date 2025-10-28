@@ -1,42 +1,32 @@
-// node.js modules
-import { join } from "path";
-import { readFileSync, readdirSync } from "fs";
-
-// configurations
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { jayJsViteOptions } from "../options/jay-js-vite-define-options.js";
-
-// types
-import { IBuildCollection } from "../types/index.js";
-
-// services
+import type { IBuildCollection } from "../types/index.js";
+import { reduceMetadata } from "../utils/reduce-metadata.js";
 import { getParsedFileContent } from "./get-parsed-file-content.js";
 import { writeCollection } from "./write-collection.js";
 
-// utilities
-import { reduceMetadata } from "../utils/reduce-metadata.js";
-
-
 export function buildCollection({
-  contentPath,
-  suffix = "collection",
-  format = "js",
-  metadata,
-  dir
+	contentPath: _contentPath,
+	suffix = "collection",
+	format = "js",
+	metadata,
+	dir,
 }: IBuildCollection) {
-  const collectionPath = join(jayJsViteOptions.contentPath, dir);
-  const collectionFile = join(jayJsViteOptions.contentPath, `${dir}.${suffix}.${format}`);
-  const files = readdirSync(collectionPath);
+	const collectionPath = join(jayJsViteOptions.contentPath, dir);
+	const collectionFile = join(jayJsViteOptions.contentPath, `${dir}.${suffix}.${format}`);
+	const files = readdirSync(collectionPath);
 
-  const collection: Array<any> = [];
+	const collection: Array<any> = [];
 
-  files.forEach(file => {
-    const filePath = join(collectionPath, file);
-    const fileContent = readFileSync(filePath, "utf-8");
-    const parsedContent = getParsedFileContent(file, fileContent);
-    const reducedMetadata = reduceMetadata(parsedContent, metadata);
-    collection.push(reducedMetadata);
-  });
+	files.forEach((file) => {
+		const filePath = join(collectionPath, file);
+		const fileContent = readFileSync(filePath, "utf-8");
+		const parsedContent = getParsedFileContent(file, fileContent);
+		const reducedMetadata = reduceMetadata(parsedContent, metadata);
+		collection.push(reducedMetadata);
+	});
 
-  writeCollection(collection, collectionFile, format);
-  return collection;
+	writeCollection(collection, collectionFile, format);
+	return collection;
 }

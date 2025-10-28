@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import type { TThemeDefinition } from "../../types";
 import { themeDefineOptions, themeOptions } from "../configuration";
 
@@ -26,15 +27,15 @@ class MockHTMLElement {
 	_customStyles: Record<string, string> = {};
 
 	classList = {
-		add: jest.fn().mockImplementation((className: string) => {
+		add: vi.fn().mockImplementation((className: string) => {
 			if (!this._classes.includes(className)) {
 				this._classes.push(className);
 			}
 		}),
-		remove: jest.fn().mockImplementation((...classNames: string[]) => {
+		remove: vi.fn().mockImplementation((...classNames: string[]) => {
 			this._classes = this._classes.filter((className) => !classNames.includes(className));
 		}),
-		contains: jest.fn().mockImplementation((className: string) => {
+		contains: vi.fn().mockImplementation((className: string) => {
 			return this._classes.includes(className);
 		}),
 		_classes: this._classes,
@@ -47,10 +48,10 @@ class MockHTMLElement {
 
 		// Mock style object
 		this.style = {
-			setProperty: jest.fn().mockImplementation((property: string, value: string) => {
+			setProperty: vi.fn().mockImplementation((property: string, value: string) => {
 				this._customStyles[property] = value;
 			}),
-			removeProperty: jest.fn().mockImplementation((property: string) => {
+			removeProperty: vi.fn().mockImplementation((property: string) => {
 				delete this._customStyles[property];
 			}),
 		} as any;
@@ -60,9 +61,9 @@ class MockHTMLElement {
 // Mock document
 const documentMock = {
 	documentElement: new MockHTMLElement(),
-	addEventListener: jest.fn(),
-	removeEventListener: jest.fn(),
-	dispatchEvent: jest.fn(),
+	addEventListener: vi.fn(),
+	removeEventListener: vi.fn(),
+	dispatchEvent: vi.fn(),
 };
 
 // Setup global mocks
@@ -71,10 +72,10 @@ Object.defineProperty(global, "document", { value: documentMock });
 
 // Reset mocks and state before each test
 beforeEach(() => {
-	jest.clearAllMocks();
+	vi.clearAllMocks();
 	localStorageMock.clear();
 	documentMock.documentElement = new MockHTMLElement();
-	documentMock.dispatchEvent = jest.fn();
+	documentMock.dispatchEvent = vi.fn();
 
 	// Reset themeOptions to defaults
 	Object.assign(themeOptions, {

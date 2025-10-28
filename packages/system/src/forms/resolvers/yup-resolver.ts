@@ -27,7 +27,7 @@ export function yupResolver<T>(schema: ObjectSchema<any>): TResolver<T> {
 			}
 			return { errors: [] };
 		} catch (error: any) {
-			if (error && error.inner) {
+			if (error?.inner) {
 				const formattedErrors = error.inner.length > 0 ? error.inner : [error];
 				return {
 					errors: formattedErrors.map((err: any) => ({

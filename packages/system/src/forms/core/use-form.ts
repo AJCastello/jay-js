@@ -92,7 +92,7 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 			formErrors.sub(path as string, (error) => {
 				const errorFound = error.errors.find((err) => err.path === path);
 				errorText.textContent = "";
-				if (errorFound && errorFound.message) {
+				if (errorFound?.message) {
 					errorText.textContent = errorFound.message;
 				}
 			});

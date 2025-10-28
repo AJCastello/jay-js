@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TInput } from "./input.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TInput } from "./input.types";
 
 export function Input<T extends TBaseTagMap = "input">(
 	{ ...props }: TInput<T> = { tag: "input" },

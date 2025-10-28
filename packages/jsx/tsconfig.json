@@ -6,20 +6,23 @@
       "ESNext",
       "DOM"
     ],
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "sourceMap": true,
     "declaration": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "types": ["jest", "node"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"],
     "paths": {
       "@jay-js/elements": [
-        "../elements/src"
+        "../elements/dist"
       ],
       "@jay-js/elements/*": [
-        "../elements/src/*"
+        "../elements/dist/*"
       ]
     }
   },
@@ -29,6 +32,11 @@
   ],
   "exclude": [
     "./node_modules",
-    "./dist"
+    "./dist",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
   ]
 }

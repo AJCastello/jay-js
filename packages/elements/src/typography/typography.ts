@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TTypography } from "./typography.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TTypography } from "./typography.types";
 
 export function Typography<T extends TBaseTagMap = "p">(
 	{ ...props }: TTypography<T> = { tag: "p" },

@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TTextArea } from "./text-area.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TTextArea } from "./text-area.types";
 
 export function TextArea<T extends TBaseTagMap = "textarea">(
 	props: TTextArea<T> = { tag: "textarea" },

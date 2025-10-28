@@ -1,5 +1,5 @@
-import { TBaseTagMap, Base } from "../base";
-import { TSection } from "./section.types";
+import { Base, type TBaseTagMap } from "../base";
+import type { TSection } from "./section.types";
 
 export function Section<T extends TBaseTagMap = "section">(
 	props: TSection<T> = { tag: "section" },

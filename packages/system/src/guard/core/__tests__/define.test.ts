@@ -1,4 +1,3 @@
-import type { TPermission } from "../../types";
 /**
  * Tests for the permission definition functionality
  */

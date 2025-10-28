@@ -16,7 +16,7 @@ export function PersistentState<T>(key: string, defaultValue: T): StateType<T> {
 	try {
 		const savedValue = localStorage.getItem(key);
 		initialValue = savedValue ? JSON.parse(savedValue) : defaultValue;
-	} catch (error) {
+	} catch {
 		initialValue = defaultValue;
 	}
 

@@ -1,20 +1,18 @@
-import { Button } from "./button";
-import { Input } from "./input";
-import { TextInput } from "./text-input";
-import { TextArea } from "./text-area";
-import { Checkbox } from "./checkbox";
-import { Radio } from "./radio";
-import { Select } from "./select";
-import { Form } from "./form";
+import { vi } from 'vitest';
 import { Box } from "./box";
-import { Typography } from "./typography";
-import { Link } from "./link";
+import { Button } from "./button";
+import { Form } from "./form";
 import { Img } from "./img";
+import { Input } from "./input";
+import { Link } from "./link";
+import { Select } from "./select";
+import { TextArea } from "./text-area";
+import { Typography } from "./typography";
 
 describe("Component Functions", () => {
 	beforeEach(() => {
 		document.body.innerHTML = "";
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("Button Component", () => {
@@ -27,22 +25,22 @@ describe("Component Functions", () => {
 			const button = Button({
 				type: "submit",
 				disabled: true,
-				children: "Click Me"
+				children: "Click Me",
 			});
-			
+
 			expect(button.type).toBe("submit");
 			expect(button.disabled).toBe(true);
 			expect(button.textContent).toBe("Click Me");
 		});
 
 		it("should handle click events", () => {
-			const clickHandler = jest.fn();
+			const clickHandler = vi.fn();
 			const button = Button({
 				listeners: {
-					click: clickHandler
-				}
+					click: clickHandler,
+				},
 			});
-			
+
 			button.click();
 			expect(clickHandler).toHaveBeenCalledTimes(1);
 		});
@@ -59,33 +57,13 @@ describe("Component Functions", () => {
 				type: "email",
 				placeholder: "Enter email",
 				required: true,
-				value: "test@example.com"
+				value: "test@example.com",
 			});
-			
+
 			expect(input.type).toBe("email");
 			expect(input.placeholder).toBe("Enter email");
 			expect(input.required).toBe(true);
 			expect(input.value).toBe("test@example.com");
-		});
-	});
-
-	describe("TextInput Component", () => {
-		it("should create input with text type", () => {
-			const textInput = TextInput();
-			expect(textInput.tagName.toLowerCase()).toBe("input");
-			expect(textInput.type).toBe("text");
-		});
-
-		it("should apply text input properties", () => {
-			const textInput = TextInput({
-				placeholder: "Enter text",
-				maxLength: 50,
-				value: "Sample text"
-			});
-			
-			expect(textInput.placeholder).toBe("Enter text");
-			expect(textInput.maxLength).toBe(50);
-			expect(textInput.value).toBe("Sample text");
 		});
 	});
 
@@ -100,53 +78,13 @@ describe("Component Functions", () => {
 				placeholder: "Enter long text",
 				rows: 5,
 				cols: 40,
-				value: "Multi-line\ntext content"
+				value: "Multi-line\ntext content",
 			});
-			
+
 			expect(textarea.placeholder).toBe("Enter long text");
 			expect(textarea.rows).toBe(5);
 			expect(textarea.cols).toBe(40);
 			expect(textarea.value).toBe("Multi-line\ntext content");
-		});
-	});
-
-	describe("Checkbox Component", () => {
-		it("should create checkbox input", () => {
-			const checkbox = Checkbox();
-			expect(checkbox.tagName.toLowerCase()).toBe("input");
-			expect(checkbox.type).toBe("checkbox");
-		});
-
-		it("should apply checkbox properties", () => {
-			const checkbox = Checkbox({
-				checked: true,
-				value: "option1",
-				name: "options"
-			});
-			
-			expect(checkbox.checked).toBe(true);
-			expect(checkbox.value).toBe("option1");
-			expect(checkbox.name).toBe("options");
-		});
-	});
-
-	describe("Radio Component", () => {
-		it("should create radio input", () => {
-			const radio = Radio();
-			expect(radio.tagName.toLowerCase()).toBe("input");
-			expect(radio.type).toBe("radio");
-		});
-
-		it("should apply radio properties", () => {
-			const radio = Radio({
-				name: "gender",
-				value: "male",
-				checked: true
-			});
-			
-			expect(radio.name).toBe("gender");
-			expect(radio.value).toBe("male");
-			expect(radio.checked).toBe(true);
 		});
 	});
 
@@ -160,9 +98,9 @@ describe("Component Functions", () => {
 			const select = Select({
 				name: "country",
 				multiple: true,
-				...(({ size: 3 } as any))
+				...({ size: 3 } as any),
 			});
-			
+
 			expect(select.name).toBe("country");
 			expect(select.multiple).toBe(true);
 			expect((select as any).size).toBe(3);
@@ -179,22 +117,22 @@ describe("Component Functions", () => {
 			const form = Form({
 				action: "/submit",
 				method: "post",
-				noValidate: true
+				noValidate: true,
 			});
-			
+
 			expect(form.action.endsWith("/submit")).toBe(true);
 			expect(form.method).toBe("post");
 			expect(form.noValidate).toBe(true);
 		});
 
 		it("should handle form submission", () => {
-			const submitHandler = jest.fn((e) => e.preventDefault());
+			const submitHandler = vi.fn((e) => e.preventDefault());
 			const form = Form({
 				listeners: {
-					submit: submitHandler
-				}
+					submit: submitHandler,
+				},
 			});
-			
+
 			form.dispatchEvent(new Event("submit"));
 			expect(submitHandler).toHaveBeenCalledTimes(1);
 		});
@@ -212,10 +150,10 @@ describe("Component Functions", () => {
 				children: "Box content",
 				style: {
 					padding: "20px",
-					margin: "10px"
-				}
+					margin: "10px",
+				},
 			});
-			
+
 			expect(box.className).toBe("container");
 			expect(box.textContent).toBe("Box content");
 			expect(box.style.padding).toBe("20px");
@@ -233,7 +171,7 @@ describe("Component Functions", () => {
 			const h1 = Typography({ tag: "h1" });
 			const h2 = Typography({ tag: "h2" });
 			const span = Typography({ tag: "span" });
-			
+
 			expect(h1.tagName.toLowerCase()).toBe("h1");
 			expect(h2.tagName.toLowerCase()).toBe("h2");
 			expect(span.tagName.toLowerCase()).toBe("span");
@@ -243,9 +181,9 @@ describe("Component Functions", () => {
 			const typography = Typography({
 				tag: "h1",
 				children: "Main Heading",
-				className: "title"
+				className: "title",
 			});
-			
+
 			expect(typography.textContent).toBe("Main Heading");
 			expect(typography.className).toBe("title");
 		});
@@ -262,9 +200,9 @@ describe("Component Functions", () => {
 				href: "https://example.com",
 				target: "_blank",
 				rel: "noopener noreferrer",
-				children: "Visit Example"
+				children: "Visit Example",
 			});
-			
+
 			expect(link.href).toBe("https://example.com/");
 			expect(link.target).toBe("_blank");
 			expect(link.rel).toBe("noopener noreferrer");
@@ -283,9 +221,9 @@ describe("Component Functions", () => {
 				src: "/path/to/image.jpg",
 				alt: "Description",
 				width: 300,
-				height: 200
+				height: 200,
 			});
-			
+
 			expect(img.src.endsWith("/path/to/image.jpg")).toBe(true);
 			expect(img.alt).toBe("Description");
 			expect(img.width).toBe(300);
@@ -293,20 +231,20 @@ describe("Component Functions", () => {
 		});
 
 		it("should handle image loading events", () => {
-			const loadHandler = jest.fn();
-			const errorHandler = jest.fn();
-			
+			const loadHandler = vi.fn();
+			const errorHandler = vi.fn();
+
 			const img = Img({
 				src: "/test-image.jpg",
 				listeners: {
 					load: loadHandler,
-					error: errorHandler
-				}
+					error: errorHandler,
+				},
 			});
-			
+
 			img.dispatchEvent(new Event("load"));
 			img.dispatchEvent(new Event("error"));
-			
+
 			expect(loadHandler).toHaveBeenCalledTimes(1);
 			expect(errorHandler).toHaveBeenCalledTimes(1);
 		});
@@ -316,31 +254,32 @@ describe("Component Functions", () => {
 		it("should compose components together", () => {
 			const form = Form({
 				children: [
-					TextInput({
+					Input({
 						placeholder: "Name",
-						name: "name"
+						name: "name",
+						type: "text",
 					}),
 					Input({
 						placeholder: "Email",
 						name: "email",
-						type: "email"
+						type: "email",
 					}),
 					Button({
 						type: "submit",
-						children: "Submit"
-					})
-				]
+						children: "Submit",
+					}),
+				],
 			});
-			
+
 			expect(form.children.length).toBe(3);
 			expect(form.children[0].tagName.toLowerCase()).toBe("input");
 			expect(form.children[1].tagName.toLowerCase()).toBe("input");
 			expect(form.children[2].tagName.toLowerCase()).toBe("button");
-			
+
 			const nameInput = form.children[0] as HTMLInputElement;
 			const emailInput = form.children[1] as HTMLInputElement;
 			const submitButton = form.children[2] as HTMLButtonElement;
-			
+
 			expect(nameInput.placeholder).toBe("Name");
 			expect(emailInput.type).toBe("email");
 			expect(submitButton.textContent).toBe("Submit");
@@ -353,14 +292,14 @@ describe("Component Functions", () => {
 					className: "inner",
 					children: Typography({
 						tag: "h1",
-						children: "Nested Content"
-					})
-				})
+						children: "Nested Content",
+					}),
+				}),
 			});
-			
+
 			expect(container.className).toBe("container");
 			expect(container.children[0].className).toBe("inner");
-			
+
 			const heading = container.querySelector("h1");
 			expect(heading?.textContent).toBe("Nested Content");
 		});

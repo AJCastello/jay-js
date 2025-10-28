@@ -18,7 +18,7 @@ export function DrawerOverlay<T extends TBaseTagMap = "div">(
 		props.className,
 	);
 
-	const handleDrawer = useDrawer({ id: props.id });
+	const handleDrawer = useDrawer({ drawerId: props.id });
 
 	return Base({
 		...props,

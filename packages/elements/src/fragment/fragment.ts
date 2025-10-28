@@ -1,4 +1,4 @@
-import { IFragment } from "./fragment.types";
+import type { IFragment } from "./fragment.types";
 
 export function Fragment({ children, ...props }: IFragment): DocumentFragment {
 	const fragment = document.createDocumentFragment();

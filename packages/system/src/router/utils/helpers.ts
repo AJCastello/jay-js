@@ -1,5 +1,4 @@
 import { compile, match, pathToRegexp } from "path-to-regexp";
-import { routerDefineOptions } from "../core/configuration";
 
 /**
  * Converts a route path to a regular expression pattern

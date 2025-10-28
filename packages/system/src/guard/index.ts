@@ -18,15 +18,13 @@ export * from "./core/define";
  * @see ./core/permissions.ts for detailed documentation
  */
 export * from "./core/permissions";
-
-/**
- * Utility functions for working with permissions
- * @see ./utils/permissions.ts for detailed documentation
- */
-export * from "./utils/permissions";
-
 /**
  * Type definitions for the guard system
  * @see ./types.ts for detailed type information
  */
 export * from "./types";
+/**
+ * Utility functions for working with permissions
+ * @see ./utils/permissions.ts for detailed documentation
+ */
+export * from "./utils/permissions";

@@ -1,35 +1,44 @@
-import { uniKey } from "../utils/uni-key.js";
-import { TBaseTagMap, TBase, TLifecycleElement, TStyle } from "./base.types.js";
+import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
-export function Base<T extends TBaseTagMap = "div">(
-	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = { tag: "div" },
-): HTMLElementTagNameMap[T] {
+type ReactiveEffect = (target: any, prop: string) => void;
 
+function isReactiveValue(value: any): boolean {
+	return typeof value === "function" && (value as ReactiveEffect).name.includes("_set_value_effect");
+}
+
+export function Base<T extends TBaseTagMap = "div">(
+	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = {
+		tag: "div",
+	},
+): HTMLElementTagNameMap[T] {
 	const hasLifecycle = Boolean(onmount || onunmount);
 
 	if (hasLifecycle) {
 		registerJayJsElement(tag || "div");
 	}
 
-	let elementOptions = hasLifecycle ? { is: `jayjs-${tag || "div"}` } : undefined;
+	const elementOptions = hasLifecycle ? { is: `jayjs-${tag || "div"}` } : undefined;
 
 	const base = document.createElement(tag || "div", elementOptions);
 
 	if (hasLifecycle) {
-		const lyfercycleElement = base as unknown as TLifecycleElement
+		const lyfercycleElement = base as unknown as TLifecycleElement;
 		if (onmount) lyfercycleElement.onmount = onmount;
 		if (onunmount) lyfercycleElement.onunmount = onunmount;
 	}
 
-	ref && (ref.current = base);
+	if (ref) {
+		ref.current = base;
+	}
 
-	const elementId = id || uniKey();
-	base.id = elementId;
+	if (id) {
+		base.id = id;
+	}
 
 	if (className) {
-		if (typeof className === "function" && (className as Function).name.includes("_set_value_effect")) {
-			(className as Function)(base, "className");
+		if (isReactiveValue(className)) {
+			(className as unknown as ReactiveEffect)(base, "className");
 		} else {
 			base.className = className;
 		}
@@ -40,17 +49,34 @@ export function Base<T extends TBaseTagMap = "div">(
 			base.addEventListener(key, value as EventListener);
 		});
 
-	style &&
-		Object.entries(style).forEach(([key, value]: [string, any]) => {
-			if (key === "parentRule" || key === "length") return;
-			base.style[key as keyof TStyle] = value;
-		});
+	if (style) {
+		if (isReactiveValue(style)) {
+			(style as unknown as ReactiveEffect)(base, "style");
+		} else {
+			Object.entries(style).forEach(([key, value]: [string, any]) => {
+				if (key === "parentRule" || key === "length") return;
+				if (isReactiveValue(value)) {
+					(value as unknown as ReactiveEffect)(base.style, key);
+				} else {
+					base.style[key as keyof TStyle] = value;
+				}
+			});
+		}
+	}
 
-	dataset &&
-		Object.entries(dataset).forEach(([key, value]) => {
-			base.dataset[key] = value as string;
-		});
-
+	if (dataset) {
+		if (isReactiveValue(dataset)) {
+			(dataset as unknown as ReactiveEffect)(base, "dataset");
+		} else {
+			Object.entries(dataset).forEach(([key, value]) => {
+				if (isReactiveValue(value)) {
+					(value as unknown as ReactiveEffect)(base.dataset, key);
+				} else {
+					base.dataset[key] = value as string;
+				}
+			});
+		}
+	}
 
 	if (children) {
 		if (children instanceof Promise) {
@@ -84,33 +110,19 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	props &&
 		Object.entries(props).forEach(([key, value]) => {
-			try {
-				(base as any)[key] = value;
-			} catch (error) {
-				if (error instanceof TypeError) {
-					console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
-					throw error;
+			if (isReactiveValue(value)) {
+				(value as unknown as ReactiveEffect)(base, key);
+			} else {
+				try {
+					(base as any)[key] = value;
+				} catch (error) {
+					if (error instanceof TypeError) {
+						console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
+						throw error;
+					}
 				}
 			}
 		});
-
-	// Development-only: Register element with inspector if available
-	if (process.env.NODE_ENV === "development" && typeof window !== "undefined" && window.__jayjs_debug__) {
-		// Get caller information for better debugging (fallback metadata)
-		const metadata = {
-			component: (tag || "div").charAt(0).toUpperCase() + (tag || "div").slice(1),
-			file: "unknown",
-			line: 0,
-			column: 0,
-		};
-
-		try {
-			window.__jayjs_debug__(base, metadata);
-		} catch (error) {
-			// Silently ignore inspector errors in production-like scenarios
-			console.debug("Inspector registration failed:", error);
-		}
-	}
 
 	return base as HTMLElementTagNameMap[T];
 }

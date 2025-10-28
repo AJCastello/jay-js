@@ -1,5 +1,5 @@
 import type { TLazyModule } from "../types.js";
-import { lazyOptions, moduleCache } from "./configuration.js";
+import { moduleCache } from "./configuration.js";
 
 /**
  * Loads a module from the cache and resets its usage counter.

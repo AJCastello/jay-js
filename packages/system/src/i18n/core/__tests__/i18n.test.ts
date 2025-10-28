@@ -1,5 +1,6 @@
+import { vi } from "vitest";
 import { i18nOptions, i18nState } from "../../core/configuration.js";
-import { getCurrentLocale, initLanguage, setLanguage } from "../../core/language-manager.js";
+import { initLanguage, setLanguage } from "../../core/language-manager.js";
 import { i18nDefineOptions, useI18n } from "../../index.js";
 
 // Mock localStorage for testing
@@ -60,9 +61,9 @@ const mockTranslate = (path: string, data: any = {}, options = {}, nestedKeys = 
 };
 
 // Mock the i18n provider's import mechanism
-jest.mock("../../hooks/use-i18n.js", () => {
+vi.mock("../../hooks/use-i18n.js", () => {
 	return {
-		useI18n: jest.fn().mockImplementation(() => {
+		useI18n: vi.fn().mockImplementation(() => {
 			return (path: string, data?: any, options?: any) => {
 				return mockTranslate(path, data, options, i18nOptions.nestedKeys);
 			};
@@ -70,11 +71,11 @@ jest.mock("../../hooks/use-i18n.js", () => {
 	};
 });
 
-jest.mock("../../core/language-manager.js", () => {
-	const actual = jest.requireActual("../../core/language-manager.js");
+vi.mock("../../core/language-manager.js", async () => {
+	const actual = await vi.importActual("../../core/language-manager.js");
 	return {
 		...actual,
-		initLanguage: jest.fn().mockImplementation(() => {
+		initLanguage: vi.fn().mockImplementation(() => {
 			// Custom implementation that doesn't depend on DOM APIs
 			const defaultLocaleStored = localStorage.getItem(i18nOptions.localStorageKey);
 			let locale = i18nOptions.defaultLocale;
@@ -95,7 +96,7 @@ jest.mock("../../core/language-manager.js", () => {
 				);
 			}
 		}),
-		setLanguage: jest.fn().mockImplementation((code) => {
+		setLanguage: vi.fn().mockImplementation((code) => {
 			const language = i18nOptions.languages.find((lang) => lang.code === code);
 			if (!language) {
 				throw new Error(`Language ${code} not found`);
@@ -130,7 +131,7 @@ jest.mock("../../core/language-manager.js", () => {
 
 // Reset mocks and state before each test
 beforeEach(() => {
-	jest.clearAllMocks();
+	vi.clearAllMocks();
 	localStorageMock.clear();
 
 	// Reset i18n options for each test
@@ -393,7 +394,7 @@ describe("i18n", () => {
 		it("should load language data dynamically", async () => {
 			// Mock import function that will be called
 			const mockData = { Hello: "Guten Tag" };
-			const mockImport = jest.fn().mockResolvedValue(mockData);
+			const mockImport = vi.fn().mockResolvedValue(mockData);
 
 			i18nDefineOptions({
 				languages: [

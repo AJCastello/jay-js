@@ -1,15 +1,15 @@
 export interface IJayJsViteOptions {
-  contentPath: string;
+	contentPath: string;
 }
 
 export interface Metadata {
-  [key: string]: any;
+	[key: string]: any;
 }
 
 export interface IBuildCollection {
-  contentPath: string;
-  dir: string;
-  format?: string;
-  metadata?: Array<string>;
-  suffix?: string;
+	contentPath: string;
+	dir: string;
+	format?: string;
+	metadata?: Array<string>;
+	suffix?: string;
 }

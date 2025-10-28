@@ -1,12 +1,13 @@
+import { vi } from "vitest";
 import type { TLazyModule } from "../../types.js";
 import { lazyOptions, moduleCache } from "../configuration.js";
 import { loadFromCache, loadModule } from "../module-loader.js";
 
-const mockReplaceWith = jest.fn();
+const mockReplaceWith = vi.fn();
 
 describe("Module Loader", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		moduleCache.clear();
 
 		Object.assign(lazyOptions, {
@@ -17,7 +18,7 @@ describe("Module Loader", () => {
 
 	describe("loadFromCache", () => {
 		it("should load a module from cache", () => {
-			const mockModule = jest.fn(() => document.createElement("div"));
+			const mockModule = vi.fn(() => document.createElement("div"));
 			moduleCache.set("TestModule", {
 				module: mockModule,
 				lastUsed: 5,
@@ -26,7 +27,7 @@ describe("Module Loader", () => {
 
 			const config: TLazyModule = {
 				module: "TestModule",
-				import: jest.fn(),
+				import: vi.fn(),
 				params: { test: "value" },
 			};
 
@@ -40,7 +41,7 @@ describe("Module Loader", () => {
 		it("should throw an error when module is not found in cache", () => {
 			const config: TLazyModule = {
 				module: "NonExistentModule",
-				import: jest.fn(),
+				import: vi.fn(),
 			};
 
 			expect(() => loadFromCache(config)).toThrow("Module NonExistentModule not found in cache");
@@ -53,8 +54,8 @@ describe("Module Loader", () => {
 		});
 
 		it("should load a named export module successfully", async () => {
-			const mockModuleFn = jest.fn(() => document.createElement("div"));
-			const mockImportFn = jest.fn(() =>
+			const mockModuleFn = vi.fn(() => document.createElement("div"));
+			const mockImportFn = vi.fn(() =>
 				Promise.resolve({
 					TestModule: mockModuleFn,
 				}),
@@ -79,8 +80,8 @@ describe("Module Loader", () => {
 		});
 
 		it("should handle default export when named export is not found", async () => {
-			const mockDefaultFn = jest.fn(() => document.createElement("div"));
-			const mockImportFn = jest.fn(() =>
+			const mockDefaultFn = vi.fn(() => document.createElement("div"));
+			const mockImportFn = vi.fn(() =>
 				Promise.resolve({
 					default: mockDefaultFn,
 				}),
@@ -92,7 +93,7 @@ describe("Module Loader", () => {
 			};
 
 			const moduleSection = document.createElement("div");
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation();
 
 			await loadModule(config, moduleSection);
 
@@ -104,8 +105,8 @@ describe("Module Loader", () => {
 		});
 
 		it("should respect collect property from config", async () => {
-			const mockModuleFn = jest.fn(() => document.createElement("div"));
-			const mockImportFn = jest.fn(() =>
+			const mockModuleFn = vi.fn(() => document.createElement("div"));
+			const mockImportFn = vi.fn(() =>
 				Promise.resolve({
 					TestModule: mockModuleFn,
 				}),
@@ -126,7 +127,7 @@ describe("Module Loader", () => {
 
 		it("should log error when module loading fails", async () => {
 			const mockError = new Error("Import failed");
-			const mockImportFn = jest.fn(() => Promise.reject(mockError));
+			const mockImportFn = vi.fn(() => Promise.reject(mockError));
 
 			const config: TLazyModule = {
 				module: "TestModule",
@@ -134,7 +135,7 @@ describe("Module Loader", () => {
 			};
 
 			const moduleSection = document.createElement("div");
-			const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+			const consoleSpy = vi.spyOn(console, "error").mockImplementation();
 
 			await loadModule(config, moduleSection);
 

@@ -1,5 +1,4 @@
 import type { ComponentMetadata, JayJsInspectorOptions } from "../plugin/types.js";
-import { DebugReporter } from "../utils/debug-reporter.js";
 
 /**
  * Debug function that gets injected into instrumented components
@@ -14,17 +13,8 @@ export function __jayjs_debug__(element: HTMLElement, metadata: ComponentMetadat
 	try {
 		// Register element with inspector
 		window.__JAYJS_INSPECTOR__.registerElement(element, metadata);
-
-		// Report element registration
-		if (window.__JAYJS_DEBUG_REPORTER__) {
-			window.__JAYJS_DEBUG_REPORTER__.addElementRegistration();
-		}
-	} catch (error) {
-		// Report debug function error
-		if (window.__JAYJS_DEBUG_REPORTER__) {
-			const errorMessage = error instanceof Error ? error.message : String(error);
-			window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Debug Function', errorMessage);
-		}
+	} catch (_error) {
+		// Silent fail - no logging needed
 	}
 
 	return element;
@@ -41,7 +31,6 @@ if (typeof window !== "undefined") {
 export class JayJsInspectorRuntime {
 	private overlay: HTMLElement | null = null;
 	private elementMap = new WeakMap<HTMLElement, ComponentMetadata>();
-	private isInspecting = false;
 
 	constructor(private config: Required<JayJsInspectorOptions>) {
 		this.init();
@@ -57,10 +46,7 @@ export class JayJsInspectorRuntime {
 		// Bind event listeners
 		this.bindEvents();
 
-		console.log("[Jay JS Inspector] Runtime initialized");
-		console.log("[Jay JS Inspector] Config:", this.config);
-		console.log("[Jay JS Inspector] Press Shift+Alt+J to toggle inspector mode");
-		console.log("[Jay JS Inspector] Then use Shift+Click on components to open in editor");
+		// Runtime initialized - ready for use
 	} /**
 	 * Register an element with its component metadata
 	 */
@@ -73,20 +59,9 @@ export class JayJsInspectorRuntime {
 			element.dataset.jayjsFile = metadata.file;
 			element.dataset.jayjsLine = metadata.line.toString();
 
-			console.debug(`[Jay JS Inspector] Registered ${metadata.component} from ${metadata.file}:${metadata.line}`, element);
-
-			// Report element registration
-			if (typeof window !== "undefined" && window.__JAYJS_DEBUG_REPORTER__) {
-				window.__JAYJS_DEBUG_REPORTER__.addElementRegistration();
-			}
+			// Element registered successfully
 		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : String(error);
 			console.error(`[Jay JS Inspector] Failed to register element:`, error);
-
-			// Report registration error
-			if (typeof window !== "undefined" && window.__JAYJS_DEBUG_REPORTER__) {
-				window.__JAYJS_DEBUG_REPORTER__.addRuntimeError('Element Registration', errorMessage);
-			}
 		}
 	} /**
 	 * Create the visual overlay element
@@ -164,18 +139,20 @@ export class JayJsInspectorRuntime {
 		document.addEventListener("click", (e) => {
 			if (!isInspecting) return;
 
-			// Check activation key
-			if (this.config.activationKey === "shift+click" && !e.shiftKey) return;
-			if (this.config.activationKey === "ctrl+click" && !e.ctrlKey) return;
-			if (this.config.activationKey === "alt+click" && !e.altKey) return;
+			const target = e.target as HTMLElement;
+			const metadata = this.findComponentMetadata(target);
+
+			if (!metadata) return;
 
 			e.preventDefault();
 			e.stopPropagation();
 
-			const target = e.target as HTMLElement;
-			const metadata = this.findComponentMetadata(target);
-
-			if (metadata) {
+			// Ctrl+Click or Alt+Click: Copy file path to clipboard
+			if (e.ctrlKey || e.altKey) {
+				this.copyFilePath(metadata);
+			}
+			// Shift+Click: Open in editor
+			else if (e.shiftKey) {
 				this.openInEditor(metadata);
 			}
 		});
@@ -232,15 +209,44 @@ export class JayJsInspectorRuntime {
 	 * Toggle inspector mode
 	 */
 	private setInspecting(enabled: boolean) {
-		this.isInspecting = enabled;
-
 		if (enabled) {
 			document.body.style.cursor = "crosshair";
-			console.log("[Jay JS Inspector] Inspector mode enabled. Click on components to open in editor.");
 		} else {
 			document.body.style.cursor = "";
 			this.hideOverlay();
-			console.log("[Jay JS Inspector] Inspector mode disabled.");
+		}
+	}
+
+	/**
+	 * Copy file path to clipboard
+	 */
+	private async copyFilePath(metadata: ComponentMetadata) {
+		try {
+			const filePath = `${metadata.file}:${metadata.line}:${metadata.column}`;
+			await navigator.clipboard.writeText(filePath);
+
+			// Show feedback
+			const notification = document.createElement("div");
+			notification.textContent = `Copied: ${filePath}`;
+			Object.assign(notification.style, {
+				position: "fixed",
+				top: "20px",
+				left: "50%",
+				transform: "translateX(-50%)",
+				backgroundColor: "#333",
+				color: "white",
+				padding: "12px 24px",
+				borderRadius: "4px",
+				zIndex: "1000000",
+				fontFamily: "monospace",
+				fontSize: "14px",
+				boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+			});
+
+			document.body.appendChild(notification);
+			setTimeout(() => notification.remove(), 2000);
+		} catch (error) {
+			console.error("[Jay JS Inspector] Error copying file path:", error);
 		}
 	}
 
@@ -249,7 +255,7 @@ export class JayJsInspectorRuntime {
 	 */
 	private async openInEditor(metadata: ComponentMetadata) {
 		try {
-			const response = await fetch("/__jayjs-inspector/open-in-editor", {
+			const _response = await fetch("/__jayjs-inspector/open-in-editor", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -261,11 +267,7 @@ export class JayJsInspectorRuntime {
 				}),
 			});
 
-			if (response.ok) {
-				console.log(`[Jay JS Inspector] Opening ${metadata.file}:${metadata.line}`);
-			} else {
-				console.error("[Jay JS Inspector] Failed to open file in editor");
-			}
+			// Request sent to editor
 		} catch (error) {
 			console.error("[Jay JS Inspector] Error opening file:", error);
 		}
