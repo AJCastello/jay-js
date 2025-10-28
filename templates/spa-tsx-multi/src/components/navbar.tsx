@@ -1,5 +1,5 @@
 import { Navigate } from "@jay-js/system";
-import { i18n } from "../../locales/i18n";
+import { i18n } from "../locales/i18n";
 
 export function NavBar() {
   function handleNavigate(ev: MouseEvent, path: string) {

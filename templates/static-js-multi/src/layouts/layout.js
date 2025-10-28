@@ -3,8 +3,6 @@ import { Section, Outlet, Typography, Img } from "@jay-js/elements";
 // image
 import jayjs from "/jayjs.svg";
 import { NavBar } from "../components/navbar";
-
-// i18n
 import { i18n } from "../locales/i18n";
 
 export function Layout() {
@@ -20,7 +18,7 @@ export function Layout() {
       Typography({
         tag: "h1",
         className: "text-4xl mb-4 font-bold",
-        children: i18n("Welcome do Jay JS!")
+        children: i18n("Welcome to Jay JS!")
       }),
       NavBar(),
       Outlet()
