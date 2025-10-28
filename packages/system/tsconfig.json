@@ -6,16 +6,18 @@
 			"ESNext",
 			"DOM"
 		],
-		"moduleResolution": "Node",
+		"moduleResolution": "Bundler",
 		"sourceMap": true,
 		"declaration": true,
 		"outDir": "./dist",
 		"strict": true,
 		"noImplicitAny": true,
 		"types": [
-			"node"
+			"node",
+			"vitest/globals"
 		],
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"skipLibCheck": true
 	},
 	"include": [
 		"./src/**/*",
