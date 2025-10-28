@@ -6,10 +6,12 @@
     "strict": true,
     "esModuleInterop": true,
     "sourceMap": true,
+		"skipLibCheck": true,
     "lib": [
       "DOM",
       "ESNext"
     ],
+		"rootDir": "./src",
     "outDir": "dist",
     "allowJs": true
   },

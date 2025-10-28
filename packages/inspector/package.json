@@ -71,7 +71,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.3",
-    "@types/babel__parser": "^7.1.1",
     "@types/babel__traverse": "^7.20.4",
     "@vitest/ui": "^4.0.4",
     "jsdom": "^27.0.1",
