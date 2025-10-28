@@ -46,7 +46,7 @@ describe("JSX Runtime", () => {
 	test("handles event listeners", async () => {
 		const clickHandler = vi.fn();
 		const result = jsx("button", {
-			onClick: clickHandler,
+			onclick: clickHandler,
 		});
 
 		// Handle both synchronous and Promise return types
