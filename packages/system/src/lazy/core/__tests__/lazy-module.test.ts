@@ -1,35 +1,36 @@
+import { vi } from 'vitest';
 import { moduleCache } from "../configuration.js";
 import { LazyModule } from "../lazy-module.js";
 import * as moduleLoader from "../module-loader.js";
 
 // Mock the moduleLoader functions
-jest.mock("../module-loader.js", () => ({
-	loadFromCache: jest.fn(),
-	loadModule: jest.fn(),
+vi.mock("../module-loader.js", () => ({
+	loadFromCache: vi.fn(),
+	loadModule: vi.fn(),
 }));
 
 // Mock the uniKey function
-jest.mock("../../../utils/index.js", () => ({
-	uniKey: jest.fn(() => "test-key-123"),
+vi.mock("../../../utils/index.js", () => ({
+	uniKey: vi.fn(() => "test-key-123"),
 }));
 
 describe("LazyModule", () => {
 	beforeEach(() => {
 		// Clear all mocks
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 
 		// Clear the module cache
 		moduleCache.clear();
 
 		// Mock implementation of loadFromCache
-		(moduleLoader.loadFromCache as jest.Mock).mockImplementation(() => {
+		(moduleLoader.loadFromCache as ReturnType<typeof vi.fn>).mockImplementation(() => {
 			const element = document.createElement("div");
 			element.textContent = "Cached Module";
 			return element;
 		});
 
 		// Mock implementation of loadModule
-		(moduleLoader.loadModule as jest.Mock).mockImplementation((lazy, moduleSection) => {
+		(moduleLoader.loadModule as ReturnType<typeof vi.fn>).mockImplementation((lazy, moduleSection) => {
 			const element = document.createElement("div");
 			element.textContent = "Loaded Module";
 			return element;
@@ -44,7 +45,7 @@ describe("LazyModule", () => {
 
 	it("should generate a default module ID when module name is not provided", () => {
 		const lazyConfig = {
-			import: jest.fn(() => Promise.resolve({ default: () => {} })),
+			import: vi.fn(() => Promise.resolve({ default: () => {} })),
 		};
 
 		LazyModule(lazyConfig);
@@ -61,7 +62,7 @@ describe("LazyModule", () => {
 	it("should return from cache when module is already cached", () => {
 		const lazyConfig = {
 			module: "TestModule",
-			import: jest.fn(() => Promise.resolve({ TestModule: () => {} })),
+			import: vi.fn(() => Promise.resolve({ TestModule: () => {} })),
 		};
 
 		// Add the module to cache
@@ -80,7 +81,7 @@ describe("LazyModule", () => {
 	it("should call loadModule when module is not cached", () => {
 		const lazyConfig = {
 			module: "TestModule",
-			import: jest.fn(() => Promise.resolve({ TestModule: () => {} })),
+			import: vi.fn(() => Promise.resolve({ TestModule: () => {} })),
 		};
 
 		LazyModule(lazyConfig);
@@ -92,7 +93,7 @@ describe("LazyModule", () => {
 	it("should use custom loader element when provided", () => {
 		const lazyConfig = {
 			module: "TestModule",
-			import: jest.fn(() => Promise.resolve({ TestModule: () => {} })),
+			import: vi.fn(() => Promise.resolve({ TestModule: () => {} })),
 		};
 
 		const customLoader = document.createElement("custom-loader");
@@ -106,7 +107,7 @@ describe("LazyModule", () => {
 	it("should use default element when loader is not provided", () => {
 		const lazyConfig = {
 			module: "TestModule",
-			import: jest.fn(() => Promise.resolve({ TestModule: () => {} })),
+			import: vi.fn(() => Promise.resolve({ TestModule: () => {} })),
 		};
 
 		LazyModule(lazyConfig);
@@ -114,7 +115,7 @@ describe("LazyModule", () => {
 		expect(moduleLoader.loadModule).toHaveBeenCalledWith(lazyConfig, expect.any(HTMLElement));
 
 		// Verify that the default element is jayjs-lazy-slot
-		const moduleSection = (moduleLoader.loadModule as jest.Mock).mock.calls[0][1];
+		const moduleSection = (moduleLoader.loadModule as ReturnType<typeof vi.fn>).mock.calls[0][1];
 		expect(moduleSection.tagName.toLowerCase()).toBe("jayjs-lazy-slot");
 	});
 });

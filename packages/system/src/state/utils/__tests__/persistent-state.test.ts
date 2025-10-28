@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { PersistentState } from "../helpers";
 
 describe("PersistentState", () => {
@@ -5,14 +6,14 @@ describe("PersistentState", () => {
 	const localStorageMock = (() => {
 		let store: Record<string, string> = {};
 		return {
-			getItem: jest.fn((key) => store[key] || null),
-			setItem: jest.fn((key, value) => {
+			getItem: vi.fn((key) => store[key] || null),
+			setItem: vi.fn((key, value) => {
 				store[key] = value;
 			}),
 			clear: () => {
 				store = {};
 			},
-			removeItem: jest.fn((key) => {
+			removeItem: vi.fn((key) => {
 				delete store[key];
 			}),
 		};
@@ -26,7 +27,7 @@ describe("PersistentState", () => {
 
 	beforeEach(() => {
 		localStorageMock.clear();
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should initialize with default value when no stored value exists", () => {
@@ -57,7 +58,7 @@ describe("PersistentState", () => {
 
 	it("should handle localStorage errors gracefully", () => {
 		// Simulate localStorage error
-		const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+		const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		localStorageMock.getItem.mockImplementationOnce(() => {
 			throw new Error("localStorage error");
 		});
@@ -81,7 +82,7 @@ describe("PersistentState", () => {
 
 	it("should update subscribers when state changes", () => {
 		const state = PersistentState("test", 0);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test-sub", subscriber);
 		state.set(10);
@@ -102,7 +103,7 @@ describe("PersistentState", () => {
 		expect(state.value).toBe(10);
 
 		// Test triggering
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 		state.sub("test-sub", subscriber);
 		state.trigger();
 		expect(subscriber).toHaveBeenCalledWith(10);
@@ -113,7 +114,7 @@ describe("PersistentState", () => {
 		expect(subscriber).toHaveBeenCalledTimes(1); // Not called again after unsub
 
 		// Test clear
-		const newSubscriber = jest.fn();
+		const newSubscriber = vi.fn();
 		state.sub("new-sub", newSubscriber);
 		state.clear(20);
 		expect(state.get()).toBe(20);

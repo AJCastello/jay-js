@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { formatError, isValidResult } from "../../utils/validators.js";
 import { useForm } from "../use-form.js";
 
@@ -35,26 +36,35 @@ class MockSelectElement extends MockElement {
 }
 
 // Helper for creating DOM events
-// const createEvent = (target: any) => ({ target, preventDefault: jest.fn() });
+// const createEvent = (target: any) => ({ target, preventDefault: vi.fn() });
 
 describe("useForm", () => {
-	let querySelectMock: jest.Mock;
+	let querySelectMock: ReturnType<typeof vi.fn>;
 
 	beforeEach(() => {
 		// Clear mocks between tests
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 
 		// Global settings for the test
 		const mockTextNode = { textContent: "" };
-		querySelectMock = jest.fn().mockImplementation(() => {
+		querySelectMock = vi.fn().mockImplementation(() => {
 			return new MockElement();
 		});
+
+		// Mock MutationObserver
+		global.MutationObserver = class MutationObserver {
+			constructor(callback: any) {}
+			observe() {}
+			disconnect() {}
+			takeRecords() { return []; }
+		} as any;
 
 		global.document = {
 			...global.document,
 			querySelector: querySelectMock,
-			querySelectorAll: jest.fn().mockImplementation(() => []),
-			createTextNode: jest.fn().mockImplementation(() => mockTextNode),
+			querySelectorAll: vi.fn().mockImplementation(() => []),
+			createTextNode: vi.fn().mockImplementation(() => mockTextNode),
+			contains: vi.fn().mockReturnValue(false),
 		} as any;
 	});
 
@@ -185,8 +195,8 @@ describe("useForm", () => {
 
 	it("should process form submission with validation", async () => {
 		const defaultValues = { email: "", password: "" };
-		const mockSubmitFn = jest.fn();
-		const mockEvent = { preventDefault: jest.fn() };
+		const mockSubmitFn = vi.fn();
+		const mockEvent = { preventDefault: vi.fn() };
 
 		const customResolver = async (values: any) => {
 			const errors = [];
@@ -244,7 +254,7 @@ describe("useForm", () => {
 		const defaultValues = { nome: "", idade: 0 };
 		const form = useForm({ defaultValues });
 
-		const onChangeMock = jest.fn();
+		const onChangeMock = vi.fn();
 		form.onChange(onChangeMock);
 
 		// Change a value
@@ -262,7 +272,7 @@ describe("useForm", () => {
 
 	it("should notify about validation errors", async () => {
 		const defaultValues = { email: "" };
-		const onErrorsMock = jest.fn();
+		const onErrorsMock = vi.fn();
 
 		const form = useForm({
 			defaultValues,
@@ -287,9 +297,9 @@ describe("useForm", () => {
 		expect(form.formState.getValue("nome")).toBe("Ana");
 
 		// Submission without validation
-		const mockSubmitFn = jest.fn();
+		const mockSubmitFn = vi.fn();
 		const submitHandler = form.onSubmit(mockSubmitFn);
-		const mockEvent = { preventDefault: jest.fn() };
+		const mockEvent = { preventDefault: vi.fn() };
 
 		submitHandler(mockEvent as any);
 

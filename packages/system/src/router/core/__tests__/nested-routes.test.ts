@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import type { TRoute } from "../../types";
 import { resolvedRoutes, routerOptions } from "../configuration";
 import { Navigate } from "../navigation/navigate";
 import { Router } from "../router";
 
 // Mock the history API
-const mockPushState = jest.fn();
+const mockPushState = vi.fn();
 const originalPushState = window.history.pushState;
 const originalLocation = window.location;
 
@@ -75,7 +76,7 @@ describe("Router - nested routes with same path", () => {
 		});
 
 		// Limpar mocks
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should register routes with index child correctly", () => {

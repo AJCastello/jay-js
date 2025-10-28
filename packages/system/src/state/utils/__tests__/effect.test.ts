@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import { State } from "../../core/state.js";
 import { Effect } from "../helpers.js";
 
 describe("Effect", () => {
 	it("should run effect immediately when created", () => {
-		const mockFn = jest.fn();
+		const mockFn = vi.fn();
 		Effect(mockFn);
 
 		expect(mockFn).toHaveBeenCalledTimes(1);
@@ -11,7 +12,7 @@ describe("Effect", () => {
 
 	it("should re-run when accessed state changes", () => {
 		const count = State(0);
-		const mockFn = jest.fn(() => {
+		const mockFn = vi.fn(() => {
 			const value = count.value; // Access the state
 			return value;
 		});
@@ -29,7 +30,7 @@ describe("Effect", () => {
 	it("should not re-run when state changes but wasn't accessed", () => {
 		const count1 = State(0);
 		const count2 = State(0);
-		const mockFn = jest.fn(() => {
+		const mockFn = vi.fn(() => {
 			const value = count1.value; // Only access count1
 			return value;
 		});
@@ -47,7 +48,7 @@ describe("Effect", () => {
 	it("should track multiple state dependencies", () => {
 		const count1 = State(0);
 		const count2 = State(10);
-		const mockFn = jest.fn(() => {
+		const mockFn = vi.fn(() => {
 			const sum = count1.value + count2.value;
 			return sum;
 		});
@@ -67,7 +68,7 @@ describe("Effect", () => {
 		const countA = State(0);
 		const countB = State(10);
 
-		const mockFn = jest.fn(() => {
+		const mockFn = vi.fn(() => {
 			// Only access countA or countB based on condition
 			const value = condition.value ? countA.value : countB.value;
 			return value;
@@ -93,7 +94,7 @@ describe("Effect", () => {
 
 	it("should work with deeply nested state access", () => {
 		const user = State({ profile: { name: "John", age: 30 } });
-		const mockFn = jest.fn(() => {
+		const mockFn = vi.fn(() => {
 			return user.value.profile.name;
 		});
 

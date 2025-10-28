@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { State } from "../../core/state.js";
 import { Values } from "../helpers.js";
 

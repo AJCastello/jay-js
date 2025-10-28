@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { TRoute } from "../../types";
 import { routerOptions } from "../configuration";
 import { Routes } from "../route-registry";
@@ -7,27 +8,13 @@ const normalizePath = (path: string) => path || "/";
 
 describe("Routes - route registration", () => {
 	// Mock the DOM selector
-	const mockSelector = jest.fn();
-	jest.mock("../../../utils/dom/query", () => ({
+	const mockSelector = vi.fn();
+	vi.mock("../../../utils/dom/query", () => ({
 		selector: (query: string) => mockSelector(query),
 	}));
 
 	// Save route IDs for testing relationships
 	let routeIds: string[] = [];
-
-	beforeAll(() => {
-		// Override the original import of uniKey to use our mock
-		// Note: This is a workaround since direct mocking might not work with Jest
-		const originalUniKey = jest.requireActual("../../../utils").uniKey;
-		jest.mock("../../../utils", () => ({
-			...jest.requireActual("../../../utils"),
-			uniKey: () => {
-				const id = originalUniKey();
-				routeIds.push(id);
-				return id;
-			},
-		}));
-	});
 
 	beforeEach(() => {
 		// Reset mocks and data

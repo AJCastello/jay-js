@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { lazyOptions, moduleCache, setLazyOptions } from "../configuration.js";
 
 describe("Lazy Configuration", () => {
@@ -8,7 +9,7 @@ describe("Lazy Configuration", () => {
 
 	describe("moduleCache", () => {
 		it("should store and retrieve modules correctly", () => {
-			const mockModule = jest.fn();
+			const mockModule = vi.fn();
 
 			moduleCache.set("TestModule", {
 				module: mockModule,
@@ -25,7 +26,7 @@ describe("Lazy Configuration", () => {
 		});
 
 		it("should check if a module exists in cache", () => {
-			const mockModule = jest.fn();
+			const mockModule = vi.fn();
 
 			moduleCache.set("TestModule", {
 				module: mockModule,
@@ -38,7 +39,7 @@ describe("Lazy Configuration", () => {
 		});
 
 		it("should delete modules from cache", () => {
-			const mockModule = jest.fn();
+			const mockModule = vi.fn();
 
 			moduleCache.set("TestModule", {
 				module: mockModule,
@@ -53,13 +54,13 @@ describe("Lazy Configuration", () => {
 
 		it("should clear all modules from cache", () => {
 			moduleCache.set("Module1", {
-				module: jest.fn(),
+				module: vi.fn(),
 				lastUsed: 0,
 				collect: true,
 			});
 
 			moduleCache.set("Module2", {
-				module: jest.fn(),
+				module: vi.fn(),
 				lastUsed: 0,
 				collect: true,
 			});

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { State } from "../../core/state";
 import { CombineStates } from "../helpers";
 
@@ -62,7 +63,7 @@ describe("CombineStates", () => {
 			y,
 		});
 
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 		point.sub("test", subscriber);
 
 		x.set(15);

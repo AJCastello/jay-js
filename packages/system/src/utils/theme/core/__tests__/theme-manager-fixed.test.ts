@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { themeDefineOptions, themeOptions } from "../configuration";
 import * as themeManagerModule from "../theme-manager";
 import { initTheme, prefersColorSchemeDark, setTheme } from "../theme-manager";
@@ -24,15 +25,15 @@ class MockHTMLElement {
 	dataset: Record<string, string> = {};
 	_classes: string[] = [];
 	classList = {
-		add: jest.fn().mockImplementation((className: string) => {
+		add: vi.fn().mockImplementation((className: string) => {
 			if (!this._classes.includes(className)) {
 				this._classes.push(className);
 			}
 		}),
-		remove: jest.fn().mockImplementation((...classNames: string[]) => {
+		remove: vi.fn().mockImplementation((...classNames: string[]) => {
 			this._classes = this._classes.filter((className) => !classNames.includes(className));
 		}),
-		contains: jest.fn().mockImplementation((className: string) => {
+		contains: vi.fn().mockImplementation((className: string) => {
 			return this._classes.includes(className);
 		}),
 		_classes: this._classes,
@@ -47,22 +48,22 @@ class MockHTMLElement {
 // Mock document and window objects
 const documentMock = {
 	documentElement: new MockHTMLElement(),
-	addEventListener: jest.fn(),
-	removeEventListener: jest.fn(),
-	dispatchEvent: jest.fn(),
+	addEventListener: vi.fn(),
+	removeEventListener: vi.fn(),
+	dispatchEvent: vi.fn(),
 };
 
 interface WindowMock {
-	matchMedia: jest.Mock;
+	matchMedia: ReturnType<typeof vi.fn>;
 	_prefersColorSchemeDark: boolean;
 }
 
 const windowMock: WindowMock = {
-	matchMedia: jest.fn().mockImplementation((query: string) => {
+	matchMedia: vi.fn().mockImplementation((query: string) => {
 		return {
 			matches: query === "(prefers-color-scheme: dark)" && windowMock._prefersColorSchemeDark,
-			addEventListener: jest.fn(),
-			removeEventListener: jest.fn(),
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
 		};
 	}),
 	_prefersColorSchemeDark: false,
@@ -75,10 +76,10 @@ Object.defineProperty(global, "window", { value: windowMock });
 
 // Reset mocks and state before each test
 beforeEach(() => {
-	jest.clearAllMocks();
+	vi.clearAllMocks();
 	localStorageMock.clear();
 	documentMock.documentElement = new MockHTMLElement();
-	documentMock.dispatchEvent = jest.fn();
+	documentMock.dispatchEvent = vi.fn();
 	windowMock._prefersColorSchemeDark = false;
 
 	// Reset theme configuration to default values
@@ -155,7 +156,7 @@ describe("Theme Manager", () => {
 			});
 
 			// Mock initTheme since it's called by themeDefineOptions
-			const initThemeSpy = jest.spyOn(themeManagerModule, "initTheme");
+			const initThemeSpy = vi.spyOn(themeManagerModule, "initTheme");
 
 			themeDefineOptions({
 				defaultTheme: "custom-blue",
@@ -301,11 +302,11 @@ describe("Theme Manager", () => {
 
 		it("should handle localStorage errors gracefully", () => {
 			const originalSetItem = localStorage.setItem;
-			localStorage.setItem = jest.fn().mockImplementation(() => {
+			localStorage.setItem = vi.fn().mockImplementation(() => {
 				throw new Error("Storage error");
 			});
 
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			setTheme("dark");
 

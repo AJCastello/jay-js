@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { State } from "../state.js";
 
 describe("State", () => {
@@ -20,7 +21,7 @@ describe("State", () => {
 
 	it("should notify subscribers when state changes", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber);
 		state.set(20);
@@ -30,7 +31,7 @@ describe("State", () => {
 
 	it("should not notify subscribers when silent option is true", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber);
 		state.set(20, { silent: true });
@@ -40,8 +41,8 @@ describe("State", () => {
 
 	it("should only notify specific subscriber when target option is provided", () => {
 		const state = State(10);
-		const subscriber1 = jest.fn();
-		const subscriber2 = jest.fn();
+		const subscriber1 = vi.fn();
+		const subscriber2 = vi.fn();
 
 		state.sub("sub1", subscriber1);
 		state.sub("sub2", subscriber2);
@@ -54,9 +55,9 @@ describe("State", () => {
 
 	it("should notify multiple target subscribers when target is an array", () => {
 		const state = State(10);
-		const subscriber1 = jest.fn();
-		const subscriber2 = jest.fn();
-		const subscriber3 = jest.fn();
+		const subscriber1 = vi.fn();
+		const subscriber2 = vi.fn();
+		const subscriber3 = vi.fn();
 
 		state.sub("sub1", subscriber1);
 		state.sub("sub2", subscriber2);
@@ -71,7 +72,7 @@ describe("State", () => {
 
 	it("should run subscriber immediately if run parameter is true", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber, true);
 
@@ -80,7 +81,7 @@ describe("State", () => {
 
 	it("should unsubscribe a subscriber", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber);
 		state.unsub("test");
@@ -91,7 +92,7 @@ describe("State", () => {
 
 	it("should manually trigger all subscribers with trigger method", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber);
 		state.trigger();
@@ -101,8 +102,8 @@ describe("State", () => {
 
 	it("should manually trigger specific subscriber with trigger method", () => {
 		const state = State(10);
-		const subscriber1 = jest.fn();
-		const subscriber2 = jest.fn();
+		const subscriber1 = vi.fn();
+		const subscriber2 = vi.fn();
 
 		state.sub("sub1", subscriber1);
 		state.sub("sub2", subscriber2);
@@ -114,9 +115,9 @@ describe("State", () => {
 
 	it("should manually trigger multiple specific subscribers with trigger method", () => {
 		const state = State(10);
-		const subscriber1 = jest.fn();
-		const subscriber2 = jest.fn();
-		const subscriber3 = jest.fn();
+		const subscriber1 = vi.fn();
+		const subscriber2 = vi.fn();
+		const subscriber3 = vi.fn();
 
 		state.sub("sub1", subscriber1);
 		state.sub("sub2", subscriber2);
@@ -130,7 +131,7 @@ describe("State", () => {
 
 	it("should clear all subscriptions with clear method", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber);
 		state.clear();
@@ -141,7 +142,7 @@ describe("State", () => {
 
 	it("should clear subscriptions and set new value with clear method", () => {
 		const state = State(10);
-		const subscriber = jest.fn();
+		const subscriber = vi.fn();
 
 		state.sub("test", subscriber);
 		state.clear(20);

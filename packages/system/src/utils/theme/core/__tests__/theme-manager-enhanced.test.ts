@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { TThemeDefinition, TThemeMode } from "../../types";
 import { themeDefineOptions, themeOptions } from "../configuration";
 import * as themeManagerModule from "../theme-manager";
@@ -28,15 +29,15 @@ class MockHTMLElement {
 	_customStyles: Record<string, string> = {};
 
 	classList = {
-		add: jest.fn().mockImplementation((className: string) => {
+		add: vi.fn().mockImplementation((className: string) => {
 			if (!this._classes.includes(className)) {
 				this._classes.push(className);
 			}
 		}),
-		remove: jest.fn().mockImplementation((...classNames: string[]) => {
+		remove: vi.fn().mockImplementation((...classNames: string[]) => {
 			this._classes = this._classes.filter((className) => !classNames.includes(className));
 		}),
-		contains: jest.fn().mockImplementation((className: string) => {
+		contains: vi.fn().mockImplementation((className: string) => {
 			return this._classes.includes(className);
 		}),
 		_classes: this._classes,
@@ -49,10 +50,10 @@ class MockHTMLElement {
 
 		// Mock style object
 		this.style = {
-			setProperty: jest.fn().mockImplementation((property: string, value: string) => {
+			setProperty: vi.fn().mockImplementation((property: string, value: string) => {
 				this._customStyles[property] = value;
 			}),
-			removeProperty: jest.fn().mockImplementation((property: string) => {
+			removeProperty: vi.fn().mockImplementation((property: string) => {
 				delete this._customStyles[property];
 			}),
 		} as any;
@@ -62,22 +63,22 @@ class MockHTMLElement {
 // Mock document and window objects
 const documentMock = {
 	documentElement: new MockHTMLElement(),
-	addEventListener: jest.fn(),
-	removeEventListener: jest.fn(),
-	dispatchEvent: jest.fn(),
+	addEventListener: vi.fn(),
+	removeEventListener: vi.fn(),
+	dispatchEvent: vi.fn(),
 };
 
 interface WindowMock {
-	matchMedia: jest.Mock;
+	matchMedia: ReturnType<typeof vi.fn>;
 	_prefersColorSchemeDark: boolean;
 }
 
 const windowMock: WindowMock = {
-	matchMedia: jest.fn().mockImplementation((query: string) => {
+	matchMedia: vi.fn().mockImplementation((query: string) => {
 		return {
 			matches: query === "(prefers-color-scheme: dark)" && windowMock._prefersColorSchemeDark,
-			addEventListener: jest.fn(),
-			removeEventListener: jest.fn(),
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
 		};
 	}),
 	_prefersColorSchemeDark: false,
@@ -90,10 +91,10 @@ Object.defineProperty(global, "window", { value: windowMock });
 
 // Reset mocks and state before each test
 beforeEach(() => {
-	jest.clearAllMocks();
+	vi.clearAllMocks();
 	localStorageMock.clear();
 	documentMock.documentElement = new MockHTMLElement();
-	documentMock.dispatchEvent = jest.fn();
+	documentMock.dispatchEvent = vi.fn();
 	windowMock._prefersColorSchemeDark = false;
 });
 
@@ -220,7 +221,7 @@ describe("Enhanced Theme Manager", () => {
 			setTheme("blue", "light");
 
 			// Clear the mock to check new calls
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 
 			// Switch to red theme
 			setTheme("red", "light");
@@ -369,7 +370,7 @@ describe("Enhanced Theme Manager", () => {
 			// Store an invalid theme
 			localStorage.setItem("jayjs-current-theme", "nonexistent-theme");
 
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			initTheme();
 
@@ -389,7 +390,7 @@ describe("Enhanced Theme Manager", () => {
 			// Store an invalid theme ID
 			localStorage.setItem("jayjs-current-theme", "invalid-theme-id");
 
-			const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			initTheme();
 
