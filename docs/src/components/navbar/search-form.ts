@@ -1,25 +1,11 @@
-import { Box, TextInput } from "../../../../packages/elements/src";
-// import { Kbd } from "../ui";
+import { Box, Input } from "../../../../packages/elements/src";
 
 export function SearchForm() {
 	return Box({
-		children: TextInput({
-			//bordered: true,
+		children: Input({
+			type: "search",
 			placeholder: "Search",
 			className: "w-64 pr-24",
-			// endAdornment: Box({
-			// 	children: [
-			// 		Kbd({
-			// 			size: "kbd-sm",
-			// 			children: "Ctrl",
-			// 		}),
-			// 		"+",
-			// 		Kbd({
-			// 			size: "kbd-sm",
-			// 			children: "K",
-			// 		}),
-			// 	],
-			// }),
 		}),
 	});
 }
