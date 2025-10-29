@@ -2,8 +2,8 @@
 
 import inquirer, { type QuestionCollection } from "inquirer";
 import { faceChalk } from "../../../utils/terminal";
-import { initPrepare } from "../modules/prepare/initPrepare";
-import { initStatic } from "../modules/static/initStatic";
+import { initPrepare } from "../modules/prepare/init-prepare";
+import { initStatic } from "../modules/static/init-static";
 import type { TBuildCommandOptions } from "../types";
 
 export async function buildAction(options: TBuildCommandOptions) {

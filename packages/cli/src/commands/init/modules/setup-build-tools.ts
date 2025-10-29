@@ -1,6 +1,6 @@
 import { toKebabCase } from "../../../utils/case.js";
-import { packageFile, packageVersion } from "../services/setupConfig.js";
-import { viteTypesFile } from "../templates/configFiles.js";
+import { packageFile, packageVersion } from "../services/setup-config.js";
+import { viteTypesFile } from "../templates/config-files.js";
 import type { IJayJSCLIInitOptions } from "../types/index.js";
 import { createFile } from "../utils/filesystem.js";
 

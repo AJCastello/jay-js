@@ -1,7 +1,7 @@
 import type { Command } from "commander";
 import inquirer, { type QuestionCollection } from "inquirer";
 import { faceChalk, log } from "../../../utils/terminal.js";
-import { init } from "../action/initAction.js";
+import { init } from "../action/init-action.js";
 
 export function registerInitCommand(program: Command) {
 	program

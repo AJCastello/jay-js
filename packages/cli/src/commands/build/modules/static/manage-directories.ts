@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "fs-extra";
-import { jayJsOptions } from "../../../../options/jayJsDefineOptions";
+import { jayJsOptions } from "../../../../options/jayjs-define-options";
 import { face, log } from "../../../../utils/terminal";
 
 export async function manageDirectories() {
