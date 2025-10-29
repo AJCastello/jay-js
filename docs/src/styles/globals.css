@@ -3,10 +3,10 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
-@source "../../node_modules/@jay-js/ui/**/*.styled";
+
 @theme {
 	--font-primary: "Noto Sans", "sans-serif";
-}	
+}
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
@@ -45,9 +45,9 @@
 @plugin "daisyui/theme" {
 	name: "dark";
   default: true;
-  prefersdark: false;
+  prefersdark: true;
   color-scheme: "dark";
-  
+
 	--color-base-100: oklch(30.857% 0.023 264.149);
   --color-base-200: oklch(28.036% 0.019 264.182);
   --color-base-300: oklch(26.346% 0.018 262.177);
@@ -94,11 +94,11 @@ div#app {
 
 .prose :where(h2) {
   @apply scroll-mt-28;
-}  
+}
 
 .prose :where(pre) {
   @apply bg-[#282c34];
-}  
+}
 
 
 .prose code {
