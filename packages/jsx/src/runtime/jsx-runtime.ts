@@ -20,24 +20,6 @@ export interface JSXProps {
 export type JSXComponent = (props: JSXProps) => HTMLElement | Promise<HTMLElement>;
 
 /**
- * JSX function for Jay JS used directly by transpiled code
- *
- * @param tag - String tag name or component function
- * @param props - Element properties and attributes
- * @param children - Child elements
- * @returns HTMLElement or Promise<HTMLElement>
- */
-function jayJSX(tag: any, props: JSXProps, ...children: any[]): HTMLElement | Promise<HTMLElement> {
-	if (typeof tag === "function") {
-		return tag({ ...props, children });
-	}
-	// Use type assertion to get around type checking issues
-	// This is safe because Base component expects tag to be a valid HTML tag
-	const element = Base({ tag, ...props, children });
-	return element;
-}
-
-/**
  * JSX transformation function for production use
  *
  * @param tag - String tag name or component function
@@ -54,4 +36,4 @@ function jsx(tag: any, props: JSXProps): HTMLElement | Promise<HTMLElement> {
 	return element;
 }
 
-export { jsx, jsx as jsxs, jayJSX, Fragment, JSX };
+export { jsx, jsx as jsxs, Fragment, JSX };

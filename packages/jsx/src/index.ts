@@ -9,8 +9,5 @@ export * from "./runtime/index.js";
 // Export JSX types
 export { JSX } from "./types/intrinsic-elements.js";
 
-// Export the Vite plugin
-export { default as jayJsxPlugin } from "./vite-plugin/index.js";
-
 // Ensure TypeScript recognizes this as a module
 export default {};
