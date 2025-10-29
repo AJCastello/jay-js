@@ -68,32 +68,6 @@ export function registerInitCommand(program: Command) {
 				// },
 				{
 					type: "confirm",
-					name: "uiPackage",
-					message: faceChalk`{bold Install the {green.italic @jay-js/ui} package?} {italic.gray (Recommended)}`,
-					default: true,
-				},
-				{
-					when: (answers) => answers.uiPackage,
-					type: "list",
-					name: "cssPlugin",
-					message: faceChalk`{bold Tailwind CSS component plugin:}`,
-					choices: [
-						new inquirer.Separator(
-							faceChalk`It integrate seamlessly with {italic @jay-js/ui} leveraging its class names for styling.`,
-						),
-						{ name: faceChalk`{blueBright daisyUI}`, value: "daisyui" },
-					],
-					loop: false,
-				},
-				// {
-				//   type: "confirm",
-				//   name: "useThemeProvider",
-				//   message: "Do you want to use the theme provider utility? (recommended)\n" +
-				//     new inquirer.Separator("useThemeProvider from @jay-js/ui utility to handle dark mode and other theme settings.\n"),
-				//   default: true,
-				// },
-				{
-					type: "confirm",
 					name: "useJSX",
 					message: "Would you like to use JSX?",
 					default: true,

@@ -21,12 +21,9 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
 		}
 		packageFile.scripts.build = buildCommand;
 		if (options.type === "static") {
-			packageFile.scripts.prebuild = "jayjs build --prepare";
-			if (options.uiPackage) {
-				packageFile.scripts.prebuild = "jayjs build --prepare && npm run build:css";
-				packageFile.scripts["build:css"] =
-					"tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";
-			}
+			packageFile.scripts.prebuild = "jayjs build --prepare && npm run build:css";
+			packageFile.scripts["build:css"] =
+				"tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";
 			packageFile.scripts.postbuild = "jayjs build --static";
 		}
 		packageFile.scripts.preview = "vite preview";

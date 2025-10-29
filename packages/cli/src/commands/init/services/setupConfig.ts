@@ -3,14 +3,13 @@ import type { IPackageFile, IPackageVersion, ITsConfigFile } from "../types/inde
 export const packageVersion: IPackageVersion = {
 	"@jay-js/static": "latest",
 	"@jay-js/system": "latest",
-	"@jay-js/ui": "latest",
+	"@jay-js/elements": "latest",
 	"@jay-js/jsx": "latest",
 	vite: "latest",
 	tailwindcss: "latest",
 	postcss: "latest",
 	autoprefixer: "latest",
 	typescript: "latest",
-	daisyui: "latest",
 	vitest: "latest",
 };
 
@@ -37,6 +36,7 @@ export const packageFile: IPackageFile = {
 	scripts: {},
 	dependencies: {
 		"@jay-js/system": packageVersion["@jay-js/system"],
+		"@jay-js/elements": packageVersion["@jay-js/elements"],
 	},
 	devDependencies: {},
 };
