@@ -9,8 +9,6 @@ export interface IJayJSCLIInitOptions {
 	defaultLanguage?: string;
 	useThemeProvider: boolean;
 	useJSX: boolean;
-	useTests: boolean;
-	testLibrary?: "vitest" | "none";
 	installDependencies: "npm" | "yarn" | "pnpm" | "none";
 }
 
@@ -21,10 +19,8 @@ export interface IPackageVersion {
 	"@jay-js/jsx": string;
 	vite: string;
 	tailwindcss: string;
-	postcss: string;
-	autoprefixer: string;
+	"@tailwindcss/vite": string;
 	typescript: string;
-	vitest: string;
 	// EXPERIMENTAL
 	// "babel/preset-react": string;
 	// webpack: string;
@@ -80,10 +76,8 @@ interface IDevDependencies {
 	"@jay-js/jsx": string;
 	vite: string;
 	tailwindcss: string;
-	postcss: string;
-	autoprefixer: string;
+	"@tailwindcss/vite": string;
 	typescript: string;
-	vitest: string;
 	"@babel/preset-react": string;
 }
 

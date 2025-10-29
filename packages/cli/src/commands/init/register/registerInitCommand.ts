@@ -70,24 +70,7 @@ export function registerInitCommand(program: Command) {
 					type: "confirm",
 					name: "useJSX",
 					message: "Would you like to use JSX?",
-					default: true,
-				},
-				{
-					type: "confirm",
-					name: "useTests",
-					message: faceChalk`{bold Would you like to set up tests?} {italic.gray (Recommended)}`,
-					default: true,
-				},
-				{
-					when: (answers) => answers.useTests,
-					type: "list",
-					name: "testLibrary",
-					message: faceChalk`{bold Test library}`,
-					choices: [
-						new inquirer.Separator("Choose a testing library to set up tests."),
-						{ name: faceChalk`{greenBright Vitest}`, value: "vitest" },
-					],
-					loop: false,
+					default: false,
 				},
 				{
 					type: "list",

@@ -1,31 +1,31 @@
 import type { IJayJSCLIInitOptions } from "../types";
 
-function configVitest() {
-	return `test: {
-    globals: true,
-    environment: "node",
-    include: ["src/**/*.spec.ts"],
-  },`;
-}
-
 function staticImports() {
 	return `import { jayJsViteStatic } from "@jay-js/static/vite-plugin";
 import path from "path";\n`;
 }
 
-function staticPlugin() {
-	return `plugins: [
+export function viteConfigFile(options: IJayJSCLIInitOptions): string {
+	const hasStaticType = options.type === "static";
+	const hasPlugins = hasStaticType;
+
+	return `import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+${hasStaticType ? staticImports() : ""}
+export default defineConfig({
+  ${
+		hasPlugins
+			? `plugins: [
+    tailwindcss(),${
+			hasStaticType
+				? `
     jayJsViteStatic({
       contentPath: path.resolve(__dirname, "./src/content")
-    })
-  ],`;
-}
-
-export function viteConfigFile(options: IJayJSCLIInitOptions): string {
-	return `import { defineConfig } from "vite";
-${options.type === "static" ? staticImports() : ""}
-export default defineConfig({
-  ${options.type === "static" ? staticPlugin() : ""}
-  ${options.useTests ? configVitest() : ""}
+    })`
+				: ""
+		}
+  ],`
+			: `plugins: [tailwindcss()],`
+	}
 });`;
 }

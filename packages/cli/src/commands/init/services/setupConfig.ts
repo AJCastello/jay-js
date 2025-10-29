@@ -7,10 +7,8 @@ export const packageVersion: IPackageVersion = {
 	"@jay-js/jsx": "latest",
 	vite: "latest",
 	tailwindcss: "latest",
-	postcss: "latest",
-	autoprefixer: "latest",
+	"@tailwindcss/vite": "latest",
 	typescript: "latest",
-	vitest: "latest",
 };
 
 export const tsConfigFile: ITsConfigFile = {
