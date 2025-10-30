@@ -5,6 +5,26 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [4.0.1] - 30/10/2025
+
+### Adicionado
+- **Sistema de Temas**: Implementação completa do theme management system com configuração e testes
+- **AutoReactiveState**: Sistema de reatividade automática para detecção e transformação de estado
+- **Utilitários de Renderização**: Novas funções utilitárias para renderização de elementos e merge de classes
+- **Documentação do Router**: Exemplos detalhados para sintaxe de path patterns (named, optional, wildcard parameters)
+- **Route Metadata**: Suporte a metadados de rota no sistema de roteamento
+- **Subscription Registry**: Gerenciamento aprimorado de subscrições no sistema de estado com lifecycle management
+
+### Melhorado
+- **Estado Simplificado**: Removidas funções PersistentState e CombineStates para streamline do gerenciamento de estado
+- **Helpers Legados**: Draggable e Theme movidos para helpers legados
+- Exportação de utilitários relacionados a tema no módulo utils
+- Configuração TypeScript atualizada (paths include/exclude)
+
+### Corrigido
+- **Module Loader**: Adicionado await na função loadModule para garantir comportamento assíncrono adequado
+- Scripts de build refinados e formatação de versão normalizada
+
 ## [4.0.0] - 18/09/2025
 
 ### ⚠️ BREAKING CHANGES

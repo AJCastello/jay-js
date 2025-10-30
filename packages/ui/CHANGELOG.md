@@ -5,6 +5,26 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [4.2.1] - 30/10/2025
+
+### Adicionado
+- **TextInput Component**: Implementado componente TextInput com suporte a adornments e definições de tipo específicas
+- **Lifecycle Management**: Sistema de gerenciamento de lifecycle para componentes com suporte a ondismount
+- **Utility Functions**: Novas funções utilitárias para renderização de elementos e merge de classes
+
+### Melhorado
+- **Integração @jay-js/elements**: Refatoração completa dos componentes UI para utilizar @jay-js/elements como base
+  - Rating, Dropdown, Footer, Indicator, Join, Kbd, Loading, Menu, Modal, Navbar e outros componentes atualizados
+  - Timeline, TabItem e múltiplos componentes com imports consolidados para maior clareza
+- **mergeClasses Utility**: Atualizado para aceitar spread arguments e simplificar uso em componentes
+- **Padrão de Design UI**: Refatoração do padrão de design através de múltiplos componentes (WIP)
+- **Base Component**: Limpeza de comentários e melhor gerenciamento de lifecycle de elementos
+
+### Corrigido
+- **Função cn**: Adicionada anotação de tipo de retorno para melhor type safety
+- **Exports de Componentes**: Atualizados para usar paths em lowercase para consistência
+- **Base Component**: Adicionado logging para execução de callback ondismount
+
 ## [4.2.0] - 27/10/2025
 
 ### Adicionado

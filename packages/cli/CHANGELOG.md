@@ -5,6 +5,21 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [3.1.0] - 30/10/2025
+
+### Adicionado
+- **Templates Tailwind**: Estilos padrão para html/body incluídos automaticamente no CSS do template init
+- **Build otimizado**: Script `build:css` do Tailwind CLI incluído em projetos static Vite
+
+### Melhorado
+- **Build simplificado**: Consolidados pre/post build steps em único comando Vite build para projetos static
+- Remoção de configuração `.npmrc` template desnecessária
+
+### Corrigido
+- Campo `packageManager` removido do package.json gerado (evita conflitos de gerenciador de pacotes)
+- Lógica de inicialização do packageManager removida para maior flexibilidade
+- Branch do GitHub atualizado de "main" para "development" no download de componentes
+
 ## [3.0.1] - 30/10/2025
 
 ### Corrigido

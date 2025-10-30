@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [1.3.1] - 30/10/2025
+
+### Melhorado
+- Atualização de versão para manter consistência com outros pacotes do monorepo
+- Sincronização de dependências internas com versões mais recentes
+
 ## [1.3.0] - 18/09/2025
 
 ### Adicionado
