@@ -1,35 +1,30 @@
 import { getParams } from "@jay-js/system";
+import { useContent } from "../utils/use-content";
 
 export async function Article(slug) {
   if (!slug) {
-    slug = getParams().slug;
+    slug = getParams().slug || "";
   }
 
-  const articleData = await Article.useContent.get("blog", slug);
+  const articleData = await Article.content.get(slug);
 
   return (
-    <article className="container mx-auto">
+    <article className="container mx-auto border border-zinc-700 rounded p-6">
       <div className="flex flex-col">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-2xl font-semibold">
           {articleData.title}
         </h1>
         <p className="mt-5 text-sm">
           {articleData.description}
         </p>
-        <div className="mt-5" innerHTML={articleData.content} />
+        <div className="mt-5 pt-5 border-t border-zinc-700" innerHTML={articleData.content} />
       </div>
     </article>
   )
 }
 
-Article.useContent = {
-  contentPath: "../content",
-  fileExt: "md",
-  dir: "blog",
-  param: "slug",
-  get: async function (dir, slug) {
-    const filePath = `${this.contentPath}/${dir}/${slug}.${this.fileExt}`;
-    const data = await import(filePath/* @vite-ignore */);
-    return data.default;
-  }
-};
+Article.content = useContent({
+	fileExt: "md",
+	dir: "blog",
+	param: "slug",
+});
