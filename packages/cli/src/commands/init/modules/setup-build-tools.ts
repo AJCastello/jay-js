@@ -14,12 +14,16 @@ export async function setupBuildTools(options: IJayJSCLIInitOptions) {
 		let buildCommand = "vite build";
 		if (options.javascriptVariant === "ts") {
 			if (options.type === "static") {
-				buildCommand = "jayjs build --prepare && tsc && jayjs build --static";
+				packageFile.devDependencies["@tailwindcss/cli"] = packageVersion["@tailwindcss/cli"];
+				packageFile.scripts["build:css"] = "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";
+				buildCommand = "jayjs build --prepare && npm run build:css && tsc && jayjs build --static";
 			} else {
 				buildCommand = "tsc && vite build";
 			}
 		} else if (options.type === "static") {
-			buildCommand = "jayjs build --prepare && vite build && jayjs build --static";
+			packageFile.devDependencies["@tailwindcss/cli"] = packageVersion["@tailwindcss/cli"];
+			packageFile.scripts["build:css"] = "tailwindcss -i ./src/styles/globals.css -o ./dist/transformed/styles/globals.css";
+			buildCommand = "jayjs build --prepare && npm run build:css && vite build && jayjs build --static";
 		}
 		packageFile.scripts.build = buildCommand;
 		packageFile.scripts.preview = "vite preview";

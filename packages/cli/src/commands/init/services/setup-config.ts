@@ -8,6 +8,7 @@ export const packageVersion: IPackageVersion = {
 	vite: "^7.1.0",
 	tailwindcss: "^4.1.0",
 	"@tailwindcss/vite": "^4.1.0",
+	"@tailwindcss/cli": "^4.1.16",
 	typescript: "~5.9.0",
 };
 
