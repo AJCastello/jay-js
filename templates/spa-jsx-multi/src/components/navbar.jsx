@@ -9,10 +9,10 @@ export function NavBar() {
 
   return (
     <nav className="mb-4 flex gap-2">
-      <a href="/" onclick={(ev) => handleNavigate(ev, "/")}>
+      <a href="/" className="underline" onclick={(ev) => handleNavigate(ev, "/")}>
         {i18n("Home")}
       </a>
-      <a href="/about" onclick={(ev) => handleNavigate(ev, "/about")}>
+      <a href="/about" className="underline" onclick={(ev) => handleNavigate(ev, "/about")}>
         {i18n("About")}
       </a>
     </nav>
