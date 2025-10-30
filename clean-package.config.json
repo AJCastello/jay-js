@@ -5,6 +5,7 @@
   },
   "remove": [
     "files",
+		"exports",
     "scripts",
     "publishConfig",
     "clean-package",
