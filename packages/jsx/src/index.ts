@@ -3,8 +3,11 @@
  * @description Provides JSX runtime functions and TypeScript declarations for Jay JS
  */
 
-// Re-export all JSX runtime components
-export * from "./runtime/index.js";
+// Export development JSX runtime
+export { jsxDEV } from "./jsx-dev-runtime.js";
+
+// Export production JSX runtime
+export * from "./jsx-runtime.js";
 
 // Export JSX types
 export { JSX } from "./types/intrinsic-elements.js";
