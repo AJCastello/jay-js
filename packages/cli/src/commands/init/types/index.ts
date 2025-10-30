@@ -20,6 +20,7 @@ export interface IPackageVersion {
 	vite: string;
 	tailwindcss: string;
 	"@tailwindcss/vite": string;
+	"@tailwindcss/cli": string;
 	typescript: string;
 	// EXPERIMENTAL
 	// "babel/preset-react": string;
@@ -77,6 +78,7 @@ interface IDevDependencies {
 	vite: string;
 	tailwindcss: string;
 	"@tailwindcss/vite": string;
+	"@tailwindcss/cli": string;
 	typescript: string;
 	"@babel/preset-react": string;
 }
@@ -99,5 +101,4 @@ export interface IPackageFile {
 	babel?: {
 		presets: Array<string>;
 	};
-	packageManager?: string;
 }

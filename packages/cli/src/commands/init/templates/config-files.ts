@@ -6,10 +6,6 @@ export function viteTypesFile(): string {
 	return `/// <reference types="vite/client" />`;
 }
 
-export function npmrFile(): string {
-	return "enable-pre-post-scripts=true";
-}
-
 export function logoSVGFile(): string {
 	return `<svg width="350" height="350" viewBox="0 0 350 350" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="175" cy="175" r="175" fill="url(#paint0_linear_110_16)"/>
