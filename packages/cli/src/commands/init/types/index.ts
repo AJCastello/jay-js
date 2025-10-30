@@ -99,5 +99,4 @@ export interface IPackageFile {
 	babel?: {
 		presets: Array<string>;
 	};
-	packageManager?: string;
 }
