@@ -5,6 +5,22 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [2.0.0] - 30/10/2025
+
+### ⚠️ Breaking Changes
+- **Vite Plugin removido**: `jayJsxPlugin()` não está mais disponível
+- **jsxImportSource alterado**: Use `"@jay-js/jsx"` no tsconfig.json (antes era `"@jay-js/jsx/runtime"`)
+- **Função `jayJSX` removida**: Use transform automático JSX
+- **Tipos JSX exportados**: Namespace JSX agora é exportado em vez de global
+
+### Refatorado
+- Estrutura de arquivos runtime simplificada (movidos de `src/runtime/` para `src/`)
+- Exports do package.json explicitamente definidos
+- Tipos JSX centralizados em `src/types/intrinsic-elements.ts`
+
+### Corrigido
+- Event listeners em testes (onclick lowercase)
+
 ## [1.3.0] - 27/10/2025
 
 ### Melhorado
