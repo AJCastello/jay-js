@@ -1,8 +1,8 @@
 import { toKebabCase } from "../../../utils/case.js";
-import { packageFile } from "../services/setupConfig.js";
-import { gitIgnoreFile, logoSVGFile, npmrFile } from "../templates/configFiles.js";
-import { indexFile } from "../templates/indexFile.js";
-import { viteConfigFile } from "../templates/viteConfigFile.js";
+import { packageFile } from "../services/setup-config.js";
+import { gitIgnoreFile, logoSVGFile, npmrFile } from "../templates/config-files.js";
+import { indexFile } from "../templates/index-file.js";
+import { viteConfigFile } from "../templates/vite-config-file.js";
 import type { IJayJSCLIInitOptions } from "../types/index.js";
 import { createDirectory, createFile } from "../utils/filesystem.js";
 

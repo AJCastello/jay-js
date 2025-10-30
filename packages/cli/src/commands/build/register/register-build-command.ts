@@ -1,5 +1,5 @@
 import type { Command } from "commander";
-import { buildAction } from "../action/buildAction";
+import { buildAction } from "../action/build-action";
 
 export function registerBuildCommand(program: Command) {
 	program

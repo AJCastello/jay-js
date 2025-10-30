@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 // modules
-import { transformMarkdownFile } from "./transformMarkdownFile";
+import { transformMarkdownFile } from "./transform-markdown-file";
 
 async function removeMarkdownFile(filePath: string) {
 	await fs.unlink(filePath);

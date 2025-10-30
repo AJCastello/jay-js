@@ -10,14 +10,14 @@ import { JSDOM } from "jsdom";
 // register loader
 import "./register-loader.js";
 
-import { jayJsOptions } from "../../../../options/jayJsDefineOptions.js";
+import { jayJsOptions } from "../../../../options/jayjs-define-options.js";
 // Local type definitions
 import type { Route } from "../../../../types/index.js";
 import { Face, log } from "../../../../utils/terminal.js";
-import { findScriptAndSrc } from "../../utils/findScriptAndSrc.js";
-import { finalizeOutDirectory } from "./finalizeOutDirectory.js";
+import { findScriptAndSrc } from "../../utils/find-script-and-src.js";
+import { finalizeOutDirectory } from "./finalize-out-directory.js";
 // output
-import { manageDirectories } from "./manageDirectories.js";
+import { manageDirectories } from "./manage-directories.js";
 
 const face = new Face();
 

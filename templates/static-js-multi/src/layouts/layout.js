@@ -1,6 +1,4 @@
 import { Section, Outlet, Typography, Img } from "@jay-js/elements";
-
-// image
 import jayjs from "/jayjs.svg";
 import { NavBar } from "../components/navbar";
 import { i18n } from "../locales/i18n";
@@ -13,7 +11,7 @@ export function Layout() {
       Img({
         src: jayjs,
         alt: "Jay JS Logo",
-        className: "w-32 h-32 mb-4"
+        className: "w-32 h-32 mb-4 shadow-2xl shadow-emerald-400/20 hover:shadow-emerald-400/70 rounded-full transition-shadow ease-in-out duration-500"
       }),
       Typography({
         tag: "h1",
