@@ -14,16 +14,19 @@ export function NavBar() {
       Link({
         href: "/",
         children: "Home",
+				className: "underline",
         onclick: (ev) => handleNavigate(ev, "/")
       }),
       Link({
         href: "/about",
         children: "About",
+				className: "underline",
         onclick: (ev) => handleNavigate(ev, "/about")
       }),
       Link({
         href: "/blog",
         children: "Blog",
+				className: "underline",
         onclick: (ev) => handleNavigate(ev, "/blog")
       })
     ]
