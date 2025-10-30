@@ -41,7 +41,7 @@ Configure your `tsconfig.json` to use the Jay JS JSX runtime with automatic tran
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@jay-js/jsx/runtime"
+    "jsxImportSource": "@jay-js/jsx"
   }
 }
 ```

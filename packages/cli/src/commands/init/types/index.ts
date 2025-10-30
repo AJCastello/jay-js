@@ -54,7 +54,7 @@ export interface ITsConfigFile {
 		noUnusedParameters: boolean;
 		noFallthroughCasesInSwitch: boolean;
 		jsx: "react-jsx";
-		jsxImportSource: "@jay-js/jsx/runtime";
+		jsxImportSource: "@jay-js/jsx";
 		outDir: string;
 		allowJs: boolean;
 	}>;
