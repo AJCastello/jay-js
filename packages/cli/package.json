@@ -1,6 +1,6 @@
 {
   "name": "@jay-js/cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A CLI for Jay JS",
   "bin": {
     "jayjs": "./bin/jayjs.js"
