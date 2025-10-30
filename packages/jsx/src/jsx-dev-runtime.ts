@@ -4,7 +4,6 @@
  */
 
 import { Base, Fragment } from "@jay-js/elements";
-import type {} from "../types/jsx-intrinsic-elements";
 
 /**
  * Type definition for JSX props
@@ -55,3 +54,4 @@ function jayJSXDEV(
 }
 
 export { jayJSXDEV as jsxDEV, Fragment };
+export type { JSX } from "./types/intrinsic-elements.js";

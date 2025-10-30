@@ -7,7 +7,7 @@ import path from "node:path";
 import { face } from "../../../../utils/terminal";
 
 // modules
-import { parseMarkdown } from "./parseMarkdown";
+import { parseMarkdown } from "./parse-markdown";
 
 export async function transformMarkdownFile(filePath: string) {
 	const markdownContent = await fs.readFile(filePath, "utf8");

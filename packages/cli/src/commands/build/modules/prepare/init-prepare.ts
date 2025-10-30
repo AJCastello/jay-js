@@ -4,11 +4,11 @@ import path from "node:path";
 import fs from "fs-extra";
 
 // options
-import { jayJsOptions } from "../../../../options/jayJsDefineOptions.js";
+import { jayJsOptions } from "../../../../options/jayjs-define-options.js";
 
 // terminal
 import { face, log } from "../../../../utils/terminal.js";
-import { searchAndTransformMarkdownFiles } from "./searchAndTransformMarkdownFiles.js";
+import { searchAndTransformMarkdownFiles } from "./search-and-transform-markdown-files.js";
 
 export async function initPrepare() {
 	const cwd = process.cwd();

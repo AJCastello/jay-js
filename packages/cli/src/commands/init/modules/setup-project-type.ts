@@ -1,4 +1,4 @@
-import { packageFile, packageVersion } from "../services/setupConfig.js";
+import { packageFile, packageVersion } from "../services/setup-config.js";
 import type { IJayJSCLIInitOptions } from "../types/index.js";
 
 export async function setupProjectType(options: IJayJSCLIInitOptions) {

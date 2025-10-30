@@ -7,27 +7,20 @@ export interface IJayJSCLIInitOptions {
 	type: "static" | "spa";
 	language: "single" | "multi";
 	defaultLanguage?: string;
-	uiPackage: boolean;
-	cssPlugin?: "daisyui" | "none";
 	useThemeProvider: boolean;
 	useJSX: boolean;
-	useTests: boolean;
-	testLibrary?: "vitest" | "none";
 	installDependencies: "npm" | "yarn" | "pnpm" | "none";
 }
 
 export interface IPackageVersion {
 	"@jay-js/static": string;
 	"@jay-js/system": string;
-	"@jay-js/ui": string;
+	"@jay-js/elements": string;
 	"@jay-js/jsx": string;
 	vite: string;
 	tailwindcss: string;
-	postcss: string;
-	autoprefixer: string;
+	"@tailwindcss/vite": string;
 	typescript: string;
-	daisyui: string;
-	vitest: string;
 	// EXPERIMENTAL
 	// "babel/preset-react": string;
 	// webpack: string;
@@ -61,7 +54,7 @@ export interface ITsConfigFile {
 		noUnusedParameters: boolean;
 		noFallthroughCasesInSwitch: boolean;
 		jsx: "react-jsx";
-		jsxImportSource: "@jay-js/jsx/runtime";
+		jsxImportSource: "@jay-js/jsx";
 		outDir: string;
 		allowJs: boolean;
 	}>;
@@ -80,21 +73,17 @@ interface IDevScripts {
 
 interface IDevDependencies {
 	"@jay-js/static": string;
-	"@jay-js/ui": string;
 	"@jay-js/jsx": string;
 	vite: string;
 	tailwindcss: string;
-	postcss: string;
-	autoprefixer: string;
+	"@tailwindcss/vite": string;
 	typescript: string;
-	daisyui: string;
-	vitest: string;
 	"@babel/preset-react": string;
 }
 
 interface IDependencies {
 	"@jay-js/system": string;
-	"@jay-js/ui": string;
+	"@jay-js/elements": string;
 	"@jay-js/jsx": string;
 	"@jay-js/static": string;
 }

@@ -1,5 +1,5 @@
 import { toKebabCase } from "../../../utils/case.js";
-import { downloadTemplateFiles } from "../services/downloadTemplateFiles.js";
+import { downloadTemplateFiles } from "../services/download-template-files.js";
 import type { IJayJSCLIInitOptions } from "../types/index.js";
 import { createDirectory } from "../utils/filesystem.js";
 

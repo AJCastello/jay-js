@@ -1,5 +1,5 @@
 import { toKebabCase } from "../../../utils/case.js";
-import { packageFile, packageVersion, tsConfigFile } from "../services/setupConfig.js";
+import { packageFile, packageVersion, tsConfigFile } from "../services/setup-config.js";
 import type { IJayJSCLIInitOptions } from "../types/index.js";
 import { createFile } from "../utils/filesystem.js";
 

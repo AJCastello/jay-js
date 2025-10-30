@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [3.0.1] - 30/10/2025
+
+### Corrigido
+- jsxImportSource gerado pelo comando `init` (de `"@jay-js/jsx/runtime"` para `"@jay-js/jsx"`)
+- Versões dos pacotes fixadas nos templates (substituído "latest" por versões semânticas)
+
 ## [3.0.0] - 27/10/2025
 
 ### ⚠️ BREAKING CHANGES
