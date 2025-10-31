@@ -19,6 +19,7 @@ export const tsConfigFile: ITsConfigFile = {
 		moduleResolution: "node",
 		strict: true,
 		esModuleInterop: true,
+		skipLibCheck: true,
 		sourceMap: true,
 		lib: ["DOM", "ESNext"],
 		outDir: "dist",
