@@ -328,7 +328,7 @@ if (window.__JAYJS_INSPECTOR__) {
 		`.trim();
 	}
 
-	private log(message: string, data?: any) {
+	private log(_message: string, _data?: any) {
 		if (process.env.NODE_ENV === "development") {
 			// console.debug(`[JayJS Inspector Debug] ${message}`, data || '');
 		}
