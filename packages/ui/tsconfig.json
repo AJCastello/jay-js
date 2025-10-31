@@ -13,7 +13,6 @@
     "strict": true,
     "noImplicitAny": true,
     "types": [
-      "jest",
       "node"
     ],
     "esModuleInterop": true,
