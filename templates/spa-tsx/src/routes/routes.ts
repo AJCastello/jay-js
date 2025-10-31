@@ -1,8 +1,8 @@
-import { Navigate, Router } from "@jay-js/system";
+import { Router } from "@jay-js/system";
 import { Layout } from "../layouts/layout";
 import { Home } from "../pages/home";
 
-export function Routes(app: HTMLDivElement) {
+export function Routes() {
   Router([
     {
       path: "/",
@@ -23,11 +23,6 @@ export function Routes(app: HTMLDivElement) {
       ]
     }
   ], {
-    target: app,
-    onError: (error) => {
-      if (error.cause === "no-match") {
-        Navigate("/");
-      }
-    }
+    target: "#app"
   });
 }

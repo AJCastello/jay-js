@@ -5,6 +5,11 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [3.1.1] - 31/10/2025
+
+### Removido
+- Templates não utilizados (post-css-file.ts e tailwind-config-file.ts) após migração para Tailwind v4
+
 ## [3.1.0] - 30/10/2025
 
 ### Adicionado
