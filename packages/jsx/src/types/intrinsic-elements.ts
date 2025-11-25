@@ -1,6 +1,8 @@
 import type { TBase } from "@jay-js/elements";
 
 export declare namespace JSX {
+	type Element = HTMLElement | Promise<HTMLElement>;
+
 	interface IntrinsicElements {
 		a: TBase<"a">;
 		abbr: TBase<"abbr">;
