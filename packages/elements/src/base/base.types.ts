@@ -53,12 +53,11 @@ export type TBaseTagMap = keyof TBaseTagNameMap;
 
 export type TStyle = Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
 
-export type TChildren =
-	| (string | Node | boolean | null | undefined)
-	| (string | Node | boolean | null | undefined)[]
-	| Promise<string | Node | boolean | null | undefined>
-	| Promise<string | Node | boolean | null | undefined>[]
-	| (string | Node | Promise<string | Node> | boolean | null | undefined)[];
+type TChildValue = string | Node | boolean | null | undefined;
+type TChildPromise = Promise<TChildValue>;
+type TChildFunction = () => TChildValue | TChildPromise;
+
+export type TChildren = TChildValue | TChildPromise | TChildFunction | (TChildValue | TChildPromise | TChildFunction)[];
 
 export type TLifecycleElement = {
 	onmount?: (element: HTMLElement) => void;

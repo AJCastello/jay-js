@@ -79,7 +79,10 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (children) {
-		if (children instanceof Promise) {
+		if (typeof children === "function") {
+			const result = children();
+			appendChildToBase(base, result);
+		} else if (children instanceof Promise) {
 			const elementSlot = document.createElement("jayjs-lazy-slot");
 			base.appendChild(elementSlot);
 			children
@@ -129,8 +132,20 @@ export function Base<T extends TBaseTagMap = "div">(
 
 function appendChildToBase(
 	base: HTMLElement,
-	child: string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>,
+	child:
+		| string
+		| Node
+		| boolean
+		| null
+		| undefined
+		| Promise<string | Node | boolean | null | undefined>
+		| (() => string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>),
 ): void {
+	if (typeof child === "function") {
+		const result = child();
+		appendChildToBase(base, result);
+		return;
+	}
 	if (child instanceof Promise) {
 		const elementSlot = document.createElement("jayjs-lazy-slot");
 		base.appendChild(elementSlot);
