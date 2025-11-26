@@ -66,15 +66,25 @@ export type TLifecycleElement = {
 
 export type TBaseElement<T extends TBaseTagMap> = {
 	tag?: T;
-	className?: string;
+	className?: string | (() => string);
 	listeners?: Listener;
 	ref?: TRefObject<HTMLElement>;
-	dataset?: Partial<DOMStringMap>;
-	style?: TStyle;
+	dataset?:
+		| Partial<DOMStringMap>
+		| (() => Partial<DOMStringMap>)
+		| {
+				[key: string]: string | (() => string);
+		  };
+	style?:
+		| TStyle
+		| (() => TStyle)
+		| {
+				[K in keyof TStyle]?: TStyle[K] | (() => TStyle[K]);
+		  };
 	children?: TChildren;
 	onmount?: (element: HTMLElement) => void;
 	onunmount?: (element: HTMLElement) => void;
-} & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style" | "size">;
+} & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style" | "size" | "className" | "dataset">;
 
 export type TBaseDiv = TBaseElement<TBaseTagMap> & {
 	tag: TBaseTagMap;

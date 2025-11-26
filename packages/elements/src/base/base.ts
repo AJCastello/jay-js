@@ -1,3 +1,4 @@
+import { Values } from "@jay-js/system";
 import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
@@ -5,6 +6,17 @@ type ReactiveEffect = (target: any, prop: string) => void;
 
 function isReactiveValue(value: any): boolean {
 	return typeof value === "function" && (value as ReactiveEffect).name.includes("_set_value_effect");
+}
+
+function autoWrapReactive<T>(value: T | (() => T)): T | ReactiveEffect {
+	if (typeof value === "function") {
+		const fnName = (value as any).name;
+		if (fnName?.includes("_set_value_effect")) {
+			return value as unknown as ReactiveEffect;
+		}
+		return Values(value as () => T) as unknown as ReactiveEffect;
+	}
+	return value;
 }
 
 export function Base<T extends TBaseTagMap = "div">(
@@ -37,10 +49,11 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (className) {
-		if (isReactiveValue(className)) {
-			(className as unknown as ReactiveEffect)(base, "className");
+		const wrappedClassName = autoWrapReactive(className);
+		if (isReactiveValue(wrappedClassName)) {
+			(wrappedClassName as unknown as ReactiveEffect)(base, "className");
 		} else {
-			base.className = className;
+			base.className = wrappedClassName as string;
 		}
 	}
 
@@ -55,10 +68,11 @@ export function Base<T extends TBaseTagMap = "div">(
 		} else {
 			Object.entries(style).forEach(([key, value]: [string, any]) => {
 				if (key === "parentRule" || key === "length") return;
-				if (isReactiveValue(value)) {
-					(value as unknown as ReactiveEffect)(base.style, key);
+				const wrappedValue = autoWrapReactive(value);
+				if (isReactiveValue(wrappedValue)) {
+					(wrappedValue as unknown as ReactiveEffect)(base.style, key);
 				} else {
-					base.style[key as keyof TStyle] = value;
+					base.style[key as keyof TStyle] = wrappedValue;
 				}
 			});
 		}
@@ -69,10 +83,11 @@ export function Base<T extends TBaseTagMap = "div">(
 			(dataset as unknown as ReactiveEffect)(base, "dataset");
 		} else {
 			Object.entries(dataset).forEach(([key, value]) => {
-				if (isReactiveValue(value)) {
-					(value as unknown as ReactiveEffect)(base.dataset, key);
+				const wrappedValue = autoWrapReactive(value);
+				if (isReactiveValue(wrappedValue)) {
+					(wrappedValue as unknown as ReactiveEffect)(base.dataset, key);
 				} else {
-					base.dataset[key] = value as string;
+					base.dataset[key] = wrappedValue as string;
 				}
 			});
 		}

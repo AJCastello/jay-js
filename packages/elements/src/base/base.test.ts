@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 import { Base } from "./base";
+import { State, Values } from "@jay-js/system";
 
 describe("Base Function", () => {
 	beforeEach(() => {
@@ -313,6 +314,317 @@ describe("Base Function", () => {
 
 			expect(element.style.color).toBe("red");
 			// parentRule and length should be skipped
+		});
+	});
+
+	describe("Automatic Values() Wrapping - className", () => {
+		it("should auto-wrap function in className", () => {
+			const state = State("initial");
+			const element = Base({
+				className: () => state.value,
+			});
+
+			expect(element.className).toBe("initial");
+
+			state.set("updated");
+			expect(element.className).toBe("updated");
+		});
+
+		it("should work with manually wrapped Values()", () => {
+			const state = State("initial");
+			const element = Base({
+				className: Values(() => state.value),
+			});
+
+			expect(element.className).toBe("initial");
+
+			state.set("updated");
+			expect(element.className).toBe("updated");
+		});
+
+		it("should not wrap static strings", () => {
+			const element = Base({ className: "static-class" });
+			expect(element.className).toBe("static-class");
+		});
+
+		it("should handle multiple state dependencies in className", () => {
+			const firstName = State("John");
+			const lastName = State("Doe");
+			const element = Base({
+				className: () => `${firstName.value}-${lastName.value}`,
+			});
+
+			expect(element.className).toBe("John-Doe");
+
+			firstName.set("Jane");
+			expect(element.className).toBe("Jane-Doe");
+
+			lastName.set("Smith");
+			expect(element.className).toBe("Jane-Smith");
+		});
+	});
+
+
+	describe("Automatic Values() Wrapping - style (nested)", () => {
+		it("should auto-wrap functions in individual style properties", () => {
+			const colorState = State("red");
+			const element = Base({
+				style: {
+					color: () => colorState.value,
+					fontSize: "16px",
+				},
+			});
+
+			expect(element.style.color).toBe("red");
+			expect(element.style.fontSize).toBe("16px");
+
+			colorState.set("blue");
+			expect(element.style.color).toBe("blue");
+		});
+
+		it("should handle mixed static and reactive properties", () => {
+			const dynamicState = State("red");
+			const element = Base({
+				style: {
+					color: () => dynamicState.value,
+					backgroundColor: "white",
+					fontSize: "16px",
+				},
+			});
+
+			expect(element.style.color).toBe("red");
+			expect(element.style.backgroundColor).toBe("white");
+
+			dynamicState.set("green");
+			expect(element.style.color).toBe("green");
+			expect(element.style.backgroundColor).toBe("white");
+		});
+
+		it("should work with manually wrapped Values() in nested style", () => {
+			const colorState = State("purple");
+			const element = Base({
+				style: {
+					color: Values(() => colorState.value),
+					fontSize: "18px",
+				},
+			});
+
+			expect(element.style.color).toBe("purple");
+
+			colorState.set("orange");
+			expect(element.style.color).toBe("orange");
+		});
+
+		it("should handle multiple reactive style properties", () => {
+			const colorState = State("red");
+			const sizeState = State("16px");
+			const element = Base({
+				style: {
+					color: () => colorState.value,
+					fontSize: () => sizeState.value,
+					backgroundColor: "white",
+				},
+			});
+
+			expect(element.style.color).toBe("red");
+			expect(element.style.fontSize).toBe("16px");
+
+			colorState.set("blue");
+			expect(element.style.color).toBe("blue");
+
+			sizeState.set("20px");
+			expect(element.style.fontSize).toBe("20px");
+		});
+	});
+
+	describe("Automatic Values() Wrapping - dataset", () => {
+		it("should auto-wrap functions in individual dataset properties", () => {
+			const idState = State("123");
+			const element = Base({
+				dataset: {
+					userId: () => idState.value,
+					role: "admin",
+				},
+			});
+
+			expect(element.dataset.userId).toBe("123");
+			expect(element.dataset.role).toBe("admin");
+
+			idState.set("456");
+			expect(element.dataset.userId).toBe("456");
+		});
+
+		it("should work with manually wrapped Values() in dataset", () => {
+			const idState = State("789");
+			const element = Base({
+				dataset: {
+					userId: Values(() => idState.value),
+					role: "moderator",
+				},
+			});
+
+			expect(element.dataset.userId).toBe("789");
+			expect(element.dataset.role).toBe("moderator");
+
+			idState.set("101112");
+			expect(element.dataset.userId).toBe("101112");
+		});
+
+		it("should handle multiple reactive dataset properties", () => {
+			const userIdState = State("100");
+			const roleState = State("admin");
+			const element = Base({
+				dataset: {
+					userId: () => userIdState.value,
+					role: () => roleState.value,
+					status: "active",
+				},
+			});
+
+			expect(element.dataset.userId).toBe("100");
+			expect(element.dataset.role).toBe("admin");
+			expect(element.dataset.status).toBe("active");
+
+			userIdState.set("200");
+			expect(element.dataset.userId).toBe("200");
+
+			roleState.set("user");
+			expect(element.dataset.role).toBe("user");
+		});
+	});
+
+	describe("Backward Compatibility", () => {
+		it("should work with existing Values() wrapped className", () => {
+			const state = State("test");
+			const element = Base({
+				className: Values(() => state.value),
+			});
+
+			expect(element.className).toBe("test");
+
+			state.set("updated");
+			expect(element.className).toBe("updated");
+		});
+
+		it("should work with existing Values() wrapped in style", () => {
+			const colorState = State("red");
+			const element = Base({
+				style: {
+					color: Values(() => colorState.value),
+				},
+			});
+
+			expect(element.style.color).toBe("red");
+
+			colorState.set("blue");
+			expect(element.style.color).toBe("blue");
+		});
+
+		it("should work with existing Values() wrapped in dataset", () => {
+			const state = State("test");
+			const element = Base({
+				dataset: {
+					value: Values(() => state.value),
+				},
+			});
+
+			expect(element.dataset.value).toBe("test");
+
+			state.set("updated");
+			expect(element.dataset.value).toBe("updated");
+		});
+
+		it("should not break static values", () => {
+			const element = Base({
+				className: "static",
+				style: { color: "red" },
+				dataset: { id: "123" },
+			});
+
+			expect(element.className).toBe("static");
+			expect(element.style.color).toBe("red");
+			expect(element.dataset.id).toBe("123");
+		});
+	});
+
+	describe("Edge Cases - Auto Wrapping", () => {
+		it("should handle undefined/null values", () => {
+			const element = Base({
+				className: undefined,
+				style: undefined,
+				dataset: undefined,
+			});
+
+			expect(element.className).toBe("");
+		});
+
+		it("should handle nested undefined in style", () => {
+			const state = State<string | undefined>(undefined);
+			const element = Base({
+				style: {
+					color: () => state.value || "red",
+				},
+			});
+
+			expect(element.style.color).toBe("red");
+
+			state.set("blue");
+			expect(element.style.color).toBe("blue");
+		});
+
+		it("should not interfere with event listeners", () => {
+			const handler = vi.fn();
+			const state = State("click-handler");
+
+			const element = Base({
+				className: () => state.value,
+				listeners: { click: handler },
+			});
+
+			element.click();
+			expect(handler).toHaveBeenCalledTimes(1);
+		});
+
+		it("should not interfere with lifecycle hooks", () => {
+			const onmountSpy = vi.fn();
+			const state = State("test");
+
+			const element = Base({
+				className: () => state.value,
+				onmount: onmountSpy,
+			});
+
+			expect(typeof (element as any).onmount).toBe("function");
+		});
+
+		it("should handle conditional reactive values", () => {
+			const isActive = State(true);
+			const element = Base({
+				className: () => (isActive.value ? "active" : "inactive"),
+			});
+
+			expect(element.className).toBe("active");
+
+			isActive.set(false);
+			expect(element.className).toBe("inactive");
+		});
+
+		it("should handle computed values from multiple states", () => {
+			const count = State(5);
+			const multiplier = State(2);
+			const element = Base({
+				dataset: {
+					result: () => (count.value * multiplier.value).toString(),
+				},
+			});
+
+			expect(element.dataset.result).toBe("10");
+
+			count.set(10);
+			expect(element.dataset.result).toBe("20");
+
+			multiplier.set(3);
+			expect(element.dataset.result).toBe("30");
 		});
 	});
 });
