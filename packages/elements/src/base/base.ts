@@ -19,6 +19,19 @@ function autoWrapReactive<T>(value: T | (() => T)): T | ReactiveEffect {
 	return value;
 }
 
+function isEventHandler(propName: string, value: any): boolean {
+	if (typeof value !== "function") {
+		return false;
+	}
+
+	if (propName.startsWith("on") && propName.length > 2) {
+		const thirdChar = propName[2];
+		return thirdChar === thirdChar.toLowerCase() && thirdChar !== thirdChar.toUpperCase();
+	}
+
+	return false;
+}
+
 export function Base<T extends TBaseTagMap = "div">(
 	{ id, tag, ref, style, children, dataset, className, listeners, onmount, onunmount, ...props }: TBase<T> = {
 		tag: "div",
@@ -45,7 +58,12 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (id) {
-		base.id = id;
+		const wrappedId = autoWrapReactive(id);
+		if (isReactiveValue(wrappedId)) {
+			(wrappedId as unknown as ReactiveEffect)(base, "id");
+		} else {
+			base.id = wrappedId as string;
+		}
 	}
 
 	if (className) {
@@ -128,16 +146,29 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	props &&
 		Object.entries(props).forEach(([key, value]) => {
-			if (isReactiveValue(value)) {
-				(value as unknown as ReactiveEffect)(base, key);
-			} else {
+			if (isEventHandler(key, value)) {
 				try {
 					(base as any)[key] = value;
 				} catch (error) {
 					if (error instanceof TypeError) {
 						console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
-						throw error;
 					}
+					throw error;
+				}
+				return;
+			}
+
+			const wrappedValue = autoWrapReactive(value);
+			if (isReactiveValue(wrappedValue)) {
+				(wrappedValue as unknown as ReactiveEffect)(base, key);
+			} else {
+				try {
+					(base as any)[key] = wrappedValue;
+				} catch (error) {
+					if (error instanceof TypeError) {
+						console.warn(`JayJS: Cannot set property "${key}" of type "${typeof value}" to "${value}".`);
+					}
+					throw error;
 				}
 			}
 		});

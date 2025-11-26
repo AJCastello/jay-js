@@ -1,6 +1,6 @@
+import { State, Values } from "@jay-js/system";
 import { vi } from "vitest";
 import { Base } from "./base";
-import { State, Values } from "@jay-js/system";
 
 describe("Base Function", () => {
 	beforeEach(() => {
@@ -364,7 +364,6 @@ describe("Base Function", () => {
 		});
 	});
 
-
 	describe("Automatic Values() Wrapping - style (nested)", () => {
 		it("should auto-wrap functions in individual style properties", () => {
 			const colorState = State("red");
@@ -625,6 +624,221 @@ describe("Base Function", () => {
 
 			multiplier.set(3);
 			expect(element.dataset.result).toBe("30");
+		});
+	});
+
+	describe("Automatic Values() Wrapping - Props (Phase 2)", () => {
+		describe("HTML Properties", () => {
+			it("should auto-wrap function in value property", () => {
+				const valueState = State("hello");
+				const element = Base({
+					tag: "input",
+					value: () => valueState.value,
+				});
+
+				expect((element as HTMLInputElement).value).toBe("hello");
+
+				valueState.set("world");
+				expect((element as HTMLInputElement).value).toBe("world");
+			});
+
+			it("should auto-wrap function in checked property", () => {
+				const checkedState = State(true);
+				const element = Base({
+					tag: "input",
+					type: "checkbox",
+					checked: () => checkedState.value,
+				});
+
+				expect((element as HTMLInputElement).checked).toBe(true);
+
+				checkedState.set(false);
+				expect((element as HTMLInputElement).checked).toBe(false);
+			});
+
+			it("should auto-wrap function in disabled property", () => {
+				const disabledState = State(false);
+				const element = Base({
+					tag: "button",
+					disabled: () => disabledState.value,
+				});
+
+				expect((element as HTMLButtonElement).disabled).toBe(false);
+
+				disabledState.set(true);
+				expect((element as HTMLButtonElement).disabled).toBe(true);
+			});
+
+			it("should auto-wrap function in placeholder property", () => {
+				const placeholderState = State("Enter name");
+				const element = Base({
+					tag: "input",
+					placeholder: () => placeholderState.value,
+				});
+
+				expect((element as HTMLInputElement).placeholder).toBe("Enter name");
+
+				placeholderState.set("Enter email");
+				expect((element as HTMLInputElement).placeholder).toBe("Enter email");
+			});
+
+			it("should handle static property values", () => {
+				const element = Base({
+					tag: "input",
+					value: "static",
+					disabled: true,
+					placeholder: "test",
+				});
+
+				expect((element as HTMLInputElement).value).toBe("static");
+				expect((element as HTMLInputElement).disabled).toBe(true);
+				expect((element as HTMLInputElement).placeholder).toBe("test");
+			});
+		});
+
+		describe("Event Handlers Should NOT be Wrapped", () => {
+			it("should NOT wrap onclick event handler", () => {
+				const handler = vi.fn();
+				const element = Base({
+					tag: "button",
+					onclick: handler,
+				});
+
+				element.click();
+				expect(handler).toHaveBeenCalledTimes(1);
+			});
+
+			it("should NOT wrap onchange event handler", () => {
+				const handler = vi.fn();
+				const element = Base({
+					tag: "input",
+					onchange: handler,
+				});
+
+				element.dispatchEvent(new Event("change"));
+				expect(handler).toHaveBeenCalledTimes(1);
+			});
+
+			it("should NOT wrap oninput event handler", () => {
+				const handler = vi.fn();
+				const element = Base({
+					tag: "input",
+					oninput: handler,
+				});
+
+				element.dispatchEvent(new Event("input"));
+				expect(handler).toHaveBeenCalledTimes(1);
+			});
+
+			it("should NOT wrap onmouseover event handler", () => {
+				const handler = vi.fn();
+				const element = Base({
+					onmouseover: handler,
+				});
+
+				element.dispatchEvent(new Event("mouseover"));
+				expect(handler).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("Mixed Props and Event Handlers", () => {
+			it("should auto-wrap props but not event handlers", () => {
+				const valueState = State("test");
+				const disabledState = State(false);
+				const clickHandler = vi.fn();
+				const inputHandler = vi.fn();
+
+				const element = Base({
+					tag: "input",
+					value: () => valueState.value,
+					disabled: () => disabledState.value,
+					onclick: clickHandler,
+					oninput: inputHandler,
+				});
+
+				expect((element as HTMLInputElement).value).toBe("test");
+				expect((element as HTMLInputElement).disabled).toBe(false);
+
+				valueState.set("updated");
+				disabledState.set(true);
+
+				expect((element as HTMLInputElement).value).toBe("updated");
+				expect((element as HTMLInputElement).disabled).toBe(true);
+
+				element.dispatchEvent(new Event("click"));
+				element.dispatchEvent(new Event("input"));
+
+				expect(clickHandler).toHaveBeenCalledTimes(1);
+				expect(inputHandler).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("Backward Compatibility - Props", () => {
+			it("should work with existing Values() wrapped props", () => {
+				const valueState = State("test");
+				const element = Base({
+					tag: "input",
+					value: Values(() => valueState.value),
+				});
+
+				expect((element as HTMLInputElement).value).toBe("test");
+
+				valueState.set("updated");
+				expect((element as HTMLInputElement).value).toBe("updated");
+			});
+
+			it("should not break when mixing Values() and auto-wrap", () => {
+				const value1 = State("a");
+				const value2 = State("b");
+
+				const element = Base({
+					tag: "input",
+					value: Values(() => value1.value),
+					placeholder: () => value2.value,
+				});
+
+				expect((element as HTMLInputElement).value).toBe("a");
+				expect((element as HTMLInputElement).placeholder).toBe("b");
+
+				value1.set("c");
+				value2.set("d");
+
+				expect((element as HTMLInputElement).value).toBe("c");
+				expect((element as HTMLInputElement).placeholder).toBe("d");
+			});
+		});
+
+		describe("Edge Cases - Props", () => {
+			it("should handle computed values with multiple dependencies", () => {
+				const firstName = State("John");
+				const lastName = State("Doe");
+
+				const element = Base({
+					tag: "input",
+					value: () => `${firstName.value} ${lastName.value}`,
+				});
+
+				expect((element as HTMLInputElement).value).toBe("John Doe");
+
+				firstName.set("Jane");
+				expect((element as HTMLInputElement).value).toBe("Jane Doe");
+
+				lastName.set("Smith");
+				expect((element as HTMLInputElement).value).toBe("Jane Smith");
+			});
+
+			it("should handle conditional reactive values in props", () => {
+				const isEnabled = State(true);
+				const element = Base({
+					tag: "button",
+					disabled: () => !isEnabled.value,
+				});
+
+				expect((element as HTMLButtonElement).disabled).toBe(false);
+
+				isEnabled.set(false);
+				expect((element as HTMLButtonElement).disabled).toBe(true);
+			});
 		});
 	});
 });

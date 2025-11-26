@@ -64,6 +64,10 @@ export type TLifecycleElement = {
 	onunmount?: (element: HTMLElement) => void;
 } & HTMLElement;
 
+type ReactiveHTMLProps<T> = {
+	[K in keyof T]?: K extends `on${string}` ? T[K] : T[K] | (() => T[K]);
+};
+
 export type TBaseElement<T extends TBaseTagMap> = {
 	tag?: T;
 	className?: string | (() => string);
@@ -84,7 +88,7 @@ export type TBaseElement<T extends TBaseTagMap> = {
 	children?: TChildren;
 	onmount?: (element: HTMLElement) => void;
 	onunmount?: (element: HTMLElement) => void;
-} & Omit<Partial<TBaseTagNameMap[T]>, "children" | "style" | "size" | "className" | "dataset">;
+} & ReactiveHTMLProps<Omit<TBaseTagNameMap[T], "children" | "style" | "size" | "className" | "dataset">>;
 
 export type TBaseDiv = TBaseElement<TBaseTagMap> & {
 	tag: TBaseTagMap;
