@@ -218,10 +218,7 @@ describe("Base Function", () => {
 				children: asyncFunction,
 			});
 
-			expect(element.children.length).toBe(1);
-			expect(element.children[0].tagName.toLowerCase()).toBe("jayjs-lazy-slot");
-
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			await new Promise((resolve) => setTimeout(resolve, 10));
 
 			expect(element.textContent).toBe("Async function content");
 		});
@@ -838,6 +835,296 @@ describe("Base Function", () => {
 
 				isEnabled.set(false);
 				expect((element as HTMLButtonElement).disabled).toBe(true);
+			});
+		});
+	});
+
+	describe("Automatic Values() Wrapping - Children (Phase 3)", () => {
+		describe("Reactive String Children", () => {
+			it("should auto-wrap function returning string", () => {
+				const textState = State("Hello");
+				const element = Base({
+					children: () => textState.value,
+				});
+
+				expect(element.textContent).toBe("Hello");
+
+				textState.set("World");
+				expect(element.textContent).toBe("World");
+			});
+
+			it("should handle computed values in children", () => {
+				const firstName = State("John");
+				const lastName = State("Doe");
+				const element = Base({
+					children: () => `${firstName.value} ${lastName.value}`,
+				});
+
+				expect(element.textContent).toBe("John Doe");
+
+				firstName.set("Jane");
+				expect(element.textContent).toBe("Jane Doe");
+
+				lastName.set("Smith");
+				expect(element.textContent).toBe("Jane Smith");
+			});
+
+			it("should handle multiple state dependencies", () => {
+				const count = State(0);
+				const prefix = State("Count");
+				const element = Base({
+					children: () => `${prefix.value}: ${count.value}`,
+				});
+
+				expect(element.textContent).toBe("Count: 0");
+
+				count.set(1);
+				expect(element.textContent).toBe("Count: 1");
+
+				prefix.set("Total");
+				expect(element.textContent).toBe("Total: 1");
+			});
+		});
+
+		describe("Reactive Node Children", () => {
+			it("should auto-wrap function returning Node", () => {
+				const showImage = State(true);
+				const element = Base({
+					children: () =>
+						showImage.value ? Base({ tag: "img", src: "test.jpg" }) : Base({ tag: "span", children: "No image" }),
+				});
+
+				expect(element.querySelector("img")).toBeDefined();
+				expect(element.querySelector("span")).toBeNull();
+
+				showImage.set(false);
+				expect(element.querySelector("img")).toBeNull();
+				expect(element.querySelector("span")).toBeDefined();
+				expect(element.textContent).toBe("No image");
+			});
+
+			it("should handle transitions from string to Node", () => {
+				const useElement = State(false);
+				const element = Base({
+					children: () => (useElement.value ? Base({ tag: "strong", children: "Bold" }) : "Plain text"),
+				});
+
+				expect(element.textContent).toBe("Plain text");
+				expect(element.querySelector("strong")).toBeNull();
+
+				useElement.set(true);
+				expect(element.querySelector("strong")).toBeDefined();
+				expect(element.textContent).toBe("Bold");
+			});
+
+			it("should handle transitions from Node to string", () => {
+				const useElement = State(true);
+				const element = Base({
+					children: () => (useElement.value ? Base({ tag: "em", children: "Italic" }) : "Plain"),
+				});
+
+				expect(element.querySelector("em")).toBeDefined();
+				expect(element.textContent).toBe("Italic");
+
+				useElement.set(false);
+				expect(element.querySelector("em")).toBeNull();
+				expect(element.textContent).toBe("Plain");
+			});
+		});
+
+		describe("Array Children with Functions", () => {
+			it("should auto-wrap functions in array children", () => {
+				const prefix = State("Item");
+				const count = State(1);
+				const element = Base({
+					children: [() => prefix.value, " ", () => count.value.toString()],
+				});
+
+				expect(element.textContent).toBe("Item 1");
+
+				prefix.set("Entry");
+				expect(element.textContent).toBe("Entry 1");
+
+				count.set(2);
+				expect(element.textContent).toBe("Entry 2");
+			});
+
+			it("should handle mix of static and reactive children", () => {
+				const dynamic = State("Dynamic");
+				const element = Base({
+					children: ["Static ", () => dynamic.value, " End"],
+				});
+
+				expect(element.textContent).toBe("Static Dynamic End");
+
+				dynamic.set("Changed");
+				expect(element.textContent).toBe("Static Changed End");
+			});
+
+			it("should handle multiple reactive functions in array", () => {
+				const a = State("A");
+				const b = State("B");
+				const c = State("C");
+				const element = Base({
+					children: [() => a.value, "-", () => b.value, "-", () => c.value],
+				});
+
+				expect(element.textContent).toBe("A-B-C");
+
+				a.set("X");
+				expect(element.textContent).toBe("X-B-C");
+
+				b.set("Y");
+				expect(element.textContent).toBe("X-Y-C");
+
+				c.set("Z");
+				expect(element.textContent).toBe("X-Y-Z");
+			});
+		});
+
+		describe("Promise Children", () => {
+			it("should handle reactive function returning Promise", async () => {
+				const shouldResolve = State(true);
+				const element = Base({
+					children: () => (shouldResolve.value ? Promise.resolve("Resolved") : Promise.resolve("Alternative")),
+				});
+
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("Resolved");
+
+				shouldResolve.set(false);
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("Alternative");
+			});
+
+			it("should handle rejected promises gracefully", async () => {
+				const shouldReject = State(false);
+				const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+				const element = Base({
+					children: () => (shouldReject.value ? Promise.reject(new Error("Test error")) : Promise.resolve("Success")),
+				});
+
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("Success");
+
+				shouldReject.set(true);
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("");
+				expect(consoleErrorSpy).toHaveBeenCalled();
+
+				consoleErrorSpy.mockRestore();
+			});
+		});
+
+		describe("Backward Compatibility - Children", () => {
+			it("should not break static string children", () => {
+				const element = Base({
+					children: "Static text",
+				});
+
+				expect(element.textContent).toBe("Static text");
+			});
+
+			it("should not break static Node children", () => {
+				const span = Base({ tag: "span", children: "Span content" });
+				const element = Base({
+					children: span,
+				});
+
+				expect(element.querySelector("span")).toBeDefined();
+				expect(element.textContent).toBe("Span content");
+			});
+
+			it("should not break array children with static values", () => {
+				const element = Base({
+					children: ["Part 1", " ", "Part 2"],
+				});
+
+				expect(element.textContent).toBe("Part 1 Part 2");
+			});
+		});
+
+		describe("Edge Cases", () => {
+			it("should handle null/undefined returns from functions", () => {
+				const value = State<string | null>("Text");
+				const element = Base({
+					children: () => value.value,
+				});
+
+				expect(element.textContent).toBe("Text");
+
+				value.set(null);
+				expect(element.textContent).toBe("");
+
+				value.set("Back");
+				expect(element.textContent).toBe("Back");
+			});
+
+			it("should handle boolean returns from functions", () => {
+				const value = State<string | boolean>("Show");
+				const element = Base({
+					children: () => value.value,
+				});
+
+				expect(element.textContent).toBe("Show");
+
+				value.set(false);
+				expect(element.textContent).toBe("");
+
+				value.set(true);
+				expect(element.textContent).toBe("");
+
+				value.set("Text");
+				expect(element.textContent).toBe("Text");
+			});
+
+			it("should handle rapid state changes", () => {
+				const counter = State(0);
+				const element = Base({
+					children: () => counter.value.toString(),
+				});
+
+				expect(element.textContent).toBe("0");
+
+				for (let i = 1; i <= 10; i++) {
+					counter.set(i);
+					expect(element.textContent).toBe(i.toString());
+				}
+			});
+
+			it("should handle empty string", () => {
+				const value = State("Text");
+				const element = Base({
+					children: () => value.value,
+				});
+
+				expect(element.textContent).toBe("Text");
+
+				value.set("");
+				expect(element.textContent).toBe("");
+			});
+
+			it("should handle transitions between different types", () => {
+				const mode = State<"string" | "node" | "null">("string");
+				const element = Base({
+					children: () => {
+						if (mode.value === "string") return "String value";
+						if (mode.value === "node") return Base({ tag: "b", children: "Bold" });
+						return null;
+					},
+				});
+
+				expect(element.textContent).toBe("String value");
+
+				mode.set("node");
+				expect(element.querySelector("b")).toBeDefined();
+				expect(element.textContent).toBe("Bold");
+
+				mode.set("null");
+				expect(element.textContent).toBe("");
+
+				mode.set("string");
+				expect(element.textContent).toBe("String value");
 			});
 		});
 	});

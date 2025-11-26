@@ -1,4 +1,4 @@
-import { Values } from "@jay-js/system";
+import { Effect, Values } from "@jay-js/system";
 import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
@@ -30,6 +30,11 @@ function isEventHandler(propName: string, value: any): boolean {
 	}
 
 	return false;
+}
+
+function isReactiveFunction(fn: (...args: any[]) => any): boolean {
+	const name = fn.name;
+	return name?.includes("_set_value_effect") || name?.includes("_effect");
 }
 
 export function Base<T extends TBaseTagMap = "div">(
@@ -113,8 +118,7 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	if (children) {
 		if (typeof children === "function") {
-			const result = children();
-			appendChildToBase(base, result);
+			appendChildToBase(base, children);
 		} else if (children instanceof Promise) {
 			const elementSlot = document.createElement("jayjs-lazy-slot");
 			base.appendChild(elementSlot);
@@ -176,6 +180,35 @@ export function Base<T extends TBaseTagMap = "div">(
 	return base as HTMLElementTagNameMap[T];
 }
 
+function updateChildNode(currentNode: Node, newValue: string | Node | boolean | null | undefined): Node {
+	if (typeof newValue === "string") {
+		if (currentNode instanceof Text) {
+			currentNode.textContent = newValue;
+			return currentNode;
+		}
+		const newTextNode = document.createTextNode(newValue);
+		(currentNode as ChildNode).replaceWith(newTextNode);
+		return newTextNode;
+	}
+
+	if (newValue instanceof Node) {
+		(currentNode as ChildNode).replaceWith(newValue);
+		return newValue;
+	}
+
+	if (newValue === null || newValue === undefined || newValue === false || newValue === true) {
+		if (currentNode instanceof Text) {
+			currentNode.textContent = "";
+			return currentNode;
+		}
+		const emptyTextNode = document.createTextNode("");
+		(currentNode as ChildNode).replaceWith(emptyTextNode);
+		return emptyTextNode;
+	}
+
+	return currentNode;
+}
+
 function appendChildToBase(
 	base: HTMLElement,
 	child:
@@ -188,24 +221,59 @@ function appendChildToBase(
 		| (() => string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>),
 ): void {
 	if (typeof child === "function") {
-		const result = child();
-		appendChildToBase(base, result);
+		if (isReactiveFunction(child)) {
+			const result = child();
+			appendChildToBase(base, result);
+			return;
+		}
+
+		let currentNode: Node = document.createTextNode("");
+		base.appendChild(currentNode);
+
+		const effectFn = () => {
+			const result = child();
+
+			if (result instanceof Promise) {
+				result
+					.then((resolved) => {
+						currentNode = updateChildNode(currentNode, resolved);
+					})
+					.catch((error) => {
+						console.error("JayJS: Error resolving child Promise:", error);
+						currentNode = updateChildNode(currentNode, null);
+					});
+				return;
+			}
+
+			currentNode = updateChildNode(currentNode, result);
+		};
+
+		Effect(effectFn);
+
 		return;
 	}
+
 	if (child instanceof Promise) {
 		const elementSlot = document.createElement("jayjs-lazy-slot");
 		base.appendChild(elementSlot);
-		child.then((resolvedChild) => {
-			if (resolvedChild && typeof resolvedChild !== "boolean") {
-				elementSlot.replaceWith(resolvedChild);
-			}
-		});
+		child
+			.then((resolvedChild) => {
+				if (resolvedChild && typeof resolvedChild !== "boolean") {
+					elementSlot.replaceWith(resolvedChild);
+				}
+			})
+			.catch((error) => {
+				console.error("JayJS: Error resolving child Promise:", error);
+				elementSlot.remove();
+			});
 		return;
 	}
+
 	if (typeof child === "string") {
 		base.appendChild(document.createTextNode(child));
 		return;
 	}
+
 	if (child && typeof child !== "boolean") {
 		base.appendChild(child);
 	}
