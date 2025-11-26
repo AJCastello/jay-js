@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { Base } from "./base";
 
 describe("Lifecycle Components", () => {
@@ -201,8 +201,9 @@ describe("Lifecycle Components", () => {
 			document.body.appendChild(element);
 
 			expect(mountedElement).toBe(element);
-			expect(mountedElement!.id).toBe("test-article");
-			expect(mountedElement!.tagName.toLowerCase()).toBe("article");
+			expect(mountedElement).not.toBeNull();
+			expect((mountedElement as unknown as HTMLElement).id).toBe("test-article");
+			expect((mountedElement as unknown as HTMLElement).tagName.toLowerCase()).toBe("article");
 		});
 
 		it("should pass correct element to onunmount", () => {
@@ -220,8 +221,9 @@ describe("Lifecycle Components", () => {
 			element.remove();
 
 			expect(unmountedElement).toBe(element);
-			expect(unmountedElement!.id).toBe("test-aside");
-			expect(unmountedElement!.tagName.toLowerCase()).toBe("aside");
+			expect(unmountedElement).not.toBeNull();
+			expect((unmountedElement as unknown as HTMLElement).id).toBe("test-aside");
+			expect((unmountedElement as unknown as HTMLElement).tagName.toLowerCase()).toBe("aside");
 		});
 	});
 });

@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { Base } from "./base";
 
 describe("Base Function", () => {
@@ -198,6 +198,66 @@ describe("Base Function", () => {
 			expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to resolve child promise:", expect.any(Error));
 
 			consoleErrorSpy.mockRestore();
+		});
+	});
+
+	describe("Function Children", () => {
+		it("should handle synchronous function children", () => {
+			const element = Base({
+				children: () => "Function content",
+			});
+
+			expect(element.textContent).toBe("Function content");
+		});
+
+		it("should handle async function children", async () => {
+			const asyncFunction = async () => "Async function content";
+
+			const element = Base({
+				children: asyncFunction,
+			});
+
+			expect(element.children.length).toBe(1);
+			expect(element.children[0].tagName.toLowerCase()).toBe("jayjs-lazy-slot");
+
+			await new Promise((resolve) => setTimeout(resolve, 0));
+
+			expect(element.textContent).toBe("Async function content");
+		});
+
+		it("should handle function children in arrays", () => {
+			const element = Base({
+				children: ["Text", () => " from function", () => " and more"],
+			});
+
+			expect(element.textContent).toBe("Text from function and more");
+		});
+
+		it("should handle mixed function and async function children in arrays", async () => {
+			const element = Base({
+				children: ["Start", () => " sync", async () => " async", " end"],
+			});
+
+			expect(element.textContent).toContain("Start sync");
+
+			await new Promise((resolve) => setTimeout(resolve, 0));
+
+			expect(element.textContent).toContain("async");
+			expect(element.textContent).toContain("end");
+		});
+
+		it("should handle function returning Node", () => {
+			const createNode = () => {
+				const node = document.createElement("span");
+				node.textContent = "Node from function";
+				return node;
+			};
+
+			const element = Base({
+				children: createNode,
+			});
+
+			expect(element.querySelector("span")?.textContent).toBe("Node from function");
 		});
 	});
 
