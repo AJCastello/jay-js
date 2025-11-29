@@ -5,6 +5,8 @@
 class SubscriberManager {
 	// The current active subscriber
 	private _current: ((args?: any) => void | Promise<void>) | null = null;
+	// Counter to ensure unique subscription IDs
+	private _counter = 0;
 
 	/**
 	 * Sets the current subscriber
@@ -52,7 +54,8 @@ class SubscriberManager {
 			hash |= 0;
 		}
 
-		return Math.abs(hash).toString(16);
+		const uniqueId = this._counter++;
+		return `${Math.abs(hash).toString(16)}-${uniqueId}`;
 	}
 }
 

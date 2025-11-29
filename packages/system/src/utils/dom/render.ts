@@ -7,7 +7,7 @@ import { selector } from "./query.js";
 function hasPromise(content: TRenderContent): boolean {
 	if (content instanceof Promise) return true;
 	if (Array.isArray(content)) {
-		return content.some(item => item instanceof Promise);
+		return content.some((item) => item instanceof Promise);
 	}
 	return false;
 }
@@ -20,9 +20,7 @@ async function resolveContent(content: TRenderContent): Promise<TRenderContentSy
 		return await content;
 	}
 	if (Array.isArray(content)) {
-		return await Promise.all(
-			content.map(item => item instanceof Promise ? item : item)
-		);
+		return await Promise.all(content.map((item) => (item instanceof Promise ? item : item)));
 	}
 	return content as TRenderContentSync;
 }
@@ -43,7 +41,11 @@ async function resolveContent(content: TRenderContent): Promise<TRenderContentSy
  * await render('#app', asyncElement); // Handles Promise<HTMLElement>
  * ```
  */
-export function render(target: TRenderTarget, content: TRenderContent, options: TRenderOptions = {}): void | Promise<void> {
+export function render(
+	target: TRenderTarget,
+	content: TRenderContent,
+	options: TRenderOptions = {},
+): void | Promise<void> {
 	if (hasPromise(content)) {
 		return renderAsync(target, content, options);
 	}
@@ -54,7 +56,11 @@ export function render(target: TRenderTarget, content: TRenderContent, options: 
 /**
  * Async version of render for Promise content
  */
-async function renderAsync(target: TRenderTarget, content: TRenderContent, options: TRenderOptions = {}): Promise<void> {
+async function renderAsync(
+	target: TRenderTarget,
+	content: TRenderContent,
+	options: TRenderOptions = {},
+): Promise<void> {
 	if (!target || content === null || content === undefined) return;
 
 	const element = typeof target === "string" ? selector(target) : target;
