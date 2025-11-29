@@ -227,8 +227,10 @@ function appendChildToBase(
 			return;
 		}
 
-		let currentNode: Node = document.createTextNode("");
-		base.appendChild(currentNode);
+		const nodeRef = {
+			current: document.createTextNode("") as Node,
+		};
+		base.appendChild(nodeRef.current);
 
 		const effectFn = () => {
 			const result = child();
@@ -236,16 +238,16 @@ function appendChildToBase(
 			if (result instanceof Promise) {
 				result
 					.then((resolved) => {
-						currentNode = updateChildNode(currentNode, resolved);
+						nodeRef.current = updateChildNode(nodeRef.current, resolved);
 					})
 					.catch((error) => {
 						console.error("JayJS: Error resolving child Promise:", error);
-						currentNode = updateChildNode(currentNode, null);
+						nodeRef.current = updateChildNode(nodeRef.current, null);
 					});
 				return;
 			}
 
-			currentNode = updateChildNode(currentNode, result);
+			nodeRef.current = updateChildNode(nodeRef.current, result);
 		};
 
 		Effect(effectFn);

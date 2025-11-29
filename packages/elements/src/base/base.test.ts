@@ -1127,5 +1127,105 @@ describe("Base Function", () => {
 				expect(element.textContent).toBe("String value");
 			});
 		});
+
+		describe("Bug: Nested Reactive Children in Arrays", () => {
+			it("should update reactive function inside nested element within array", () => {
+				const textState = State("Initial");
+
+				const element = Base({
+					children: [
+						() => textState.value,
+						Base({
+							tag: "span",
+							children: () => textState.value,
+						}),
+					],
+				});
+
+				const textNodes = Array.from(element.childNodes).filter((n) => n.nodeType === Node.TEXT_NODE);
+				const spanElement = element.querySelector("span");
+
+				expect(textNodes[0].textContent).toBe("Initial");
+				expect(spanElement?.textContent).toBe("Initial");
+
+				textState.set("Updated");
+
+				expect(textNodes[0].textContent).toBe("Updated");
+				expect(spanElement?.textContent).toBe("Updated");
+			});
+
+			it("should handle multiple nested reactive children", () => {
+				const state1 = State("A");
+				const state2 = State("B");
+
+				const element = Base({
+					children: [
+						Base({
+							tag: "div",
+							children: () => state1.value,
+						}),
+						Base({
+							tag: "span",
+							children: () => state2.value,
+						}),
+					],
+				});
+
+				expect(element.querySelector("div")?.textContent).toBe("A");
+				expect(element.querySelector("span")?.textContent).toBe("B");
+
+				state1.set("X");
+				state2.set("Y");
+
+				expect(element.querySelector("div")?.textContent).toBe("X");
+				expect(element.querySelector("span")?.textContent).toBe("Y");
+			});
+
+			it("should handle deeply nested reactive children", () => {
+				const state = State("Deep");
+
+				const element = Base({
+					children: [
+						Base({
+							tag: "div",
+							children: [
+								Base({
+									tag: "span",
+									children: () => state.value,
+								}),
+							],
+						}),
+					],
+				});
+
+				expect(element.querySelector("span")?.textContent).toBe("Deep");
+				state.set("Updated");
+				expect(element.querySelector("span")?.textContent).toBe("Updated");
+			});
+
+			it("should handle mix of nested and top-level reactive children", () => {
+				const state1 = State("Top");
+				const state2 = State("Nested");
+
+				const element = Base({
+					children: [
+						() => state1.value,
+						" - ",
+						Base({
+							tag: "span",
+							children: () => state2.value,
+						}),
+					],
+				});
+
+				expect(element.textContent).toBe("Top - Nested");
+
+				state1.set("Updated1");
+				expect(element.textContent).toBe("Updated1 - Nested");
+
+				state2.set("Updated2");
+				expect(element.textContent).toBe("Updated1 - Updated2");
+			});
+		});
 	});
 });
