@@ -218,8 +218,16 @@ function appendChildToBase(
 		| null
 		| undefined
 		| Promise<string | Node | boolean | null | undefined>
-		| (() => string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>),
+		| (() => string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>)
+		| any[],
 ): void {
+	if (Array.isArray(child)) {
+		child.forEach((nestedChild) => {
+			appendChildToBase(base, nestedChild);
+		});
+		return;
+	}
+
 	if (typeof child === "function") {
 		if (isReactiveFunction(child)) {
 			const result = child();

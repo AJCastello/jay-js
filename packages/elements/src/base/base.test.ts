@@ -982,6 +982,107 @@ describe("Base Function", () => {
 			});
 		});
 
+		describe("Nested Array Children (Auto-flatten)", () => {
+			it("should flatten nested arrays from map operations", () => {
+				const items = ["A", "B", "C"];
+				const element = Base({
+					children: [
+						"Start-",
+						items.map((item) => Base({ tag: "span", children: item })),
+						"-End",
+					],
+				});
+
+				expect(element.children.length).toBe(3);
+				expect(element.textContent).toBe("Start-ABC-End");
+			});
+
+			it("should handle deeply nested arrays", () => {
+				const element = Base({
+					children: [
+						"L1",
+						[
+							"L2",
+							[
+								"L3",
+								["L4"],
+							],
+						],
+					],
+				});
+
+				expect(element.textContent).toBe("L1L2L3L4");
+			});
+
+			it("should flatten arrays with mix of elements and text nodes", () => {
+				const items = [1, 2, 3];
+				const element = Base({
+					children: [
+						Base({ tag: "span", children: "Header" }),
+						items.map((n) => Base({ tag: "div", children: n.toString() })),
+						Base({ tag: "span", children: "Footer" }),
+					],
+				});
+
+				expect(element.children.length).toBe(5);
+				expect(element.children[0].textContent).toBe("Header");
+				expect(element.children[1].textContent).toBe("1");
+				expect(element.children[2].textContent).toBe("2");
+				expect(element.children[3].textContent).toBe("3");
+				expect(element.children[4].textContent).toBe("Footer");
+			});
+
+			it("should handle arrays with reactive functions inside", () => {
+				const state = State("Test");
+				const items = ["A", "B"];
+				const element = Base({
+					children: [
+						() => state.value,
+						items.map((item) => Base({ tag: "span", children: item })),
+					],
+				});
+
+				expect(element.textContent).toBe("TestAB");
+
+				state.set("Updated");
+				expect(element.textContent).toBe("UpdatedAB");
+			});
+
+			it("should handle empty arrays in nested structure", () => {
+				const element = Base({
+					children: [
+						"Start",
+						[],
+						"Middle",
+						[[], []],
+						"End",
+					],
+				});
+
+				expect(element.textContent).toBe("StartMiddleEnd");
+			});
+
+			it("should maintain correct DOM order with nested arrays", () => {
+				const firstGroup = ["1", "2"];
+				const secondGroup = ["3", "4"];
+				const element = Base({
+					children: [
+						firstGroup.map((n) => Base({ tag: "span", children: n })),
+						"-",
+						secondGroup.map((n) => Base({ tag: "span", children: n })),
+					],
+				});
+
+				expect(element.textContent).toBe("12-34");
+				const spans = element.querySelectorAll("span");
+				expect(spans.length).toBe(4);
+				expect(spans[0].textContent).toBe("1");
+				expect(spans[1].textContent).toBe("2");
+				expect(spans[2].textContent).toBe("3");
+				expect(spans[3].textContent).toBe("4");
+			});
+		});
+
 		describe("Promise Children", () => {
 			it("should handle reactive function returning Promise", async () => {
 				const shouldResolve = State(true);

@@ -56,8 +56,9 @@ export type TStyle = Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>
 type TChildValue = string | Node | boolean | null | undefined;
 type TChildPromise = Promise<TChildValue>;
 type TChildFunction = () => TChildValue | TChildPromise;
+type TChildArray = (TChildValue | TChildPromise | TChildFunction | TChildArray)[];
 
-export type TChildren = TChildValue | TChildPromise | TChildFunction | (TChildValue | TChildPromise | TChildFunction)[];
+export type TChildren = TChildValue | TChildPromise | TChildFunction | TChildArray;
 
 export type TLifecycleElement = {
 	onmount?: (element: HTMLElement) => void;
