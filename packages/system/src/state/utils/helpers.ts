@@ -2,6 +2,8 @@ import { State } from "../core/state.js";
 import { subscriberManager } from "../core/subscriber.js";
 import type { ISetValue, StateType } from "../types.js";
 
+export const REACTIVE_MARKER = Symbol("reactive");
+
 /**
  * Creates a persistent state that saves values to localStorage
  *
@@ -130,5 +132,6 @@ export function Values(fn: () => any): any {
 		_setValue._path = path;
 		Effect(_setValue);
 	}
+	((_set_value_effect as any)[REACTIVE_MARKER] = true);
 	return _set_value_effect;
 }

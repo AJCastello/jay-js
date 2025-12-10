@@ -1,17 +1,16 @@
-import { Effect, Values } from "@jay-js/system";
+import { Effect, REACTIVE_MARKER, Values } from "@jay-js/system";
 import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
 type ReactiveEffect = (target: any, prop: string) => void;
 
 function isReactiveValue(value: any): boolean {
-	return typeof value === "function" && (value as ReactiveEffect).name.includes("_set_value_effect");
+	return typeof value === "function" && (value as any)[REACTIVE_MARKER] === true;
 }
 
 function autoWrapReactive<T>(value: T | (() => T)): T | ReactiveEffect {
 	if (typeof value === "function") {
-		const fnName = (value as any).name;
-		if (fnName?.includes("_set_value_effect")) {
+		if ((value as any)[REACTIVE_MARKER] === true) {
 			return value as unknown as ReactiveEffect;
 		}
 		return Values(value as () => T) as unknown as ReactiveEffect;
@@ -33,8 +32,7 @@ function isEventHandler(propName: string, value: any): boolean {
 }
 
 function isReactiveFunction(fn: (...args: any[]) => any): boolean {
-	const name = fn.name;
-	return name?.includes("_set_value_effect") || name?.includes("_effect");
+	return (fn as any)[REACTIVE_MARKER] === true;
 }
 
 export function Base<T extends TBaseTagMap = "div">(
