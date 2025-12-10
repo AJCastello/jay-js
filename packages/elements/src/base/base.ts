@@ -114,7 +114,7 @@ export function Base<T extends TBaseTagMap = "div">(
 		}
 	}
 
-	if (children) {
+	if (children !== null && children !== undefined && typeof children !== "boolean") {
 		if (typeof children === "function") {
 			appendChildToBase(base, children);
 		} else if (children instanceof Promise) {
@@ -122,8 +122,12 @@ export function Base<T extends TBaseTagMap = "div">(
 			base.appendChild(elementSlot);
 			children
 				.then((resolvedChild) => {
-					if (resolvedChild && typeof resolvedChild !== "boolean") {
-						elementSlot.replaceWith(resolvedChild);
+					if (resolvedChild !== null && resolvedChild !== undefined && typeof resolvedChild !== "boolean") {
+						if (typeof resolvedChild === "string" || typeof resolvedChild === "number") {
+							elementSlot.replaceWith(document.createTextNode(String(resolvedChild)));
+						} else {
+							elementSlot.replaceWith(resolvedChild);
+						}
 					}
 				})
 				.catch((error) => {
@@ -132,10 +136,8 @@ export function Base<T extends TBaseTagMap = "div">(
 		} else {
 			if (Array.isArray(children)) {
 				children.forEach((child) => {
-					if (child) {
-						if (typeof child !== "boolean") {
-							appendChildToBase(base, child);
-						}
+					if (child !== null && child !== undefined && typeof child !== "boolean") {
+						appendChildToBase(base, child);
 					}
 				});
 			} else {
@@ -178,13 +180,13 @@ export function Base<T extends TBaseTagMap = "div">(
 	return base as HTMLElementTagNameMap[T];
 }
 
-function updateChildNode(currentNode: Node, newValue: string | Node | boolean | null | undefined): Node {
-	if (typeof newValue === "string") {
+function updateChildNode(currentNode: Node, newValue: string | number | Node | boolean | null | undefined): Node {
+	if (typeof newValue === "string" || typeof newValue === "number") {
 		if (currentNode instanceof Text) {
-			currentNode.textContent = newValue;
+			currentNode.textContent = String(newValue);
 			return currentNode;
 		}
-		const newTextNode = document.createTextNode(newValue);
+		const newTextNode = document.createTextNode(String(newValue));
 		(currentNode as ChildNode).replaceWith(newTextNode);
 		return newTextNode;
 	}
@@ -211,12 +213,13 @@ function appendChildToBase(
 	base: HTMLElement,
 	child:
 		| string
+		| number
 		| Node
 		| boolean
 		| null
 		| undefined
-		| Promise<string | Node | boolean | null | undefined>
-		| (() => string | Node | boolean | null | undefined | Promise<string | Node | boolean | null | undefined>)
+		| Promise<string | number | Node | boolean | null | undefined>
+		| (() => string | number | Node | boolean | null | undefined | Promise<string | number | Node | boolean | null | undefined>)
 		| any[],
 ): void {
 	if (Array.isArray(child)) {
@@ -266,8 +269,12 @@ function appendChildToBase(
 		base.appendChild(elementSlot);
 		child
 			.then((resolvedChild) => {
-				if (resolvedChild && typeof resolvedChild !== "boolean") {
-					elementSlot.replaceWith(resolvedChild);
+				if (resolvedChild !== null && resolvedChild !== undefined && typeof resolvedChild !== "boolean") {
+					if (typeof resolvedChild === "string" || typeof resolvedChild === "number") {
+						elementSlot.replaceWith(document.createTextNode(String(resolvedChild)));
+					} else {
+						elementSlot.replaceWith(resolvedChild);
+					}
 				}
 			})
 			.catch((error) => {
@@ -277,12 +284,12 @@ function appendChildToBase(
 		return;
 	}
 
-	if (typeof child === "string") {
-		base.appendChild(document.createTextNode(child));
+	if (typeof child === "string" || typeof child === "number") {
+		base.appendChild(document.createTextNode(String(child)));
 		return;
 	}
 
-	if (child && typeof child !== "boolean") {
+	if (child !== null && child !== undefined && typeof child !== "boolean") {
 		base.appendChild(child);
 	}
 }

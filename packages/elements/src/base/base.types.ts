@@ -53,7 +53,7 @@ export type TBaseTagMap = keyof TBaseTagNameMap;
 
 export type TStyle = Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>;
 
-type TChildValue = string | Node | boolean | null | undefined;
+type TChildValue = string | number | Node | boolean | null | undefined;
 type TChildPromise = Promise<TChildValue>;
 type TChildFunction = () => TChildValue | TChildPromise;
 type TChildArray = (TChildValue | TChildPromise | TChildFunction | TChildArray)[];

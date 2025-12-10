@@ -118,6 +118,34 @@ describe("Base Function", () => {
 			expect(element.textContent).toBe("Hello World");
 		});
 
+		it("should handle number children", () => {
+			const element = Base({
+				children: 42,
+			});
+			expect(element.textContent).toBe("42");
+		});
+
+		it("should handle zero as number child", () => {
+			const element = Base({
+				children: 0,
+			});
+			expect(element.textContent).toBe("0");
+		});
+
+		it("should handle negative numbers as children", () => {
+			const element = Base({
+				children: -15.5,
+			});
+			expect(element.textContent).toBe("-15.5");
+		});
+
+		it("should handle array with mixed string and number children", () => {
+			const element = Base({
+				children: ["Progress: ", 75, "%"],
+			});
+			expect(element.textContent).toBe("Progress: 75%");
+		});
+
 		it("should handle Node children", () => {
 			const childElement = document.createElement("span");
 			childElement.textContent = "Child Node";
@@ -884,6 +912,48 @@ describe("Base Function", () => {
 				prefix.set("Total");
 				expect(element.textContent).toBe("Total: 1");
 			});
+
+			it("should handle reactive number children", () => {
+				const progress = State(0);
+				const element = Base({
+					children: () => progress.value,
+				});
+
+				expect(element.textContent).toBe("0");
+
+				progress.set(50);
+				expect(element.textContent).toBe("50");
+
+				progress.set(100);
+				expect(element.textContent).toBe("100");
+			});
+
+			it("should handle reactive number with string template", () => {
+				const progress = State(0);
+				const element = Base({
+					children: () => `${Math.round(progress.value)}%`,
+				});
+
+				expect(element.textContent).toBe("0%");
+
+				progress.set(45.7);
+				expect(element.textContent).toBe("46%");
+
+				progress.set(99.2);
+				expect(element.textContent).toBe("99%");
+			});
+
+			it("should handle reactive number in array", () => {
+				const score = State(85);
+				const element = Base({
+					children: ["Score: ", () => score.value, "/100"],
+				});
+
+				expect(element.textContent).toBe("Score: 85/100");
+
+				score.set(92);
+				expect(element.textContent).toBe("Score: 92/100");
+			});
 		});
 
 		describe("Reactive Node Children", () => {
@@ -1114,6 +1184,29 @@ describe("Base Function", () => {
 				expect(consoleErrorSpy).toHaveBeenCalled();
 
 				consoleErrorSpy.mockRestore();
+			});
+
+			it("should handle Promise resolving to number", async () => {
+				const element = Base({
+					children: Promise.resolve(42),
+				});
+
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("42");
+			});
+
+			it("should handle reactive function returning Promise with number", async () => {
+				const value = State(10);
+				const element = Base({
+					children: () => Promise.resolve(value.value * 2),
+				});
+
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("20");
+
+				value.set(25);
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				expect(element.textContent).toBe("50");
 			});
 		});
 
