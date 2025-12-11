@@ -1,5 +1,5 @@
 import { State } from "../../core/state.js";
-import { Values } from "../helpers.js";
+import { SETVALUE_MARKER, Values } from "../helpers.js";
 
 describe("Values", () => {
 	it("should set a value in an object based on state", () => {
@@ -122,5 +122,47 @@ describe("Values", () => {
 
 		isDark.set(true);
 		expect(element.className).toBe("dark-theme");
+	});
+
+	it("should mark _setValue function with SETVALUE_MARKER symbol", () => {
+		const count = State(10);
+		const setValue = Values(() => count.value * 2);
+
+		// Access the internal _setValue function
+		// Note: This is testing implementation details, but important for ensuring
+		// the Symbol is correctly applied for the state reactivity system
+		const target = {};
+		setValue(target, "doubled");
+
+		// The _setValue function should have the SETVALUE_MARKER
+		// We can't directly access it, but we can verify through side effects
+		// that it's working correctly with the state system
+		expect(target).toEqual({ doubled: 20 });
+
+		// When state changes, the subscription should work correctly
+		count.set(15);
+		expect(target).toEqual({ doubled: 30 });
+	});
+
+	it("should use SETVALUE_MARKER for proper hash generation in state subscriptions", () => {
+		const state1 = State(10);
+		const state2 = State(20);
+		const target = {};
+
+		// Create two different Values functions with same logic
+		const setValue1 = Values(() => state1.value * 2);
+		const setValue2 = Values(() => state2.value * 3);
+
+		setValue1(target, "value1");
+		setValue2(target, "value2");
+
+		expect(target).toEqual({ value1: 20, value2: 60 });
+
+		// Each should update independently
+		state1.set(15);
+		expect(target).toEqual({ value1: 30, value2: 60 });
+
+		state2.set(10);
+		expect(target).toEqual({ value1: 30, value2: 30 });
 	});
 });

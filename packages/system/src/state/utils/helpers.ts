@@ -3,72 +3,7 @@ import { subscriberManager } from "../core/subscriber.js";
 import type { ISetValue, StateType } from "../types.js";
 
 export const REACTIVE_MARKER = Symbol("reactive");
-
-/**
- * Creates a persistent state that saves values to localStorage
- *
- * @template T Type of the state data
- * @param key Key for storage in localStorage
- * @param defaultValue Default value when no data is saved
- * @returns A state object that persists changes to localStorage
- */
-export function PersistentState<T>(key: string, defaultValue: T): StateType<T> {
-	// Try to retrieve value from localStorage
-	let initialValue: T;
-	try {
-		const savedValue = localStorage.getItem(key);
-		initialValue = savedValue ? JSON.parse(savedValue) : defaultValue;
-	} catch {
-		initialValue = defaultValue;
-	}
-
-	const state = State<T>(initialValue);
-	const originalSet = state.set;
-	state.set = (newData, options) => {
-		originalSet(newData, options);
-		try {
-			localStorage.setItem(key, JSON.stringify(state.get()));
-		} catch (error) {
-			console.error(`Error saving state to localStorage: ${error}`);
-		}
-	};
-
-	return state;
-}
-
-/**
- * Combines multiple states into a single object
- *
- * @template T Record type containing state types
- * @param states Object with states to be combined
- * @returns A new state that keeps the combined values updated
- */
-export function CombineStates<T extends Record<string, any>>(
-	states: { [K in keyof T]: StateType<T[K]> },
-): StateType<T> {
-	// Gets initial values from each state
-	const initialValue = Object.entries(states).reduce(
-		(acc, [key, state]) => {
-			acc[key] = state.get();
-			return acc;
-		},
-		{} as Record<string, any>,
-	) as T;
-
-	const combinedState = State<T>(initialValue);
-
-	// Subscribe to each state to update the combined value
-	Object.entries(states).forEach(([key, state]) => {
-		state.sub(`combined_${key}`, (newValue: T[typeof key]) => {
-			combinedState.set((current) => ({
-				...current,
-				[key]: newValue,
-			}));
-		});
-	});
-
-	return combinedState;
-}
+export const SETVALUE_MARKER = Symbol("setValue");
 
 /**
  * Creates a derived state that automatically recalculates whenever states
@@ -108,29 +43,30 @@ export function Effect(fn: () => void) {
  * @returns Function for setting values in objects
  */
 export function Values(fn: () => any): any {
-	const _setValue: ISetValue = () => {
-		if (_setValue._path.length > 0) {
-			let target = _setValue._object;
-			for (let i = 0; i < _setValue._path.length - 1; i++) {
-				if (!target[_setValue._path[i]]) {
-					target[_setValue._path[i]] = {};
+	const _set_value: ISetValue = () => {
+		if (_set_value._path.length > 0) {
+			let target = _set_value._object;
+			for (let i = 0; i < _set_value._path.length - 1; i++) {
+				if (!target[_set_value._path[i]]) {
+					target[_set_value._path[i]] = {};
 				}
-				target = target[_setValue._path[i]];
+				target = target[_set_value._path[i]];
 			}
-			const lastKey = _setValue._path[_setValue._path.length - 1];
-			target[lastKey] = _setValue._fn();
+			const lastKey = _set_value._path[_set_value._path.length - 1];
+			target[lastKey] = _set_value._fn();
 			return;
 		}
-		_setValue._object = _setValue._fn();
+		_set_value._object = _set_value._fn();
 	};
-	_setValue._object = undefined;
-	_setValue._path = [];
-	_setValue._fn = fn;
+	_set_value._object = undefined;
+	_set_value._path = [];
+	_set_value._fn = fn;
+	((_set_value as any)[SETVALUE_MARKER] = true);
 
 	function _set_value_effect(object: any, ...path: string[]) {
-		_setValue._object = object;
-		_setValue._path = path;
-		Effect(_setValue);
+		_set_value._object = object;
+		_set_value._path = path;
+		Effect(_set_value);
 	}
 	((_set_value_effect as any)[REACTIVE_MARKER] = true);
 	return _set_value_effect;

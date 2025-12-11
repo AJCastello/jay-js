@@ -1,5 +1,6 @@
 import type { StateType, TSetOptions } from "../types.js";
 import { subscriberManager } from "./subscriber.js";
+import { SETVALUE_MARKER } from "../utils/helpers.js";
 
 /**
  * Creates a reactive state container that can be subscribed to for changes
@@ -151,8 +152,8 @@ export const State = <T>(data: T): StateType<T> => {
 			if (currentSubscriber) {
 				let hash: string;
 
-				// Check if it's a setValue (from Values function)
-				if (currentSubscriber.name.includes("_setValue") && (currentSubscriber as any)._fn) {
+				// Check if it's a setValue (from Values function) using Symbol
+				if ((currentSubscriber as any)[SETVALUE_MARKER] && (currentSubscriber as any)._fn) {
 					hash = subscriberManager.generateFunctionHash((currentSubscriber as any)._fn);
 				} else {
 					hash = subscriberManager.generateFunctionHash(currentSubscriber);
