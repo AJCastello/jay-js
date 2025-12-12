@@ -51,6 +51,9 @@
     "url": "https://github.com/AJCastello/jay-js/issues"
   },
   "homepage": "https://github.com/AJCastello/jay-js#readme",
+  "dependencies": {
+    "@jay-js/system": "^4.0.1"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.2.3",
     "@vitest/ui": "^4.0.4",

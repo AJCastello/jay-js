@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { Base } from "./base";
+import { Base } from "../base";
 
 describe("Lifecycle Components", () => {
 	beforeEach(() => {

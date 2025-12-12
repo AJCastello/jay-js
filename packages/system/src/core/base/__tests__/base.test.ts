@@ -1,6 +1,6 @@
-import { State, Values } from "@jay-js/system";
+import { State, Values } from "../../../state";
 import { vi } from "vitest";
-import { Base } from "./base";
+import { Base } from "../base";
 
 describe("Base Function", () => {
 	beforeEach(() => {

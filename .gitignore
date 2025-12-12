@@ -3,12 +3,10 @@ examples
 implement
 package-lock.json
 dist
-.turbo/
 .nx/
 .nx/cache
 pnpm-lock.yaml
 builder
-firebase.json
 .ai
 llm
 console

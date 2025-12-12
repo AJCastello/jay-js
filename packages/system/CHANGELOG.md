@@ -5,6 +5,19 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [4.0.2] - 27/11/2025
+
+### Corrigido
+- **Bug crítico de colisão de hash**: Múltiplos Effects acessando o mesmo State com código similar geravam hashes idênticos, causando sobrescrição de subscriptions
+- Effects em elementos aninhados agora atualizam corretamente quando compartilham o mesmo State
+- Sistema de subscription agora garante IDs únicos para cada Effect usando contador incremental
+
+### Técnico
+- Adicionado contador `_counter` no `SubscriberManager` para garantir unicidade de subscriptions
+- Modificado `generateFunctionHash()` para incluir ID único no formato `{hash}-{counter}`
+- Cada subscription agora recebe um ID único mesmo que o código da função seja similar
+- Solução resolve bug onde segundo Effect sobrescreve o primeiro no Map de subscriptions
+
 ## [4.0.1] - 30/10/2025
 
 ### Adicionado

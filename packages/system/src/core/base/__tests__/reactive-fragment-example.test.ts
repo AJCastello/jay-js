@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from "vitest";
-import { State } from "@jay-js/system";
-import { Base } from "./base.js";
+import { State, Values } from "../../../state";
+import { Base } from "../base.js";
 
 /**
  * Real-world example tests demonstrating reactive JSX fragments

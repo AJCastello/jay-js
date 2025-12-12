@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it, vi } from "vitest";
-import { Base } from "./base.js";
+import { Base } from "../base.js";
 
 describe("Lifecycle Cleanup from onmount", () => {
 	it("should execute cleanup function returned from onmount on unmount", () => {
