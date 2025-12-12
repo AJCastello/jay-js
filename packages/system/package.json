@@ -10,15 +10,25 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./jsx-runtime": {
+      "types": "./jsx/core/jsx-runtime.d.ts",
+      "import": "./jsx/core/jsx-runtime.js",
+      "default": "./jsx/core/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./jsx/core/jsx-dev-runtime.d.ts",
+      "import": "./jsx/core/jsx-dev-runtime.js",
+      "default": "./jsx/core/jsx-dev-runtime.js"
     }
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "bun build src/index.ts --outdir dist --target node --format esm --external '*' && npm run build:types",
+    "build": "bun build src/index.ts src/jsx/core/jsx-runtime.ts src/jsx/core/jsx-dev-runtime.ts --outdir dist --target node --format esm --external '*' && npm run build:types",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
