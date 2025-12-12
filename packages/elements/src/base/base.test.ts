@@ -1421,5 +1421,277 @@ describe("Base Function", () => {
 				expect(element.textContent).toBe("Updated1 - Updated2");
 			});
 		});
+
+		describe("Reactive DocumentFragment Children", () => {
+			it("should handle reactive function returning DocumentFragment", () => {
+				const showContent = State(true);
+
+				const element = Base({
+					children: () => {
+						if (!showContent.value) return null;
+
+						const fragment = document.createDocumentFragment();
+						const span1 = Base({ tag: "span", children: "First" });
+						const span2 = Base({ tag: "span", children: "Second" });
+						fragment.append(span1, span2);
+						return fragment;
+					},
+				});
+
+				// Initial render - fragment should be inserted
+				expect(element.querySelectorAll("span").length).toBe(2);
+				expect(element.textContent).toBe("FirstSecond");
+
+				// Hide content
+				showContent.set(false);
+				expect(element.querySelectorAll("span").length).toBe(0);
+				expect(element.textContent).toBe("");
+
+				// Show content again
+				showContent.set(true);
+				expect(element.querySelectorAll("span").length).toBe(2);
+				expect(element.textContent).toBe("FirstSecond");
+			});
+
+			it("should handle multiple updates to fragment content", () => {
+				const count = State(2);
+
+				const element = Base({
+					children: () => {
+						const fragment = document.createDocumentFragment();
+						for (let i = 0; i < count.value; i++) {
+							const span = Base({ tag: "span", children: `Item ${i + 1}` });
+							fragment.append(span);
+						}
+						return fragment;
+					},
+				});
+
+				expect(element.querySelectorAll("span").length).toBe(2);
+				expect(element.textContent).toBe("Item 1Item 2");
+
+				count.set(3);
+				expect(element.querySelectorAll("span").length).toBe(3);
+				expect(element.textContent).toBe("Item 1Item 2Item 3");
+
+				count.set(1);
+				expect(element.querySelectorAll("span").length).toBe(1);
+				expect(element.textContent).toBe("Item 1");
+
+				count.set(4);
+				expect(element.querySelectorAll("span").length).toBe(4);
+				expect(element.textContent).toBe("Item 1Item 2Item 3Item 4");
+			});
+
+			it("should transition from fragment to single element", () => {
+				const useFragment = State(true);
+
+				const element = Base({
+					children: () => {
+						if (useFragment.value) {
+							const fragment = document.createDocumentFragment();
+							fragment.append(Base({ tag: "span", children: "A" }), Base({ tag: "span", children: "B" }));
+							return fragment;
+						}
+						return Base({ tag: "div", children: "Single" });
+					},
+				});
+
+				expect(element.querySelectorAll("span").length).toBe(2);
+				expect(element.querySelector("div")).toBeNull();
+
+				useFragment.set(false);
+				expect(element.querySelectorAll("span").length).toBe(0);
+				expect(element.querySelector("div")?.textContent).toBe("Single");
+
+				useFragment.set(true);
+				expect(element.querySelectorAll("span").length).toBe(2);
+				expect(element.querySelector("div")).toBeNull();
+			});
+
+			it("should transition from single element to fragment", () => {
+				const useFragment = State(false);
+
+				const element = Base({
+					children: () => {
+						if (!useFragment.value) {
+							return Base({ tag: "div", children: "Single" });
+						}
+						const fragment = document.createDocumentFragment();
+						fragment.append(Base({ tag: "span", children: "A" }), Base({ tag: "span", children: "B" }));
+						return fragment;
+					},
+				});
+
+				expect(element.querySelector("div")?.textContent).toBe("Single");
+				expect(element.querySelectorAll("span").length).toBe(0);
+
+				useFragment.set(true);
+				expect(element.querySelector("div")).toBeNull();
+				expect(element.querySelectorAll("span").length).toBe(2);
+				expect(element.textContent).toBe("AB");
+			});
+
+			it("should handle empty fragment", () => {
+				const isEmpty = State(true);
+
+				const element = Base({
+					children: () => {
+						const fragment = document.createDocumentFragment();
+						if (!isEmpty.value) {
+							fragment.append(Base({ tag: "span", children: "Content" }));
+						}
+						return fragment;
+					},
+				});
+
+				expect(element.textContent).toBe("");
+				expect(element.querySelectorAll("span").length).toBe(0);
+
+				isEmpty.set(false);
+				expect(element.textContent).toBe("Content");
+				expect(element.querySelectorAll("span").length).toBe(1);
+
+				isEmpty.set(true);
+				expect(element.textContent).toBe("");
+				expect(element.querySelectorAll("span").length).toBe(0);
+			});
+
+			it("should handle fragment with text nodes", () => {
+				const prefix = State("Hello");
+
+				const element = Base({
+					children: () => {
+						const fragment = document.createDocumentFragment();
+						fragment.append(
+							document.createTextNode(prefix.value),
+							document.createTextNode(" "),
+							Base({ tag: "strong", children: "World" }),
+						);
+						return fragment;
+					},
+				});
+
+				expect(element.textContent).toBe("Hello World");
+				expect(element.querySelector("strong")?.textContent).toBe("World");
+
+				prefix.set("Hi");
+				expect(element.textContent).toBe("Hi World");
+			});
+
+			it("should handle nested fragments (fragment inside Base element)", () => {
+				const count = State(2);
+
+				const element = Base({
+					children: [
+						"Start: ",
+						Base({
+							tag: "div",
+							children: () => {
+								const fragment = document.createDocumentFragment();
+								for (let i = 0; i < count.value; i++) {
+									fragment.append(Base({ tag: "span", children: `${i + 1}` }));
+								}
+								return fragment;
+							},
+						}),
+						" :End",
+					],
+				});
+
+				expect(element.textContent).toBe("Start: 12 :End");
+				expect(element.querySelectorAll("span").length).toBe(2);
+
+				count.set(3);
+				expect(element.textContent).toBe("Start: 123 :End");
+				expect(element.querySelectorAll("span").length).toBe(3);
+			});
+
+			it("should handle fragment with reactive content inside", () => {
+				const text = State("Initial");
+				const showFragment = State(true);
+
+				const element = Base({
+					children: () => {
+						if (!showFragment.value) return null;
+
+						const fragment = document.createDocumentFragment();
+						fragment.append(
+							Base({ tag: "span", children: () => text.value }),
+							Base({ tag: "strong", children: " - Static" }),
+						);
+						return fragment;
+					},
+				});
+
+				expect(element.querySelector("span")?.textContent).toBe("Initial");
+				expect(element.textContent).toBe("Initial - Static");
+
+				text.set("Updated");
+				expect(element.querySelector("span")?.textContent).toBe("Updated");
+				expect(element.textContent).toBe("Updated - Static");
+
+				showFragment.set(false);
+				expect(element.textContent).toBe("");
+
+				showFragment.set(true);
+				expect(element.querySelector("span")?.textContent).toBe("Updated");
+			});
+
+			it("should maintain correct DOM order with consecutive fragment updates", () => {
+				const items = State(["A", "B"]);
+
+				const element = Base({
+					children: () => {
+						const fragment = document.createDocumentFragment();
+						items.value.forEach((item) => {
+							fragment.append(Base({ tag: "span", children: item }));
+						});
+						return fragment;
+					},
+				});
+
+				const getSpanTexts = () => Array.from(element.querySelectorAll("span")).map((s) => s.textContent);
+
+				expect(getSpanTexts()).toEqual(["A", "B"]);
+
+				items.set(["X", "Y", "Z"]);
+				expect(getSpanTexts()).toEqual(["X", "Y", "Z"]);
+
+				items.set(["1"]);
+				expect(getSpanTexts()).toEqual(["1"]);
+
+				items.set(["P", "Q"]);
+				expect(getSpanTexts()).toEqual(["P", "Q"]);
+			});
+
+			it("should not leak comment nodes outside the element", () => {
+				const show = State(true);
+
+				const element = Base({
+					children: () => {
+						if (!show.value) return null;
+						const fragment = document.createDocumentFragment();
+						fragment.append(Base({ tag: "span", children: "Test" }));
+						return fragment;
+					},
+				});
+
+				// Comment nodes should exist but be internal
+				const allNodes = Array.from(element.childNodes);
+				const commentNodes = allNodes.filter((node) => node.nodeType === Node.COMMENT_NODE);
+
+				// Should have start and end markers
+				expect(commentNodes.length).toBe(2);
+
+				show.set(false);
+				show.set(true);
+
+				// After updates, should still have exactly 2 markers (reused)
+				const allNodesAfter = Array.from(element.childNodes);
+				const commentNodesAfter = allNodesAfter.filter((node) => node.nodeType === Node.COMMENT_NODE);
+				expect(commentNodesAfter.length).toBe(2);
+			});
+		});
 	});
 });

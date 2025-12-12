@@ -4,6 +4,51 @@ import { registerJayJsElement } from "./jay-js-element.js";
 
 type ReactiveEffect = (target: any, prop: string) => void;
 
+/**
+ * Represents a range in the DOM delimited by comment node markers
+ * Used to track DocumentFragment insertions for reactive updates
+ */
+type FragmentRange = {
+	start: Comment;
+	end: Comment;
+	type: "fragment-range";
+};
+
+/**
+ * Type for node references that can be either a single Node or a FragmentRange
+ */
+type NodeRefType = Node | FragmentRange;
+
+/**
+ * Checks if a node reference is a FragmentRange
+ */
+function isFragmentRange(node: NodeRefType): node is FragmentRange {
+	return typeof node === "object" && node !== null && "type" in node && node.type === "fragment-range";
+}
+
+/**
+ * Removes all nodes between two marker nodes (exclusive)
+ */
+function removeNodesBetween(start: Node, end: Node): void {
+	let current = start.nextSibling;
+	while (current && current !== end) {
+		const next = current.nextSibling;
+		current.remove();
+		current = next;
+	}
+}
+
+/**
+ * Inserts an array of nodes after a given node
+ */
+function insertNodesAfter(afterNode: Node, nodes: Node[]): void {
+	let current = afterNode as ChildNode;
+	for (const node of nodes) {
+		current.after(node);
+		current = node as ChildNode;
+	}
+}
+
 function isReactiveValue(value: any): boolean {
 	return typeof value === "function" && (value as any)[REACTIVE_MARKER] === true;
 }
@@ -180,7 +225,46 @@ export function Base<T extends TBaseTagMap = "div">(
 	return base as HTMLElementTagNameMap[T];
 }
 
-function updateChildNode(currentNode: Node, newValue: string | number | Node | boolean | null | undefined): Node {
+function updateChildNode(currentNode: NodeRefType, newValue: string | number | Node | boolean | null | undefined): NodeRefType {
+	// Handle DocumentFragment
+	if (newValue instanceof DocumentFragment) {
+		const children = Array.from(newValue.childNodes);
+
+		if (children.length === 0) {
+			// Empty fragment - treat as null
+			return updateChildNode(currentNode, null);
+		}
+
+		if (isFragmentRange(currentNode)) {
+			// Already have a range - remove old content and insert new
+			removeNodesBetween(currentNode.start, currentNode.end);
+			insertNodesAfter(currentNode.start, children);
+			return currentNode; // Reuse the same markers
+		}
+
+		// First time - create markers
+		const startMarker = document.createComment("jayjs-fragment-start");
+		const endMarker = document.createComment("jayjs-fragment-end");
+
+		(currentNode as ChildNode).replaceWith(startMarker, ...children, endMarker);
+
+		return {
+			start: startMarker,
+			end: endMarker,
+			type: "fragment-range",
+		};
+	}
+
+	// If currentNode is a range but newValue is not a fragment, collapse the range
+	if (isFragmentRange(currentNode)) {
+		removeNodesBetween(currentNode.start, currentNode.end);
+		const placeholder = document.createTextNode("");
+		currentNode.start.replaceWith(placeholder);
+		currentNode.end.remove();
+		// Continue with normal logic using the placeholder
+		currentNode = placeholder;
+	}
+
 	if (typeof newValue === "string" || typeof newValue === "number") {
 		if (currentNode instanceof Text) {
 			currentNode.textContent = String(newValue);
@@ -237,9 +321,9 @@ function appendChildToBase(
 		}
 
 		const nodeRef = {
-			current: document.createTextNode("") as Node,
+			current: document.createTextNode("") as NodeRefType,
 		};
-		base.appendChild(nodeRef.current);
+		base.appendChild(nodeRef.current as Node);
 
 		const effectFn = () => {
 			const result = child();
