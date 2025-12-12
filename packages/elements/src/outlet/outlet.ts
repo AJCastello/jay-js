@@ -1,4 +1,4 @@
-import { Base } from "../base/base.js";
+import { Base } from "@jay-js/system";
 
 export function Outlet(): HTMLDivElement {
 	return Base({

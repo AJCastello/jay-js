@@ -8,12 +8,9 @@ export {
 	getCurrentTheme,
 	initTheme,
 	render,
-	selector,
-	selectors,
 	setTheme,
 	themeDefineOptions,
 	toggleThemeMode,
-	uniKey,
 } from "./utils/index.js";
 
 // Core elements

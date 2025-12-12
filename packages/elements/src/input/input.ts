@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TInput } from "./input.types";
 
 export function Input<T extends TBaseTagMap = "input">(

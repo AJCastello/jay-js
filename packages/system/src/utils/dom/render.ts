@@ -1,5 +1,4 @@
 import type { TRenderContent, TRenderContentSync, TRenderOptions, TRenderTarget } from "../types.js";
-import { selector } from "./query.js";
 
 /**
  * Checks if content contains any Promises
@@ -63,7 +62,7 @@ async function renderAsync(
 ): Promise<void> {
 	if (!target || content === null || content === undefined) return;
 
-	const element = typeof target === "string" ? selector(target) : target;
+	const element = typeof target === "string" ? document.querySelector(target) : target;
 	if (!element) return;
 
 	const resolvedContent = await resolveContent(content);
@@ -77,7 +76,7 @@ async function renderAsync(
 function renderSync(target: TRenderTarget, content: TRenderContentSync, options: TRenderOptions = {}): void {
 	if (!target || content === null || content === undefined) return;
 
-	const element = typeof target === "string" ? selector(target) : target;
+	const element = typeof target === "string" ? document.querySelector(target) : target;
 	if (!element) return;
 
 	if (options.replace) {
