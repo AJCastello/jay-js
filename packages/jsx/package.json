@@ -10,23 +10,25 @@
   ],
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "default": "./index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./jsx-runtime": {
-      "types": "./jsx-runtime.d.ts",
-      "default": "./jsx-runtime.js"
+      "types": "./dist/jsx-runtime.d.ts",
+      "import": "./dist/jsx-runtime.js",
+      "default": "./dist/jsx-runtime.js"
     },
     "./jsx-dev-runtime": {
-      "types": "./jsx-dev-runtime.d.ts",
-      "default": "./jsx-dev-runtime.js"
-    },
-    "./*": "./*"
+      "types": "./dist/jsx-dev-runtime.d.ts",
+      "import": "./dist/jsx-dev-runtime.js",
+      "default": "./dist/jsx-dev-runtime.js"
+    }
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "swc src -d dist --strip-leading-paths && npm run build:types",
+    "build": "bun build src/index.ts src/jsx-runtime.ts src/jsx-dev-runtime.ts --outdir dist --target browser --format esm --external @jay-js/elements && npm run build:types",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",

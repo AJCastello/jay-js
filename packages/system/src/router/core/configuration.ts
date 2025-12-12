@@ -1,4 +1,3 @@
-import { selector } from "../../utils/dom/query";
 import type { TRouteInstance, TRouterOptions } from "../types";
 
 /**
@@ -36,7 +35,7 @@ export const resolvedRoutes = new Map<string, TRouteInstance>();
  */
 export function routerDefineOptions(options: Partial<TRouterOptions>) {
 	if (typeof options.target === "string") {
-		const targetElement = selector(options.target);
+		const targetElement = document.querySelector(options.target) as HTMLElement | null;
 		if (!targetElement) {
 			if (options.onError) {
 				options.onError(new Error(`Target element not found: ${options.target}`, { cause: "invalid-target" }));

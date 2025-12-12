@@ -3,7 +3,7 @@
  * @description Provides the JSX transformation functions for development use
  */
 
-import { Base, Fragment } from "../core/index.js";
+import { Base, Fragment } from "../../core/index.js";
 
 /**
  * Type definition for JSX props
@@ -54,4 +54,4 @@ function jayJSXDEV(
 }
 
 export { jayJSXDEV as jsxDEV, Fragment };
-export type { JSX } from "./types/intrinsic-elements.js";
+export type { JSX } from "../types/intrinsic-elements.js";

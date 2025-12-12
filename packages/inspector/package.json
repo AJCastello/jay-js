@@ -25,7 +25,7 @@
   "scripts": {
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
     "prebuild": "rimraf ./dist",
-    "build": "swc src -d dist --strip-leading-paths && npm run build:types",
+    "build": "bun build src/index.ts src/plugin/index.ts src/runtime/index.ts --outdir dist --target node --format esm --external vite --external '@babel/*' --external magic-string && npm run build:types",
     "postbuild": "cpy ./src/**/*.{css,html} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",

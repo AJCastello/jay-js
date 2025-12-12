@@ -1,4 +1,4 @@
-import type { TRefObject } from "../utils/use-ref.js";
+import type { TRefObject } from "../../utils/dom/use-ref.js";
 
 interface HTMLFormElementExt extends HTMLElement {
 	acceptCharset: string;

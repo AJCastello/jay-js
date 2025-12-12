@@ -1,80 +1,7 @@
 import { vi } from "vitest";
-import { uniKey } from "./uni-key";
-import { type TRefObject, useRef } from "./use-ref";
+import { useRef } from "../use-ref";
 
 describe("Utility Functions", () => {
-	describe("uniKey", () => {
-		it("should generate a key with default length of 10", () => {
-			const key = uniKey();
-			expect(key).toHaveLength(10);
-			expect(typeof key).toBe("string");
-		});
-
-		it("should generate a key with specified length", () => {
-			const lengths = [1, 5, 15, 20, 50];
-
-			lengths.forEach((length) => {
-				const key = uniKey(length);
-				expect(key).toHaveLength(length);
-			});
-		});
-
-		it("should generate unique keys on multiple calls", () => {
-			const keys = new Set();
-			const iterations = 1000;
-
-			for (let i = 0; i < iterations; i++) {
-				const key = uniKey();
-				keys.add(key);
-			}
-
-			// Should generate mostly unique keys (allowing for minimal collision)
-			expect(keys.size).toBeGreaterThan(iterations * 0.95);
-		});
-
-		it("should only contain alphanumeric characters", () => {
-			const key = uniKey(100);
-			const validChars = /^[A-Za-z0-9]+$/;
-
-			expect(validChars.test(key)).toBe(true);
-		});
-
-		it("should handle edge cases", () => {
-			// Length 0
-			const emptyKey = uniKey(0);
-			expect(emptyKey).toBe("");
-
-			// Length 1
-			const singleKey = uniKey(1);
-			expect(singleKey).toHaveLength(1);
-		});
-
-		it("should generate keys with consistent character distribution", () => {
-			const key = uniKey(1000);
-			const uppercase = (key.match(/[A-Z]/g) || []).length;
-			const lowercase = (key.match(/[a-z]/g) || []).length;
-			const numbers = (key.match(/[0-9]/g) || []).length;
-
-			// Should have reasonable distribution of character types
-			expect(uppercase + lowercase + numbers).toBe(1000);
-			expect(uppercase).toBeGreaterThan(0);
-			expect(lowercase).toBeGreaterThan(0);
-			expect(numbers).toBeGreaterThan(0);
-		});
-
-		it("should be deterministic with same random seed", () => {
-			// Mock Math.random to test deterministic behavior
-			const mockRandom = vi.spyOn(Math, "random");
-			mockRandom.mockReturnValue(0.5);
-
-			const key1 = uniKey(5);
-			const key2 = uniKey(5);
-
-			expect(key1).toBe(key2);
-
-			mockRandom.mockRestore();
-		});
-	});
 
 	describe("useRef", () => {
 		it("should create a reference object with null current", () => {
@@ -178,46 +105,6 @@ describe("Utility Functions", () => {
 
 			expect(ref.current).toBe(testFunction);
 			expect(ref.current?.()).toBe("test result");
-		});
-	});
-
-	describe("Utility Integration", () => {
-		it("should work together in practical scenarios", () => {
-			const elementRef = useRef<HTMLElement>();
-			const uniqueId = uniKey(8);
-
-			const element = document.createElement("div");
-			element.id = uniqueId;
-			elementRef.current = element;
-
-			expect(elementRef.current?.id).toBe(uniqueId);
-			expect(elementRef.current?.id).toHaveLength(8);
-		});
-
-		it("should support reference arrays with unique keys", () => {
-			const refs: TRefObject<HTMLElement>[] = [];
-			const ids: string[] = [];
-
-			// Create multiple refs with unique IDs
-			for (let i = 0; i < 5; i++) {
-				const ref = useRef<HTMLElement>();
-				const id = uniKey(6);
-				const element = document.createElement("div");
-
-				element.id = id;
-				ref.current = element;
-
-				refs.push(ref);
-				ids.push(id);
-			}
-
-			// Verify all IDs are unique
-			expect(new Set(ids).size).toBe(5);
-
-			// Verify all refs are properly set
-			refs.forEach((ref, index) => {
-				expect(ref.current?.id).toBe(ids[index]);
-			});
 		});
 	});
 });

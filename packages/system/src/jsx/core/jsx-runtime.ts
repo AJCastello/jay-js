@@ -3,7 +3,7 @@
  * @description Provides the JSX transformation functions for production use
  */
 
-import { Base, Fragment } from "../core/index.js";
+import { Base, Fragment } from "../../core/index.js";
 
 /**
  * Type definition for JSX props
@@ -36,4 +36,4 @@ function jsx(tag: any, props: JSXProps): HTMLElement | Promise<HTMLElement> {
 }
 
 export { jsx, jsx as jsxs, Fragment };
-export type { JSX } from "./types/intrinsic-elements.js";
+export type { JSX } from "../types/intrinsic-elements.js";

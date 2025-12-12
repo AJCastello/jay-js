@@ -11,6 +11,7 @@ export {
 	setTheme,
 	themeDefineOptions,
 	toggleThemeMode,
+	useRef,
 } from "./utils/index.js";
 
 // Core elements
