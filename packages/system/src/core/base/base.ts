@@ -1,4 +1,4 @@
-import { Effect, REACTIVE_MARKER, Values } from "@jay-js/system";
+import { Effect, REACTIVE_MARKER, Values } from "../../state";
 import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 

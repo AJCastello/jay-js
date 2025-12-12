@@ -3,7 +3,7 @@
  * @description Provides the JSX transformation functions for development use
  */
 
-import { Base, Fragment } from "@jay-js/elements";
+import { Base, Fragment } from "../core/index.js";
 
 /**
  * Type definition for JSX props
