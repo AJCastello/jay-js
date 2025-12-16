@@ -27,7 +27,7 @@ export function getParams(): Record<string, string | string[]> {
 		if (matchResult && matchResult.params) {
 			// Process params to ensure they are all string or string[]
 			Object.entries(matchResult.params).forEach(([key, value]) => {
-				if (value !== undefined) {
+				if (value !== undefined && value !== null) {
 					params[key] = value;
 				}
 			});
@@ -36,7 +36,9 @@ export function getParams(): Record<string, string | string[]> {
 
 	// Also include query parameters
 	const searchParams = new URLSearchParams(window.location.search);
-	searchParams.forEach((value, key) => (params[key] = value));
+	for (const [key, value] of searchParams) {
+		params[key] = value;
+	}
 
 	return params;
 }

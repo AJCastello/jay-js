@@ -27,13 +27,11 @@ export function LazyModule(lazy: TLazyModule, loader?: HTMLElement) {
 		lazy = { ...lazy, module: moduleId };
 	}
 
-	let moduleSection: HTMLElement;
-
 	if (lazy.module && moduleCache.has(lazy.module)) {
 		return loadFromCache(lazy);
 	}
 
-	moduleSection = loader || document.createElement("jayjs-lazy-slot");
+	const moduleSection = loader || document.createElement("jayjs-lazy-slot");
 	loadModule(lazy, moduleSection);
 	return moduleSection;
 }

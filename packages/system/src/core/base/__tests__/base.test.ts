@@ -1,5 +1,5 @@
-import { State, Values } from "../../../state";
 import { vi } from "vitest";
+import { State, Values } from "../../../state";
 import { Base } from "../base";
 
 describe("Base Function", () => {
@@ -189,6 +189,20 @@ describe("Base Function", () => {
 			const element = Base({ ref });
 
 			expect(ref.current).toBe(element);
+		});
+
+		it("should clean ref.current when element is removed", async () => {
+			const ref = { current: null };
+			const element = Base({ tag: "div", ref });
+
+			document.body.appendChild(element);
+			expect(ref.current).toBe(element);
+
+			element.remove();
+
+			await new Promise((resolve) => setTimeout(resolve, 0));
+
+			expect(ref.current).toBeNull();
 		});
 	});
 
@@ -1056,11 +1070,7 @@ describe("Base Function", () => {
 			it("should flatten nested arrays from map operations", () => {
 				const items = ["A", "B", "C"];
 				const element = Base({
-					children: [
-						"Start-",
-						items.map((item) => Base({ tag: "span", children: item })),
-						"-End",
-					],
+					children: ["Start-", items.map((item) => Base({ tag: "span", children: item })), "-End"],
 				});
 
 				expect(element.children.length).toBe(3);
@@ -1069,16 +1079,7 @@ describe("Base Function", () => {
 
 			it("should handle deeply nested arrays", () => {
 				const element = Base({
-					children: [
-						"L1",
-						[
-							"L2",
-							[
-								"L3",
-								["L4"],
-							],
-						],
-					],
+					children: ["L1", ["L2", ["L3", ["L4"]]]],
 				});
 
 				expect(element.textContent).toBe("L1L2L3L4");
@@ -1106,10 +1107,7 @@ describe("Base Function", () => {
 				const state = State("Test");
 				const items = ["A", "B"];
 				const element = Base({
-					children: [
-						() => state.value,
-						items.map((item) => Base({ tag: "span", children: item })),
-					],
+					children: [() => state.value, items.map((item) => Base({ tag: "span", children: item }))],
 				});
 
 				expect(element.textContent).toBe("TestAB");
@@ -1120,13 +1118,7 @@ describe("Base Function", () => {
 
 			it("should handle empty arrays in nested structure", () => {
 				const element = Base({
-					children: [
-						"Start",
-						[],
-						"Middle",
-						[[], []],
-						"End",
-					],
+					children: ["Start", [], "Middle", [[], []], "End"],
 				});
 
 				expect(element.textContent).toBe("StartMiddleEnd");

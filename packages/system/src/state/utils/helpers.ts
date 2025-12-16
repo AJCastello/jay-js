@@ -61,13 +61,13 @@ export function Values(fn: () => any): any {
 	_set_value._object = undefined;
 	_set_value._path = [];
 	_set_value._fn = fn;
-	((_set_value as any)[SETVALUE_MARKER] = true);
+	(_set_value as any)[SETVALUE_MARKER] = true;
 
 	function _set_value_effect(object: any, ...path: string[]) {
 		_set_value._object = object;
 		_set_value._path = path;
 		Effect(_set_value);
 	}
-	((_set_value_effect as any)[REACTIVE_MARKER] = true);
+	(_set_value_effect as any)[REACTIVE_MARKER] = true;
 	return _set_value_effect;
 }

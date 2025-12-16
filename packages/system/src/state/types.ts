@@ -73,7 +73,7 @@ export type StateType<T> = TState<T>;
 /**
  * Interface for setValue function used by Values helper
  */
-export interface ISetValue extends Function {
+export interface ISetValue {
 	(): void;
 	_object: any;
 	_path: string[];

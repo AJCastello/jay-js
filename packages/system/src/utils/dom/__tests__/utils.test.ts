@@ -1,8 +1,6 @@
-import { vi } from "vitest";
 import { useRef } from "../use-ref";
 
 describe("Utility Functions", () => {
-
 	describe("useRef", () => {
 		it("should create a reference object with null current", () => {
 			const ref = useRef<string>();

@@ -1,5 +1,5 @@
 import { State } from "../../core/state.js";
-import { SETVALUE_MARKER, Values } from "../helpers.js";
+import { Values } from "../helpers.js";
 
 describe("Values", () => {
 	it("should set a value in an object based on state", () => {

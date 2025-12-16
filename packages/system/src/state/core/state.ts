@@ -1,6 +1,6 @@
 import type { StateType, TSetOptions } from "../types.js";
-import { subscriberManager } from "./subscriber.js";
 import { SETVALUE_MARKER } from "../utils/helpers.js";
+import { subscriberManager } from "./subscriber.js";
 
 /**
  * Creates a reactive state container that can be subscribed to for changes

@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from "vitest";
-import { State, Values } from "../../../state";
+import { State } from "../../../state";
 import { Base } from "../base.js";
 
 /**

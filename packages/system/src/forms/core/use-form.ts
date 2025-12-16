@@ -462,7 +462,9 @@ export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFo
 		elementCache.clear();
 
 		// Clear all debounce timers
-		debounceTimers.forEach((timer) => clearTimeout(timer));
+		for (const timer of debounceTimers.values()) {
+			clearTimeout(timer);
+		}
 		debounceTimers.clear();
 
 		// Cleanup all event listeners

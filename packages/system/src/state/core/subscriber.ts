@@ -44,7 +44,7 @@ class SubscriberManager {
 	 * @param func Function to generate the hash for
 	 * @returns String hash representing the function
 	 */
-	generateFunctionHash(func: Function): string {
+	generateFunctionHash(func: (...args: never) => unknown): string {
 		const funcString = func.toString();
 		let hash = 0;
 
