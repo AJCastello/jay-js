@@ -78,10 +78,7 @@ describe("Lifecycle Cleanup from onmount", () => {
 		element.remove();
 
 		expect(cleanup).toHaveBeenCalled();
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"JayJS: Error in onmount cleanup:",
-			expect.any(Error),
-		);
+		expect(consoleErrorSpy).toHaveBeenCalledWith("JayJS: Error in onmount cleanup:", expect.any(Error));
 
 		// onunmount should still be called even if cleanup throws
 		expect(onunmount).toHaveBeenCalledWith(element);
@@ -107,10 +104,7 @@ describe("Lifecycle Cleanup from onmount", () => {
 
 		expect(cleanup).toHaveBeenCalled();
 		expect(onunmount).toHaveBeenCalled();
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"JayJS: Error in onunmount:",
-			expect.any(Error),
-		);
+		expect(consoleErrorSpy).toHaveBeenCalledWith("JayJS: Error in onunmount:", expect.any(Error));
 
 		consoleErrorSpy.mockRestore();
 	});
@@ -131,7 +125,9 @@ describe("Lifecycle Cleanup from onmount", () => {
 				};
 			},
 			trigger: () => {
-				subscriptionCallbacks.forEach((cb) => cb());
+				for (const cb of subscriptionCallbacks) {
+					cb();
+				}
 			},
 		};
 
@@ -263,5 +259,42 @@ describe("Lifecycle Cleanup from onmount", () => {
 		element.remove();
 
 		expect(onunmount).toHaveBeenCalledWith(element);
+	});
+
+	it("ref is cleaned before onunmount is called", async () => {
+		const ref = { current: null };
+		let refValueInOnunmount: HTMLElement | null = "not-called" as any;
+
+		const element = Base({
+			tag: "div",
+			ref,
+			onunmount: () => {
+				refValueInOnunmount = ref.current;
+			},
+		});
+
+		document.body.appendChild(element);
+		expect(ref.current).toBe(element);
+
+		element.remove();
+
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		expect(refValueInOnunmount).toBeNull();
+		expect(ref.current).toBeNull();
+	});
+
+	it("ref is cleaned even without onmount/onunmount", async () => {
+		const ref = { current: null };
+		const element = Base({ tag: "div", ref });
+
+		document.body.appendChild(element);
+		expect(ref.current).toBe(element);
+
+		element.remove();
+
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		expect(ref.current).toBeNull();
 	});
 });

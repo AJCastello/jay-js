@@ -1,3 +1,4 @@
+import type { TRefObject } from "../../utils/dom/use-ref.js";
 import type { TBaseTagMap } from "./base.types";
 
 export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new () => HTMLElement {
@@ -9,8 +10,9 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
 	const BaseClass = baseElement.constructor as { new (): HTMLElement };
 
 	class JayJsElement extends BaseClass {
-		onmount?: (element: HTMLElement) => void | (() => void) | Promise<void | (() => void)>;
+		onmount?: (element: HTMLElement) => void | (() => void) | Promise<undefined | (() => void)>;
 		onunmount?: (element: HTMLElement) => void | Promise<void>;
+		_ref?: TRefObject<HTMLElement>;
 		private _cleanupFromMount?: () => void;
 
 		connectedCallback() {
@@ -18,13 +20,15 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
 				const result = this.onmount(this);
 
 				if (result instanceof Promise) {
-					result.then((cleanup) => {
-						if (typeof cleanup === "function") {
-							this._cleanupFromMount = cleanup;
-						}
-					}).catch((error) => {
-						console.error("JayJS: Error in async onmount:", error);
-					});
+					result
+						.then((cleanup) => {
+							if (typeof cleanup === "function") {
+								this._cleanupFromMount = cleanup;
+							}
+						})
+						.catch((error) => {
+							console.error("JayJS: Error in async onmount:", error);
+						});
 				} else if (typeof result === "function") {
 					this._cleanupFromMount = result;
 				}
@@ -32,6 +36,11 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
 		}
 
 		disconnectedCallback() {
+			if (this._ref) {
+				this._ref.current = null;
+				this._ref = undefined;
+			}
+
 			if (typeof this._cleanupFromMount === "function") {
 				try {
 					this._cleanupFromMount();
@@ -42,18 +51,16 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
 			}
 
 			if (typeof this.onunmount === "function") {
-				const result = this.onunmount(this);
+				try {
+					const result = this.onunmount(this);
 
-				if (result instanceof Promise) {
-					result.catch((error) => {
-						console.error("JayJS: Error in async onunmount:", error);
-					});
-				} else {
-					try {
-						// No synchronous cleanup expected here
-					} catch (error) {
-						console.error("JayJS: Error in onunmount:", error);
+					if (result instanceof Promise) {
+						result.catch((error) => {
+							console.error("JayJS: Error in async onunmount:", error);
+						});
 					}
+				} catch (error) {
+					console.error("JayJS: Error in onunmount:", error);
 				}
 			}
 		}

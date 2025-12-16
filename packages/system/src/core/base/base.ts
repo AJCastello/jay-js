@@ -85,7 +85,7 @@ export function Base<T extends TBaseTagMap = "div">(
 		tag: "div",
 	},
 ): HTMLElementTagNameMap[T] {
-	const hasLifecycle = Boolean(onmount || onunmount);
+	const hasLifecycle = Boolean(onmount || onunmount || ref);
 
 	if (hasLifecycle) {
 		registerJayJsElement(tag || "div");
@@ -99,10 +99,10 @@ export function Base<T extends TBaseTagMap = "div">(
 		const lyfercycleElement = base as unknown as TLifecycleElement;
 		if (onmount) lyfercycleElement.onmount = onmount;
 		if (onunmount) lyfercycleElement.onunmount = onunmount;
-	}
-
-	if (ref) {
-		ref.current = base;
+		if (ref) {
+			lyfercycleElement._ref = ref;
+			ref.current = base;
+		}
 	}
 
 	if (id) {
@@ -225,7 +225,10 @@ export function Base<T extends TBaseTagMap = "div">(
 	return base as HTMLElementTagNameMap[T];
 }
 
-function updateChildNode(currentNode: NodeRefType, newValue: string | number | Node | boolean | null | undefined): NodeRefType {
+function updateChildNode(
+	currentNode: NodeRefType,
+	newValue: string | number | Node | boolean | null | undefined,
+): NodeRefType {
 	// Handle DocumentFragment
 	if (newValue instanceof DocumentFragment) {
 		const children = Array.from(newValue.childNodes);
@@ -303,7 +306,14 @@ function appendChildToBase(
 		| null
 		| undefined
 		| Promise<string | number | Node | boolean | null | undefined>
-		| (() => string | number | Node | boolean | null | undefined | Promise<string | number | Node | boolean | null | undefined>)
+		| (() =>
+				| string
+				| number
+				| Node
+				| boolean
+				| null
+				| undefined
+				| Promise<string | number | Node | boolean | null | undefined>)
 		| any[],
 ): void {
 	if (Array.isArray(child)) {
