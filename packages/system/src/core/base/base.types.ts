@@ -61,8 +61,8 @@ type TChildArray = (TChildValue | TChildPromise | TChildFunction | TChildArray)[
 export type TChildren = TChildValue | TChildPromise | TChildFunction | TChildArray;
 
 export type TLifecycleElement = {
-	onmount?: (element: HTMLElement) => void | (() => void);
-	onunmount?: (element: HTMLElement) => void;
+	onmount?: (element: HTMLElement) => void | (() => void) | Promise<void | (() => void)>;
+	onunmount?: (element: HTMLElement) => void | Promise<void>;
 } & HTMLElement;
 
 type ReactiveHTMLProps<T> = {
@@ -87,8 +87,8 @@ export type TBaseElement<T extends TBaseTagMap> = {
 				[K in keyof TStyle]?: TStyle[K] | (() => TStyle[K]);
 		  };
 	children?: TChildren;
-	onmount?: (element: HTMLElement) => void | (() => void);
-	onunmount?: (element: HTMLElement) => void;
+	onmount?: (element: HTMLElement) => void | (() => void) | Promise<void | (() => void)>;
+	onunmount?: (element: HTMLElement) => void | Promise<void>;
 } & ReactiveHTMLProps<Omit<TBaseTagNameMap[T], "children" | "style" | "size" | "className" | "dataset">>;
 
 export type TBaseDiv = TBaseElement<TBaseTagMap> & {
