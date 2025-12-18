@@ -28,7 +28,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "bun build src/index.ts src/jsx-runtime.ts src/jsx-dev-runtime.ts --outdir dist --target browser --format esm --external @jay-js/elements && npm run build:types",
+    "build": "bun build src/index.ts src/jsx-runtime.ts src/jsx-dev-runtime.ts --outdir dist --target browser --format esm --external @jay-js/system && npm run build:types",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
@@ -71,11 +71,7 @@
     "typescript": "^5.4.5",
     "vitest": "^2.1.8"
   },
-  "dependencies": {
-    "@jay-js/elements": "file:../elements"
-  },
   "peerDependencies": {
-    "@jay-js/ui": "^4.2.0",
-    "@jay-js/elements": "^1.2.0"
+    "@jay-js/system": "^4.0.1"
   }
 }

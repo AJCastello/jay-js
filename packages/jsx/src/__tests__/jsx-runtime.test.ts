@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { Fragment, jsx } from "../runtime/jsx-runtime.js";
+import { Fragment, jsx } from "../jsx-runtime.js";
 
 describe("JSX Runtime", () => {
 	beforeEach(() => {

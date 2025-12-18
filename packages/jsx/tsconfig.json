@@ -16,15 +16,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node"],
-    "paths": {
-      "@jay-js/system": [
-        "../system/dist"
-      ],
-      "@jay-js/system/*": [
-        "../system/dist/*"
-      ]
-    }
+    "types": ["node"]
   },
   "include": [
     "./src/**/*",

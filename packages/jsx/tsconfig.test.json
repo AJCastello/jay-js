@@ -12,8 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "@jay-js/jsx": ["./src/index.ts"],
-      "@jay-js/jsx/*": ["./src/*"],
-      "@jay-js/elements": ["../elements/dist"]
+      "@jay-js/jsx/*": ["./src/*"]
     }
   },
   "include": ["test-jsx.tsx", "src/**/*.ts"],
