@@ -1,5 +1,5 @@
 import { Box, type TButton } from "@jay-js/elements";
-import { Base, type TBaseTagMap } from "@jay-js/system/dist";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 
 export function ModalBackdrop<T extends TBaseTagMap = "div">(

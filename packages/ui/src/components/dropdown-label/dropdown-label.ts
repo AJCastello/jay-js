@@ -1,4 +1,4 @@
-import { Base, type TBase, type TBaseTagMap } from "@jay-js/system/dist";
+import { Base, type TBase, type TBaseTagMap } from "@jay-js/system";
 
 export function DropdownLabel<T extends TBaseTagMap = "label">(
 	{ ...props }: TBase<T> = { tag: "label" },

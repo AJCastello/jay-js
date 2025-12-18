@@ -1,5 +1,5 @@
 import { ListItem } from "@jay-js/elements";
-import { TBaseTagMap } from "@jay-js/system/dist";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TStepItem } from "./step-item.types";
 

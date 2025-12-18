@@ -3,7 +3,14 @@ import { cn } from "../../utils";
 import type { TToast } from "../toast/toast.types";
 
 export function ToastContainer<T extends TBaseTagMap = "div">(
-	{ horizontal = "toast-end", vertical = "toast-top", duration = 5000, asChild = false, dataset, ...props }: TToast<T> = {
+	{
+		horizontal = "toast-end",
+		vertical = "toast-top",
+		duration = 5000,
+		asChild = false,
+		dataset,
+		...props
+	}: TToast<T> = {
 		tag: "div",
 	},
 ): HTMLElementTagNameMap[T] {
@@ -17,7 +24,7 @@ export function ToastContainer<T extends TBaseTagMap = "div">(
 			vertical: vertical || "",
 			duration: duration.toString() || "",
 			asChild: asChild ? "true" : "false",
-			...(typeof dataset === "function" ? dataset() : dataset)
-		}
+			...(typeof dataset === "function" ? dataset() : dataset),
+		},
 	}) as HTMLElementTagNameMap[T];
 }
