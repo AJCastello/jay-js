@@ -1,4 +1,4 @@
-import { Base } from "@jay-js/elements";
+import { Base } from "@jay-js/system/dist";
 import type { IResizableSplitter } from "./resizable-splitter.types.js";
 
 export function ResizableSplitter({ direction = "vertical", ...props }: IResizableSplitter = {}): HTMLDivElement {

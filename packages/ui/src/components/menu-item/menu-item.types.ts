@@ -1,4 +1,5 @@
-import type { TBaseTagMap, TListItem } from "@jay-js/elements";
+import { TListItem } from "@jay-js/elements";
+import { TBaseTagMap } from "@jay-js/system/dist";
 
 export type TMenuItem<T extends TBaseTagMap> = {
 	disabled?: boolean;

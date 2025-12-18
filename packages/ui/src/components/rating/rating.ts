@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TRating } from "./rating.types";
 

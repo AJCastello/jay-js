@@ -9,10 +9,13 @@ vi.mock("../module-loader.js", () => ({
 	loadModule: vi.fn(),
 }));
 
-// Mock the uniKey function
-vi.mock("../../../utils/index.js", () => ({
-	uniKey: vi.fn(() => "test-key-123"),
-}));
+// Mock crypto.randomUUID
+Object.defineProperty(global, "crypto", {
+	value: {
+		randomUUID: vi.fn(() => "test-key-123"),
+	},
+	writable: true,
+});
 
 describe("LazyModule", () => {
 	beforeEach(() => {

@@ -1,6 +1,7 @@
-import { Select as SelectElement, type TBaseTagMap } from "@jay-js/elements";
+import { Select as SelectElement } from "@jay-js/elements";
 import { cn } from "../../utils/cn";
 import type { TSelect } from "./select.types";
+import { TBaseTagMap } from "@jay-js/system/dist";
 
 export function Select<T extends TBaseTagMap = "select">(
 	{ className, variant, color, size, fullWidth, ...props }: TSelect<T> = { tag: "select" },

@@ -1,4 +1,4 @@
-import type { TBase, TBaseTagMap } from "@jay-js/elements";
+import type { TBase, TBaseTagMap } from "@jay-js/system";
 
 export type TLoading<T extends TBaseTagMap> = {
 	type?: "loading-spinner" | "loading-dots" | "loading-ring" | "loading-ball" | "loading-bars" | "loading-infinity";

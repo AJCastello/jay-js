@@ -1,5 +1,6 @@
-import { Box, Input, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
+import { Box, Input } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TTextInput } from "./text-input.types";
 
 export function TextInput<T extends TBaseTagMap = "input">(

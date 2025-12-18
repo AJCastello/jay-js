@@ -1,4 +1,4 @@
-import type { TBase, TBaseTagMap } from "@jay-js/elements";
+import type { TBase, TBaseTagMap } from "@jay-js/system";
 
 export type TRating<T extends TBaseTagMap> = {
 	size?: "rating-lg" | "rating-md" | "rating-sm" | "rating-xs";

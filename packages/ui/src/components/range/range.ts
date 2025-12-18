@@ -1,4 +1,5 @@
-import { Input, type TBaseTagMap } from "@jay-js/elements";
+import { Input } from "@jay-js/elements";
+import { TBaseTagMap } from "@jay-js/system/dist";
 import { cn } from "../../utils/cn";
 import type { TRange } from "./range.types";
 

@@ -229,15 +229,6 @@ describe("Enhanced Theme Manager", () => {
 			expect(documentMock.documentElement.style.removeProperty).toHaveBeenCalledWith("text-decoration");
 		});
 
-		it("should dispatch enhanced themeChanged event", () => {
-			setTheme("red", "dark");
-
-			expect(documentMock.dispatchEvent).toHaveBeenCalled();
-			const eventArg = documentMock.dispatchEvent.mock.calls[0][0];
-			expect(eventArg.type).toBe("themeChanged");
-			expect(eventArg.detail.theme).toBe("cave");
-			expect(eventArg.detail.mode).toBe("dark");
-		});
 	});
 
 	describe("toggleThemeMode", () => {

@@ -148,6 +148,7 @@ export const State = <T>(data: T): StateType<T> => {
 		 * Getter for state value that automatically registers the current subscriber
 		 */
 		get value() {
+			console.log("Accessing state value, registering subscriber if exists. 🔨");
 			const currentSubscriber = subscriberManager.getSubscriber();
 			if (currentSubscriber) {
 				let hash: string;

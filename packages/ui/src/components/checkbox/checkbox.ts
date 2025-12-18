@@ -1,5 +1,6 @@
-import { Input, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
+import { Input } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TCheckbox } from "./checkbox.types";
 
 export function Checkbox<T extends TBaseTagMap = "input">(

@@ -1,5 +1,6 @@
-import { Base, Input, type TBaseTagMap, Typography } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
+import { Input, Typography } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TToggle } from "./toggle.types";
 
 export function Toggle<T extends TBaseTagMap = "div" | "input">(

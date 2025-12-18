@@ -7,7 +7,6 @@ export * from "./input";
 export * from "./link";
 export * from "./list";
 export * from "./list-item";
-export * from "./outlet";
 export * from "./progress";
 export * from "./section";
 export * from "./select";

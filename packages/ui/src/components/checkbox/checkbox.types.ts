@@ -1,4 +1,4 @@
-import type { TBase, TBaseTagMap } from "@jay-js/elements";
+import type { TBase, TBaseTagMap } from "@jay-js/system";
 
 export type TCheckbox<T extends TBaseTagMap = "input"> = {
 	color?:
