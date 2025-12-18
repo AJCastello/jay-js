@@ -13,10 +13,10 @@ export function ToastContainer<T extends TBaseTagMap = "div">(
 		...props,
 		className,
 		dataset: {
-			horizontal,
-			vertical,
-			duration: duration.toString(),
+			horizontal: horizontal || "",
+			vertical: vertical || "",
+			duration: duration.toString() || "",
 			asChild: asChild ? "true" : "false",
-		},
+		}
 	}) as HTMLElementTagNameMap[T];
 }

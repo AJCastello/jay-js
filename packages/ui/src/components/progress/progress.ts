@@ -1,5 +1,5 @@
 import { Progress } from "@jay-js/elements";
-import { TBaseTagMap } from "@jay-js/system/dist";
+import type { TBaseTagMap } from "@jay-js/system/dist";
 import { cn } from "../../utils/cn";
 import type { TProgress } from "./progress.types";
 

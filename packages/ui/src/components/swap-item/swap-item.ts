@@ -1,4 +1,5 @@
-import { Box, type TBaseTagMap } from "@jay-js/elements";
+import { Box } from "@jay-js/elements";
+import { TBaseTagMap } from "@jay-js/system/dist";
 import { cn } from "../../utils/cn";
 import type { TSwapItem } from "./swap-item.types";
 
