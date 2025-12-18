@@ -18,11 +18,11 @@
     "allowSyntheticDefaultImports": true,
     "types": ["node"],
     "paths": {
-      "@jay-js/elements": [
-        "../elements/dist"
+      "@jay-js/system": [
+        "../system/dist"
       ],
-      "@jay-js/elements/*": [
-        "../elements/dist/*"
+      "@jay-js/system/*": [
+        "../system/dist/*"
       ]
     }
   },

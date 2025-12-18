@@ -1,4 +1,4 @@
-import type { TBase } from "@jay-js/elements";
+import type { TBase } from "@jay-js/system";
 
 export declare namespace JSX {
 	type Element = HTMLElement | Promise<HTMLElement>;
