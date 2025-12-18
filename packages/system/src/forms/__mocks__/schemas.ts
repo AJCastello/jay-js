@@ -22,7 +22,7 @@ export const createMockYupSchema = <T>(validationFn: (data: T) => void): YupObje
 			validationFn(value);
 			return value;
 		},
-		validateAt: async (path: string, value: any) => {
+		validateAt: async (_path: string, value: any) => {
 			validationFn(value);
 			return value;
 		},

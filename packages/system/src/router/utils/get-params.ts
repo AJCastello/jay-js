@@ -24,7 +24,7 @@ export function getParams(): Record<string, string | string[]> {
 		const matcher = createMatcher(match.route.path);
 		const matchResult = matcher(window.location.pathname);
 
-		if(!matchResult) {
+		if (!matchResult) {
 			return params;
 		}
 
