@@ -1,5 +1,5 @@
-import type { ZodSchema } from "zod";
-import type { TResolver } from "../types";
+import type { ZodSchema } from "../types/external-types.js";
+import type { TResolver } from "../types.js";
 
 /**
  * Creates a resolver function for validating form values using a Zod schema.
