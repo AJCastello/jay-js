@@ -16,7 +16,11 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@jay-js/system": ["../system/dist/index.d.ts"]
+    }
   },
   "include": [
     "./src/**/*",
