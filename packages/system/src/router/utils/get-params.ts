@@ -24,7 +24,11 @@ export function getParams(): Record<string, string | string[]> {
 		const matcher = createMatcher(match.route.path);
 		const matchResult = matcher(window.location.pathname);
 
-		if (matchResult && matchResult.params) {
+		if(!matchResult) {
+			return params;
+		}
+
+		if (matchResult.params) {
 			// Process params to ensure they are all string or string[]
 			Object.entries(matchResult.params).forEach(([key, value]) => {
 				if (value !== undefined && value !== null) {

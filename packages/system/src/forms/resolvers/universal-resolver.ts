@@ -1,7 +1,7 @@
 import type { TResolver } from "../types.js";
-import { standardSchemaResolver, type StandardSchemaV1 } from "./standard-schema-resolver.js";
-import { zodResolver } from "./zod-resolver.js";
+import { type StandardSchemaV1, standardSchemaResolver } from "./standard-schema-resolver.js";
 import { yupResolver } from "./yup-resolver.js";
+import { zodResolver } from "./zod-resolver.js";
 
 export function resolver<T>(schema: any): TResolver<T> {
 	if (schema["~standard"]) {
@@ -16,7 +16,5 @@ export function resolver<T>(schema: any): TResolver<T> {
 		return yupResolver<T>(schema);
 	}
 
-	throw new Error(
-		"Unsupported schema type. Please use Zod, Yup, or a Standard Schema compatible library.",
-	);
+	throw new Error("Unsupported schema type. Please use Zod, Yup, or a Standard Schema compatible library.");
 }

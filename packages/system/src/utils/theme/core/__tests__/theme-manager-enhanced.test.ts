@@ -228,7 +228,6 @@ describe("Enhanced Theme Manager", () => {
 			// Should clear the previous custom style
 			expect(documentMock.documentElement.style.removeProperty).toHaveBeenCalledWith("text-decoration");
 		});
-
 	});
 
 	describe("toggleThemeMode", () => {

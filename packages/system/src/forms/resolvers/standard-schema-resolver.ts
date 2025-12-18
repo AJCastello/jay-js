@@ -6,9 +6,7 @@ export interface StandardSchemaV1 {
 		vendor: string;
 		validate: (
 			value: unknown,
-		) =>
-			| { value: unknown; issues?: undefined }
-			| { issues: Array<{ message: string; path?: (string | number)[] }> };
+		) => { value: unknown; issues?: undefined } | { issues: Array<{ message: string; path?: (string | number)[] }> };
 	};
 }
 
