@@ -77,36 +77,14 @@ export function Values(fn: () => any): (object: any, ...path: string[]) => void 
 	});
 }
 
-export function ChildValues(child: any, nodeRef: TRefObject<any>, updateChildNode: (...args: any[]) => any): any {
-	console.log("Setting up ChildValues reactive effect for nodeRef:", nodeRef.id);
-	const _set_child = Object.assign(() => {
-		console.log("Running ChildValues effect for nodeRef:", nodeRef.id);
-		const result = child()
-
-		if (result instanceof Promise) {
-			result
-				.then((resolved) => {
-					nodeRef.current = updateChildNode(nodeRef.current, resolved);
-				})
-				.catch((error) => {
-					console.error("JayJS: Error resolving child Promise:", error);
-					nodeRef.current = updateChildNode(nodeRef.current, null);
-				});
-			return;
-		}
-
-		nodeRef.current = updateChildNode(nodeRef.current, result);
-	}, {
-		_fn: child,
-		_ref: nodeRef.id,
+export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
+	const _set_child = Object.assign(setChild, {
+		_fn: fn,
+		_ref: nodeRefId,
 		[SETCHILD_MARKER]: true,
 	});
 
 	Effect(_set_child);
-	// return Object.assign((object: any, ...path: string[]) => {
-	// }, {
-	// 	[REACTIVE_MARKER]: true,
-	// });
 }
 
 

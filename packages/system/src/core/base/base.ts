@@ -1,5 +1,5 @@
 import { Effect, REACTIVE_MARKER, Values } from "../../state";
-import { ChildValues, SETCHILD_MARKER } from "../../state/utils/helpers";
+import { Childs, SETCHILD_MARKER } from "../../state/utils/helpers";
 import { TRefObject } from "../../utils/dom/use-ref";
 import type { TBase, TBaseTagMap, TChildren, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
@@ -76,10 +76,6 @@ function isEventHandler(propName: string, value: any): boolean {
 	}
 
 	return false;
-}
-
-function isReactiveFunction(fn: (...args: any[]) => any): boolean {
-	return (fn as any)[REACTIVE_MARKER] === true;
 }
 
 export function Base<T extends TBaseTagMap = "div">(
@@ -303,9 +299,6 @@ function appendChildToBase(
 	child: TChildren
 ): void {
 	if (Array.isArray(child)) {
-		// child.forEach((nestedChild) => {
-		// 	appendChildToBase(base, nestedChild);
-		// });
 		for (const nestedChild of child) {
 			appendChildToBase(base, nestedChild);
 		}
@@ -313,22 +306,33 @@ function appendChildToBase(
 	}
 
 	if (typeof child === "function") {
-		// vrificar qual é o caso de uso deste:
-		if (isReactiveFunction(child)) {
-			console.log("🤠Child is a reactive function, setting up ChildValues effect");
-			const result = child();
-			appendChildToBase(base, result);
-			return;
-		}
+
+		const nodeRefId = crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
 
 		const nodeRef: TRefObject<TNodeRef> = {
 			current: document.createTextNode("") as TNodeRef,
-			id: crypto.getRandomValues(new Uint32Array(1))[0].toString(16),
+			id: nodeRefId
 		};
 
 		base.appendChild(nodeRef.current as Node);
 
-		ChildValues(child, nodeRef, updateChildNode);
+		const setChild = () => {
+			const result = child()
+			if (result instanceof Promise) {
+				result
+					.then((resolved) => {
+						nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, resolved);
+					})
+					.catch((error) => {
+						console.error("JayJS: Error resolving child Promise:", error);
+						nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, null);
+					});
+				return;
+			}
+			nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, result);
+		}
+
+		Childs(child, nodeRefId, setChild);
 
 		return;
 	}
