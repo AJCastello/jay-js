@@ -1,9 +1,13 @@
+import { TChildren } from "../../core/index.js";
+import { TRefObject } from "../../utils/dom/use-ref.js";
 import { State } from "../core/state.js";
 import { subscriberManager } from "../core/subscriber.js";
 import type { ISetValue, StateType } from "../types.js";
 
 export const REACTIVE_MARKER = Symbol("reactive");
 export const SETVALUE_MARKER = Symbol("setValue");
+export const SETCHILD_MARKER = Symbol("setChildren");
+
 
 /**
  * Creates a derived state that automatically recalculates whenever states
@@ -42,10 +46,10 @@ export function Effect(fn: () => void) {
  * @param fn Function that returns the value to be set
  * @returns Function for setting values in objects
  */
-export function Values(fn: () => any): any {
-	const _set_value: ISetValue = () => {
+export function Values(fn: () => any): (object: any, ...path: string[]) => void {
+	const _set_value: ISetValue = Object.assign(() => {
 		if (_set_value._path.length > 0) {
-			let target = _set_value._object;
+			let target = _set_value._object_ref;
 			for (let i = 0; i < _set_value._path.length - 1; i++) {
 				if (!target[_set_value._path[i]]) {
 					target[_set_value._path[i]] = {};
@@ -56,18 +60,78 @@ export function Values(fn: () => any): any {
 			target[lastKey] = _set_value._fn();
 			return;
 		}
-		_set_value._object = _set_value._fn();
-	};
-	_set_value._object = undefined;
-	_set_value._path = [];
-	_set_value._fn = fn;
-	(_set_value as any)[SETVALUE_MARKER] = true;
+		_set_value._object_ref = _set_value._fn(); // Isso aqui é para o caso de setar o objeto todo, Mas talvez não faça sentido
+	}, {
+		_object_ref: undefined,
+		_path: [] as string[],
+		_fn: fn,
+		[SETVALUE_MARKER]: true,
+	});
 
-	function _set_value_effect(object: any, ...path: string[]) {
-		_set_value._object = object;
+	return Object.assign((object: any, ...path: string[]) => {
+		_set_value._object_ref = object;
 		_set_value._path = path;
 		Effect(_set_value);
+	}, {
+		[REACTIVE_MARKER]: true,
+	});
+}
+
+export function ChildValues(child: any, nodeRef: TRefObject<any>, updateChildNode: (...args: any[]) => any): any {
+	console.log("Setting up ChildValues reactive effect for nodeRef:", nodeRef.id);
+	const _set_child = Object.assign(() => {
+		console.log("Running ChildValues effect for nodeRef:", nodeRef.id);
+		const result = child()
+
+		if (result instanceof Promise) {
+			result
+				.then((resolved) => {
+					nodeRef.current = updateChildNode(nodeRef.current, resolved);
+				})
+				.catch((error) => {
+					console.error("JayJS: Error resolving child Promise:", error);
+					nodeRef.current = updateChildNode(nodeRef.current, null);
+				});
+			return;
+		}
+
+		nodeRef.current = updateChildNode(nodeRef.current, result);
+	}, {
+		_fn: child,
+		_ref: nodeRef.id,
+		[SETCHILD_MARKER]: true,
+	});
+
+	Effect(_set_child);
+	// return Object.assign((object: any, ...path: string[]) => {
+	// }, {
+	// 	[REACTIVE_MARKER]: true,
+	// });
+}
+
+
+export function generateFunctionHash(fn: (...args: never) => unknown): string {
+	let suffix = "";
+	let _fn: (...args: never) => unknown = fn;
+
+	if ((fn as any)[SETVALUE_MARKER]) {
+		suffix = (fn as any)._path.join(".");
+		_fn = (fn as any)._fn;
 	}
-	(_set_value_effect as any)[REACTIVE_MARKER] = true;
-	return _set_value_effect;
+
+	if ((fn as any)[SETCHILD_MARKER]) {
+		suffix = (fn as any)._ref;
+		_fn = (fn as any)._fn;
+	}
+
+	const _fn_string = _fn.toString();
+	let hash = 0;
+
+	for (let i = 0; i < _fn_string.length; i++) {
+		const char = _fn_string.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash |= 0;
+	}
+
+	return `${Math.abs(hash).toString(16)}${suffix ? `-${suffix}` : ""}`;
 }

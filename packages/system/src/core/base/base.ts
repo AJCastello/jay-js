@@ -1,5 +1,7 @@
 import { Effect, REACTIVE_MARKER, Values } from "../../state";
-import type { TBase, TBaseTagMap, TLifecycleElement, TStyle } from "./base.types.js";
+import { ChildValues, SETCHILD_MARKER } from "../../state/utils/helpers";
+import { TRefObject } from "../../utils/dom/use-ref";
+import type { TBase, TBaseTagMap, TChildren, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
 type ReactiveEffect = (target: any, prop: string) => void;
@@ -17,12 +19,12 @@ type FragmentRange = {
 /**
  * Type for node references that can be either a single Node or a FragmentRange
  */
-type NodeRefType = Node | FragmentRange;
+type TNodeRef = Node | FragmentRange;
 
 /**
  * Checks if a node reference is a FragmentRange
  */
-function isFragmentRange(node: NodeRefType): node is FragmentRange {
+function isFragmentRange(node: TNodeRef): node is FragmentRange {
 	return typeof node === "object" && node !== null && "type" in node && node.type === "fragment-range";
 }
 
@@ -53,7 +55,7 @@ function isReactiveValue(value: any): boolean {
 	return typeof value === "function" && (value as any)[REACTIVE_MARKER] === true;
 }
 
-function autoWrapReactive<T>(value: T | (() => T)): T | ReactiveEffect {
+function autoWrapReactiveValues<T>(value: T | (() => T)): T | ReactiveEffect {
 	if (typeof value === "function") {
 		if ((value as any)[REACTIVE_MARKER] === true) {
 			return value as unknown as ReactiveEffect;
@@ -106,7 +108,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (id) {
-		const wrappedId = autoWrapReactive(id);
+		const wrappedId = autoWrapReactiveValues(id);
 		if (isReactiveValue(wrappedId)) {
 			(wrappedId as unknown as ReactiveEffect)(base, "id");
 		} else {
@@ -115,7 +117,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (className) {
-		const wrappedClassName = autoWrapReactive(className);
+		const wrappedClassName = autoWrapReactiveValues(className);
 		if (isReactiveValue(wrappedClassName)) {
 			(wrappedClassName as unknown as ReactiveEffect)(base, "className");
 		} else {
@@ -134,7 +136,7 @@ export function Base<T extends TBaseTagMap = "div">(
 		} else {
 			Object.entries(style).forEach(([key, value]: [string, any]) => {
 				if (key === "parentRule" || key === "length") return;
-				const wrappedValue = autoWrapReactive(value);
+				const wrappedValue = autoWrapReactiveValues(value);
 				if (isReactiveValue(wrappedValue)) {
 					(wrappedValue as unknown as ReactiveEffect)(base.style, key);
 				} else {
@@ -149,7 +151,7 @@ export function Base<T extends TBaseTagMap = "div">(
 			(dataset as unknown as ReactiveEffect)(base, "dataset");
 		} else {
 			Object.entries(dataset).forEach(([key, value]) => {
-				const wrappedValue = autoWrapReactive(value);
+				const wrappedValue = autoWrapReactiveValues(value);
 				if (isReactiveValue(wrappedValue)) {
 					(wrappedValue as unknown as ReactiveEffect)(base.dataset, key);
 				} else {
@@ -207,7 +209,7 @@ export function Base<T extends TBaseTagMap = "div">(
 				return;
 			}
 
-			const wrappedValue = autoWrapReactive(value);
+			const wrappedValue = autoWrapReactiveValues(value);
 			if (isReactiveValue(wrappedValue)) {
 				(wrappedValue as unknown as ReactiveEffect)(base, key);
 			} else {
@@ -226,9 +228,9 @@ export function Base<T extends TBaseTagMap = "div">(
 }
 
 function updateChildNode(
-	currentNode: NodeRefType,
+	currentNode: TNodeRef,
 	newValue: string | number | Node | boolean | null | undefined,
-): NodeRefType {
+): TNodeRef {
 	// Handle DocumentFragment
 	if (newValue instanceof DocumentFragment) {
 		const children = Array.from(newValue.childNodes);
@@ -298,62 +300,35 @@ function updateChildNode(
 
 function appendChildToBase(
 	base: HTMLElement,
-	child:
-		| string
-		| number
-		| Node
-		| boolean
-		| null
-		| undefined
-		| Promise<string | number | Node | boolean | null | undefined>
-		| (() =>
-				| string
-				| number
-				| Node
-				| boolean
-				| null
-				| undefined
-				| Promise<string | number | Node | boolean | null | undefined>)
-		| any[],
+	child: TChildren
 ): void {
 	if (Array.isArray(child)) {
-		child.forEach((nestedChild) => {
+		// child.forEach((nestedChild) => {
+		// 	appendChildToBase(base, nestedChild);
+		// });
+		for (const nestedChild of child) {
 			appendChildToBase(base, nestedChild);
-		});
+		}
 		return;
 	}
 
 	if (typeof child === "function") {
+		// vrificar qual é o caso de uso deste:
 		if (isReactiveFunction(child)) {
+			console.log("🤠Child is a reactive function, setting up ChildValues effect");
 			const result = child();
 			appendChildToBase(base, result);
 			return;
 		}
 
-		const nodeRef = {
-			current: document.createTextNode("") as NodeRefType,
+		const nodeRef: TRefObject<TNodeRef> = {
+			current: document.createTextNode("") as TNodeRef,
+			id: crypto.getRandomValues(new Uint32Array(1))[0].toString(16),
 		};
+
 		base.appendChild(nodeRef.current as Node);
 
-		const effectFn = () => {
-			const result = child();
-
-			if (result instanceof Promise) {
-				result
-					.then((resolved) => {
-						nodeRef.current = updateChildNode(nodeRef.current, resolved);
-					})
-					.catch((error) => {
-						console.error("JayJS: Error resolving child Promise:", error);
-						nodeRef.current = updateChildNode(nodeRef.current, null);
-					});
-				return;
-			}
-
-			nodeRef.current = updateChildNode(nodeRef.current, result);
-		};
-
-		Effect(effectFn);
+		ChildValues(child, nodeRef, updateChildNode);
 
 		return;
 	}
