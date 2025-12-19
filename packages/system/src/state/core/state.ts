@@ -1,5 +1,5 @@
 import type { StateType, TSetOptions } from "../types.js";
-import { SETVALUE_MARKER } from "../utils/helpers.js";
+import { generateFunctionHash, SETVALUE_MARKER } from "../utils/helpers.js";
 import { subscriberManager } from "./subscriber.js";
 
 /**
@@ -148,18 +148,10 @@ export const State = <T>(data: T): StateType<T> => {
 		 * Getter for state value that automatically registers the current subscriber
 		 */
 		get value() {
-			console.log("Accessing state value, registering subscriber if exists. 🔨");
 			const currentSubscriber = subscriberManager.getSubscriber();
 			if (currentSubscriber) {
-				let hash: string;
-
-				// Check if it's a setValue (from Values function) using Symbol
-				if ((currentSubscriber as any)[SETVALUE_MARKER] && (currentSubscriber as any)._fn) {
-					hash = subscriberManager.generateFunctionHash((currentSubscriber as any)._fn);
-				} else {
-					hash = subscriberManager.generateFunctionHash(currentSubscriber);
-				}
-
+				const hash = generateFunctionHash(currentSubscriber);
+				console.log("Subscribing to state with hash:", hash);
 				state.sub(hash, currentSubscriber);
 			}
 
