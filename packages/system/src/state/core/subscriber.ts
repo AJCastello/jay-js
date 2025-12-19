@@ -5,8 +5,6 @@
 class SubscriberManager {
 	// The current active subscriber
 	private _current: ((args?: any) => void | Promise<void>) | null = null;
-	// Counter to ensure unique subscription IDs
-	private _counter = 0;
 
 	/**
 	 * Sets the current subscriber
@@ -39,24 +37,6 @@ class SubscriberManager {
 		this._current = null;
 	}
 
-	/**
-	 * Generates a hash for a function for unique identification purposes
-	 * @param func Function to generate the hash for
-	 * @returns String hash representing the function
-	 */
-	generateFunctionHash(func: (...args: never) => unknown): string {
-		const funcString = func.toString();
-		let hash = 0;
-
-		for (let i = 0; i < funcString.length; i++) {
-			const char = funcString.charCodeAt(i);
-			hash = (hash << 5) - hash + char;
-			hash |= 0;
-		}
-
-		const uniqueId = this._counter++;
-		return `${Math.abs(hash).toString(16)}-${uniqueId}`;
-	}
 }
 
 // Exports a single instance of the manager to be shared across the application

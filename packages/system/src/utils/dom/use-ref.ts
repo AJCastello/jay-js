@@ -3,6 +3,7 @@
  */
 export type TRefObject<T> = {
 	current: T | null;
+	id?: string;
 };
 
 /**

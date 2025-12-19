@@ -75,7 +75,7 @@ export type StateType<T> = TState<T>;
  */
 export interface ISetValue {
 	(): void;
-	_object: any;
+	_object_ref: any;
 	_path: string[];
 	_fn: () => any;
 }
