@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 import { State } from "../state.js";
+import { Effect } from "../../utils/helpers.js";
 
 describe("State", () => {
 	it("should create a state with initial value", () => {
@@ -162,5 +163,43 @@ describe("State", () => {
 		const state = State(10);
 		state.value = 20;
 		expect(state.get()).toBe(20);
+	});
+
+	it("should not notify when setting same primitive value", () => {
+		const state = State(false);
+		const subscriber = vi.fn();
+
+		state.sub("test", subscriber);
+		state.value = false;
+		expect(subscriber).not.toHaveBeenCalled();
+
+		state.value = true;
+		expect(subscriber).toHaveBeenCalledTimes(1);
+
+		state.value = true;
+		expect(subscriber).toHaveBeenCalledTimes(1);
+	});
+
+	it("should subscribe and notify only the accessed target key", () => {
+		const person = State({ name: "John", age: 30 });
+		const effect = vi.fn(() => {
+			// Accessing property should create a targeted subscription
+			person.value.name;
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		// Same value: no-op
+		person.value.name = "John";
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		// Different value: notify only target 'name'
+		person.value.name = "Doe";
+		expect(effect).toHaveBeenCalledTimes(2);
+
+		// Changing another property should not notify 'name' target subscribers
+		person.value.age = 31;
+		expect(effect).toHaveBeenCalledTimes(2);
 	});
 });

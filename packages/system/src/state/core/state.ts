@@ -14,6 +14,109 @@ export const State = <T>(data: T): StateType<T> => {
 	const _effects = new Map<string, (data: T) => any>();
 	const _effects_ids = new Set<string>();
 
+	const TARGET_SUFFIX = "__target:";
+
+	const isObjectLike = (value: unknown): value is Record<PropertyKey, unknown> =>
+		typeof value === "object" && value !== null;
+
+	const notifyAll = (): void => {
+		if (_effects.size === 0) {
+			return;
+		}
+		const visited = new Set<(data: T) => any>();
+		for (const [, effect] of _effects) {
+			if (visited.has(effect)) {
+				continue;
+			}
+			visited.add(effect);
+			effect(_data);
+		}
+	};
+
+	const notifyTargetKey = (key: string): void => {
+		if (_effects.size === 0) {
+			return;
+		}
+		const suffix = `${TARGET_SUFFIX}${key}`;
+		for (const [id, effect] of _effects) {
+			if (id.endsWith(suffix)) {
+				effect(_data);
+			}
+		}
+	};
+
+	// A stable proxy for object-like state values.
+	// It forwards property reads/writes to the current `_data` reference.
+	const objectValueProxy = new Proxy({} as Record<PropertyKey, unknown>, {
+		get(_target, prop: PropertyKey, receiver) {
+			// Allow some runtime introspection without tracking
+			if (prop === Symbol.toStringTag) {
+				return "StateValueProxy";
+			}
+
+			if (!isObjectLike(_data)) {
+				return undefined;
+			}
+
+			const currentSubscriber = subscriberManager.getSubscriber();
+			if (currentSubscriber && typeof prop !== "symbol") {
+				const hash = generateFunctionHash(currentSubscriber);
+				state.sub(`${hash}${TARGET_SUFFIX}${String(prop)}`, currentSubscriber);
+				_effects_ids.add(`${hash}${TARGET_SUFFIX}${String(prop)}`);
+			}
+
+			return Reflect.get(_data as any, prop);
+		},
+
+		set(_target, prop: PropertyKey, value: unknown, receiver) {
+			if (!isObjectLike(_data)) {
+				return false;
+			}
+
+			const key = typeof prop === "symbol" ? undefined : String(prop);
+			const currentValue = Reflect.get(_data as any, prop);
+			if (Object.is(currentValue, value)) {
+				return true;
+			}
+
+			const didSet = Reflect.set(_data as any, prop, value);
+			if (!didSet) {
+				return false;
+			}
+
+			if (key) {
+				notifyTargetKey(key);
+			}
+			return true;
+		},
+
+		has(_target, prop: PropertyKey) {
+			if (!isObjectLike(_data)) {
+				return false;
+			}
+			return Reflect.has(_data as any, prop);
+		},
+
+		ownKeys() {
+			if (!isObjectLike(_data)) {
+				return [];
+			}
+			return Reflect.ownKeys(_data as any);
+		},
+
+		getOwnPropertyDescriptor(_target, prop: PropertyKey) {
+			if (!isObjectLike(_data)) {
+				return undefined;
+			}
+			const desc = Reflect.getOwnPropertyDescriptor(_data as any, prop);
+			if (!desc) {
+				return undefined;
+			}
+			// Ensure properties are configurable on the proxy view
+			return { ...desc, configurable: true };
+		},
+	});
+
 	const state: StateType<T> = {
 		/**
 		 * Sets a new value for the state and notifies subscribers
@@ -30,7 +133,10 @@ export const State = <T>(data: T): StateType<T> => {
 				newValue = newData;
 			}
 
-			// Update the current data
+			if (Object.is(newValue, _data)) {
+				return;
+			}
+
 			_data = newValue;
 
 			if (options?.silent) {
@@ -59,9 +165,7 @@ export const State = <T>(data: T): StateType<T> => {
 				return;
 			}
 
-			for (const [_, effect] of _effects) {
-				effect(_data);
-			}
+			notifyAll();
 		},
 
 		/**
@@ -156,7 +260,10 @@ export const State = <T>(data: T): StateType<T> => {
 				state.sub(hash, currentSubscriber);
 				_effects_ids.add(hash);
 			}
-			return this.get();
+			if (isObjectLike(_data)) {
+				return objectValueProxy as unknown as T;
+			}
+			return _data;
 		},
 
 		/**
