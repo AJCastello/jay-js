@@ -10,6 +10,10 @@ import { subscriberManager } from "./subscriber.js";
  * @returns A state object with methods to manage the state
  */
 export const State = <T>(data: T): StateType<T> => {
+	let _data = data;
+	const _effects = new Map<string, (data: T) => any>();
+	const _effects_ids = new Set<string>();
+
 	const state: StateType<T> = {
 		/**
 		 * Sets a new value for the state and notifies subscribers
@@ -21,42 +25,42 @@ export const State = <T>(data: T): StateType<T> => {
 			let newValue: T;
 
 			if (typeof newData === "function") {
-				newValue = (newData as (currentState: T) => T)(data);
+				newValue = (newData as (currentState: T) => T)(_data);
 			} else {
 				newValue = newData;
 			}
 
 			// Update the current data
-			data = newValue;
+			_data = newValue;
 
 			if (options?.silent) {
 				return;
 			}
 
-			if (state.effects.size === 0) {
+			if (_effects.size === 0) {
 				return;
 			}
 
 			if (options?.target) {
 				if (Array.isArray(options.target)) {
 					for (const item of options.target) {
-						const effect = state.effects.get(item);
+						const effect = _effects.get(item);
 						if (effect) {
-							effect(data);
+							effect(_data);
 						}
 					}
 					return;
 				}
 
-				const effect = state.effects.get(options.target);
+				const effect = _effects.get(options.target);
 				if (effect) {
-					effect(data);
+					effect(_data);
 				}
 				return;
 			}
 
-			for (const [_, effect] of state.effects) {
-				effect(data);
+			for (const [_, effect] of _effects) {
+				effect(_data);
 			}
 		},
 
@@ -68,9 +72,9 @@ export const State = <T>(data: T): StateType<T> => {
 		 */
 		get: (callback?: (data: T) => void): T => {
 			if (callback) {
-				callback(data);
+				callback(_data);
 			}
-			return data;
+			return _data;
 		},
 
 		/**
@@ -82,9 +86,10 @@ export const State = <T>(data: T): StateType<T> => {
 		 * @returns Result of the effect if run is true
 		 */
 		sub: (id: string, effect: (data: T) => any, run = false): any => {
-			state.effects.set(id, effect);
+			_effects.set(id, effect);
+			_effects_ids.add(id);
 			if (run) {
-				return effect(data);
+				return effect(_data);
 			}
 		},
 
@@ -94,7 +99,8 @@ export const State = <T>(data: T): StateType<T> => {
 		 * @param id ID of the subscription to remove
 		 */
 		unsub: (id: string) => {
-			state.effects.delete(id);
+			_effects.delete(id);
+			_effects_ids.delete(id);
 		},
 
 		/**
@@ -103,22 +109,22 @@ export const State = <T>(data: T): StateType<T> => {
 		 * @param ids Specific subscriber IDs to trigger, if none provided all subscribers will be notified
 		 */
 		trigger: (...ids: string[]): void => {
-			if (state.effects.size === 0) {
+			if (_effects.size === 0) {
 				return;
 			}
 
 			if (ids.length > 0) {
 				for (let i = 0; i < ids.length; i++) {
-					const effect = state.effects.get(ids[i]);
+					const effect = _effects.get(ids[i]);
 					if (effect) {
-						effect(data);
+						effect(_data);
 					}
 				}
 				return;
 			}
 
-			for (const [, item] of state.effects) {
-				item(data);
+			for (const [, item] of _effects) {
+				item(_data);
 			}
 		},
 
@@ -129,20 +135,16 @@ export const State = <T>(data: T): StateType<T> => {
 		 */
 		clear: (newData?: T | ((currentState: T) => T)): void => {
 			if (typeof newData === "function") {
-				data = (newData as (currentState: T) => T)(data);
+				_data = (newData as (currentState: T) => T)(_data);
 			} else if (newData !== undefined) {
-				data = newData;
+				_data = newData;
 			} else {
-				data = undefined as unknown as T;
+				_data = undefined as unknown as T;
 			}
 
-			state.effects.clear();
+			_effects.clear();
+			_effects_ids.clear();
 		},
-
-		/**
-		 * Map of all registered effect callbacks
-		 */
-		effects: new Map(),
 
 		/**
 		 * Getter for state value that automatically registers the current subscriber
@@ -151,10 +153,9 @@ export const State = <T>(data: T): StateType<T> => {
 			const currentSubscriber = subscriberManager.getSubscriber();
 			if (currentSubscriber) {
 				const hash = generateFunctionHash(currentSubscriber);
-				console.log("Subscribing to state with hash:", hash);
 				state.sub(hash, currentSubscriber);
+				_effects_ids.add(hash);
 			}
-
 			return this.get();
 		},
 

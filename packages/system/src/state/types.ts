@@ -58,11 +58,6 @@ export type TState<T> = {
 	clear: (newData?: T | ((currentState: T) => T)) => void;
 
 	/**
-	 * Map of registered effect callbacks
-	 */
-	effects: Map<string, (value: T) => void>;
-
-	/**
 	 * Accessor property for the state value
 	 */
 	value: T;
