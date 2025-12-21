@@ -1,5 +1,3 @@
-import { TChildren } from "../../core/index.js";
-import { TRefObject } from "../../utils/dom/use-ref.js";
 import { State } from "../core/state.js";
 import { subscriberManager } from "../core/subscriber.js";
 import type { ISetValue, StateType } from "../types.js";
@@ -7,7 +5,6 @@ import type { ISetValue, StateType } from "../types.js";
 export const REACTIVE_MARKER = Symbol("reactive");
 export const SETVALUE_MARKER = Symbol("setValue");
 export const SETCHILD_MARKER = Symbol("setChildren");
-
 
 /**
  * Creates a derived state that automatically recalculates whenever states
@@ -93,12 +90,12 @@ export function generateFunctionHash(fn: (...args: never) => unknown): string {
 	let _fn: (...args: never) => unknown = fn;
 
 	if ((fn as any)[SETVALUE_MARKER]) {
-		suffix = (fn as any)._path.join(".");
+		suffix = `__prop:${(fn as any)._path.join(".")}`;
 		_fn = (fn as any)._fn;
 	}
 
 	if ((fn as any)[SETCHILD_MARKER]) {
-		suffix = (fn as any)._ref;
+		suffix = `__childref:${(fn as any)._ref}`;
 		_fn = (fn as any)._fn;
 	}
 

@@ -1,6 +1,9 @@
 import type { StateType, TSetOptions } from "../types.js";
-import { generateFunctionHash, SETVALUE_MARKER } from "../utils/helpers.js";
+import { generateFunctionHash } from "../utils/helpers.js";
 import { subscriberManager } from "./subscriber.js";
+
+const buildPath = (segments: Array<string | symbol>): string => (segments.length ? segments.map(String).join(".") : "<root>");
+const isObjectLike = (value: unknown): value is Record<string | symbol, any> => typeof value === "object" && value !== null;
 
 /**
  * Creates a reactive state container that can be subscribed to for changes
@@ -13,109 +16,54 @@ export const State = <T>(data: T): StateType<T> => {
 	let _data = data;
 	const _effects = new Map<string, (data: T) => any>();
 	const _effects_ids = new Set<string>();
+	let _target = "";
 
-	const TARGET_SUFFIX = "__target:";
-
-	const isObjectLike = (value: unknown): value is Record<PropertyKey, unknown> =>
-		typeof value === "object" && value !== null;
-
-	const notifyAll = (): void => {
+	function runEffects(targetKey: string | null = null, targets?: string | string[]) {
 		if (_effects.size === 0) {
 			return;
 		}
-		const visited = new Set<(data: T) => any>();
-		for (const [, effect] of _effects) {
-			if (visited.has(effect)) {
-				continue;
-			}
-			visited.add(effect);
-			effect(_data);
-		}
-	};
 
-	const notifyTargetKey = (key: string): void => {
-		if (_effects.size === 0) {
+		const _ids: string[] = [];
+
+		const subscribedIds = _effects_ids.size > 0 ? Array.from(_effects_ids) : [];
+
+		for (let i = 0; i < subscribedIds.length; i++) {
+			const id = subscribedIds[i];
+
+			if (!id.includes("__prop:") && !id.includes("__childref:")) {
+				_ids.push(id);
+			}
+
+			if (targetKey) {
+				const targetSuffix = `__target:${targetKey}`;
+				if (id.includes(targetSuffix)) {
+					_ids.push(id);
+				}
+			}
+		}
+
+		if (targets) {
+			if (Array.isArray(targets)) {
+				_ids.push(...targets);
+			} else {
+				_ids.push(targets);
+			}
+		}
+
+		if (_ids.length > 0) {
+			for (let i = 0; i < _ids.length; i++) {
+				const effect = _effects.get(_ids[i]);
+				if (effect) {
+					effect(_data);
+				}
+			}
 			return;
 		}
-		const suffix = `${TARGET_SUFFIX}${key}`;
-		for (const [id, effect] of _effects) {
-			if (id.endsWith(suffix)) {
-				effect(_data);
-			}
+
+		for (const [, item] of _effects) {
+			item(_data);
 		}
-	};
-
-	// A stable proxy for object-like state values.
-	// It forwards property reads/writes to the current `_data` reference.
-	const objectValueProxy = new Proxy({} as Record<PropertyKey, unknown>, {
-		get(_target, prop: PropertyKey, receiver) {
-			// Allow some runtime introspection without tracking
-			if (prop === Symbol.toStringTag) {
-				return "StateValueProxy";
-			}
-
-			if (!isObjectLike(_data)) {
-				return undefined;
-			}
-
-			const currentSubscriber = subscriberManager.getSubscriber();
-			if (currentSubscriber && typeof prop !== "symbol") {
-				const hash = generateFunctionHash(currentSubscriber);
-				state.sub(`${hash}${TARGET_SUFFIX}${String(prop)}`, currentSubscriber);
-				_effects_ids.add(`${hash}${TARGET_SUFFIX}${String(prop)}`);
-			}
-
-			return Reflect.get(_data as any, prop);
-		},
-
-		set(_target, prop: PropertyKey, value: unknown, receiver) {
-			if (!isObjectLike(_data)) {
-				return false;
-			}
-
-			const key = typeof prop === "symbol" ? undefined : String(prop);
-			const currentValue = Reflect.get(_data as any, prop);
-			if (Object.is(currentValue, value)) {
-				return true;
-			}
-
-			const didSet = Reflect.set(_data as any, prop, value);
-			if (!didSet) {
-				return false;
-			}
-
-			if (key) {
-				notifyTargetKey(key);
-			}
-			return true;
-		},
-
-		has(_target, prop: PropertyKey) {
-			if (!isObjectLike(_data)) {
-				return false;
-			}
-			return Reflect.has(_data as any, prop);
-		},
-
-		ownKeys() {
-			if (!isObjectLike(_data)) {
-				return [];
-			}
-			return Reflect.ownKeys(_data as any);
-		},
-
-		getOwnPropertyDescriptor(_target, prop: PropertyKey) {
-			if (!isObjectLike(_data)) {
-				return undefined;
-			}
-			const desc = Reflect.getOwnPropertyDescriptor(_data as any, prop);
-			if (!desc) {
-				return undefined;
-			}
-			// Ensure properties are configurable on the proxy view
-			return { ...desc, configurable: true };
-		},
-	});
+	}
 
 	const state: StateType<T> = {
 		/**
@@ -143,29 +91,12 @@ export const State = <T>(data: T): StateType<T> => {
 				return;
 			}
 
-			if (_effects.size === 0) {
-				return;
-			}
-
 			if (options?.target) {
-				if (Array.isArray(options.target)) {
-					for (const item of options.target) {
-						const effect = _effects.get(item);
-						if (effect) {
-							effect(_data);
-						}
-					}
-					return;
-				}
-
-				const effect = _effects.get(options.target);
-				if (effect) {
-					effect(_data);
-				}
+				runEffects(null, options.target);
 				return;
 			}
 
-			notifyAll();
+			runEffects();
 		},
 
 		/**
@@ -213,23 +144,11 @@ export const State = <T>(data: T): StateType<T> => {
 		 * @param ids Specific subscriber IDs to trigger, if none provided all subscribers will be notified
 		 */
 		trigger: (...ids: string[]): void => {
-			if (_effects.size === 0) {
+			if (ids.length === 0) {
+				runEffects(null, Array.from(_effects_ids));
 				return;
 			}
-
-			if (ids.length > 0) {
-				for (let i = 0; i < ids.length; i++) {
-					const effect = _effects.get(ids[i]);
-					if (effect) {
-						effect(_data);
-					}
-				}
-				return;
-			}
-
-			for (const [, item] of _effects) {
-				item(_data);
-			}
+			runEffects(null, ids);
 		},
 
 		/**
@@ -254,14 +173,17 @@ export const State = <T>(data: T): StateType<T> => {
 		 * Getter for state value that automatically registers the current subscriber
 		 */
 		get value() {
+			// TODO:
+			// aqui tem que identificar que se, em caso de objeto completo, saber qual caminho está sendo acessado
+			// para isso, talvez seja necessário criar um proxy dinâmico para cada nível do objeto
+			// que ao acessar uma propriedade, ele atualiza o _target com o caminho completo daquela propriedade
+			// e depois reseta o _target para vazio após a leitura completa
+
 			const currentSubscriber = subscriberManager.getSubscriber();
 			if (currentSubscriber) {
 				const hash = generateFunctionHash(currentSubscriber);
 				state.sub(hash, currentSubscriber);
 				_effects_ids.add(hash);
-			}
-			if (isObjectLike(_data)) {
-				return objectValueProxy as unknown as T;
 			}
 			return _data;
 		},
@@ -270,6 +192,11 @@ export const State = <T>(data: T): StateType<T> => {
 		 * Setter for state value
 		 */
 		set value(newData: T) {
+			// TODO:
+			// aqui tem que identificar que se, em caso de objeto completo, saber qual caminho está sendo acessado
+			// para isso, talvez seja necessário criar um proxy dinâmico para cada nível do objeto
+			// que ao acessar uma propriedade, ele atualiza o _target com o caminho completo daquela propriedade
+			// e depois reseta o _target para vazio após a leitura completa
 			this.set(newData);
 		},
 	};
