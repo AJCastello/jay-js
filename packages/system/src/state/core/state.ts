@@ -34,8 +34,9 @@ export const State = <T>(data: T): StateType<T> => {
 			return !hadKey;
 		}
 
-		// Adding/removing keys is considered structural.
-		return !hadKey;
+		// Para objetos: adicionar/remover propriedade NÃO é estrutural
+		// (apenas notifica quem acessa essa propriedade específica)
+		return false;
 	}
 
 	function subscribeEffect(path?: string) {
@@ -79,15 +80,19 @@ export const State = <T>(data: T): StateType<T> => {
 				}
 
 				const nextPathSegments = pathSegments.concat(prop);
-				subscribeEffect(buildPath(nextPathSegments));
-
 				const res = Reflect.get(target, prop, receiver);
-				return isObjectLike(res) ? getProxyForPath(res, nextPathSegments) : res;
+
+				if (isObjectLike(res)) {
+					return getProxyForPath(res, nextPathSegments)
+				}
+				subscribeEffect(buildPath(nextPathSegments));
+				return res;
 			},
 
 			set(target, prop, newValue, receiver) {
 				const hadKey = Reflect.has(target, prop);
 				const prev = Reflect.get(target, prop, receiver);
+				console.log("🔥🔥🔥🔥", Array.from(_effects_ids));
 				if (Object.is(prev, newValue)) {
 					return true;
 				}
@@ -145,7 +150,7 @@ export const State = <T>(data: T): StateType<T> => {
 			return;
 		}
 
-		const _ids: string[] = [];
+		const _ids = new Set<string>();
 
 		const subscribedIds = _effects_ids.size > 0 ? Array.from(_effects_ids) : [];
 
@@ -153,28 +158,31 @@ export const State = <T>(data: T): StateType<T> => {
 			const id = subscribedIds[i];
 
 			if (!id.includes("__prop:") && !id.includes("__childref:")) {
-				_ids.push(id);
+				_ids.add(id);
 			}
 
 			if (targetKey) {
 				const targetSuffix = `__target:${targetKey}`;
 				if (id.includes(targetSuffix)) {
-					_ids.push(id);
+					_ids.add(id);
 				}
 			}
 		}
 
 		if (targets) {
 			if (Array.isArray(targets)) {
-				_ids.push(...targets);
+				for (const target of targets) {
+					_ids.add(target);
+				}
 			} else {
-				_ids.push(targets);
+				_ids.add(targets);
 			}
 		}
 
-		if (_ids.length > 0) {
-			for (let i = 0; i < _ids.length; i++) {
-				const effect = _effects.get(_ids[i]);
+		if (_ids.size > 0) {
+			const ids = Array.from(_ids);
+			for (let i = 0; i < ids.length; i++) {
+				const effect = _effects.get(ids[i]);
 				if (effect) {
 					effect(_data);
 				}
