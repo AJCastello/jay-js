@@ -16,7 +16,129 @@ export const State = <T>(data: T): StateType<T> => {
 	let _data = data;
 	const _effects = new Map<string, (data: T) => any>();
 	const _effects_ids = new Set<string>();
-	let _target = "";
+
+	const _proxy_cache = new WeakMap<object, Map<string, any>>();
+
+	function isStructuralMutation(target: object, prop: string | symbol, hadKey: boolean): boolean {
+		if (Array.isArray(target)) {
+			if (prop === "length") {
+				return true;
+			}
+			if (typeof prop === "string") {
+				// Numeric index: setting an existing slot is not structural.
+				// Adding/removing (new index) is structural.
+				if (/^(0|[1-9]\d*)$/.test(prop)) {
+					return !hadKey;
+				}
+			}
+			return !hadKey;
+		}
+
+		// Adding/removing keys is considered structural.
+		return !hadKey;
+	}
+
+	function subscribeEffect(path?: string) {
+		const currentSubscriber = subscriberManager.getSubscriber();
+		if (!currentSubscriber) {
+			return;
+		}
+
+		const hash = generateFunctionHash(currentSubscriber);
+		const id = path ? `${hash}__target:${path}` : hash;
+		state.sub(id, currentSubscriber);
+		_effects_ids.add(id);
+	}
+
+	function getProxyForPath(value: unknown, pathSegments: Array<string | symbol>): any {
+		if (!isObjectLike(value)) {
+			return value;
+		}
+
+		const targetObj = value as object;
+		const path = buildPath(pathSegments);
+		let byPath = _proxy_cache.get(targetObj);
+		if (!byPath) {
+			byPath = new Map<string, any>();
+			_proxy_cache.set(targetObj, byPath);
+		}
+		const existing = byPath.get(path);
+		if (existing) {
+			return existing;
+		}
+
+		const proxy = new Proxy(value as any, {
+			get(target, prop, receiver) {
+				// Always allow common symbol-based introspection without tracking noise.
+				if (
+					prop === Symbol.toStringTag ||
+					prop === Symbol.toPrimitive ||
+					prop === Symbol.iterator
+				) {
+					return Reflect.get(target, prop, receiver);
+				}
+
+				const nextPathSegments = pathSegments.concat(prop);
+				subscribeEffect(buildPath(nextPathSegments));
+
+				const res = Reflect.get(target, prop, receiver);
+				return isObjectLike(res) ? getProxyForPath(res, nextPathSegments) : res;
+			},
+
+			set(target, prop, newValue, receiver) {
+				const hadKey = Reflect.has(target, prop);
+				const prev = Reflect.get(target, prop, receiver);
+				if (Object.is(prev, newValue)) {
+					return true;
+				}
+
+				const ok = Reflect.set(target, prop, newValue, receiver);
+				if (!ok) {
+					return false;
+				}
+
+				const nextPathSegments = pathSegments.concat(prop);
+				const changedPath = buildPath(nextPathSegments);
+				const structural = isStructuralMutation(target, prop, hadKey);
+
+				// Prefer targeted invalidation; for structural mutations be conservative.
+				if (structural) {
+					runEffects(null, Array.from(_effects_ids));
+				} else {
+					runEffects(changedPath);
+				}
+
+				return true;
+			},
+
+			deleteProperty(target, prop) {
+				const hadKey = Reflect.has(target, prop);
+				const ok = Reflect.deleteProperty(target, prop);
+				if (!ok) {
+					return false;
+				}
+
+				if (!hadKey) {
+					return true;
+				}
+
+				const nextPathSegments = pathSegments.concat(prop);
+				const changedPath = buildPath(nextPathSegments);
+				const structural = isStructuralMutation(target, prop, hadKey);
+
+				if (structural) {
+					runEffects(null, Array.from(_effects_ids));
+				} else {
+					runEffects(changedPath);
+				}
+
+				return true;
+			},
+		});
+
+		byPath.set(path, proxy);
+		return proxy;
+	}
 
 	function runEffects(targetKey: string | null = null, targets?: string | string[]) {
 		if (_effects.size === 0) {
@@ -173,18 +295,13 @@ export const State = <T>(data: T): StateType<T> => {
 		 * Getter for state value that automatically registers the current subscriber
 		 */
 		get value() {
-			// TODO:
-			// aqui tem que identificar que se, em caso de objeto completo, saber qual caminho está sendo acessado
-			// para isso, talvez seja necessário criar um proxy dinâmico para cada nível do objeto
-			// que ao acessar uma propriedade, ele atualiza o _target com o caminho completo daquela propriedade
-			// e depois reseta o _target para vazio após a leitura completa
-
-			const currentSubscriber = subscriberManager.getSubscriber();
-			if (currentSubscriber) {
-				const hash = generateFunctionHash(currentSubscriber);
-				state.sub(hash, currentSubscriber);
-				_effects_ids.add(hash);
+			// Para objetos/arrays, retorna um Proxy que registra a propriedade acessada
+			// e dispara invalidação por caminho (keyed-tracking).
+			if (isObjectLike(_data)) {
+				return getProxyForPath(_data, []);
 			}
+
+			subscribeEffect();
 			return _data;
 		},
 
@@ -192,11 +309,6 @@ export const State = <T>(data: T): StateType<T> => {
 		 * Setter for state value
 		 */
 		set value(newData: T) {
-			// TODO:
-			// aqui tem que identificar que se, em caso de objeto completo, saber qual caminho está sendo acessado
-			// para isso, talvez seja necessário criar um proxy dinâmico para cada nível do objeto
-			// que ao acessar uma propriedade, ele atualiza o _target com o caminho completo daquela propriedade
-			// e depois reseta o _target para vazio após a leitura completa
 			this.set(newData);
 		},
 	};

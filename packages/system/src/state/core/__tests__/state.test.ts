@@ -202,4 +202,51 @@ describe("State", () => {
 		person.value.age = 31;
 		expect(effect).toHaveBeenCalledTimes(2);
 	});
+
+	it("should support keyed-tracking with symbol keys", () => {
+		const secret = Symbol("secret");
+		const state = State({ [secret]: "a", other: "x" } as Record<string | symbol, string>);
+
+		const effect = vi.fn(() => {
+			state.value[secret];
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		state.value.other = "y";
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		state.value[secret] = "b";
+		expect(effect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should support keyed-tracking with array indices", () => {
+		const numbers = State([10, 20, 30]);
+		const effect = vi.fn(() => {
+			numbers.value[0];
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		numbers.value[1] = 25;
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		numbers.value[0] = 11;
+		expect(effect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should conservatively invalidate on structural array mutations", () => {
+		const numbers = State([1, 2, 3]);
+		const effect = vi.fn(() => {
+			numbers.value[0];
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		numbers.value.push(4);
+		expect(effect).toHaveBeenCalledTimes(2);
+	});
 });

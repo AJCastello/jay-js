@@ -108,5 +108,5 @@ export function generateFunctionHash(fn: (...args: never) => unknown): string {
 		hash |= 0;
 	}
 
-	return `${Math.abs(hash).toString(16)}${suffix ? `-${suffix}` : ""}`;
+	return `${Math.abs(hash).toString(16)}${suffix ? suffix : ""}`;
 }
