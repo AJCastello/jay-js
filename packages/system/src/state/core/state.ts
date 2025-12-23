@@ -40,6 +40,7 @@ export const State = <T>(data: T): StateType<T> => {
 	}
 
 	function subscribeEffect(path?: string) {
+
 		const currentSubscriber = subscriberManager.getSubscriber();
 		if (!currentSubscriber) {
 			return;
@@ -92,7 +93,6 @@ export const State = <T>(data: T): StateType<T> => {
 			set(target, prop, newValue, receiver) {
 				const hadKey = Reflect.has(target, prop);
 				const prev = Reflect.get(target, prop, receiver);
-				console.log("🔥🔥🔥🔥", Array.from(_effects_ids));
 				if (Object.is(prev, newValue)) {
 					return true;
 				}
@@ -142,6 +142,7 @@ export const State = <T>(data: T): StateType<T> => {
 		});
 
 		byPath.set(path, proxy);
+		subscribeEffect(path);
 		return proxy;
 	}
 
