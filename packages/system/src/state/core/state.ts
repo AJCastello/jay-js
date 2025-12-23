@@ -93,6 +93,10 @@ export const State = <T>(data: T): TState<T> => {
 			},
 
 			set(target, prop, newValue, receiver) {
+				if (prop === "__proto__" || prop === "constructor" || prop === "prototype") {
+					return false;
+				}
+
 				const hadKey = Reflect.has(target, prop);
 				const prev = Reflect.get(target, prop, receiver);
 				if (Object.is(prev, newValue)) {
@@ -119,6 +123,10 @@ export const State = <T>(data: T): TState<T> => {
 			},
 
 			deleteProperty(target, prop) {
+				if (prop === "__proto__" || prop === "constructor" || prop === "prototype") {
+					return false;
+				}
+
 				const hadKey = Reflect.has(target, prop);
 				const ok = Reflect.deleteProperty(target, prop);
 				if (!ok) {
