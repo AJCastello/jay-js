@@ -156,7 +156,7 @@ export const State = <T>(data: T): TState<T> => {
 		return proxy;
 	}
 
-	function runEffects(targetKey: string | null = null, targets?: string | string[] | Set<string>) {
+	function runEffects(targetKey: string | null = null, targets?: string | string[] | Set<string>, includeGlobal: boolean = true) {
 		if (_effects.size === 0) {
 			return;
 		}
@@ -172,8 +172,10 @@ export const State = <T>(data: T): TState<T> => {
 			}
 		}
 
-		for (const id of _effects_global) {
-			effectsToRun.add(id);
+		if (includeGlobal) {
+			for (const id of _effects_global) {
+				effectsToRun.add(id);
+			}
 		}
 
 		if (targets) {
@@ -230,7 +232,7 @@ export const State = <T>(data: T): TState<T> => {
 			}
 
 			if (options?.target) {
-				runEffects(null, options.target);
+				runEffects(null, options.target, false);
 				return;
 			}
 
@@ -316,7 +318,7 @@ export const State = <T>(data: T): TState<T> => {
 				runEffects(null, _effects_ids);
 				return;
 			}
-			runEffects(null, ids);
+			runEffects(null, ids, false);
 		},
 
 		/**
