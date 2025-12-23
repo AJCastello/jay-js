@@ -197,9 +197,12 @@ export const State = <T>(data: T): TState<T> => {
 			}
 		}
 
+		const executedFunctions = new Set<Function>();
+
 		for (const id of effectsToRun) {
 			const effect = _effects.get(id);
-			if (effect) {
+			if (effect && !executedFunctions.has(effect)) {
+				executedFunctions.add(effect);
 				effect(_data);
 			}
 		}
