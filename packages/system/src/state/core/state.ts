@@ -17,6 +17,9 @@ export const State = <T>(data: T): TState<T> => {
 	const _effects = new Map<string, (data: T) => any>();
 	const _effects_ids = new Set<string>();
 
+	const _effects_by_target = new Map<string, Set<string>>();
+	const _effects_global = new Set<string>();
+
 	const _proxy_cache = new WeakMap<object, Map<string, any>>();
 
 	function isStructuralMutation(target: object, prop: string | symbol, hadKey: boolean): boolean {
@@ -150,45 +153,39 @@ export const State = <T>(data: T): TState<T> => {
 			return;
 		}
 
-		const _effects_to_run = new Set<string>();
+		const effectsToRun = new Set<string>();
 
-		for (const [id, effect] of _effects) {
-			if (
-				!(effect as any)[SETVALUE_MARKER] &&
-				!(effect as any)[SETCHILD_MARKER]
-			) {
-				_effects_to_run.add(id);
-			}
-
-			if (targetKey) {
-				if ((effect as any)._target === targetKey) {
-					_effects_to_run.add(id);
+		if (targetKey) {
+			const targetedEffects = _effects_by_target.get(targetKey);
+			if (targetedEffects) {
+				for (const id of targetedEffects) {
+					effectsToRun.add(id);
 				}
 			}
+		}
+
+		for (const id of _effects_global) {
+			effectsToRun.add(id);
 		}
 
 		if (targets) {
-			if (Array.isArray(targets)) {
-				for (const target of targets) {
-					_effects_to_run.add(target);
-				}
-			} else {
-				_effects_to_run.add(targets);
+			const targetArray = Array.isArray(targets) ? targets : [targets];
+			for (const target of targetArray) {
+				effectsToRun.add(target);
 			}
 		}
 
-		if (_effects_to_run.size > 0) {
-			for (const id of _effects_to_run) {
-				const effect = _effects.get(id);
-				if (effect) {
-					effect(_data);
-				}
+		if (effectsToRun.size === 0 && !targetKey && !targets) {
+			for (const [id] of _effects) {
+				effectsToRun.add(id);
 			}
-			return;
 		}
 
-		for (const [, effect] of _effects) {
-			effect(_data);
+		for (const id of effectsToRun) {
+			const effect = _effects.get(id);
+			if (effect) {
+				effect(_data);
+			}
 		}
 	}
 
@@ -250,6 +247,21 @@ export const State = <T>(data: T): TState<T> => {
 		sub: (id: string, effect: (data: T) => any, run = false): any => {
 			_effects.set(id, effect);
 			_effects_ids.add(id);
+
+			const target = (effect as any)._target;
+
+			if (target) {
+				if (!_effects_by_target.has(target)) {
+					_effects_by_target.set(target, new Set());
+				}
+				_effects_by_target.get(target)!.add(id);
+			} else if (
+				!(effect as any)[SETVALUE_MARKER] &&
+				!(effect as any)[SETCHILD_MARKER]
+			) {
+				_effects_global.add(id);
+			}
+
 			if (run) {
 				return effect(_data);
 			}
@@ -261,8 +273,23 @@ export const State = <T>(data: T): TState<T> => {
 		 * @param id ID of the subscription to remove
 		 */
 		unsub: (id: string) => {
+			const effect = _effects.get(id);
+			if (!effect) return;
+
 			_effects.delete(id);
 			_effects_ids.delete(id);
+			_effects_global.delete(id);
+
+			const target = (effect as any)._target;
+			if (target) {
+				const targetSet = _effects_by_target.get(target);
+				if (targetSet) {
+					targetSet.delete(id);
+					if (targetSet.size === 0) {
+						_effects_by_target.delete(target);
+					}
+				}
+			}
 		},
 
 		/**
@@ -294,6 +321,8 @@ export const State = <T>(data: T): TState<T> => {
 
 			_effects.clear();
 			_effects_ids.clear();
+			_effects_by_target.clear();
+			_effects_global.clear();
 		},
 
 		/**
