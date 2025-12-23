@@ -1,5 +1,5 @@
-import type { StateType, TSetOptions } from "../types.js";
-import { generateFunctionHash } from "../utils/helpers.js";
+import type { TState, TSetOptions } from "../types.js";
+import { generateFunctionHash, SETCHILD_MARKER, SETVALUE_MARKER } from "../utils/helpers.js";
 import { subscriberManager } from "./subscriber.js";
 
 const buildPath = (segments: Array<string | symbol>): string => (segments.length ? segments.map(String).join(".") : "<root>");
@@ -12,7 +12,7 @@ const isObjectLike = (value: unknown): value is Record<string | symbol, any> => 
  * @param data Initial value of the state
  * @returns A state object with methods to manage the state
  */
-export const State = <T>(data: T): StateType<T> => {
+export const State = <T>(data: T): TState<T> => {
 	let _data = data;
 	const _effects = new Map<string, (data: T) => any>();
 	const _effects_ids = new Set<string>();
@@ -46,10 +46,9 @@ export const State = <T>(data: T): StateType<T> => {
 			return;
 		}
 
-		const hash = generateFunctionHash(currentSubscriber);
-		const id = path ? `${hash}__target:${path}` : hash;
-		state.sub(id, currentSubscriber);
-		_effects_ids.add(id);
+		const hash = generateFunctionHash(currentSubscriber, path);
+		state.sub(hash, Object.assign(currentSubscriber, { _target: path }));
+		_effects_ids.add(hash);
 	}
 
 	function getProxyForPath(value: unknown, pathSegments: Array<string | symbol>): any {
@@ -151,21 +150,19 @@ export const State = <T>(data: T): StateType<T> => {
 			return;
 		}
 
-		const _ids = new Set<string>();
+		const _effects_to_run = new Set<string>();
 
-		const subscribedIds = _effects_ids.size > 0 ? Array.from(_effects_ids) : [];
-
-		for (let i = 0; i < subscribedIds.length; i++) {
-			const id = subscribedIds[i];
-
-			if (!id.includes("__prop:") && !id.includes("__childref:")) {
-				_ids.add(id);
+		for (const [id, effect] of _effects) {
+			if (
+				!(effect as any)[SETVALUE_MARKER] &&
+				!(effect as any)[SETCHILD_MARKER]
+			) {
+				_effects_to_run.add(id);
 			}
 
 			if (targetKey) {
-				const targetSuffix = `__target:${targetKey}`;
-				if (id.includes(targetSuffix)) {
-					_ids.add(id);
+				if ((effect as any)._target === targetKey) {
+					_effects_to_run.add(id);
 				}
 			}
 		}
@@ -173,17 +170,16 @@ export const State = <T>(data: T): StateType<T> => {
 		if (targets) {
 			if (Array.isArray(targets)) {
 				for (const target of targets) {
-					_ids.add(target);
+					_effects_to_run.add(target);
 				}
 			} else {
-				_ids.add(targets);
+				_effects_to_run.add(targets);
 			}
 		}
 
-		if (_ids.size > 0) {
-			const ids = Array.from(_ids);
-			for (let i = 0; i < ids.length; i++) {
-				const effect = _effects.get(ids[i]);
+		if (_effects_to_run.size > 0) {
+			for (const id of _effects_to_run) {
+				const effect = _effects.get(id);
 				if (effect) {
 					effect(_data);
 				}
@@ -191,12 +187,12 @@ export const State = <T>(data: T): StateType<T> => {
 			return;
 		}
 
-		for (const [, item] of _effects) {
-			item(_data);
+		for (const [, effect] of _effects) {
+			effect(_data);
 		}
 	}
 
-	const state: StateType<T> = {
+	const state: TState<T> = {
 		/**
 		 * Sets a new value for the state and notifies subscribers
 		 *

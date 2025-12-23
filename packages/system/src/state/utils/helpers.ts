@@ -1,6 +1,6 @@
 import { State } from "../core/state.js";
 import { subscriberManager } from "../core/subscriber.js";
-import type { ISetValue, StateType } from "../types.js";
+import type { ISetValue, TState } from "../types.js";
 
 export const REACTIVE_MARKER = Symbol("reactive");
 export const SETVALUE_MARKER = Symbol("setValue");
@@ -14,7 +14,7 @@ export const SETCHILD_MARKER = Symbol("setChildren");
  * @param fn Function that calculates the derived value
  * @returns A state that updates when any dependency changes
  */
-export function Derived<T>(fn: () => T): StateType<T> {
+export function Derived<T>(fn: () => T): TState<T> {
 	const derivedState = State(fn());
 	Effect(() => {
 		derivedState.set(fn());
@@ -100,7 +100,7 @@ export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
  * @param fn Function to generate hash for
  * @returns Hexadecimal hash string with optional suffix based on function markers
  */
-export function generateFunctionHash(fn: (...args: never) => unknown): string {
+export function generateFunctionHash(fn: (...args: never) => unknown, path?: string): string {
 	let suffix = "";
 	let _fn: (...args: never) => unknown = fn;
 
@@ -113,6 +113,8 @@ export function generateFunctionHash(fn: (...args: never) => unknown): string {
 		suffix = `__childref:${(fn as any)._ref}`;
 		_fn = (fn as any)._fn;
 	}
+
+	suffix = path ? `${suffix}__target:${path}` : suffix
 
 	const _fn_string = _fn.toString();
 	let hash = 0;

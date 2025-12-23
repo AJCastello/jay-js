@@ -63,8 +63,6 @@ export type TState<T> = {
 	value: T;
 };
 
-export type StateType<T> = TState<T>;
-
 /**
  * Interface for setValue function used by Values helper
  */
