@@ -74,6 +74,14 @@ export function Values(fn: () => any): (object: any, ...path: string[]) => void 
 	});
 }
 
+/**
+ * Creates a reactive effect for updating children of a DOM node.
+ * Automatically monitors state changes and triggers child updates.
+ *
+ * @param fn Function that generates the child elements
+ * @param nodeRefId Reference identifier for the target node
+ * @param setChild Callback function to execute when children need to be updated
+ */
 export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
 	const _set_child = Object.assign(setChild, {
 		_fn: fn,
@@ -84,7 +92,14 @@ export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
 	Effect(_set_child);
 }
 
-
+/**
+ * Generates a unique hash identifier for a function.
+ * Takes into account special markers (SETVALUE_MARKER, SETCHILD_MARKER) to create
+ * unique identifiers for reactive functions with additional metadata.
+ *
+ * @param fn Function to generate hash for
+ * @returns Hexadecimal hash string with optional suffix based on function markers
+ */
 export function generateFunctionHash(fn: (...args: never) => unknown): string {
 	let suffix = "";
 	let _fn: (...args: never) => unknown = fn;
