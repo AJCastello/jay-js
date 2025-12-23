@@ -110,7 +110,7 @@ export const State = <T>(data: T): TState<T> => {
 
 				// Prefer targeted invalidation; for structural mutations be conservative.
 				if (structural) {
-					runEffects(null, Array.from(_effects_ids));
+					runEffects(null, _effects_ids);
 				} else {
 					runEffects(changedPath);
 				}
@@ -134,7 +134,7 @@ export const State = <T>(data: T): TState<T> => {
 				const structural = isStructuralMutation(target, prop, hadKey);
 
 				if (structural) {
-					runEffects(null, Array.from(_effects_ids));
+					runEffects(null, _effects_ids);
 				} else {
 					runEffects(changedPath);
 				}
@@ -148,7 +148,7 @@ export const State = <T>(data: T): TState<T> => {
 		return proxy;
 	}
 
-	function runEffects(targetKey: string | null = null, targets?: string | string[]) {
+	function runEffects(targetKey: string | null = null, targets?: string | string[] | Set<string>) {
 		if (_effects.size === 0) {
 			return;
 		}
@@ -169,9 +169,15 @@ export const State = <T>(data: T): TState<T> => {
 		}
 
 		if (targets) {
-			const targetArray = Array.isArray(targets) ? targets : [targets];
-			for (const target of targetArray) {
-				effectsToRun.add(target);
+			if (targets instanceof Set) {
+				for (const id of targets) {
+					effectsToRun.add(id);
+				}
+			} else {
+				const targetArray = Array.isArray(targets) ? targets : [targets];
+				for (const target of targetArray) {
+					effectsToRun.add(target);
+				}
 			}
 		}
 
@@ -299,7 +305,7 @@ export const State = <T>(data: T): TState<T> => {
 		 */
 		trigger: (...ids: string[]): void => {
 			if (ids.length === 0) {
-				runEffects(null, Array.from(_effects_ids));
+				runEffects(null, _effects_ids);
 				return;
 			}
 			runEffects(null, ids);
