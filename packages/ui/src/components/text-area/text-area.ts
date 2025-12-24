@@ -1,4 +1,5 @@
-import { type TBaseTagMap, TextArea as TextAreaElement } from "@jay-js/elements";
+import { TextArea as TextAreaElement } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TTextArea } from "./text-area.types";
 

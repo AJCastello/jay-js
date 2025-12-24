@@ -1,4 +1,5 @@
-import { Button as ButtonElement, type TBaseTagMap } from "@jay-js/elements";
+import { Button as ButtonElement } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TButton } from "./button.types";
 

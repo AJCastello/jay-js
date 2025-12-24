@@ -1,9 +1,16 @@
-import { Base, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
+import { Base, type TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TToast } from "../toast/toast.types";
 
 export function ToastContainer<T extends TBaseTagMap = "div">(
-	{ horizontal = "toast-end", vertical = "toast-top", duration = 5000, asChild = false, ...props }: TToast<T> = {
+	{
+		horizontal = "toast-end",
+		vertical = "toast-top",
+		duration = 5000,
+		asChild = false,
+		dataset,
+		...props
+	}: TToast<T> = {
 		tag: "div",
 	},
 ): HTMLElementTagNameMap[T] {
@@ -13,10 +20,11 @@ export function ToastContainer<T extends TBaseTagMap = "div">(
 		...props,
 		className,
 		dataset: {
-			horizontal,
-			vertical,
-			duration: duration.toString(),
+			horizontal: horizontal || "",
+			vertical: vertical || "",
+			duration: duration.toString() || "",
 			asChild: asChild ? "true" : "false",
+			...(typeof dataset === "function" ? dataset() : dataset),
 		},
 	}) as HTMLElementTagNameMap[T];
 }

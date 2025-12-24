@@ -1,4 +1,3 @@
-export * from "./base";
 export * from "./box";
 export * from "./button";
 export * from "./form";
@@ -8,11 +7,9 @@ export * from "./input";
 export * from "./link";
 export * from "./list";
 export * from "./list-item";
-export * from "./outlet";
 export * from "./progress";
 export * from "./section";
 export * from "./select";
 export * from "./select-item";
 export * from "./text-area";
 export * from "./typography";
-export * from "./utils";

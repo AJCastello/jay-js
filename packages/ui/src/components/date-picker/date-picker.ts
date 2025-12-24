@@ -1,6 +1,6 @@
-import { Base, Box, Button, type TBaseTagMap, Typography } from "@jay-js/elements";
-import { Effect, render, State } from "@jay-js/system";
-import { cn } from "../../utils/cn";
+import { Box, Button, Typography } from "@jay-js/elements";
+import { Base, render, type TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TDatePicker } from "./date-picker.types";
 
 const LOCALES = {
@@ -84,55 +84,60 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 ): HTMLElementTagNameMap[T] {
 	const strings = LOCALES[locale] || LOCALES["pt-BR"];
 
-	const currentDate = State(new Date(defaultDate));
-	const selectedDate = State<Date | null>(value ? new Date(value) : null);
-	const currentView = State<"calendar" | "time">("calendar");
-	const selectedHour = State(value ? value.getHours() : new Date().getHours());
-	const selectedMinute = State(value ? value.getMinutes() : new Date().getMinutes());
+	let currentDate = new Date(defaultDate);
+	let selectedDate: Date | null = value ? new Date(value) : null;
+	let currentView: "calendar" | "time" = "calendar";
+	let selectedHour = value ? value.getHours() : new Date().getHours();
+	let selectedMinute = value ? value.getMinutes() : new Date().getMinutes();
 
-	const containerId = `picker-${Math.random().toString(36).slice(2, 11)}`;
-	const monthYearId = `${containerId}-month-year`;
-	const calendarDaysId = `${containerId}-calendar-days`;
+	const monthYearId = `month-year-${Math.random().toString(36).slice(2, 11)}`;
+	const calendarDaysId = `calendar-days-${Math.random().toString(36).slice(2, 11)}`;
 
 	const container = Base({
 		tag: "div",
 		...props,
 		className: cn("w-full max-w-sm", props.className),
-		onunmount: () => {
-			currentDate.clear();
-			selectedDate.clear();
-			currentView.clear();
-			selectedHour.clear();
-			selectedMinute.clear();
-		},
 	}) as HTMLDivElement;
 
+	function updateMonthYear(element: HTMLElement) {
+		element.textContent = `${strings.months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+	}
+
 	function previousMonth() {
-		currentDate.set((current) => {
-			const newDate = new Date(current);
-			newDate.setMonth(newDate.getMonth() - 1);
-			return newDate;
-		});
+		const newDate = new Date(currentDate);
+		newDate.setMonth(newDate.getMonth() - 1);
+		currentDate = newDate;
+
+		const monthYearElement = container.querySelector(`#${monthYearId}`) as HTMLElement;
+		if (monthYearElement) {
+			updateMonthYear(monthYearElement);
+		}
+		renderCalendarDays();
 	}
 
 	function nextMonth() {
-		currentDate.set((current) => {
-			const newDate = new Date(current);
-			newDate.setMonth(newDate.getMonth() + 1);
-			return newDate;
-		});
+		const newDate = new Date(currentDate);
+		newDate.setMonth(newDate.getMonth() + 1);
+		currentDate = newDate;
+
+		const monthYearElement = container.querySelector(`#${monthYearId}`) as HTMLElement;
+		if (monthYearElement) {
+			updateMonthYear(monthYearElement);
+		}
+		renderCalendarDays();
 	}
 
 	function selectDate(day: number) {
-		const newDate = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth(), day);
+		const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
 
 		if (minDate && newDate < minDate) return;
 		if (maxDate && newDate > maxDate) return;
 
-		selectedDate.set(newDate);
+		selectedDate = newDate;
 
 		if (withTime) {
-			currentView.set("time");
+			currentView = "time";
+			showTimeSelector();
 		} else {
 			if (onSelect) {
 				onSelect(new Date(newDate));
@@ -170,10 +175,11 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					disabled,
 					onclick: () => {
 						if (type === "hour") {
-							selectedHour.set((h) => (h - 1 + 24) % 24);
+							selectedHour = (selectedHour - 1 + 24) % 24;
 						} else {
-							selectedMinute.set((m) => (m - 1 + 60) % 60);
+							selectedMinute = (selectedMinute - 1 + 60) % 60;
 						}
+						renderTimeDisplay();
 					},
 				}),
 				Box({
@@ -187,14 +193,34 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 					disabled,
 					onclick: () => {
 						if (type === "hour") {
-							selectedHour.set((h) => (h + 1) % 24);
+							selectedHour = (selectedHour + 1) % 24;
 						} else {
-							selectedMinute.set((m) => (m + 1) % 60);
+							selectedMinute = (selectedMinute + 1) % 60;
 						}
+						renderTimeDisplay();
 					},
 				}),
 			],
 		});
+	}
+
+	function renderTimeDisplay() {
+		const timeContainer = contentContainer.querySelector(".time-display-container") as HTMLElement;
+		if (!timeContainer) return;
+
+		const hourColumn = createTimeColumn("hour", selectedHour);
+		const minuteColumn = createTimeColumn("minute", selectedMinute);
+		const separator = Box({
+			className: "flex items-center justify-center px-2",
+			children: Typography({
+				tag: "span",
+				children: ":",
+				className: "font-mono text-2xl font-bold",
+				style: { userSelect: "none" },
+			}),
+		});
+
+		render(timeContainer, [hourColumn, separator, minuteColumn]);
 	}
 
 	function createTimeSelector(): HTMLElement {
@@ -202,24 +228,19 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 			className: "time-display-container flex items-center justify-center gap-1 mb-6",
 		});
 
-		Effect(() => {
-			const hour = selectedHour.value;
-			const minute = selectedMinute.value;
-
-			const hourColumn = createTimeColumn("hour", hour);
-			const minuteColumn = createTimeColumn("minute", minute);
-			const separator = Box({
-				className: "flex items-center justify-center px-2",
-				children: Typography({
-					tag: "span",
-					children: ":",
-					className: "font-mono text-2xl font-bold",
-					style: { userSelect: "none" },
-				}),
-			});
-
-			render(timeContainer, [hourColumn, separator, minuteColumn]);
+		const hourColumn = createTimeColumn("hour", selectedHour);
+		const minuteColumn = createTimeColumn("minute", selectedMinute);
+		const separator = Box({
+			className: "flex items-center justify-center px-2",
+			children: Typography({
+				tag: "span",
+				children: ":",
+				className: "font-mono text-2xl font-bold",
+				style: { userSelect: "none" },
+			}),
 		});
+
+		render(timeContainer, [hourColumn, separator, minuteColumn]);
 
 		return Box({
 			className: "border border-base-300 rounded-lg bg-base-100 shadow-sm p-6",
@@ -234,7 +255,8 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 							className: cn("btn btn-ghost", size),
 							disabled,
 							onclick: () => {
-								currentView.set("calendar");
+								currentView = "calendar";
+								showCalendar();
 							},
 						}),
 						Button({
@@ -243,11 +265,10 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 							className: cn("btn", color, size),
 							disabled,
 							onclick: () => {
-								const selected = selectedDate.value;
-								if (selected) {
-									selected.setHours(selectedHour.value, selectedMinute.value, 0, 0);
+								if (selectedDate) {
+									selectedDate.setHours(selectedHour, selectedMinute, 0, 0);
 									if (onSelect) {
-										onSelect(new Date(selected));
+										onSelect(new Date(selectedDate));
 									}
 								}
 							},
@@ -258,68 +279,65 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		});
 	}
 
+	function renderCalendarDays() {
+		const calendarDaysElement = container.querySelector(`#${calendarDaysId}`) as HTMLElement;
+		if (!calendarDaysElement) return;
+
+		const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+		const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+		const days: HTMLElement[] = [];
+
+		for (let i = 0; i < firstDay.getDay(); i++) {
+			days.push(Box({ className: "p-2" }));
+		}
+
+		for (let day = 1; day <= lastDay.getDate(); day++) {
+			const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+			const isDisabled = (minDate && dayDate < minDate) || (maxDate && dayDate > maxDate) || disabled;
+			const isSelected =
+				selectedDate &&
+				selectedDate.getDate() === day &&
+				selectedDate.getMonth() === currentDate.getMonth() &&
+				selectedDate.getFullYear() === currentDate.getFullYear();
+			const isToday = showToday && new Date().toDateString() === dayDate.toDateString();
+
+			const isRangeEdge =
+				(rangeStart && dayDate.toDateString() === rangeStart.toDateString()) ||
+				(rangeEnd && dayDate.toDateString() === rangeEnd.toDateString());
+
+			const isInRange = rangeStart && rangeEnd && dayDate > rangeStart && dayDate < rangeEnd && !isSelected;
+
+			const dayElement = Button({
+				type: "button",
+				className: cn(
+					"btn btn-square",
+					size,
+					isSelected || isRangeEdge ? color : isInRange ? "btn-ghost bg-primary/10" : "btn-ghost",
+					isToday && !isSelected && !isRangeEdge && "border border-primary",
+				),
+				children: String(day),
+				disabled: isDisabled,
+				onclick: () => selectDate(day),
+			});
+
+			days.push(dayElement);
+		}
+
+		render(calendarDaysElement, days);
+	}
+
 	function createCalendar(): HTMLElement {
 		const monthYearElement = Typography({
 			id: monthYearId,
 			className: "font-semibold text-base",
 		});
 
+		updateMonthYear(monthYearElement);
+
 		const calendarDaysElement = Box({
 			id: calendarDaysId,
 			className: "grid grid-cols-7 p-2 gap-1",
-		});
-
-		Effect(() => {
-			const current = currentDate.value;
-			monthYearElement.textContent = `${strings.months[current.getMonth()]} ${current.getFullYear()}`;
-		});
-
-		Effect(() => {
-			const current = currentDate.value;
-			const selected = selectedDate.value;
-
-			const firstDay = new Date(current.getFullYear(), current.getMonth(), 1);
-			const lastDay = new Date(current.getFullYear(), current.getMonth() + 1, 0);
-
-			const days: HTMLElement[] = [];
-
-			for (let i = 0; i < firstDay.getDay(); i++) {
-				days.push(Box({ className: "p-2" }));
-			}
-
-			for (let day = 1; day <= lastDay.getDate(); day++) {
-				const dayDate = new Date(current.getFullYear(), current.getMonth(), day);
-				const isDisabled = (minDate && dayDate < minDate) || (maxDate && dayDate > maxDate) || disabled;
-				const isSelected =
-					selected &&
-					selected.getDate() === day &&
-					selected.getMonth() === current.getMonth() &&
-					selected.getFullYear() === current.getFullYear();
-				const isToday = showToday && new Date().toDateString() === dayDate.toDateString();
-
-				const isRangeEdge =
-					(rangeStart && dayDate.toDateString() === rangeStart.toDateString()) ||
-					(rangeEnd && dayDate.toDateString() === rangeEnd.toDateString());
-
-				const isInRange = rangeStart && rangeEnd && dayDate > rangeStart && dayDate < rangeEnd && !isSelected;
-
-				const dayElement = Button({
-					type: "button",
-					className: cn(
-						"btn btn-square",
-						size,
-						isSelected || isRangeEdge ? color : isInRange ? "btn-ghost bg-primary/10" : "btn-ghost",
-						isToday && !isSelected && !isRangeEdge && "border border-primary",
-					),
-					children: String(day),
-					disabled: isDisabled,
-					onclick: () => selectDate(day),
-				});
-
-				days.push(dayElement);
-			}
-
-			render(calendarDaysElement, days);
 		});
 
 		return Box({
@@ -363,15 +381,20 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		className: "w-full",
 	});
 
-	Effect(() => {
-		const view = currentView.value;
+	function showCalendar() {
+		render(contentContainer, createCalendar());
+		renderCalendarDays();
+	}
 
-		if (view === "calendar") {
-			render(contentContainer, createCalendar());
-		} else {
-			render(contentContainer, createTimeSelector());
-		}
-	});
+	function showTimeSelector() {
+		render(contentContainer, createTimeSelector());
+	}
+
+	if (currentView === "calendar") {
+		showCalendar();
+	} else {
+		showTimeSelector();
+	}
 
 	const children: HTMLElement[] = [contentContainer];
 

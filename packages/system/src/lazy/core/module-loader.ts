@@ -32,29 +32,30 @@ export function loadFromCache(lazy: TLazyModule): HTMLElement {
 export async function loadModule(lazy: TLazyModule, moduleSection: HTMLElement) {
 	try {
 		const moduleImported = await lazy.import();
+		const moduleName = lazy.module || "";
 
-		const moduleToUse = isDefaultExportModule(lazy) ? moduleImported.default : moduleImported[lazy.module!];
+		const moduleToUse = isDefaultExportModule(lazy) ? moduleImported.default : moduleImported[moduleName];
 
 		if (!moduleToUse) {
 			if (moduleImported.default && !isDefaultExportModule(lazy)) {
-				console.warn(`Named export '${lazy.module}' not found, using default export instead.`);
-				moduleCache.set(lazy.module!, {
+				console.warn(`Named export '${moduleName}' not found, using default export instead.`);
+				moduleCache.set(moduleName, {
 					module: moduleImported.default,
 					lastUsed: 0,
 					collect: lazy.collect ?? true,
 				});
 			} else {
-				throw new Error(`Module ${lazy.module} not found in the imported file.`);
+				throw new Error(`Module ${moduleName} not found in the imported file.`);
 			}
 		} else {
-			moduleCache.set(lazy.module!, {
+			moduleCache.set(moduleName, {
 				module: moduleToUse,
 				lastUsed: 0,
 				collect: lazy.collect ?? true,
 			});
 		}
 
-		const cached = moduleCache.get(lazy.module!);
+		const cached = moduleCache.get(moduleName);
 		if (!cached) {
 			throw new Error(`Module ${lazy.module} not found in cache`);
 		}

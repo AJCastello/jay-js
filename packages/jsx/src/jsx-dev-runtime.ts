@@ -3,7 +3,7 @@
  * @description Provides the JSX transformation functions for development use
  */
 
-import { Base, Fragment } from "@jay-js/elements";
+import { Base, Fragment } from "@jay-js/system";
 
 /**
  * Type definition for JSX props
@@ -16,7 +16,7 @@ export interface JSXProps {
 /**
  * Type definition for JSX component function
  */
-export type JSXComponent = (props: JSXProps) => HTMLElement | Promise<HTMLElement>;
+export type JSXComponent = (props: JSXProps) => Node | Promise<Node>;
 
 /**
  * JSX Development transformation function
@@ -37,7 +37,7 @@ function jayJSXDEV(
 	_isStaticChildren: boolean,
 	_source: any,
 	_self: any,
-): HTMLElement | Promise<HTMLElement> {
+	): Node | Promise<Node> {
 	if (typeof tag === "function") {
 		return tag({ ...props });
 		// Uncomment if async handling needs improvement

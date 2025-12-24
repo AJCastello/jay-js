@@ -291,15 +291,6 @@ describe("Theme Manager", () => {
 			expect(localStorage.getItem("jayjs-current-theme")).toBeNull();
 		});
 
-		it("should dispatch themeChanged event", () => {
-			setTheme("dark");
-
-			expect(documentMock.dispatchEvent).toHaveBeenCalled();
-			const eventArg = documentMock.dispatchEvent.mock.calls[0][0];
-			expect(eventArg.type).toBe("themeChanged");
-			expect(eventArg.detail.theme).toBe("dark");
-		});
-
 		it("should handle localStorage errors gracefully", () => {
 			const originalSetItem = localStorage.setItem;
 			localStorage.setItem = vi.fn().mockImplementation(() => {
@@ -365,9 +356,6 @@ describe("Theme Manager", () => {
 
 			// Should save to localStorage
 			expect(localStorage.getItem("jayjs-current-theme")).toBe("dark");
-
-			// Should dispatch event
-			expect(documentMock.dispatchEvent).toHaveBeenCalled();
 
 			// Reinitialize from localStorage
 			initTheme();

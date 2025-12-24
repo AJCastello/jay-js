@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TButton } from "./button.types";
 
 export function Button<T extends TBaseTagMap = "button">(

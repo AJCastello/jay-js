@@ -1,11 +1,12 @@
-import { Progress as ProgressElement, type TBaseTagMap } from "@jay-js/elements";
+import { Progress } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TProgress } from "./progress.types";
 
-export function Progress<T extends TBaseTagMap = "progress">(
+export function ProgressElement<T extends TBaseTagMap = "progress">(
 	{ className, color, ...props }: TProgress<T> = { tag: "progress" },
 ): HTMLElementTagNameMap[T] {
-	return ProgressElement({
+	return Progress({
 		...props,
 		tag: "progress",
 		className: cn("progress", color, className),

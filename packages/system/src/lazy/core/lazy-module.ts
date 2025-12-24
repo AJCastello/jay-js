@@ -1,4 +1,3 @@
-import { uniKey } from "../../utils/index.js";
 import type { TLazyModule } from "../types.js";
 
 import { moduleCache } from "./configuration.js";
@@ -23,17 +22,16 @@ export function LazyModule(lazy: TLazyModule, loader?: HTMLElement) {
 	}
 
 	if (!lazy.module) {
-		const moduleId = `default_${uniKey(20)}`;
+		const randomUUID = crypto.randomUUID();
+		const moduleId = `default_${randomUUID}`;
 		lazy = { ...lazy, module: moduleId };
 	}
-
-	let moduleSection: HTMLElement;
 
 	if (lazy.module && moduleCache.has(lazy.module)) {
 		return loadFromCache(lazy);
 	}
 
-	moduleSection = loader || document.createElement("jayjs-lazy-slot");
+	const moduleSection = loader || document.createElement("jayjs-lazy-slot");
 	loadModule(lazy, moduleSection);
 	return moduleSection;
 }

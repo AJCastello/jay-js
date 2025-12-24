@@ -1,5 +1,6 @@
-import { ListItem, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
+import { ListItem } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TMenuItem } from "./menu-item.types";
 
 export function MenuItem<T extends TBaseTagMap = "li">(

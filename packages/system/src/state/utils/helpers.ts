@@ -1,72 +1,10 @@
 import { State } from "../core/state.js";
 import { subscriberManager } from "../core/subscriber.js";
-import type { ISetValue, StateType } from "../types.js";
+import type { ISetValue, TState } from "../types.js";
 
-/**
- * Creates a persistent state that saves values to localStorage
- *
- * @template T Type of the state data
- * @param key Key for storage in localStorage
- * @param defaultValue Default value when no data is saved
- * @returns A state object that persists changes to localStorage
- */
-export function PersistentState<T>(key: string, defaultValue: T): StateType<T> {
-	// Try to retrieve value from localStorage
-	let initialValue: T;
-	try {
-		const savedValue = localStorage.getItem(key);
-		initialValue = savedValue ? JSON.parse(savedValue) : defaultValue;
-	} catch {
-		initialValue = defaultValue;
-	}
-
-	const state = State<T>(initialValue);
-	const originalSet = state.set;
-	state.set = (newData, options) => {
-		originalSet(newData, options);
-		try {
-			localStorage.setItem(key, JSON.stringify(state.get()));
-		} catch (error) {
-			console.error(`Error saving state to localStorage: ${error}`);
-		}
-	};
-
-	return state;
-}
-
-/**
- * Combines multiple states into a single object
- *
- * @template T Record type containing state types
- * @param states Object with states to be combined
- * @returns A new state that keeps the combined values updated
- */
-export function CombineStates<T extends Record<string, any>>(
-	states: { [K in keyof T]: StateType<T[K]> },
-): StateType<T> {
-	// Gets initial values from each state
-	const initialValue = Object.entries(states).reduce(
-		(acc, [key, state]) => {
-			acc[key] = state.get();
-			return acc;
-		},
-		{} as Record<string, any>,
-	) as T;
-
-	const combinedState = State<T>(initialValue);
-
-	// Subscribe to each state to update the combined value
-	Object.entries(states).forEach(([key, state]) => {
-		state.sub(`combined_${key}`, (newValue: T[typeof key]) => {
-			combinedState.set((current) => ({
-				...current,
-				[key]: newValue,
-			}));
-		});
-	});
-
-	return combinedState;
-}
+export const REACTIVE_MARKER = Symbol("reactive");
+export const SETVALUE_MARKER = Symbol("setValue");
+export const SETCHILD_MARKER = Symbol("setChildren");
 
 /**
  * Creates a derived state that automatically recalculates whenever states
@@ -76,7 +14,7 @@ export function CombineStates<T extends Record<string, any>>(
  * @param fn Function that calculates the derived value
  * @returns A state that updates when any dependency changes
  */
-export function Derived<T>(fn: () => T): StateType<T> {
+export function Derived<T>(fn: () => T): TState<T> {
 	const derivedState = State(fn());
 	Effect(() => {
 		derivedState.set(fn());
@@ -105,30 +43,87 @@ export function Effect(fn: () => void) {
  * @param fn Function that returns the value to be set
  * @returns Function for setting values in objects
  */
-export function Values(fn: () => any): any {
-	const _setValue: ISetValue = () => {
-		if (_setValue._path.length > 0) {
-			let target = _setValue._object;
-			for (let i = 0; i < _setValue._path.length - 1; i++) {
-				if (!target[_setValue._path[i]]) {
-					target[_setValue._path[i]] = {};
+export function Values(fn: () => any): (object: any, ...path: string[]) => void {
+	const _set_value: ISetValue = Object.assign(() => {
+		if (_set_value._path.length > 0) {
+			let target = _set_value._object_ref;
+			for (let i = 0; i < _set_value._path.length - 1; i++) {
+				if (!target[_set_value._path[i]]) {
+					target[_set_value._path[i]] = {};
 				}
-				target = target[_setValue._path[i]];
+				target = target[_set_value._path[i]];
 			}
-			const lastKey = _setValue._path[_setValue._path.length - 1];
-			target[lastKey] = _setValue._fn();
+			const lastKey = _set_value._path[_set_value._path.length - 1];
+			target[lastKey] = _set_value._fn();
 			return;
 		}
-		_setValue._object = _setValue._fn();
-	};
-	_setValue._object = undefined;
-	_setValue._path = [];
-	_setValue._fn = fn;
+		_set_value._object_ref = _set_value._fn(); // Isso aqui é para o caso de setar o objeto todo, Mas talvez não faça sentido
+	}, {
+		_object_ref: undefined,
+		_path: [] as string[],
+		_fn: fn,
+		[SETVALUE_MARKER]: true,
+	});
 
-	function _set_value_effect(object: any, ...path: string[]) {
-		_setValue._object = object;
-		_setValue._path = path;
-		Effect(_setValue);
+	return Object.assign((object: any, ...path: string[]) => {
+		_set_value._object_ref = object;
+		_set_value._path = path;
+		Effect(_set_value);
+	}, {
+		[REACTIVE_MARKER]: true,
+	});
+}
+
+/**
+ * Creates a reactive effect for updating children of a DOM node.
+ * Automatically monitors state changes and triggers child updates.
+ *
+ * @param fn Function that generates the child elements
+ * @param nodeRefId Reference identifier for the target node
+ * @param setChild Callback function to execute when children need to be updated
+ */
+export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
+	const _set_child = Object.assign(setChild, {
+		_fn: fn,
+		_ref: nodeRefId,
+		[SETCHILD_MARKER]: true,
+	});
+
+	Effect(_set_child);
+}
+
+/**
+ * Generates a unique hash identifier for a function.
+ * Takes into account special markers (SETVALUE_MARKER, SETCHILD_MARKER) to create
+ * unique identifiers for reactive functions with additional metadata.
+ *
+ * @param fn Function to generate hash for
+ * @returns Hexadecimal hash string with optional suffix based on function markers
+ */
+export function generateFunctionHash(fn: (...args: never) => unknown, path?: string): string {
+	let suffix = "";
+	let _fn: (...args: never) => unknown = fn;
+
+	if ((fn as any)[SETVALUE_MARKER]) {
+		suffix = `__prop:${(fn as any)._path.join(".")}`;
+		_fn = (fn as any)._fn;
 	}
-	return _set_value_effect;
+
+	if ((fn as any)[SETCHILD_MARKER]) {
+		suffix = `__childref:${(fn as any)._ref}`;
+		_fn = (fn as any)._fn;
+	}
+
+	suffix = path ? `${suffix}__target:${path}` : suffix
+
+	const _fn_string = _fn.toString();
+	let hash = 0;
+
+	for (let i = 0; i < _fn_string.length; i++) {
+		const char = _fn_string.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash |= 0;
+	}
+
+	return `${Math.abs(hash).toString(16)}${suffix ? suffix : ""}`;
 }

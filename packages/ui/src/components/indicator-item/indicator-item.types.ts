@@ -1,4 +1,4 @@
-import type { TBase, TBaseTagMap } from "@jay-js/elements";
+import type { TBase, TBaseTagMap } from "@jay-js/system";
 
 export type TIndicatorItem<T extends TBaseTagMap> = {
 	vertical?: "indicator-top" | "indicator-middle" | "indicator-bottom";

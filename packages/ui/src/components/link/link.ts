@@ -1,4 +1,5 @@
-import { Link as LinkElement, type TBaseTagMap } from "@jay-js/elements";
+import { Link as LinkElement } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TLink } from "./link.types";
 

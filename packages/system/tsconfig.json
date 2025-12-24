@@ -28,5 +28,9 @@
 		"./node_modules",
 		"./dist",
 		"legacy/draggable",
+		"**/__tests__",
+		"**/*.test.ts",
+		"**/*.spec.ts",
+		"**/__mocks__"
 	]
 }

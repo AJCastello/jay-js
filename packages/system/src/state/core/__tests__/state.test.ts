@@ -1,5 +1,6 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { State } from "../state.js";
+import { Effect } from "../../utils/helpers.js";
 
 describe("State", () => {
 	it("should create a state with initial value", () => {
@@ -162,5 +163,116 @@ describe("State", () => {
 		const state = State(10);
 		state.value = 20;
 		expect(state.get()).toBe(20);
+	});
+
+	it("should not notify when setting same primitive value", () => {
+		const state = State(false);
+		const subscriber = vi.fn();
+
+		state.sub("test", subscriber);
+		state.value = false;
+		expect(subscriber).not.toHaveBeenCalled();
+
+		state.value = true;
+		expect(subscriber).toHaveBeenCalledTimes(1);
+
+		state.value = true;
+		expect(subscriber).toHaveBeenCalledTimes(1);
+	});
+
+	it("should subscribe and notify only the accessed target key", () => {
+		const person = State({ name: "John", age: 30 });
+		const effect = vi.fn(() => {
+			// Accessing property should create a targeted subscription
+			person.value.name;
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		// Same value: no-op
+		person.value.name = "John";
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		// Different value: notify only target 'name'
+		person.value.name = "Doe";
+		expect(effect).toHaveBeenCalledTimes(2);
+
+		// Changing another property should not notify 'name' target subscribers
+		person.value.age = 31;
+		expect(effect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should support keyed-tracking with symbol keys", () => {
+		const secret = Symbol("secret");
+		const state = State({ [secret]: "a", other: "x" } as Record<string | symbol, string>);
+
+		const effect = vi.fn(() => {
+			state.value[secret];
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		state.value.other = "y";
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		state.value[secret] = "b";
+		expect(effect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should support keyed-tracking with array indices", () => {
+		const numbers = State([10, 20, 30]);
+		const effect = vi.fn(() => {
+			numbers.value[0];
+		});
+
+		Effect(effect);
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		numbers.value[1] = 25;
+		expect(effect).toHaveBeenCalledTimes(1);
+
+		numbers.value[0] = 11;
+		expect(effect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should NOT invalidate index-specific effects on structural array mutations", () => {
+		const numbers = State([1, 2, 3]);
+		const indexEffect = vi.fn(() => {
+			numbers.value[0];
+		});
+
+		Effect(indexEffect);
+		expect(indexEffect).toHaveBeenCalledTimes(1);
+
+		numbers.value.push(4);
+		expect(indexEffect).toHaveBeenCalledTimes(1);
+	});
+
+	it("should invalidate global effects on structural array mutations", () => {
+		const numbers = State([1, 2, 3]);
+		const globalEffect = vi.fn(() => {
+			numbers.value.forEach(n => n);
+		});
+
+		Effect(globalEffect);
+		expect(globalEffect).toHaveBeenCalledTimes(1);
+
+		numbers.value.push(4);
+		expect(globalEffect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should invalidate length watchers on structural array mutations", () => {
+		const numbers = State([1, 2, 3]);
+		const lengthEffect = vi.fn(() => {
+			numbers.value.length;
+		});
+
+		Effect(lengthEffect);
+		expect(lengthEffect).toHaveBeenCalledTimes(1);
+
+		numbers.value.push(4);
+		expect(lengthEffect).toHaveBeenCalledTimes(2);
 	});
 });

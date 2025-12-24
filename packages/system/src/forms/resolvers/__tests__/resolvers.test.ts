@@ -194,6 +194,7 @@ describe("Form Resolvers", () => {
 				temCartaoCredito: yup.boolean(),
 				numeroCartao: yup.string().when("temCartaoCredito", {
 					is: true,
+					// biome-ignore lint/suspicious/noThenProperty: Yup schema requires 'then' property for conditional validation
 					then: () => yup.string().required("Card number is required when you have a card"),
 				}),
 			});

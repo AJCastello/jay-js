@@ -17,13 +17,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "types": ["node"],
+    "baseUrl": ".",
     "paths": {
-      "@jay-js/elements": [
-        "../elements/dist"
-      ],
-      "@jay-js/elements/*": [
-        "../elements/dist/*"
-      ]
+      "@jay-js/system": ["../system/dist/index.d.ts"]
     }
   },
   "include": [

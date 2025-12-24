@@ -58,24 +58,17 @@ export type TState<T> = {
 	clear: (newData?: T | ((currentState: T) => T)) => void;
 
 	/**
-	 * Map of registered effect callbacks
-	 */
-	effects: Map<string, (value: T) => void>;
-
-	/**
 	 * Accessor property for the state value
 	 */
 	value: T;
 };
 
-export type StateType<T> = TState<T>;
-
 /**
  * Interface for setValue function used by Values helper
  */
-export interface ISetValue extends Function {
+export interface ISetValue {
 	(): void;
-	_object: any;
+	_object_ref: any;
 	_path: string[];
 	_fn: () => any;
 }
