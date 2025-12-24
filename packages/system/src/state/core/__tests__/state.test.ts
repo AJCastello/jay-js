@@ -237,16 +237,42 @@ describe("State", () => {
 		expect(effect).toHaveBeenCalledTimes(2);
 	});
 
-	it("should conservatively invalidate on structural array mutations", () => {
+	it("should NOT invalidate index-specific effects on structural array mutations", () => {
 		const numbers = State([1, 2, 3]);
-		const effect = vi.fn(() => {
+		const indexEffect = vi.fn(() => {
 			numbers.value[0];
 		});
 
-		Effect(effect);
-		expect(effect).toHaveBeenCalledTimes(1);
+		Effect(indexEffect);
+		expect(indexEffect).toHaveBeenCalledTimes(1);
 
 		numbers.value.push(4);
-		expect(effect).toHaveBeenCalledTimes(2);
+		expect(indexEffect).toHaveBeenCalledTimes(1);
+	});
+
+	it("should invalidate global effects on structural array mutations", () => {
+		const numbers = State([1, 2, 3]);
+		const globalEffect = vi.fn(() => {
+			numbers.value.forEach(n => n);
+		});
+
+		Effect(globalEffect);
+		expect(globalEffect).toHaveBeenCalledTimes(1);
+
+		numbers.value.push(4);
+		expect(globalEffect).toHaveBeenCalledTimes(2);
+	});
+
+	it("should invalidate length watchers on structural array mutations", () => {
+		const numbers = State([1, 2, 3]);
+		const lengthEffect = vi.fn(() => {
+			numbers.value.length;
+		});
+
+		Effect(lengthEffect);
+		expect(lengthEffect).toHaveBeenCalledTimes(1);
+
+		numbers.value.push(4);
+		expect(lengthEffect).toHaveBeenCalledTimes(2);
 	});
 });

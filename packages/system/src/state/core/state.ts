@@ -113,9 +113,15 @@ export const State = <T>(data: T): TState<T> => {
 				const changedPath = buildPath(nextPathSegments);
 				const structural = isStructuralMutation(target, prop, hadKey);
 
-				// Prefer targeted invalidation; for structural mutations be conservative.
 				if (structural) {
-					runEffects(null, _effects_ids);
+					const toInvalidate = new Set<string>(_effects_global);
+					const lengthWatchers = _effects_by_target.get("length");
+					if (lengthWatchers) {
+						for (const id of lengthWatchers) {
+							toInvalidate.add(id);
+						}
+					}
+					runEffects(null, toInvalidate, false);
 				} else {
 					runEffects(changedPath);
 				}
@@ -143,7 +149,14 @@ export const State = <T>(data: T): TState<T> => {
 				const structural = isStructuralMutation(target, prop, hadKey);
 
 				if (structural) {
-					runEffects(null, _effects_ids);
+					const toInvalidate = new Set<string>(_effects_global);
+					const lengthWatchers = _effects_by_target.get("length");
+					if (lengthWatchers) {
+						for (const id of lengthWatchers) {
+							toInvalidate.add(id);
+						}
+					}
+					runEffects(null, toInvalidate, false);
 				} else {
 					runEffects(changedPath);
 				}
