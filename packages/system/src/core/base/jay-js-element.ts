@@ -10,7 +10,7 @@ export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new 
 	const BaseClass = baseElement.constructor as { new (): HTMLElement };
 
 	class JayJsElement extends BaseClass {
-		onmount?: (element: HTMLElement) => void | (() => void) | Promise<undefined | (() => void)>;
+		onmount?: (element: HTMLElement) => void | (() => void) | Promise<void | (() => void)>;
 		onunmount?: (element: HTMLElement) => void | Promise<void>;
 		_ref?: TRefObject<HTMLElement>;
 		private _cleanupFromMount?: () => void;
