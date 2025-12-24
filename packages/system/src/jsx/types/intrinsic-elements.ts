@@ -1,7 +1,7 @@
 import type { TBase } from "../../core/base/base.types.js";
 
 export declare namespace JSX {
-	type Element = HTMLElement | Promise<HTMLElement>;
+	type Element = Node | Promise<Node>;
 
 	interface IntrinsicElements {
 		a: TBase<"a">;
