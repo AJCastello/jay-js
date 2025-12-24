@@ -55,8 +55,8 @@ export type TStyle = Partial<Omit<CSSStyleDeclaration, "parentRule" | "length">>
 
 type TChildValue = string | number | Node | boolean | null | undefined;
 type TChildPromise = Promise<TChildValue>;
-type TChildFunction = () => TChildValue | TChildPromise;
 type TChildArray = (TChildValue | TChildPromise | TChildFunction | TChildArray)[];
+type TChildFunction = () => TChildValue | TChildPromise | TChildArray | Node[];
 
 export type TChildren = TChildValue | TChildPromise | TChildFunction | TChildArray;
 

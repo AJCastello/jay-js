@@ -329,6 +329,16 @@ function appendChildToBase(
 					});
 				return;
 			}
+		if (Array.isArray(result)) {
+			const fragment = document.createDocumentFragment();
+			result.forEach(item => {
+				if (item instanceof Node) {
+					fragment.appendChild(item);
+				}
+			});
+			nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, fragment);
+			return;
+		}
 			nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, result);
 		}
 
