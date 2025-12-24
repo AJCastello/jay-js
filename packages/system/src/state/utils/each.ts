@@ -6,6 +6,14 @@ type TKeySelector<T> = keyof T | ((item: T, index: number) => TKey);
 
 const EACH_NODE_MARKER = Symbol("jayjs-each-node");
 
+function scheduleMicrotask(fn: () => void) {
+	if (typeof queueMicrotask === "function") {
+		queueMicrotask(fn);
+		return;
+	}
+	Promise.resolve().then(fn);
+}
+
 function untrack<T>(fn: () => T): T {
 	const current = subscriberManager.getSubscriber();
 	subscriberManager.clearSubscriber();
@@ -77,6 +85,8 @@ export function each<T extends object>(
 ): DocumentFragment {
 	const start = document.createComment("jayjs-each-start");
 	const end = document.createComment("jayjs-each-end");
+
+	let mountRetryScheduled = false;
 
 	const keyToIndex = new Map<TKey, number>();
 
@@ -201,6 +211,19 @@ export function each<T extends object>(
 	}
 
 	function update() {
+		// First run can happen before the fragment is mounted;
+		// in that case, we can't insert nodes yet.
+		if (!start.parentNode) {
+			if (!mountRetryScheduled) {
+				mountRetryScheduled = true;
+				scheduleMicrotask(() => {
+					mountRetryScheduled = false;
+					Effect(update);
+				});
+			}
+			return;
+		}
+
 		const listProxy = getter() ?? [];
 		const length = (listProxy as any).length ?? 0;
 		void (listProxy as any).length; // subscribe only to array length changes
