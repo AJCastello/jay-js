@@ -4,6 +4,7 @@ import { subscriberManager } from "./subscriber.js";
 
 const buildPath = (segments: Array<string | symbol>): string => (segments.length ? segments.map(String).join(".") : "<root>");
 const isObjectLike = (value: unknown): value is Record<string | symbol, any> => typeof value === "object" && value !== null;
+const VALID_SUBSCRIPTION_ID = /^[a-zA-Z0-9_:<>.()\-]+$/;
 
 /**
  * Creates a reactive state container that can be subscribed to for changes
@@ -264,6 +265,20 @@ export const State = <T>(data: T): TState<T> => {
 		 * @returns Result of the effect if run is true
 		 */
 		sub: (id: string, effect: (data: T) => any, run = false): any => {
+			if (!id || typeof id !== "string") {
+				throw new TypeError("Subscription ID must be a non-empty string");
+			}
+
+			if (!VALID_SUBSCRIPTION_ID.test(id)) {
+				throw new Error(
+					`Invalid subscription ID: "${id}". Only alphanumeric characters, underscore, and hyphen are allowed.`
+				);
+			}
+
+			if (typeof effect !== "function") {
+				throw new TypeError("Effect must be a function");
+			}
+
 			_effects.set(id, effect);
 			_effects_ids.add(id);
 
