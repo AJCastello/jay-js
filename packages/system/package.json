@@ -28,7 +28,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "bun build src/index.ts src/jsx/core/jsx-runtime.ts src/jsx/core/jsx-dev-runtime.ts --outdir dist --target node --format esm --external '*' && npm run build:types",
+    "build": "tsc --skipLibCheck",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
