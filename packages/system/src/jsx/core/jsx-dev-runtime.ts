@@ -16,7 +16,7 @@ export interface JSXProps {
 /**
  * Type definition for JSX component function
  */
-export type JSXComponent = (props: JSXProps) => Node | Promise<Node>;
+export type JSXComponent = (props: JSXProps) => HTMLElement | Promise<HTMLElement>;
 
 /**
  * JSX Development transformation function
@@ -37,7 +37,7 @@ function jayJSXDEV(
 	_isStaticChildren: boolean,
 	_source: any,
 	_self: any,
-	): Node | Promise<Node> {
+	): HTMLElement | Promise<HTMLElement> {
 	if (typeof tag === "function") {
 		return tag({ ...props });
 		// Uncomment if async handling needs improvement

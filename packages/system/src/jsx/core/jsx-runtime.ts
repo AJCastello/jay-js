@@ -16,7 +16,7 @@ export interface JSXProps {
 /**
  * Type definition for JSX component function
  */
-export type JSXComponent = (props: JSXProps) => Node | Promise<Node>;
+export type JSXComponent = (props: JSXProps) => HTMLElement | Promise<HTMLElement>;
 
 /**
  * JSX transformation function for production use
@@ -25,7 +25,7 @@ export type JSXComponent = (props: JSXProps) => Node | Promise<Node>;
  * @param props - Element properties and attributes
  * @returns HTMLElement or Promise<HTMLElement>
  */
-function jsx(tag: any, props: JSXProps): Node | Promise<Node> {
+function jsx(tag: any, props: JSXProps): HTMLElement | Promise<HTMLElement> {
 	if (typeof tag === "function") {
 		return tag({ ...props });
 	}
