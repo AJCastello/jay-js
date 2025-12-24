@@ -89,6 +89,35 @@ export function each<T extends object>(
 	let mountRetryScheduled = false;
 
 	const keyToIndex = new Map<TKey, number>();
+	let identityKeys: WeakMap<object, TKey> | null = null;
+	let identitySeq = 0;
+
+	function fallbackKeyFor(item: unknown, index: number): TKey {
+		if (typeof item === "object" && item !== null) {
+			if (!identityKeys) {
+				identityKeys = new WeakMap<object, TKey>();
+			}
+			const existing = identityKeys.get(item);
+			if (existing !== undefined) {
+				return existing;
+			}
+			const created = Symbol(`jayjs-each:${identitySeq++}`);
+			identityKeys.set(item, created);
+			return created;
+		}
+		return `__idx:${index}`;
+	}
+
+	function resolvedKeyFor(item: unknown, index: number): TKey {
+		if (item === null || item === undefined) {
+			return `__null:${index}`;
+		}
+		const resolved = resolveKey(item as any, index, key);
+		if (resolved === null || resolved === undefined) {
+			return fallbackKeyFor(item, index);
+		}
+		return resolved;
+	}
 
 	type Entry = {
 		key: TKey;
@@ -232,7 +261,7 @@ export function each<T extends object>(
 		untrack(() => {
 			for (let i = 0; i < length; i++) {
 				const item = (listProxy as any)[i] as T;
-				const resolved = resolveKey(item, i, key);
+				const resolved = resolvedKeyFor(item, i);
 				keyToIndex.set(resolved, i);
 			}
 		});
@@ -244,12 +273,7 @@ export function each<T extends object>(
 
 		for (let i = 0; i < length; i++) {
 			const rawItem = untrack(() => (listProxy as any)[i] as T);
-			const resolved = untrack(() => resolveKey(rawItem, i, key));
-
-			if (resolved === null || resolved === undefined) {
-				console.warn("JayJS: each() received an item with null/undefined key.");
-				continue;
-			}
+			const resolved = untrack(() => resolvedKeyFor(rawItem, i));
 
 			if (seen.has(resolved)) {
 				console.warn(`JayJS: each() received a duplicate key: ${String(resolved)}`);
