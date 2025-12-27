@@ -246,14 +246,22 @@ export function query<TData = unknown, TError = Error>(
 		initialize();
 	}
 
+	const data = derived(() => internalState.value.data) as TState<TData | null>;
+	const error = derived(() => internalState.value.error) as TState<TError | null>;
+	const isLoading = derived(() => internalState.value.isLoading);
+	const isFetching = derived(() => internalState.value.isFetching);
+	const isError = derived(() => internalState.value.isError);
+	const isSuccess = derived(() => internalState.value.isSuccess);
+	const status = derived(() => internalState.value.status);
+
 	return {
-		data: derived(() => internalState.value.data) as TState<TData | null>,
-		error: derived(() => internalState.value.error) as TState<TError | null>,
-		isLoading: derived(() => internalState.value.isLoading),
-		isFetching: derived(() => internalState.value.isFetching),
-		isError: derived(() => internalState.value.isError),
-		isSuccess: derived(() => internalState.value.isSuccess),
-		status: derived(() => internalState.value.status),
+		get data() { return data.value },
+		get error() { return error.value },
+		get isLoading() { return isLoading.value },
+		get isFetching() { return isFetching.value },
+		get isError() { return isError.value },
+		get isSuccess() { return isSuccess.value },
+		get status() { return status.value },
 		refetch,
 		invalidate,
 		reset,

@@ -130,37 +130,37 @@ export type TQueryStore<TData, TError = Error> = {
 	/**
 	 * Query data state
 	 */
-	data: TState<TData | null>;
+	data: TData | null;
 
 	/**
 	 * Query error state
 	 */
-	error: TState<TError | null>;
+	error: TError | null;
 
 	/**
 	 * Whether the query is loading for the first time
 	 */
-	isLoading: TState<boolean>;
+	isLoading: boolean;
 
 	/**
 	 * Whether the query is currently fetching (including background refetches)
 	 */
-	isFetching: TState<boolean>;
+	isFetching: boolean;
 
 	/**
 	 * Whether the query is in error state
 	 */
-	isError: TState<boolean>;
+	isError: boolean;
 
 	/**
 	 * Whether the query is in success state
 	 */
-	isSuccess: TState<boolean>;
+	isSuccess: boolean;
 
 	/**
 	 * Current query status
 	 */
-	status: TState<TQueryStatus>;
+	status: TQueryStatus;
 
 	/**
 	 * Manually trigger a refetch

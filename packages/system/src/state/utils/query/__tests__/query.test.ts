@@ -20,16 +20,16 @@ describe("query()", () => {
 
 			const userQuery = query("user", fetcher);
 
-			expect(userQuery.isLoading.value).toBe(true);
-			expect(userQuery.status.value).toBe("loading");
+			expect(userQuery.isLoading).toBe(true);
+			expect(userQuery.status).toBe("loading");
 
 			await vi.runAllTimersAsync();
 
 			expect(fetcher).toHaveBeenCalledTimes(1);
-			expect(userQuery.data.value).toEqual({ name: "John" });
-			expect(userQuery.isLoading.value).toBe(false);
-			expect(userQuery.isSuccess.value).toBe(true);
-			expect(userQuery.status.value).toBe("success");
+			expect(userQuery.data).toEqual({ name: "John" });
+			expect(userQuery.isLoading).toBe(false);
+			expect(userQuery.isSuccess).toBe(true);
+			expect(userQuery.status).toBe("success");
 		});
 
 		it("should update error state on failed fetch", async () => {
@@ -42,10 +42,10 @@ describe("query()", () => {
 
 			await vi.runAllTimersAsync();
 
-			expect(userQuery.error.value?.message).toBe(error.message);
-			expect(userQuery.isError.value).toBe(true);
-			expect(userQuery.isSuccess.value).toBe(false);
-			expect(userQuery.status.value).toBe("error");
+			expect(userQuery.error?.message).toBe(error.message);
+			expect(userQuery.isError).toBe(true);
+			expect(userQuery.isSuccess).toBe(false);
+			expect(userQuery.status).toBe("error");
 		});
 
 		it("should set isLoading during first fetch", async () => {
@@ -56,13 +56,13 @@ describe("query()", () => {
 
 			const userQuery = query("user", fetcher);
 
-			expect(userQuery.isLoading.value).toBe(true);
-			expect(userQuery.isFetching.value).toBe(true);
+			expect(userQuery.isLoading).toBe(true);
+			expect(userQuery.isFetching).toBe(true);
 
 			await vi.runAllTimersAsync();
 
-			expect(userQuery.isLoading.value).toBe(false);
-			expect(userQuery.isFetching.value).toBe(false);
+			expect(userQuery.isLoading).toBe(false);
+			expect(userQuery.isFetching).toBe(false);
 		});
 
 		it("should respect enabled: false option", async () => {
@@ -73,7 +73,7 @@ describe("query()", () => {
 			await vi.runAllTimersAsync();
 
 			expect(fetcher).not.toHaveBeenCalled();
-			expect(userQuery.status.value).toBe("idle");
+			expect(userQuery.status).toBe("idle");
 		});
 
 		it("should use initialData if provided", () => {
@@ -83,9 +83,9 @@ describe("query()", () => {
 				initialData: "initial data",
 			});
 
-			expect(userQuery.data.value).toBe("initial data");
-			expect(userQuery.isSuccess.value).toBe(true);
-			expect(userQuery.status.value).toBe("success");
+			expect(userQuery.data).toBe("initial data");
+			expect(userQuery.isSuccess).toBe(true);
+			expect(userQuery.status).toBe("success");
 		});
 	});
 
@@ -98,7 +98,7 @@ describe("query()", () => {
 			await vi.runAllTimersAsync();
 
 			expect(fetcher).toHaveBeenCalledTimes(1);
-			expect(userQuery.data.value).toBe("data");
+			expect(userQuery.data).toBe("data");
 
 			expect(queryCache.size).toBe(1);
 			expect(queryCache.get("user")).toBeDefined();
@@ -191,12 +191,12 @@ describe("query()", () => {
 
 			await vi.runAllTimersAsync();
 
-			expect(userQuery.data.value).toBe("data");
+			expect(userQuery.data).toBe("data");
 
 			userQuery.reset();
 
-			expect(userQuery.data.value).toBe(null);
-			expect(userQuery.status.value).toBe("idle");
+			expect(userQuery.data).toBe(null);
+			expect(userQuery.status).toBe("idle");
 		});
 	});
 
@@ -216,7 +216,7 @@ describe("query()", () => {
 			await vi.runAllTimersAsync();
 
 			expect(fetcher).toHaveBeenCalledTimes(3);
-			expect(userQuery.data.value).toBe("success");
+			expect(userQuery.data).toBe("success");
 		});
 
 		it("should not retry if retry: false", async () => {
