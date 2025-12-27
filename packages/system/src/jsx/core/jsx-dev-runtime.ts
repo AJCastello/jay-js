@@ -48,7 +48,7 @@ function jayJSXDEV(
 		// return result as HTMLElement;
 	}
 	// Use type assertion to get around type checking issues
-	// This is safe because Base component expects tag to be a valid HTML tag
+	// This is safe because base component expects tag to be a valid HTML tag
 	const element = Base({ tag, ...props });
 	return element;
 }

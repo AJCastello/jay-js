@@ -1,4 +1,4 @@
-import { State } from "../../state/index.js";
+import { state } from "../../state/index.js";
 import type {
 	TFormState,
 	TFormValidateResult,
@@ -20,7 +20,7 @@ import type {
  *
  * @example
  * // Basic form with Zod validation and custom debounce
- * const form = useForm({
+ * const form = handleForm({
  *   defaultValues: { email: '', password: '', remember: false },
  *   resolver: zodResolver(loginSchema),
  *   debounceMs: 500 // Custom debounce time
@@ -49,9 +49,9 @@ import type {
  * // Cleanup when component unmounts
  * form.destroy();
  */
-export function useForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFormOptions<T>): TUseForm<T> {
-	const formErrors = State<TFormValidateResult>({ errors: [] });
-	const formValues = State<T>(defaultValues);
+export function handleForm<T>({ defaultValues, resolver, debounceMs = 300 }: TUseFormOptions<T>): TUseForm<T> {
+	const formErrors = state<TFormValidateResult>({ errors: [] });
+	const formValues = state<T>(defaultValues);
 
 	// Cache for DOM elements using WeakMap for automatic garbage collection
 	const elementCache = new Map<string, HTMLElement>();

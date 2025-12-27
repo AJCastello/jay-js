@@ -1,5 +1,5 @@
-import { vi } from "vitest";
-import { useForm } from "../use-form.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { handleForm } from "../handle-form.js";
 
 // Mock for the DOM since we are running in a test environment
 class MockElement {
@@ -70,7 +70,7 @@ describe("useForm", () => {
 
 	it("should initialize with default values", () => {
 		const defaultValues = { nome: "John", email: "john@example.com" };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		expect(form.formState.getValue("nome")).toBe("John");
 		expect(form.formState.getValue("email")).toBe("john@example.com");
@@ -78,7 +78,7 @@ describe("useForm", () => {
 
 	it("should update values through formState", () => {
 		const defaultValues = { nome: "", email: "" };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		form.formState.setValue("nome", "Maria");
 		form.formState.setValue("email", "maria@example.com");
@@ -89,7 +89,7 @@ describe("useForm", () => {
 
 	it("should update multiple values at once", () => {
 		const defaultValues = { nome: "", email: "", idade: 0 };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		form.formState.setValues({
 			nome: "Carlos",
@@ -104,7 +104,7 @@ describe("useForm", () => {
 
 	it("should register an input field and respond to events", () => {
 		const defaultValues = { nome: "" };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		// Simulate the privateSetValue function directly, as DOM events
 		// are difficult to fully simulate in the test environment
@@ -141,7 +141,7 @@ describe("useForm", () => {
 			return { errors };
 		};
 
-		const form = useForm({
+		const form = handleForm({
 			defaultValues,
 			resolver: customResolver,
 		});
@@ -171,7 +171,7 @@ describe("useForm", () => {
 			return { errors };
 		};
 
-		const form = useForm({
+		const form = handleForm({
 			defaultValues,
 			resolver: customResolver,
 		});
@@ -212,7 +212,7 @@ describe("useForm", () => {
 			return { errors };
 		};
 
-		const form = useForm({
+		const form = handleForm({
 			defaultValues,
 			resolver: customResolver,
 		});
@@ -252,7 +252,7 @@ describe("useForm", () => {
 
 	it("should notify about value changes", () => {
 		const defaultValues = { nome: "", idade: 0 };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		const onChangeMock = vi.fn();
 		form.onChange(onChangeMock);
@@ -274,7 +274,7 @@ describe("useForm", () => {
 		const defaultValues = { email: "" };
 		const onErrorsMock = vi.fn();
 
-		const form = useForm({
+		const form = handleForm({
 			defaultValues,
 		});
 
@@ -291,7 +291,7 @@ describe("useForm", () => {
 
 	it("should work without resolver for simple forms", () => {
 		const defaultValues = { nome: "", email: "" };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		form.formState.setValue("nome", "Ana");
 		expect(form.formState.getValue("nome")).toBe("Ana");
@@ -315,7 +315,7 @@ describe("useForm", () => {
 
 	it("should allow setting errors manually", () => {
 		const defaultValues = { nome: "", email: "" };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		// Set error manually
 		form.formState.setError("email", "This email is already in use");
@@ -345,7 +345,7 @@ describe("useForm", () => {
 
 	it("should handle checkbox (boolean fields)", () => {
 		const defaultValues = { nome: "João", aceitaTermos: false };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		// Register a checkbox
 		const registerProps = form.register("aceitaTermos");
@@ -358,7 +358,7 @@ describe("useForm", () => {
 
 	it("should handle radio buttons", () => {
 		const defaultValues = { genero: "masculino" };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		// Register radio buttons
 		const registerProps = form.register("genero");
@@ -371,7 +371,7 @@ describe("useForm", () => {
 
 	it("should handle multiple select (arrays of values)", () => {
 		const defaultValues = { habilidades: ["js", "css"] };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		// Simulate a select with multiple options
 		const mockSelect = new MockSelectElement(true);
@@ -398,7 +398,7 @@ describe("useForm", () => {
 
 	it("should handle file input", () => {
 		const defaultValues = { avatar: null };
-		const form = useForm({ defaultValues });
+		const form = handleForm({ defaultValues });
 
 		// Mocking a file input
 		const mockFileInput = new MockInputElement("file");

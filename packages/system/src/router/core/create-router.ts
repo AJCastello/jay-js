@@ -6,7 +6,7 @@ import { Routes } from "./route-registry";
 /**
  * Initializes the router with the specified routes and configuration
  *
- * The Router function is the main entry point for setting up the routing system.
+ * The createRouter function is the main entry point for setting up the routing system.
  * It processes route definitions, registers them, and triggers the initial route resolution.
  *
  * @param {Array<TRoute>} routes - Array of route configurations defining the application's routing structure
@@ -14,7 +14,7 @@ import { Routes } from "./route-registry";
  * @throws {Error} Throws an error if no routes are provided and no error handler is configured
  *
  * @example
- * Router([
+ * createRouter([
  *   {
  *     path: '/',
  *     element: () => document.createTextNode('Home page'),
@@ -29,7 +29,7 @@ import { Routes } from "./route-registry";
  *   onError: (err) => console.error('Router error:', err)
  * });
  */
-export function Router(routes: Array<TRoute>, options?: TRouterOptions) {
+export function createRouter(routes: Array<TRoute>, options?: TRouterOptions) {
 	if (options) {
 		routerDefineOptions(options);
 	}

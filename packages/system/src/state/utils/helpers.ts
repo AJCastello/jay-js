@@ -1,4 +1,4 @@
-import { State } from "../core/state.js";
+import { state } from "../core/state.js";
 import { subscriberManager } from "../core/subscriber.js";
 import type { ISetValue, TState } from "../types.js";
 
@@ -14,9 +14,9 @@ export const SETCHILD_MARKER = Symbol("setChildren");
  * @param fn Function that calculates the derived value
  * @returns A state that updates when any dependency changes
  */
-export function Derived<T>(fn: () => T): TState<T> {
-	const derivedState = State(fn());
-	Effect(() => {
+export function derived<T>(fn: () => T): TState<T> {
+	const derivedState = state(fn());
+	effect(() => {
 		derivedState.set(fn());
 	});
 	return derivedState;
@@ -29,7 +29,7 @@ export function Derived<T>(fn: () => T): TState<T> {
  *
  * @param fn Function to be executed as an effect
  */
-export function Effect(fn: () => void) {
+export function effect(fn: () => void) {
 	subscriberManager.setSubscriber(fn);
 	fn();
 	subscriberManager.clearSubscriber();
@@ -43,7 +43,7 @@ export function Effect(fn: () => void) {
  * @param fn Function that returns the value to be set
  * @returns Function for setting values in objects
  */
-export function Values(fn: () => any): (object: any, ...path: string[]) => void {
+export function values(fn: () => any): (object: any, ...path: string[]) => void {
 	const _set_value: ISetValue = Object.assign(() => {
 		if (_set_value._path.length > 0) {
 			let target = _set_value._object_ref;
@@ -68,7 +68,7 @@ export function Values(fn: () => any): (object: any, ...path: string[]) => void 
 	return Object.assign((object: any, ...path: string[]) => {
 		_set_value._object_ref = object;
 		_set_value._path = path;
-		Effect(_set_value);
+		effect(_set_value);
 	}, {
 		[REACTIVE_MARKER]: true,
 	});
@@ -89,7 +89,7 @@ export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
 		[SETCHILD_MARKER]: true,
 	});
 
-	Effect(_set_child);
+	effect(_set_child);
 }
 
 /**

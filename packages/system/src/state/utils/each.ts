@@ -1,5 +1,5 @@
 import { subscriberManager } from "../core/subscriber.js";
-import { Effect } from "./helpers.js";
+import { effect } from "./helpers.js";
 
 type TKey = string | number | symbol;
 type TKeySelector<T> = keyof T | ((item: T, index: number) => TKey);
@@ -247,7 +247,7 @@ export function each<T extends object>(
 				mountRetryScheduled = true;
 				scheduleMicrotask(() => {
 					mountRetryScheduled = false;
-					Effect(update);
+					effect(update);
 				});
 			}
 			return;
@@ -301,7 +301,7 @@ export function each<T extends object>(
 		}
 	}
 
-	Effect(update);
+	effect(update);
 
 	const fragment = document.createDocumentFragment();
 	fragment.appendChild(start);

@@ -1,6 +1,6 @@
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { moduleCache } from "../configuration.js";
-import { LazyModule } from "../lazy-module.js";
+import { Lazy } from "../lazy.js";
 import * as moduleLoader from "../module-loader.js";
 
 // Mock the moduleLoader functions
@@ -42,7 +42,7 @@ describe("LazyModule", () => {
 
 	it("should throw an error when module is undefined", () => {
 		expect(() => {
-			LazyModule(undefined as any);
+			Lazy(undefined as any);
 		}).toThrow("Module is undefined");
 	});
 
@@ -51,7 +51,7 @@ describe("LazyModule", () => {
 			import: vi.fn(() => Promise.resolve({ default: () => {} })),
 		};
 
-		LazyModule(lazyConfig);
+		Lazy(lazyConfig);
 
 		expect(moduleLoader.loadModule).toHaveBeenCalledWith(
 			expect.objectContaining({
@@ -75,7 +75,7 @@ describe("LazyModule", () => {
 			collect: true,
 		});
 
-		LazyModule(lazyConfig);
+		Lazy(lazyConfig);
 
 		expect(moduleLoader.loadFromCache).toHaveBeenCalledWith(lazyConfig);
 		expect(moduleLoader.loadModule).not.toHaveBeenCalled();
@@ -87,7 +87,7 @@ describe("LazyModule", () => {
 			import: vi.fn(() => Promise.resolve({ TestModule: () => {} })),
 		};
 
-		LazyModule(lazyConfig);
+		Lazy(lazyConfig);
 
 		expect(moduleLoader.loadFromCache).not.toHaveBeenCalled();
 		expect(moduleLoader.loadModule).toHaveBeenCalledWith(lazyConfig, expect.any(HTMLElement));
@@ -102,7 +102,7 @@ describe("LazyModule", () => {
 		const customLoader = document.createElement("custom-loader");
 		customLoader.textContent = "Loading...";
 
-		LazyModule(lazyConfig, customLoader);
+		Lazy(lazyConfig, customLoader);
 
 		expect(moduleLoader.loadModule).toHaveBeenCalledWith(lazyConfig, customLoader);
 	});
@@ -113,7 +113,7 @@ describe("LazyModule", () => {
 			import: vi.fn(() => Promise.resolve({ TestModule: () => {} })),
 		};
 
-		LazyModule(lazyConfig);
+		Lazy(lazyConfig);
 
 		expect(moduleLoader.loadModule).toHaveBeenCalledWith(lazyConfig, expect.any(HTMLElement));
 

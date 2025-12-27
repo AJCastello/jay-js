@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { themeDefineOptions, themeOptions } from "../configuration";
 import * as themeManagerModule from "../theme-manager";
 import { initTheme, prefersColorSchemeDark, setTheme } from "../theme-manager";

@@ -1,4 +1,4 @@
-export { useForm } from "./core/use-form.js";
+export { handleForm } from "./core/handle-form.js";
 export { yupResolver, zodResolver } from "./resolvers/index.js";
 export type { StandardSchemaV1 } from "./resolvers/standard-schema-resolver.js";
 export { standardSchemaResolver } from "./resolvers/standard-schema-resolver.js";

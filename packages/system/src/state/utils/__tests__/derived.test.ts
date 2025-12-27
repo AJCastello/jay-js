@@ -1,26 +1,27 @@
-import { State } from "../../core/state.js";
-import { Derived } from "../helpers.js";
+import { describe, it, expect } from "vitest";
+import { state } from "../../core/state.js";
+import { derived } from "../helpers.js";
 
 describe("Derived", () => {
 	it("should create a derived state with initial calculated value", () => {
-		const count = State(10);
-		const doubled = Derived(() => count.value * 2);
+		const count = state(10);
+		const doubled = derived(() => count.value * 2);
 
 		expect(doubled.get()).toBe(20);
 	});
 
 	it("should update when source state changes", () => {
-		const count = State(10);
-		const doubled = Derived(() => count.value * 2);
+		const count = state(10);
+		const doubled = derived(() => count.value * 2);
 
 		count.set(15);
 		expect(doubled.get()).toBe(30);
 	});
 
 	it("should handle multiple source states", () => {
-		const count = State(10);
-		const factor = State(2);
-		const result = Derived(() => count.value * factor.value);
+		const count = state(10);
+		const factor = state(2);
+		const result = derived(() => count.value * factor.value);
 
 		expect(result.get()).toBe(20);
 
@@ -32,11 +33,11 @@ describe("Derived", () => {
 	});
 
 	it("should support complex calculations", () => {
-		const firstName = State("John");
-		const lastName = State("Doe");
-		const age = State(30);
+		const firstName = state("John");
+		const lastName = state("Doe");
+		const age = state(30);
 
-		const person = Derived(() => ({
+		const person = derived(() => ({
 			fullName: `${firstName.value} ${lastName.value}`,
 			isAdult: age.value >= 18,
 		}));
@@ -54,8 +55,8 @@ describe("Derived", () => {
 	});
 
 	it("should maintain correct value when source state changes to the same value", () => {
-		const count = State(10);
-		const doubled = Derived(() => count.value * 2);
+		const count = state(10);
+		const doubled = derived(() => count.value * 2);
 
 		expect(doubled.get()).toBe(20);
 
@@ -64,9 +65,9 @@ describe("Derived", () => {
 	});
 
 	it("should support nested derived states", () => {
-		const count = State(10);
-		const doubled = Derived(() => count.value * 2);
-		const quadrupled = Derived(() => doubled.value * 2);
+		const count = state(10);
+		const doubled = derived(() => count.value * 2);
+		const quadrupled = derived(() => doubled.value * 2);
 
 		expect(quadrupled.get()).toBe(40);
 
@@ -76,8 +77,8 @@ describe("Derived", () => {
 	});
 
 	it("should allow manual updates to derived state", () => {
-		const count = State(10);
-		const doubled = Derived(() => count.value * 2);
+		const count = state(10);
+		const doubled = derived(() => count.value * 2);
 
 		doubled.set(50); // Manually overriding the derived value
 		expect(doubled.get()).toBe(50);

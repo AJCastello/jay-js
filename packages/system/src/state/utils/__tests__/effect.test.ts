@@ -1,23 +1,23 @@
-import { vi } from "vitest";
-import { State } from "../../core/state.js";
-import { Effect } from "../helpers.js";
+import { describe, expect, it, vi } from "vitest";
+import { state } from "../../core/state.js";
+import { effect } from "../helpers.js";
 
 describe("Effect", () => {
 	it("should run effect immediately when created", () => {
 		const mockFn = vi.fn();
-		Effect(mockFn);
+		effect(mockFn);
 
 		expect(mockFn).toHaveBeenCalledTimes(1);
 	});
 
 	it("should re-run when accessed state changes", () => {
-		const count = State(0);
+		const count = state(0);
 		const mockFn = vi.fn(() => {
 			const value = count.value; // Access the state
 			return value;
 		});
 
-		Effect(mockFn);
+		effect(mockFn);
 		expect(mockFn).toHaveBeenCalledTimes(1);
 
 		count.set(1);
@@ -28,14 +28,14 @@ describe("Effect", () => {
 	});
 
 	it("should not re-run when state changes but wasn't accessed", () => {
-		const count1 = State(0);
-		const count2 = State(0);
+		const count1 = state(0);
+		const count2 = state(0);
 		const mockFn = vi.fn(() => {
 			const value = count1.value; // Only access count1
 			return value;
 		});
 
-		Effect(mockFn);
+		effect(mockFn);
 		expect(mockFn).toHaveBeenCalledTimes(1);
 
 		count2.set(1); // Shouldn't trigger the effect
@@ -46,14 +46,14 @@ describe("Effect", () => {
 	});
 
 	it("should track multiple state dependencies", () => {
-		const count1 = State(0);
-		const count2 = State(10);
+		const count1 = state(0);
+		const count2 = state(10);
 		const mockFn = vi.fn(() => {
 			const sum = count1.value + count2.value;
 			return sum;
 		});
 
-		Effect(mockFn);
+		effect(mockFn);
 		expect(mockFn).toHaveBeenCalledTimes(1);
 
 		count1.set(1);
@@ -64,9 +64,9 @@ describe("Effect", () => {
 	});
 
 	it("should handle conditional state access", () => {
-		const condition = State(true);
-		const countA = State(0);
-		const countB = State(10);
+		const condition = state(true);
+		const countA = state(0);
+		const countB = state(10);
 
 		const mockFn = vi.fn(() => {
 			// Only access countA or countB based on condition
@@ -74,7 +74,7 @@ describe("Effect", () => {
 			return value;
 		});
 
-		Effect(mockFn);
+		effect(mockFn);
 		expect(mockFn).toHaveBeenCalledTimes(1);
 
 		countA.set(1); // Should trigger because condition is true
@@ -93,12 +93,12 @@ describe("Effect", () => {
 	});
 
 	it("should work with deeply nested state access", () => {
-		const user = State({ profile: { name: "John", age: 30 } });
+		const user = state({ profile: { name: "John", age: 30 } });
 		const mockFn = vi.fn(() => {
 			return user.value.profile.name;
 		});
 
-		Effect(mockFn);
+		effect(mockFn);
 		expect(mockFn).toHaveBeenCalledTimes(1);
 
 		// Update nested property
@@ -114,10 +114,10 @@ describe("Effect", () => {
 	});
 
 	it("should handle effect that updates state", () => {
-		const count = State(0);
-		const doubled = State(0);
+		const count = state(0);
+		const doubled = state(0);
 
-		Effect(() => {
+		effect(() => {
 			doubled.set(count.value * 2);
 		});
 
@@ -134,9 +134,9 @@ describe("Effect", () => {
 		// This test requires special handling since it could cause an infinite loop
 		// We'll use a counter to break out of potential loops
 		let executionCount = 0;
-		const count = State(0);
+		const count = state(0);
 
-		Effect(() => {
+		effect(() => {
 			executionCount++;
 			if (executionCount < 10) {
 				// Safety measure

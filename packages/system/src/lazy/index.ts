@@ -1,4 +1,4 @@
 export { setLazyOptions } from "./core/configuration.js";
-export { LazyModule } from "./core/lazy-module.js";
+export { Lazy } from "./core/lazy.js";
 export * from "./types.js";
-export { ModuleCollector } from "./utils/collector.js";
+export { moduleCollector } from "./utils/collector.js";

@@ -11,7 +11,7 @@ export type TRefObject<T> = {
  * @template T The type of value the reference will hold
  * @returns A reference object with a mutable .current property
  */
-export function useRef<T>(): TRefObject<T> {
+export function createRef<T>(): TRefObject<T> {
 	return {
 		current: null,
 	};

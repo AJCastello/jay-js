@@ -1,6 +1,7 @@
 /**
  * Tests for the permission definition functionality
  */
+import { describe, it, expect } from "vitest";
 import { definePermissions } from "../define";
 
 describe("definePermissions", () => {

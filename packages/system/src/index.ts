@@ -9,11 +9,11 @@ export * from "./lazy/index.js";
 export * from "./router/index.js";
 export * from "./state/index.js";
 export {
+	createRef,
 	getCurrentTheme,
 	initTheme,
 	render,
 	setTheme,
 	themeDefineOptions,
 	toggleThemeMode,
-	useRef,
 } from "./utils/index.js";

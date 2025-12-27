@@ -1,7 +1,7 @@
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { i18nOptions, i18nState } from "../../core/configuration.js";
 import { initLanguage, setLanguage } from "../../core/language-manager.js";
-import { i18nDefineOptions, useI18n } from "../../index.js";
+import { i18nDefineOptions, getI18n } from "../../index.js";
 
 // Mock localStorage for testing
 const localStorageMock = (() => {
@@ -63,7 +63,7 @@ const mockTranslate = (path: string, data: any = {}, options = {}, nestedKeys = 
 // Mock the i18n provider's import mechanism
 vi.mock("../../hooks/use-i18n.js", () => {
 	return {
-		useI18n: vi.fn().mockImplementation(() => {
+		getI18n: vi.fn().mockImplementation(() => {
 			return (path: string, data?: any, options?: any) => {
 				return mockTranslate(path, data, options, i18nOptions.nestedKeys);
 			};
@@ -183,14 +183,14 @@ describe("i18n", () => {
 		it("should return the correct translation for the default language", () => {
 			// Using the type from our test translations
 			type TestTranslations = typeof enTranslations;
-			const t = useI18n<TestTranslations>();
+			const t = getI18n<TestTranslations>();
 
 			expect(t("Hello")).toBe("Hello");
 		});
 
 		it("should substitute variables in translations", () => {
 			type TestTranslations = typeof enTranslations;
-			const t = useI18n<TestTranslations>();
+			const t = getI18n<TestTranslations>();
 
 			expect(t("Welcome, {{name}}!", { name: "John" })).toBe("Welcome, John!");
 			expect(t("You have {{count}} messages", { count: 5 })).toBe("You have 5 messages");
@@ -198,7 +198,7 @@ describe("i18n", () => {
 
 		it("should change language when setLanguage is called", () => {
 			type TestTranslations = typeof enTranslations;
-			const t = useI18n<TestTranslations>();
+			const t = getI18n<TestTranslations>();
 
 			// Initial language is English
 			expect(t("Hello")).toBe("Hello");
@@ -211,14 +211,14 @@ describe("i18n", () => {
 
 		it("should fallback to key if translation is missing", () => {
 			type TestTranslations = typeof enTranslations & { "Missing Key": string };
-			const t = useI18n<TestTranslations>();
+			const t = getI18n<TestTranslations>();
 
 			expect(t("Missing Key")).toBe("Missing Key");
 		});
 
 		it("should use default value if provided when translation is missing", () => {
 			type TestTranslations = typeof enTranslations & { "Missing Key": string };
-			const t = useI18n<TestTranslations>();
+			const t = getI18n<TestTranslations>();
 
 			expect(t("Missing Key", {}, { default: "Default Value" })).toBe("Default Value");
 		});
@@ -296,7 +296,7 @@ describe("i18n", () => {
 			type TestNestedTranslations = typeof enNestedTranslations & {
 				missing: { key: string };
 			};
-			const t = useI18n<TestNestedTranslations>();
+			const t = getI18n<TestNestedTranslations>();
 
 			expect(t("missing.key")).toBe("key");
 		});

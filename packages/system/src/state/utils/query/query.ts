@@ -1,6 +1,6 @@
-import { State } from "../../core/state.js";
+import { state } from "../../core/state.js";
 import type { TState } from "../../types.js";
-import { Derived, Effect } from "../helpers.js";
+import { derived, effect } from "../helpers.js";
 import { queryCache } from "./cache.js";
 import type {
 	TQueryFetcher,
@@ -52,7 +52,7 @@ const DEFAULT_OPTIONS: Required<
  * });
  *
  * // Use in component
- * Effect(() => {
+ * effect(() => {
  *   if (usersQuery.data.value) {
  *     console.log(usersQuery.data.value);
  *   }
@@ -73,7 +73,7 @@ const DEFAULT_OPTIONS: Required<
  * @example
  * Reactive key:
  * ```typescript
- * const userId = State(1);
+ * const userId = state(1);
  * const userQuery = query(
  *   () => `user-${userId.value}`,
  *   async () => {
@@ -90,7 +90,7 @@ export function query<TData = unknown, TError = Error>(
 ): TQueryStore<TData, TError> {
 	const opts = { ...DEFAULT_OPTIONS, ...options };
 
-	const internalState = State({
+	const internalState = state({
 		data: (options.initialData ?? null) as TData | null,
 		error: null as TError | null,
 		isLoading: false,
@@ -238,7 +238,7 @@ export function query<TData = unknown, TError = Error>(
 	};
 
 	if (typeof key === "function") {
-		Effect(() => {
+		effect(() => {
 			cleanup();
 			initialize();
 		});
@@ -247,13 +247,13 @@ export function query<TData = unknown, TError = Error>(
 	}
 
 	return {
-		data: Derived(() => internalState.value.data) as TState<TData | null>,
-		error: Derived(() => internalState.value.error) as TState<TError | null>,
-		isLoading: Derived(() => internalState.value.isLoading),
-		isFetching: Derived(() => internalState.value.isFetching),
-		isError: Derived(() => internalState.value.isError),
-		isSuccess: Derived(() => internalState.value.isSuccess),
-		status: Derived(() => internalState.value.status),
+		data: derived(() => internalState.value.data) as TState<TData | null>,
+		error: derived(() => internalState.value.error) as TState<TError | null>,
+		isLoading: derived(() => internalState.value.isLoading),
+		isFetching: derived(() => internalState.value.isFetching),
+		isError: derived(() => internalState.value.isError),
+		isSuccess: derived(() => internalState.value.isSuccess),
+		status: derived(() => internalState.value.status),
 		refetch,
 		invalidate,
 		reset,

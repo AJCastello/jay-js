@@ -1,4 +1,4 @@
-import { Effect, REACTIVE_MARKER, Values } from "../../state";
+import { effect, REACTIVE_MARKER, values } from "../../state";
 import { Childs, SETCHILD_MARKER } from "../../state/utils/helpers";
 import { TRefObject } from "../../utils/dom/use-ref";
 import type { TBase, TBaseTagMap, TChildren, TLifecycleElement, TStyle } from "./base.types.js";
@@ -60,7 +60,7 @@ function autoWrapReactiveValues<T>(value: T | (() => T)): T | ReactiveEffect {
 		if ((value as any)[REACTIVE_MARKER] === true) {
 			return value as unknown as ReactiveEffect;
 		}
-		return Values(value as () => T) as unknown as ReactiveEffect;
+		return values(value as () => T) as unknown as ReactiveEffect;
 	}
 	return value;
 }

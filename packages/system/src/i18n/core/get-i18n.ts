@@ -1,8 +1,8 @@
-import { i18nOptions, i18nState } from "../core/configuration.js";
+import { i18nOptions, i18nState } from "./configuration.js";
 import type { AllPaths, GetTypeAtPath } from "../types.js";
 
 /**
- * Hook for accessing internationalized strings with type safety
+ * Function for accessing internationalized strings with type safety
  *
  * @template T - The type of the translation object (derived from translation files)
  * @returns A translation function that accepts a key and optional data for variable substitution
@@ -15,7 +15,7 @@ import type { AllPaths, GetTypeAtPath } from "../types.js";
  *   'You have {{count}} messages': string;
  * };
  *
- * const t = useI18n<Translations>();
+ * const t = getI18n<Translations>();
  *
  * // Get a translation
  * const hello = t('Hello');
@@ -33,10 +33,10 @@ import type { AllPaths, GetTypeAtPath } from "../types.js";
  *   }
  * };
  *
- * const t = useI18n<NestedTranslations>();
+ * const t = getI18n<NestedTranslations>();
  * const hello = t('greetings.hello');
  */
-export function useI18n<T>(): <Path extends AllPaths<T>>(
+export function getI18n<T>(): <Path extends AllPaths<T>>(
 	path: Path,
 	data?: Record<string, any>,
 	options?: { default?: string },

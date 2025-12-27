@@ -1,5 +1,5 @@
-import { vi } from "vitest";
-import { State, Values } from "../../../state";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { state, values } from "../../../state";
 import { Base } from "../base";
 
 describe("Base Function", () => {
@@ -358,26 +358,26 @@ describe("Base Function", () => {
 
 	describe("Automatic Values() Wrapping - className", () => {
 		it("should auto-wrap function in className", () => {
-			const state = State("initial");
+			const myState = state("initial");
 			const element = Base({
-				className: () => state.value,
+				className: () => myState.value,
 			});
 
 			expect(element.className).toBe("initial");
 
-			state.set("updated");
+			myState.set("updated");
 			expect(element.className).toBe("updated");
 		});
 
 		it("should work with manually wrapped Values()", () => {
-			const state = State("initial");
+			const myState = state("initial");
 			const element = Base({
-				className: Values(() => state.value),
+				className: () => myState.value,
 			});
 
 			expect(element.className).toBe("initial");
 
-			state.set("updated");
+			myState.set("updated");
 			expect(element.className).toBe("updated");
 		});
 
@@ -387,8 +387,8 @@ describe("Base Function", () => {
 		});
 
 		it("should handle multiple state dependencies in className", () => {
-			const firstName = State("John");
-			const lastName = State("Doe");
+			const firstName = state("John");
+			const lastName = state("Doe");
 			const element = Base({
 				className: () => `${firstName.value}-${lastName.value}`,
 			});
@@ -405,7 +405,7 @@ describe("Base Function", () => {
 
 	describe("Automatic Values() Wrapping - style (nested)", () => {
 		it("should auto-wrap functions in individual style properties", () => {
-			const colorState = State("red");
+			const colorState = state("red");
 			const element = Base({
 				style: {
 					color: () => colorState.value,
@@ -421,7 +421,7 @@ describe("Base Function", () => {
 		});
 
 		it("should handle mixed static and reactive properties", () => {
-			const dynamicState = State("red");
+			const dynamicState = state("red");
 			const element = Base({
 				style: {
 					color: () => dynamicState.value,
@@ -439,10 +439,10 @@ describe("Base Function", () => {
 		});
 
 		it("should work with manually wrapped Values() in nested style", () => {
-			const colorState = State("purple");
+			const colorState = state("purple");
 			const element = Base({
 				style: {
-					color: Values(() => colorState.value),
+					color: () => colorState.value,
 					fontSize: "18px",
 				},
 			});
@@ -454,8 +454,8 @@ describe("Base Function", () => {
 		});
 
 		it("should handle multiple reactive style properties", () => {
-			const colorState = State("red");
-			const sizeState = State("16px");
+			const colorState = state("red");
+			const sizeState = state("16px");
 			const element = Base({
 				style: {
 					color: () => colorState.value,
@@ -477,7 +477,7 @@ describe("Base Function", () => {
 
 	describe("Automatic Values() Wrapping - dataset", () => {
 		it("should auto-wrap functions in individual dataset properties", () => {
-			const idState = State("123");
+			const idState = state("123");
 			const element = Base({
 				dataset: {
 					userId: () => idState.value,
@@ -493,10 +493,10 @@ describe("Base Function", () => {
 		});
 
 		it("should work with manually wrapped Values() in dataset", () => {
-			const idState = State("789");
+			const idState = state("789");
 			const element = Base({
 				dataset: {
-					userId: Values(() => idState.value),
+					userId: () => idState.value,
 					role: "moderator",
 				},
 			});
@@ -509,8 +509,8 @@ describe("Base Function", () => {
 		});
 
 		it("should handle multiple reactive dataset properties", () => {
-			const userIdState = State("100");
-			const roleState = State("admin");
+			const userIdState = state("100");
+			const roleState = state("admin");
 			const element = Base({
 				dataset: {
 					userId: () => userIdState.value,
@@ -533,22 +533,22 @@ describe("Base Function", () => {
 
 	describe("Backward Compatibility", () => {
 		it("should work with existing Values() wrapped className", () => {
-			const state = State("test");
+			const myState = state("test");
 			const element = Base({
-				className: Values(() => state.value),
+				className: () => myState.value,
 			});
 
 			expect(element.className).toBe("test");
 
-			state.set("updated");
+			myState.set("updated");
 			expect(element.className).toBe("updated");
 		});
 
 		it("should work with existing Values() wrapped in style", () => {
-			const colorState = State("red");
+			const colorState = state("red");
 			const element = Base({
 				style: {
-					color: Values(() => colorState.value),
+					color: () => colorState.value,
 				},
 			});
 
@@ -559,16 +559,16 @@ describe("Base Function", () => {
 		});
 
 		it("should work with existing Values() wrapped in dataset", () => {
-			const state = State("test");
+			const myState = state("test");
 			const element = Base({
 				dataset: {
-					value: Values(() => state.value),
+					value: () => myState.value,
 				},
 			});
 
 			expect(element.dataset.value).toBe("test");
 
-			state.set("updated");
+			myState.set("updated");
 			expect(element.dataset.value).toBe("updated");
 		});
 
@@ -597,25 +597,25 @@ describe("Base Function", () => {
 		});
 
 		it("should handle nested undefined in style", () => {
-			const state = State<string | undefined>(undefined);
+			const myState = state<string | undefined>(undefined);
 			const element = Base({
 				style: {
-					color: () => state.value || "red",
+					color: () => myState.value || "red",
 				},
 			});
 
 			expect(element.style.color).toBe("red");
 
-			state.set("blue");
+			myState.set("blue");
 			expect(element.style.color).toBe("blue");
 		});
 
 		it("should not interfere with event listeners", () => {
 			const handler = vi.fn();
-			const state = State("click-handler");
+			const myState = state("click-handler");
 
 			const element = Base({
-				className: () => state.value,
+				className: () => myState.value,
 				listeners: { click: handler },
 			});
 
@@ -625,10 +625,10 @@ describe("Base Function", () => {
 
 		it("should not interfere with lifecycle hooks", () => {
 			const onmountSpy = vi.fn();
-			const state = State("test");
+			const myState = state("test");
 
 			const element = Base({
-				className: () => state.value,
+				className: () => myState.value,
 				onmount: onmountSpy,
 			});
 
@@ -636,7 +636,7 @@ describe("Base Function", () => {
 		});
 
 		it("should handle conditional reactive values", () => {
-			const isActive = State(true);
+			const isActive = state(true);
 			const element = Base({
 				className: () => (isActive.value ? "active" : "inactive"),
 			});
@@ -648,8 +648,8 @@ describe("Base Function", () => {
 		});
 
 		it("should handle computed values from multiple states", () => {
-			const count = State(5);
-			const multiplier = State(2);
+			const count = state(5);
+			const multiplier = state(2);
 			const element = Base({
 				dataset: {
 					result: () => (count.value * multiplier.value).toString(),
@@ -669,7 +669,7 @@ describe("Base Function", () => {
 	describe("Automatic Values() Wrapping - Props (Phase 2)", () => {
 		describe("HTML Properties", () => {
 			it("should auto-wrap function in value property", () => {
-				const valueState = State("hello");
+				const valueState = state("hello");
 				const element = Base({
 					tag: "input",
 					value: () => valueState.value,
@@ -682,7 +682,7 @@ describe("Base Function", () => {
 			});
 
 			it("should auto-wrap function in checked property", () => {
-				const checkedState = State(true);
+				const checkedState = state(true);
 				const element = Base({
 					tag: "input",
 					type: "checkbox",
@@ -696,7 +696,7 @@ describe("Base Function", () => {
 			});
 
 			it("should auto-wrap function in disabled property", () => {
-				const disabledState = State(false);
+				const disabledState = state(false);
 				const element = Base({
 					tag: "button",
 					disabled: () => disabledState.value,
@@ -709,7 +709,7 @@ describe("Base Function", () => {
 			});
 
 			it("should auto-wrap function in placeholder property", () => {
-				const placeholderState = State("Enter name");
+				const placeholderState = state("Enter name");
 				const element = Base({
 					tag: "input",
 					placeholder: () => placeholderState.value,
@@ -782,8 +782,8 @@ describe("Base Function", () => {
 
 		describe("Mixed Props and Event Handlers", () => {
 			it("should auto-wrap props but not event handlers", () => {
-				const valueState = State("test");
-				const disabledState = State(false);
+				const valueState = state("test");
+				const disabledState = state(false);
 				const clickHandler = vi.fn();
 				const inputHandler = vi.fn();
 
@@ -814,10 +814,10 @@ describe("Base Function", () => {
 
 		describe("Backward Compatibility - Props", () => {
 			it("should work with existing Values() wrapped props", () => {
-				const valueState = State("test");
+				const valueState = state("test");
 				const element = Base({
 					tag: "input",
-					value: Values(() => valueState.value),
+					value: () => valueState.value,
 				});
 
 				expect((element as HTMLInputElement).value).toBe("test");
@@ -827,12 +827,12 @@ describe("Base Function", () => {
 			});
 
 			it("should not break when mixing Values() and auto-wrap", () => {
-				const value1 = State("a");
-				const value2 = State("b");
+				const value1 = state("a");
+				const value2 = state("b");
 
 				const element = Base({
 					tag: "input",
-					value: Values(() => value1.value),
+					value: () => value1.value,
 					placeholder: () => value2.value,
 				});
 
@@ -849,8 +849,8 @@ describe("Base Function", () => {
 
 		describe("Edge Cases - Props", () => {
 			it("should handle computed values with multiple dependencies", () => {
-				const firstName = State("John");
-				const lastName = State("Doe");
+				const firstName = state("John");
+				const lastName = state("Doe");
 
 				const element = Base({
 					tag: "input",
@@ -867,7 +867,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle conditional reactive values in props", () => {
-				const isEnabled = State(true);
+				const isEnabled = state(true);
 				const element = Base({
 					tag: "button",
 					disabled: () => !isEnabled.value,
@@ -884,7 +884,7 @@ describe("Base Function", () => {
 	describe("Automatic Values() Wrapping - Children (Phase 3)", () => {
 		describe("Reactive String Children", () => {
 			it("should auto-wrap function returning string", () => {
-				const textState = State("Hello");
+				const textState = state("Hello");
 				const element = Base({
 					children: () => textState.value,
 				});
@@ -896,8 +896,8 @@ describe("Base Function", () => {
 			});
 
 			it("should handle computed values in children", () => {
-				const firstName = State("John");
-				const lastName = State("Doe");
+				const firstName = state("John");
+				const lastName = state("Doe");
 				const element = Base({
 					children: () => `${firstName.value} ${lastName.value}`,
 				});
@@ -912,8 +912,8 @@ describe("Base Function", () => {
 			});
 
 			it("should handle multiple state dependencies", () => {
-				const count = State(0);
-				const prefix = State("Count");
+				const count = state(0);
+				const prefix = state("Count");
 				const element = Base({
 					children: () => `${prefix.value}: ${count.value}`,
 				});
@@ -928,7 +928,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle reactive number children", () => {
-				const progress = State(0);
+				const progress = state(0);
 				const element = Base({
 					children: () => progress.value,
 				});
@@ -943,7 +943,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle reactive number with string template", () => {
-				const progress = State(0);
+				const progress = state(0);
 				const element = Base({
 					children: () => `${Math.round(progress.value)}%`,
 				});
@@ -958,7 +958,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle reactive number in array", () => {
-				const score = State(85);
+				const score = state(85);
 				const element = Base({
 					children: ["Score: ", () => score.value, "/100"],
 				});
@@ -972,7 +972,7 @@ describe("Base Function", () => {
 
 		describe("Reactive Node Children", () => {
 			it("should auto-wrap function returning Node", () => {
-				const showImage = State(true);
+				const showImage = state(true);
 				const element = Base({
 					children: () =>
 						showImage.value ? Base({ tag: "img", src: "test.jpg" }) : Base({ tag: "span", children: "No image" }),
@@ -988,7 +988,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle transitions from string to Node", () => {
-				const useElement = State(false);
+				const useElement = state(false);
 				const element = Base({
 					children: () => (useElement.value ? Base({ tag: "strong", children: "Bold" }) : "Plain text"),
 				});
@@ -1002,7 +1002,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle transitions from Node to string", () => {
-				const useElement = State(true);
+				const useElement = state(true);
 				const element = Base({
 					children: () => (useElement.value ? Base({ tag: "em", children: "Italic" }) : "Plain"),
 				});
@@ -1018,8 +1018,8 @@ describe("Base Function", () => {
 
 		describe("Array Children with Functions", () => {
 			it("should auto-wrap functions in array children", () => {
-				const prefix = State("Item");
-				const count = State(1);
+				const prefix = state("Item");
+				const count = state(1);
 				const element = Base({
 					children: [() => prefix.value, " ", () => count.value.toString()],
 				});
@@ -1034,7 +1034,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle mix of static and reactive children", () => {
-				const dynamic = State("Dynamic");
+				const dynamic = state("Dynamic");
 				const element = Base({
 					children: ["Static ", () => dynamic.value, " End"],
 				});
@@ -1046,9 +1046,9 @@ describe("Base Function", () => {
 			});
 
 			it("should handle multiple reactive functions in array", () => {
-				const a = State("A");
-				const b = State("B");
-				const c = State("C");
+				const a = state("A");
+				const b = state("B");
+				const c = state("C");
 				const element = Base({
 					children: [() => a.value, "-", () => b.value, "-", () => c.value],
 				});
@@ -1104,15 +1104,15 @@ describe("Base Function", () => {
 			});
 
 			it("should handle arrays with reactive functions inside", () => {
-				const state = State("Test");
+				const myState = state("Test");
 				const items = ["A", "B"];
 				const element = Base({
-					children: [() => state.value, items.map((item) => Base({ tag: "span", children: item }))],
+					children: [() => myState.value, items.map((item) => Base({ tag: "span", children: item }))],
 				});
 
 				expect(element.textContent).toBe("TestAB");
 
-				state.set("Updated");
+				myState.set("Updated");
 				expect(element.textContent).toBe("UpdatedAB");
 			});
 
@@ -1147,7 +1147,7 @@ describe("Base Function", () => {
 
 		describe("Promise Children", () => {
 			it("should handle reactive function returning Promise", async () => {
-				const shouldResolve = State(true);
+				const shouldResolve = state(true);
 				const element = Base({
 					children: () => (shouldResolve.value ? Promise.resolve("Resolved") : Promise.resolve("Alternative")),
 				});
@@ -1161,7 +1161,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle rejected promises gracefully", async () => {
-				const shouldReject = State(false);
+				const shouldReject = state(false);
 				const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 				const element = Base({
 					children: () => (shouldReject.value ? Promise.reject(new Error("Test error")) : Promise.resolve("Success")),
@@ -1188,7 +1188,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle reactive function returning Promise with number", async () => {
-				const value = State(10);
+				const value = state(10);
 				const element = Base({
 					children: () => Promise.resolve(value.value * 2),
 				});
@@ -1232,7 +1232,7 @@ describe("Base Function", () => {
 
 		describe("Edge Cases", () => {
 			it("should handle null/undefined returns from functions", () => {
-				const value = State<string | null>("Text");
+				const value = state<string | null>("Text");
 				const element = Base({
 					children: () => value.value,
 				});
@@ -1247,7 +1247,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle boolean returns from functions", () => {
-				const value = State<string | boolean>("Show");
+				const value = state<string | boolean>("Show");
 				const element = Base({
 					children: () => value.value,
 				});
@@ -1265,7 +1265,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle rapid state changes", () => {
-				const counter = State(0);
+				const counter = state(0);
 				const element = Base({
 					children: () => counter.value.toString(),
 				});
@@ -1279,7 +1279,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle empty string", () => {
-				const value = State("Text");
+				const value = state("Text");
 				const element = Base({
 					children: () => value.value,
 				});
@@ -1291,7 +1291,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle transitions between different types", () => {
-				const mode = State<"string" | "node" | "null">("string");
+				const mode = state<"string" | "node" | "null">("string");
 				const element = Base({
 					children: () => {
 						if (mode.value === "string") return "String value";
@@ -1316,7 +1316,7 @@ describe("Base Function", () => {
 
 		describe("Bug: Nested Reactive Children in Arrays", () => {
 			it("should update reactive function inside nested element within array", () => {
-				const textState = State("Initial");
+				const textState = state("Initial");
 
 				const element = Base({
 					children: [
@@ -1341,8 +1341,8 @@ describe("Base Function", () => {
 			});
 
 			it("should handle multiple nested reactive children", () => {
-				const state1 = State("A");
-				const state2 = State("B");
+				const state1 = state("A");
+				const state2 = state("B");
 
 				const element = Base({
 					children: [
@@ -1368,7 +1368,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle deeply nested reactive children", () => {
-				const state = State("Deep");
+				const myState = state("Deep");
 
 				const element = Base({
 					children: [
@@ -1377,7 +1377,7 @@ describe("Base Function", () => {
 							children: [
 								Base({
 									tag: "span",
-									children: () => state.value,
+									children: () => myState.value,
 								}),
 							],
 						}),
@@ -1385,13 +1385,13 @@ describe("Base Function", () => {
 				});
 
 				expect(element.querySelector("span")?.textContent).toBe("Deep");
-				state.set("Updated");
+				myState.set("Updated");
 				expect(element.querySelector("span")?.textContent).toBe("Updated");
 			});
 
 			it("should handle mix of nested and top-level reactive children", () => {
-				const state1 = State("Top");
-				const state2 = State("Nested");
+				const state1 = state("Top");
+				const state2 = state("Nested");
 
 				const element = Base({
 					children: [
@@ -1416,7 +1416,7 @@ describe("Base Function", () => {
 
 		describe("Reactive DocumentFragment Children", () => {
 			it("should handle reactive function returning DocumentFragment", () => {
-				const showContent = State(true);
+				const showContent = state(true);
 
 				const element = Base({
 					children: () => {
@@ -1446,7 +1446,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle multiple updates to fragment content", () => {
-				const count = State(2);
+				const count = state(2);
 
 				const element = Base({
 					children: () => {
@@ -1476,7 +1476,7 @@ describe("Base Function", () => {
 			});
 
 			it("should transition from fragment to single element", () => {
-				const useFragment = State(true);
+				const useFragment = state(true);
 
 				const element = Base({
 					children: () => {
@@ -1502,7 +1502,7 @@ describe("Base Function", () => {
 			});
 
 			it("should transition from single element to fragment", () => {
-				const useFragment = State(false);
+				const useFragment = state(false);
 
 				const element = Base({
 					children: () => {
@@ -1525,7 +1525,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle empty fragment", () => {
-				const isEmpty = State(true);
+				const isEmpty = state(true);
 
 				const element = Base({
 					children: () => {
@@ -1550,7 +1550,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle fragment with text nodes", () => {
-				const prefix = State("Hello");
+				const prefix = state("Hello");
 
 				const element = Base({
 					children: () => {
@@ -1572,7 +1572,7 @@ describe("Base Function", () => {
 			});
 
 			it("should handle nested fragments (fragment inside Base element)", () => {
-				const count = State(2);
+				const count = state(2);
 
 				const element = Base({
 					children: [
@@ -1600,8 +1600,8 @@ describe("Base Function", () => {
 			});
 
 			it("should handle fragment with reactive content inside", () => {
-				const text = State("Initial");
-				const showFragment = State(true);
+				const text = state("Initial");
+				const showFragment = state(true);
 
 				const element = Base({
 					children: () => {
@@ -1631,7 +1631,7 @@ describe("Base Function", () => {
 			});
 
 			it("should maintain correct DOM order with consecutive fragment updates", () => {
-				const items = State(["A", "B"]);
+				const items = state(["A", "B"]);
 
 				const element = Base({
 					children: () => {
@@ -1658,7 +1658,7 @@ describe("Base Function", () => {
 			});
 
 			it("should not leak comment nodes outside the element", () => {
-				const show = State(true);
+				const show = state(true);
 
 				const element = Base({
 					children: () => {

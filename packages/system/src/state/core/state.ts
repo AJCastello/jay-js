@@ -13,7 +13,7 @@ const VALID_SUBSCRIPTION_ID = /^[a-zA-Z0-9_:<>.()\-]+$/;
  * @param data Initial value of the state
  * @returns A state object with methods to manage the state
  */
-export const State = <T>(data: T): TState<T> => {
+export const state = <T>(data: T): TState<T> => {
 	let _data = data;
 	const _effects = new Map<string, (data: T) => any>();
 	const _effects_ids = new Set<string>();

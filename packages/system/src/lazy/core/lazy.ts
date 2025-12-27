@@ -16,7 +16,7 @@ import { loadFromCache, loadModule } from "./module-loader.js";
  * @returns {HTMLElement} Element that will be replaced with the loaded module
  * @throws {Error} When module configuration is undefined
  */
-export function LazyModule(lazy: TLazyModule, loader?: HTMLElement) {
+export function Lazy(lazy: TLazyModule, loader?: HTMLElement) {
 	if (!lazy) {
 		throw new Error("Module is undefined");
 	}

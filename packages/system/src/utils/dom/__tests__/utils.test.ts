@@ -1,19 +1,20 @@
-import { useRef } from "../use-ref";
+import { describe, it, expect } from "vitest";
+import { createRef } from "../use-ref";
 
 describe("Utility Functions", () => {
 	describe("useRef", () => {
 		it("should create a reference object with null current", () => {
-			const ref = useRef<string>();
+			const ref = createRef<string>();
 
 			expect(ref).toHaveProperty("current");
 			expect(ref.current).toBe(null);
 		});
 
 		it("should create typed reference objects", () => {
-			const stringRef = useRef<string>();
-			const numberRef = useRef<number>();
-			const elementRef = useRef<HTMLElement>();
-			const objectRef = useRef<{ name: string }>();
+			const stringRef = createRef<string>();
+			const numberRef = createRef<number>();
+			const elementRef = createRef<HTMLElement>();
+			const objectRef = createRef<{ name: string }>();
 
 			expect(stringRef.current).toBe(null);
 			expect(numberRef.current).toBe(null);
@@ -22,7 +23,7 @@ describe("Utility Functions", () => {
 		});
 
 		it("should allow setting and getting current value", () => {
-			const ref = useRef<string>();
+			const ref = createRef<string>();
 
 			ref.current = "test value";
 			expect(ref.current).toBe("test value");
@@ -32,7 +33,7 @@ describe("Utility Functions", () => {
 		});
 
 		it("should work with HTMLElement references", () => {
-			const ref = useRef<HTMLElement>();
+			const ref = createRef<HTMLElement>();
 			const element = document.createElement("div");
 			element.id = "test-element";
 
@@ -43,7 +44,7 @@ describe("Utility Functions", () => {
 		});
 
 		it("should work with object references", () => {
-			const ref = useRef<{ name: string; age: number }>();
+			const ref = createRef<{ name: string; age: number }>();
 			const person = { name: "John", age: 30 };
 
 			ref.current = person;
@@ -54,7 +55,7 @@ describe("Utility Functions", () => {
 		});
 
 		it("should be mutable", () => {
-			const ref = useRef<number>();
+			const ref = createRef<number>();
 
 			// Initially null
 			expect(ref.current).toBe(null);
@@ -73,8 +74,8 @@ describe("Utility Functions", () => {
 		});
 
 		it("should create independent reference objects", () => {
-			const ref1 = useRef<string>();
-			const ref2 = useRef<string>();
+			const ref1 = createRef<string>();
+			const ref2 = createRef<string>();
 
 			ref1.current = "first";
 			ref2.current = "second";
@@ -85,7 +86,7 @@ describe("Utility Functions", () => {
 		});
 
 		it("should work with array references", () => {
-			const ref = useRef<number[]>();
+			const ref = createRef<number[]>();
 			const numbers = [1, 2, 3, 4, 5];
 
 			ref.current = numbers;
@@ -96,7 +97,7 @@ describe("Utility Functions", () => {
 		});
 
 		it("should handle function references", () => {
-			const ref = useRef<() => string>();
+			const ref = createRef<() => string>();
 			const testFunction = () => "test result";
 
 			ref.current = testFunction;

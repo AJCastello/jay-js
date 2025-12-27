@@ -1,5 +1,5 @@
 export { render } from "./dom/render.js";
-export { useRef } from "./dom/use-ref.js";
+export { createRef } from "./dom/use-ref.js";
 
 export * from "./theme/index.js";
 

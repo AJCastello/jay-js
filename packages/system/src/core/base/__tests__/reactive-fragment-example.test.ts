@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from "vitest";
-import { State } from "../../../state";
+import { state } from "../../../state";
 import { Base } from "../base.js";
 
 /**
@@ -18,7 +18,7 @@ describe("Reactive JSX Fragment - Real World Example", () => {
 			description: string;
 		}
 
-		const selectedTask = State<Task | null>(null);
+		const selectedTask = state<Task | null>(null);
 
 		// Simulate DrawerContent with conditional fragment
 		const drawerContent = Base({
@@ -89,8 +89,8 @@ describe("Reactive JSX Fragment - Real World Example", () => {
 	});
 
 	it("should handle JSX-like fragments with conditional rendering", () => {
-		const isEditing = State(false);
-		const title = State("View Mode");
+		const isEditing = state(false);
+		const title = state("View Mode");
 
 		const component = Base({
 			tag: "div",
@@ -150,7 +150,7 @@ describe("Reactive JSX Fragment - Real World Example", () => {
 			content: string[];
 		}
 
-		const activeSection = State<Section | null>(null);
+		const activeSection = state<Section | null>(null);
 
 		const container = Base({
 			tag: "div",
