@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { i18nOptions, i18nState } from "../../core/configuration.js";
 import { initLanguage, setLanguage } from "../../core/language-manager.js";
-import { i18nDefineOptions, getI18n } from "../../index.js";
+import { getI18n, i18nDefineOptions } from "../../index.js";
 
 // Mock localStorage for testing
 const localStorageMock = (() => {

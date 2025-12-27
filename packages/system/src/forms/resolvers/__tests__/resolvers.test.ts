@@ -1,7 +1,7 @@
+import { describe, expect, it } from "vitest";
 import * as yup from "yup";
 import { z } from "zod";
 import { yupResolver, zodResolver } from "../index.js";
-import { describe, it, expect } from "vitest";
 
 describe("Form Resolvers", () => {
 	describe("zodResolver", () => {

@@ -2,13 +2,7 @@ import { state } from "../../core/state.js";
 import type { TState } from "../../types.js";
 import { derived, effect } from "../helpers.js";
 import { queryCache } from "./cache.js";
-import type {
-	TQueryFetcher,
-	TQueryKey,
-	TQueryOptions,
-	TQueryStatus,
-	TQueryStore,
-} from "./types.js";
+import type { TQueryFetcher, TQueryKey, TQueryOptions, TQueryStatus, TQueryStore } from "./types.js";
 import {
 	cancelFetch,
 	defaultRetryDelay,
@@ -22,9 +16,7 @@ import {
 /**
  * Default query options
  */
-const DEFAULT_OPTIONS: Required<
-	Omit<TQueryOptions, "onSuccess" | "onError" | "initialData">
-> = {
+const DEFAULT_OPTIONS: Required<Omit<TQueryOptions, "onSuccess" | "onError" | "initialData">> = {
 	enabled: true,
 	staleTime: 0,
 	cacheTime: 300000,
@@ -97,9 +89,7 @@ export function query<TData = unknown, TError = Error>(
 		isFetching: false,
 		isError: false,
 		isSuccess: options.initialData !== undefined,
-		status: (options.initialData !== undefined
-			? "success"
-			: "idle") as TQueryStatus,
+		status: (options.initialData !== undefined ? "success" : "idle") as TQueryStatus,
 	});
 
 	let cleanupFns: Array<() => void> = [];
@@ -212,10 +202,7 @@ export function query<TData = unknown, TError = Error>(
 		}
 
 		if (opts.refetchInterval && typeof opts.refetchInterval === "number") {
-			refetchInterval = setInterval(
-				() => refetch(),
-				opts.refetchInterval as number,
-			);
+			refetchInterval = setInterval(() => refetch(), opts.refetchInterval as number);
 		}
 
 		queryCache.subscribe(queryKey);
@@ -255,13 +242,27 @@ export function query<TData = unknown, TError = Error>(
 	const status = derived(() => internalState.value.status);
 
 	return {
-		get data() { return data.value },
-		get error() { return error.value },
-		get isLoading() { return isLoading.value },
-		get isFetching() { return isFetching.value },
-		get isError() { return isError.value },
-		get isSuccess() { return isSuccess.value },
-		get status() { return status.value },
+		get data() {
+			return data.value;
+		},
+		get error() {
+			return error.value;
+		},
+		get isLoading() {
+			return isLoading.value;
+		},
+		get isFetching() {
+			return isFetching.value;
+		},
+		get isError() {
+			return isError.value;
+		},
+		get isSuccess() {
+			return isSuccess.value;
+		},
+		get status() {
+			return status.value;
+		},
 		refetch,
 		invalidate,
 		reset,

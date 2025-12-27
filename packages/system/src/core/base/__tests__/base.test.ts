@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { state, values } from "../../../state";
+import { state } from "../../../state";
 import { Base } from "../base";
 
 describe("Base Function", () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { state } from "../state.js";
 
 describe("State - Input Validation", () => {
@@ -61,7 +61,9 @@ describe("State - Input Validation", () => {
 		const myState = state(10);
 		const effect1 = () => {};
 		const effect2 = (data: number) => console.log(data);
-		const effect3 = function namedEffect(data: number) { return data; };
+		const effect3 = function namedEffect(data: number) {
+			return data;
+		};
 
 		expect(() => myState.sub("test1", effect1)).not.toThrow();
 		expect(() => myState.sub("test2", effect2)).not.toThrow();

@@ -36,7 +36,6 @@ class SubscriberManager {
 	clearSubscriber(): void {
 		this._current = null;
 	}
-
 }
 
 // Exports a single instance of the manager to be shared across the application

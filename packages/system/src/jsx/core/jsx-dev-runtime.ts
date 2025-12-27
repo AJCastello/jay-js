@@ -37,7 +37,7 @@ function jayJSXDEV(
 	_isStaticChildren: boolean,
 	_source: any,
 	_self: any,
-	): HTMLElement | Promise<HTMLElement> {
+): HTMLElement | Promise<HTMLElement> {
 	if (typeof tag === "function") {
 		return tag({ ...props });
 		// Uncomment if async handling needs improvement

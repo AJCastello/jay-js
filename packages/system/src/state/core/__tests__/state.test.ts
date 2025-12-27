@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { state } from "../state.js";
 import { effect } from "../../utils/helpers.js";
+import { state } from "../state.js";
 
 describe("State", () => {
 	it("should create a state with initial value", () => {
@@ -253,7 +253,7 @@ describe("State", () => {
 	it("should invalidate global effects on structural array mutations", () => {
 		const numbers = state([1, 2, 3]);
 		const globalEffect = vi.fn(() => {
-			numbers.value.forEach(n => n);
+			numbers.value.forEach((n) => n);
 		});
 
 		effect(globalEffect);

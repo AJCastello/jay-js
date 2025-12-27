@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { query } from "../query.js";
 import { queryCache } from "../cache.js";
+import { query } from "../query.js";
 
 describe("query()", () => {
 	beforeEach(() => {
@@ -49,10 +49,7 @@ describe("query()", () => {
 		});
 
 		it("should set isLoading during first fetch", async () => {
-			const fetcher = vi.fn(
-				async () =>
-					new Promise((resolve) => setTimeout(() => resolve("data"), 100)),
-			);
+			const fetcher = vi.fn(async () => new Promise((resolve) => setTimeout(() => resolve("data"), 100)));
 
 			const userQuery = query("user", fetcher);
 

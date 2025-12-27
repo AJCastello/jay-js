@@ -1,10 +1,12 @@
-import type { TState, TSetOptions } from "../types.js";
+import type { TSetOptions, TState } from "../types.js";
 import { generateFunctionHash, SETCHILD_MARKER, SETVALUE_MARKER } from "../utils/helpers.js";
 import { subscriberManager } from "./subscriber.js";
 
-const buildPath = (segments: Array<string | symbol>): string => (segments.length ? segments.map(String).join(".") : "<root>");
-const isObjectLike = (value: unknown): value is Record<string | symbol, any> => typeof value === "object" && value !== null;
-const VALID_SUBSCRIPTION_ID = /^[a-zA-Z0-9_:<>.()\-]+$/;
+const buildPath = (segments: Array<string | symbol>): string =>
+	segments.length ? segments.map(String).join(".") : "<root>";
+const isObjectLike = (value: unknown): value is Record<string | symbol, any> =>
+	typeof value === "object" && value !== null;
+const VALID_SUBSCRIPTION_ID = /^[a-zA-Z0-9_:<>.()-]+$/;
 
 /**
  * Creates a reactive state container that can be subscribed to for changes
@@ -44,7 +46,6 @@ export const state = <T>(data: T): TState<T> => {
 	}
 
 	function subscribeEffect(path?: string) {
-
 		const currentSubscriber = subscriberManager.getSubscriber();
 		if (!currentSubscriber) {
 			return;
@@ -75,11 +76,7 @@ export const state = <T>(data: T): TState<T> => {
 		const proxy = new Proxy(value as any, {
 			get(target, prop, receiver) {
 				// Always allow common symbol-based introspection without tracking noise.
-				if (
-					prop === Symbol.toStringTag ||
-					prop === Symbol.toPrimitive ||
-					prop === Symbol.iterator
-				) {
+				if (prop === Symbol.toStringTag || prop === Symbol.toPrimitive || prop === Symbol.iterator) {
 					return Reflect.get(target, prop, receiver);
 				}
 
@@ -87,7 +84,7 @@ export const state = <T>(data: T): TState<T> => {
 				const res = Reflect.get(target, prop, receiver);
 
 				if (isObjectLike(res)) {
-					return getProxyForPath(res, nextPathSegments)
+					return getProxyForPath(res, nextPathSegments);
 				}
 				subscribeEffect(buildPath(nextPathSegments));
 				return res;
@@ -157,7 +154,11 @@ export const state = <T>(data: T): TState<T> => {
 		return proxy;
 	}
 
-	function runEffects(targetKey: string | null = null, targets?: string | string[] | Set<string>, includeGlobal: boolean = true) {
+	function runEffects(
+		targetKey: string | null = null,
+		targets?: string | string[] | Set<string>,
+		includeGlobal: boolean = true,
+	) {
 		if (_effects.size === 0) {
 			return;
 		}
@@ -271,7 +272,7 @@ export const state = <T>(data: T): TState<T> => {
 
 			if (!VALID_SUBSCRIPTION_ID.test(id)) {
 				throw new Error(
-					`Invalid subscription ID: "${id}". Only alphanumeric characters, underscore, and hyphen are allowed.`
+					`Invalid subscription ID: "${id}". Only alphanumeric characters, underscore, and hyphen are allowed.`,
 				);
 			}
 
@@ -289,10 +290,7 @@ export const state = <T>(data: T): TState<T> => {
 					_effects_by_target.set(target, new Set());
 				}
 				_effects_by_target.get(target)!.add(id);
-			} else if (
-				!(effect as any)[SETVALUE_MARKER] &&
-				!(effect as any)[SETCHILD_MARKER]
-			) {
+			} else if (!(effect as any)[SETVALUE_MARKER] && !(effect as any)[SETCHILD_MARKER]) {
 				_effects_global.add(id);
 			}
 

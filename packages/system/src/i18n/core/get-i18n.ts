@@ -1,5 +1,5 @@
-import { i18nOptions, i18nState } from "./configuration.js";
 import type { AllPaths, GetTypeAtPath } from "../types.js";
+import { i18nOptions, i18nState } from "./configuration.js";
 
 /**
  * Function for accessing internationalized strings with type safety

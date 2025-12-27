@@ -44,34 +44,40 @@ export function effect(fn: () => void) {
  * @returns Function for setting values in objects
  */
 export function values(fn: () => any): (object: any, ...path: string[]) => void {
-	const _set_value: ISetValue = Object.assign(() => {
-		if (_set_value._path.length > 0) {
-			let target = _set_value._object_ref;
-			for (let i = 0; i < _set_value._path.length - 1; i++) {
-				if (!target[_set_value._path[i]]) {
-					target[_set_value._path[i]] = {};
+	const _set_value: ISetValue = Object.assign(
+		() => {
+			if (_set_value._path.length > 0) {
+				let target = _set_value._object_ref;
+				for (let i = 0; i < _set_value._path.length - 1; i++) {
+					if (!target[_set_value._path[i]]) {
+						target[_set_value._path[i]] = {};
+					}
+					target = target[_set_value._path[i]];
 				}
-				target = target[_set_value._path[i]];
+				const lastKey = _set_value._path[_set_value._path.length - 1];
+				target[lastKey] = _set_value._fn();
+				return;
 			}
-			const lastKey = _set_value._path[_set_value._path.length - 1];
-			target[lastKey] = _set_value._fn();
-			return;
-		}
-		_set_value._object_ref = _set_value._fn(); // Isso aqui é para o caso de setar o objeto todo, Mas talvez não faça sentido
-	}, {
-		_object_ref: undefined,
-		_path: [] as string[],
-		_fn: fn,
-		[SETVALUE_MARKER]: true,
-	});
+			_set_value._object_ref = _set_value._fn(); // Isso aqui é para o caso de setar o objeto todo, Mas talvez não faça sentido
+		},
+		{
+			_object_ref: undefined,
+			_path: [] as string[],
+			_fn: fn,
+			[SETVALUE_MARKER]: true,
+		},
+	);
 
-	return Object.assign((object: any, ...path: string[]) => {
-		_set_value._object_ref = object;
-		_set_value._path = path;
-		effect(_set_value);
-	}, {
-		[REACTIVE_MARKER]: true,
-	});
+	return Object.assign(
+		(object: any, ...path: string[]) => {
+			_set_value._object_ref = object;
+			_set_value._path = path;
+			effect(_set_value);
+		},
+		{
+			[REACTIVE_MARKER]: true,
+		},
+	);
 }
 
 /**
@@ -82,7 +88,7 @@ export function values(fn: () => any): (object: any, ...path: string[]) => void 
  * @param nodeRefId Reference identifier for the target node
  * @param setChild Callback function to execute when children need to be updated
  */
-export function Childs(fn: any, nodeRefId: string, setChild: () => void):  any {
+export function childs(fn: any, nodeRefId: string, setChild: () => void): any {
 	const _set_child = Object.assign(setChild, {
 		_fn: fn,
 		_ref: nodeRefId,
@@ -114,7 +120,7 @@ export function generateFunctionHash(fn: (...args: never) => unknown, path?: str
 		_fn = (fn as any)._fn;
 	}
 
-	suffix = path ? `${suffix}__target:${path}` : suffix
+	suffix = path ? `${suffix}__target:${path}` : suffix;
 
 	const _fn_string = _fn.toString();
 	let hash = 0;

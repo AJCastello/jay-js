@@ -1,6 +1,6 @@
-import { effect, REACTIVE_MARKER, values } from "../../state";
-import { Childs, SETCHILD_MARKER } from "../../state/utils/helpers";
-import { TRefObject } from "../../utils/dom/use-ref";
+import { REACTIVE_MARKER, values } from "../../state";
+import { childs } from "../../state/utils/helpers";
+import type { TRefObject } from "../../utils/dom/use-ref";
 import type { TBase, TBaseTagMap, TChildren, TLifecycleElement, TStyle } from "./base.types.js";
 import { registerJayJsElement } from "./jay-js-element.js";
 
@@ -294,10 +294,7 @@ function updateChildNode(
 	return currentNode;
 }
 
-function appendChildToBase(
-	base: HTMLElement,
-	child: TChildren
-): void {
+function appendChildToBase(base: HTMLElement, child: TChildren): void {
 	if (Array.isArray(child)) {
 		for (const nestedChild of child) {
 			appendChildToBase(base, nestedChild);
@@ -306,18 +303,17 @@ function appendChildToBase(
 	}
 
 	if (typeof child === "function") {
-
 		const nodeRefId = crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
 
 		const nodeRef: TRefObject<TNodeRef> = {
 			current: document.createTextNode("") as TNodeRef,
-			id: nodeRefId
+			id: nodeRefId,
 		};
 
 		base.appendChild(nodeRef.current as Node);
 
 		const setChild = () => {
-			const result = child()
+			const result = child();
 			if (result instanceof Promise) {
 				result
 					.then((resolved) => {
@@ -329,20 +325,20 @@ function appendChildToBase(
 					});
 				return;
 			}
-		if (Array.isArray(result)) {
-			const fragment = document.createDocumentFragment();
-			result.forEach(item => {
-				if (item instanceof Node) {
-					fragment.appendChild(item);
-				}
-			});
-			nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, fragment);
-			return;
-		}
+			if (Array.isArray(result)) {
+				const fragment = document.createDocumentFragment();
+				result.forEach((item) => {
+					if (item instanceof Node) {
+						fragment.appendChild(item);
+					}
+				});
+				nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, fragment);
+				return;
+			}
 			nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, result);
-		}
+		};
 
-		Childs(child, nodeRefId, setChild);
+		childs(child, nodeRefId, setChild);
 
 		return;
 	}

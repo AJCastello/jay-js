@@ -1,5 +1,5 @@
-export { query } from "./query.js";
 export { queryCache } from "./cache.js";
+export { query } from "./query.js";
 export type {
 	TQueryFetcher,
 	TQueryKey,

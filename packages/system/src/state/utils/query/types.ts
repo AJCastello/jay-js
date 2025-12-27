@@ -1,5 +1,3 @@
-import type { TState } from "../../types.js";
-
 /**
  * Query key type - can be static string or reactive function
  *

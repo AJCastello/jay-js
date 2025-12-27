@@ -85,8 +85,7 @@ export async function executeWithRetry<TData>(
 				break;
 			}
 
-			const delay =
-				typeof retryDelay === "function" ? retryDelay(attempt) : retryDelay;
+			const delay = typeof retryDelay === "function" ? retryDelay(attempt) : retryDelay;
 
 			await sleep(delay);
 		}
