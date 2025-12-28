@@ -1,5 +1,5 @@
-import { subscriberManager } from "../core/subscriber.js";
-import { effect } from "./helpers.js";
+import { subscriberManager } from "../state/core/subscriber.js";
+import { effect } from "../state/utils/helpers.js";
 
 type TKey = string | number | symbol;
 type TKeySelector<T> = keyof T | ((item: T, index: number) => TKey);

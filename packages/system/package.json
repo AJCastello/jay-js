@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -13,6 +14,61 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
+    },
+    "./core": {
+      "types": "./core/index.d.ts",
+      "import": "./core/index.js",
+      "default": "./core/index.js"
+    },
+    "./state": {
+      "types": "./state/index.d.ts",
+      "import": "./state/index.js",
+      "default": "./state/index.js"
+    },
+    "./query": {
+      "types": "./query/index.d.ts",
+      "import": "./query/index.js",
+      "default": "./query/index.js"
+    },
+    "./each": {
+      "types": "./each/index.d.ts",
+      "import": "./each/index.js",
+      "default": "./each/index.js"
+    },
+    "./router": {
+      "types": "./router/index.d.ts",
+      "import": "./router/index.js",
+      "default": "./router/index.js"
+    },
+    "./forms": {
+      "types": "./forms/index.d.ts",
+      "import": "./forms/index.js",
+      "default": "./forms/index.js"
+    },
+    "./guard": {
+      "types": "./guard/index.d.ts",
+      "import": "./guard/index.js",
+      "default": "./guard/index.js"
+    },
+    "./i18n": {
+      "types": "./i18n/index.d.ts",
+      "import": "./i18n/index.js",
+      "default": "./i18n/index.js"
+    },
+    "./lazy": {
+      "types": "./lazy/index.d.ts",
+      "import": "./lazy/index.js",
+      "default": "./lazy/index.js"
+    },
+    "./theme": {
+      "types": "./theme/index.d.ts",
+      "import": "./theme/index.js",
+      "default": "./theme/index.js"
+    },
+    "./utils": {
+      "types": "./utils/index.d.ts",
+      "import": "./utils/index.js",
+      "default": "./utils/index.js"
     },
     "./jsx-runtime": {
       "types": "./jsx/core/jsx-runtime.d.ts",

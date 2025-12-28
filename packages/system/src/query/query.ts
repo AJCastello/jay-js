@@ -1,6 +1,6 @@
-import { state } from "../../core/state.js";
-import type { TState } from "../../types.js";
-import { derived, effect } from "../helpers.js";
+import { state } from "../state/core/state.js";
+import type { TState } from "../state/types.js";
+import { derived, effect } from "../state/utils/helpers.js";
 import { queryCache } from "./cache.js";
 import type { TQueryFetcher, TQueryKey, TQueryOptions, TQueryStatus, TQueryStore } from "./types.js";
 import {
