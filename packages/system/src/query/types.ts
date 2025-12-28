@@ -224,20 +224,12 @@ export type TMutationStatus = "idle" | "loading" | "success" | "error";
  * };
  * ```
  */
-export type TMutationFetcher<TData, TVariables> = (
-	variables: TVariables,
-	signal: AbortSignal,
-) => Promise<TData>;
+export type TMutationFetcher<TData, TVariables> = (variables: TVariables, signal: AbortSignal) => Promise<TData>;
 
 /**
  * Mutation configuration options
  */
-export type TMutationOptions<
-	TData = unknown,
-	TError = Error,
-	TVariables = void,
-	TContext = unknown,
-> = {
+export type TMutationOptions<TData = unknown, TError = Error, TVariables = void, TContext = unknown> = {
 	/**
 	 * Callback before mutation executes
 	 * Can return context for rollback
@@ -247,20 +239,12 @@ export type TMutationOptions<
 	/**
 	 * Callback when mutation succeeds
 	 */
-	onSuccess?: (
-		data: TData,
-		variables: TVariables,
-		context: TContext | undefined,
-	) => void | Promise<void>;
+	onSuccess?: (data: TData, variables: TVariables, context: TContext | undefined) => void | Promise<void>;
 
 	/**
 	 * Callback when mutation fails
 	 */
-	onError?: (
-		error: TError,
-		variables: TVariables,
-		context: TContext | undefined,
-	) => void | Promise<void>;
+	onError?: (error: TError, variables: TVariables, context: TContext | undefined) => void | Promise<void>;
 
 	/**
 	 * Callback when mutation settles (success or error)
@@ -338,12 +322,7 @@ export type TMutationOptions<
  * await createUser.mutate({ name: 'John', email: 'john@example.com' });
  * ```
  */
-export type TMutationStore<
-	TData,
-	TError = Error,
-	TVariables = void,
-	TContext = unknown,
-> = {
+export type TMutationStore<TData, TError = Error, TVariables = void, TContext = unknown> = {
 	/**
 	 * Mutation data state
 	 */
@@ -440,7 +419,4 @@ export type TPrefetchOptions = {
  * });
  * ```
  */
-export type TCacheInvalidationPredicate = (
-	key: string,
-	entry: TCacheEntry<any>,
-) => boolean;
+export type TCacheInvalidationPredicate = (key: string, entry: TCacheEntry<any>) => boolean;

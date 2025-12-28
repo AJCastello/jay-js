@@ -1,12 +1,7 @@
 import { state } from "../state/core/state.js";
 import { derived } from "../state/utils/helpers.js";
 import { queryCache } from "./cache.js";
-import type {
-	TMutationFetcher,
-	TMutationOptions,
-	TMutationStatus,
-	TMutationStore,
-} from "./types.js";
+import type { TMutationFetcher, TMutationOptions, TMutationStatus, TMutationStore } from "./types.js";
 import { defaultRetryDelay, executeWithRetry } from "./utils.js";
 
 /**
@@ -15,13 +10,7 @@ import { defaultRetryDelay, executeWithRetry } from "./utils.js";
 const DEFAULT_OPTIONS: Required<
 	Omit<
 		TMutationOptions,
-		| "onMutate"
-		| "onSuccess"
-		| "onError"
-		| "onSettled"
-		| "invalidateQueries"
-		| "invalidatePattern"
-		| "invalidateIf"
+		"onMutate" | "onSuccess" | "onError" | "onSettled" | "invalidateQueries" | "invalidatePattern" | "invalidateIf"
 	>
 > = {
 	retry: false,
@@ -93,12 +82,7 @@ const DEFAULT_OPTIONS: Required<
  * );
  * ```
  */
-export function mutation<
-	TData = unknown,
-	TError = Error,
-	TVariables = void,
-	TContext = unknown,
->(
+export function mutation<TData = unknown, TError = Error, TVariables = void, TContext = unknown>(
 	fetcher: TMutationFetcher<TData, TVariables>,
 	options: TMutationOptions<TData, TError, TVariables, TContext> = {},
 ): TMutationStore<TData, TError, TVariables, TContext> {
@@ -194,9 +178,7 @@ export function mutation<
 		}
 	};
 
-	const mutateAsync = async (
-		variables: TVariables,
-	): Promise<TData | undefined> => {
+	const mutateAsync = async (variables: TVariables): Promise<TData | undefined> => {
 		try {
 			return await mutate(variables);
 		} catch {

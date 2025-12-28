@@ -87,6 +87,74 @@ describe("mutation()", () => {
 	});
 
 	describe("Callbacks", () => {
+		it("should execute callbacks in correct order on success", async () => {
+			const executionOrder: string[] = [];
+
+			const onMutate = vi.fn(() => {
+				executionOrder.push("onMutate");
+				return { context: "data" };
+			});
+			const fetcher = vi.fn(async () => {
+				executionOrder.push("fetcher");
+				return "data";
+			});
+			const onSuccess = vi.fn(() => {
+				executionOrder.push("onSuccess");
+			});
+			const onSettled = vi.fn(() => {
+				executionOrder.push("onSettled");
+			});
+
+			const mut = mutation(fetcher, { onMutate, onSuccess, onSettled });
+
+			const promise = mut.mutate("input");
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(executionOrder).toEqual([
+				"onMutate",
+				"fetcher",
+				"onSuccess",
+				"onSettled",
+			]);
+		});
+
+		it("should execute callbacks in correct order on error", async () => {
+			const executionOrder: string[] = [];
+
+			const onMutate = vi.fn(() => {
+				executionOrder.push("onMutate");
+				return { context: "data" };
+			});
+			const fetcher = vi.fn(async () => {
+				executionOrder.push("fetcher");
+				throw new Error("Failed");
+			});
+			const onError = vi.fn(() => {
+				executionOrder.push("onError");
+			});
+			const onSettled = vi.fn(() => {
+				executionOrder.push("onSettled");
+			});
+
+			const mut = mutation(fetcher, { onMutate, onError, onSettled, retry: false });
+
+			try {
+				const promise = mut.mutate("input");
+				await vi.runAllTimersAsync();
+				await promise;
+			} catch {
+				//
+			}
+
+			expect(executionOrder).toEqual([
+				"onMutate",
+				"fetcher",
+				"onError",
+				"onSettled",
+			]);
+		});
+
 		it("should call onMutate before mutation", async () => {
 			const onMutate = vi.fn();
 			const fetcher = vi.fn(async () => "data");
@@ -317,6 +385,85 @@ describe("mutation()", () => {
 			expect(queryCache.get("users")).toBeUndefined();
 			expect(queryCache.get("posts")).toBeUndefined();
 			expect(queryCache.get("comments")?.data).toEqual(["comment1"]);
+		});
+
+		it("should invalidate queries using pattern matching (glob)", async () => {
+			queryCache.set("user-1", "data1", 300000);
+			queryCache.set("user-2", "data2", 300000);
+			queryCache.set("post-1", "data3", 300000);
+
+			const fetcher = vi.fn(async () => "newUser");
+			const mut = mutation(fetcher, {
+				invalidatePattern: "user-*",
+			});
+
+			const promise = mut.mutate({ name: "John" });
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(queryCache.get("user-1")).toBeUndefined();
+			expect(queryCache.get("user-2")).toBeUndefined();
+			expect(queryCache.get("post-1")?.data).toBe("data3");
+		});
+
+		it("should invalidate queries using pattern matching (regex)", async () => {
+			queryCache.set("user-1", "data1", 300000);
+			queryCache.set("user-2", "data2", 300000);
+			queryCache.set("user-abc", "data3", 300000);
+
+			const fetcher = vi.fn(async () => "newUser");
+			const mut = mutation(fetcher, {
+				invalidatePattern: /^user-\d+$/,
+			});
+
+			const promise = mut.mutate({ name: "John" });
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(queryCache.get("user-1")).toBeUndefined();
+			expect(queryCache.get("user-2")).toBeUndefined();
+			expect(queryCache.get("user-abc")?.data).toBe("data3");
+		});
+
+		it("should invalidate queries using predicate function", async () => {
+			queryCache.set("old-1", "data1", 300000);
+			queryCache.set("old-2", "data2", 300000);
+			queryCache.set("new", "data3", 300000);
+
+			const fetcher = vi.fn(async () => "newData");
+			const mut = mutation(fetcher, {
+				invalidateIf: (key) => key.startsWith("old-"),
+			});
+
+			const promise = mut.mutate("input");
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(queryCache.get("old-1")).toBeUndefined();
+			expect(queryCache.get("old-2")).toBeUndefined();
+			expect(queryCache.get("new")?.data).toBe("data3");
+		});
+
+		it("should combine invalidateQueries and invalidatePattern", async () => {
+			queryCache.set("users", ["user1"], 300000);
+			queryCache.set("user-1", "data1", 300000);
+			queryCache.set("user-2", "data2", 300000);
+			queryCache.set("posts", ["post1"], 300000);
+
+			const fetcher = vi.fn(async () => "newUser");
+			const mut = mutation(fetcher, {
+				invalidateQueries: ["users"],
+				invalidatePattern: "user-*",
+			});
+
+			const promise = mut.mutate({ name: "John" });
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(queryCache.get("users")).toBeUndefined();
+			expect(queryCache.get("user-1")).toBeUndefined();
+			expect(queryCache.get("user-2")).toBeUndefined();
+			expect(queryCache.get("posts")?.data).toEqual(["post1"]);
 		});
 	});
 

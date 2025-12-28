@@ -67,10 +67,7 @@ export async function prefetchQuery<TData = unknown>(
 	}
 
 	try {
-		const data = await executeFetch(
-			queryKey,
-			(signal) => executeWithRetry(fetcher, 3, defaultRetryDelay, signal),
-		);
+		const data = await executeFetch(queryKey, (signal) => executeWithRetry(fetcher, 3, defaultRetryDelay, signal));
 
 		queryCache.set(queryKey, data, opts.cacheTime);
 	} catch {

@@ -172,9 +172,7 @@ class QueryCache {
 	 * });
 	 * ```
 	 */
-	invalidateQueries(
-		predicate: (key: string, entry: TCacheEntry<any>) => boolean,
-	): string[] {
+	invalidateQueries(predicate: (key: string, entry: TCacheEntry<any>) => boolean): string[] {
 		const keysToInvalidate: string[] = [];
 
 		for (const [key, entry] of this.cache) {

@@ -96,9 +96,7 @@ describe("queryCache", () => {
 			queryCache.set("old-2", "data2", 5000);
 			queryCache.set("new", "data3", 5000);
 
-			const invalidated = queryCache.invalidateQueries((key) =>
-				key.startsWith("old-"),
-			);
+			const invalidated = queryCache.invalidateQueries((key) => key.startsWith("old-"));
 
 			expect(invalidated).toEqual(["old-1", "old-2"]);
 			expect(queryCache.get("old-1")).toBeUndefined();
