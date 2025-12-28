@@ -126,6 +126,102 @@ class QueryCache {
 	}
 
 	/**
+	 * Invalidate queries matching a pattern
+	 * Supports glob patterns (* and ?) and RegExp
+	 *
+	 * @param pattern Glob pattern string or RegExp to match keys
+	 * @returns Array of invalidated keys
+	 *
+	 * @example
+	 * ```typescript
+	 * // Invalidate all user queries
+	 * queryCache.invalidatePattern('user-*');
+	 *
+	 * // Invalidate with regex
+	 * queryCache.invalidatePattern(/^user-\d+$/);
+	 * ```
+	 */
+	invalidatePattern(pattern: string | RegExp): string[] {
+		const keysToInvalidate: string[] = [];
+
+		for (const [key] of this.cache) {
+			if (this.matchesPattern(key, pattern)) {
+				keysToInvalidate.push(key);
+			}
+		}
+
+		for (const key of keysToInvalidate) {
+			this.delete(key);
+		}
+
+		return keysToInvalidate;
+	}
+
+	/**
+	 * Invalidate queries matching a predicate function
+	 *
+	 * @param predicate Function that returns true for keys to invalidate
+	 * @returns Array of invalidated keys
+	 *
+	 * @example
+	 * ```typescript
+	 * // Invalidate all stale queries
+	 * queryCache.invalidateQueries((key, entry) => {
+	 *   const age = Date.now() - entry.timestamp;
+	 *   return age > 60000; // 1 minute
+	 * });
+	 * ```
+	 */
+	invalidateQueries(
+		predicate: (key: string, entry: TCacheEntry<any>) => boolean,
+	): string[] {
+		const keysToInvalidate: string[] = [];
+
+		for (const [key, entry] of this.cache) {
+			if (predicate(key, entry)) {
+				keysToInvalidate.push(key);
+			}
+		}
+
+		for (const key of keysToInvalidate) {
+			this.delete(key);
+		}
+
+		return keysToInvalidate;
+	}
+
+	/**
+	 * Get all cache keys
+	 *
+	 * @returns Array of all cached query keys
+	 */
+	getKeys(): string[] {
+		return Array.from(this.cache.keys());
+	}
+
+	/**
+	 * Match key against pattern
+	 *
+	 * @param key Query key
+	 * @param pattern String glob pattern or RegExp
+	 * @returns True if key matches pattern
+	 */
+	private matchesPattern(key: string, pattern: string | RegExp): boolean {
+		if (pattern instanceof RegExp) {
+			return pattern.test(key);
+		}
+
+		const regexPattern = pattern
+			.replace(/\*/g, "__STAR__")
+			.replace(/\?/g, "__QUESTION__")
+			.replace(/[.+^${}()|[\]\\]/g, "\\$&")
+			.replace(/__STAR__/g, ".*")
+			.replace(/__QUESTION__/g, ".");
+
+		return new RegExp(`^${regexPattern}$`).test(key);
+	}
+
+	/**
 	 * Get cache size
 	 */
 	get size(): number {
