@@ -13,7 +13,16 @@ import { defaultRetryDelay, executeWithRetry } from "./utils.js";
  * Default mutation options
  */
 const DEFAULT_OPTIONS: Required<
-	Omit<TMutationOptions, "onMutate" | "onSuccess" | "onError" | "onSettled" | "invalidateQueries">
+	Omit<
+		TMutationOptions,
+		| "onMutate"
+		| "onSuccess"
+		| "onError"
+		| "onSettled"
+		| "invalidateQueries"
+		| "invalidatePattern"
+		| "invalidateIf"
+	>
 > = {
 	retry: false,
 	retryDelay: defaultRetryDelay,
