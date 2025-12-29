@@ -228,4 +228,97 @@ describe("query()", () => {
 			expect(fetcher).toHaveBeenCalledTimes(1);
 		});
 	});
+
+	describe("External Cache Updates (Optimistic Updates)", () => {
+		it("should update query.data when cache is updated externally", async () => {
+			const fetcher = vi.fn(async () => ["user1", "user2"]);
+
+			const usersQuery = query("users", fetcher);
+
+			await vi.runAllTimersAsync();
+
+			expect(usersQuery.data).toEqual(["user1", "user2"]);
+
+			queryCache.set("users", ["user1", "user2", "user3"], 300000);
+
+			expect(usersQuery.data).toEqual(["user1", "user2", "user3"]);
+			expect(usersQuery.isSuccess).toBe(true);
+			expect(usersQuery.status).toBe("success");
+		});
+
+		it("should react to multiple external cache updates", async () => {
+			const fetcher = vi.fn(async () => "initial");
+
+			const dataQuery = query("data", fetcher);
+
+			await vi.runAllTimersAsync();
+
+			expect(dataQuery.data).toBe("initial");
+
+			queryCache.set("data", "update1", 300000);
+			expect(dataQuery.data).toBe("update1");
+
+			queryCache.set("data", "update2", 300000);
+			expect(dataQuery.data).toBe("update2");
+
+			queryCache.set("data", "update3", 300000);
+			expect(dataQuery.data).toBe("update3");
+		});
+
+		it("should support optimistic updates with rollback", async () => {
+			const fetcher = vi.fn(async () => [{ id: 1, text: "Todo 1" }]);
+
+			const todosQuery = query("todos", fetcher);
+
+			await vi.runAllTimersAsync();
+
+			const previous = queryCache.get("todos");
+
+			const optimistic = [
+				...(previous?.data || []),
+				{ id: 2, text: "Todo 2" },
+			];
+			queryCache.set("todos", optimistic, 300000);
+
+			expect(todosQuery.data).toEqual([
+				{ id: 1, text: "Todo 1" },
+				{ id: 2, text: "Todo 2" },
+			]);
+
+			queryCache.set("todos", previous!.data, 300000);
+
+			expect(todosQuery.data).toEqual([{ id: 1, text: "Todo 1" }]);
+		});
+
+		it("should not update query for different cache key", async () => {
+			const fetcher1 = vi.fn(async () => "data1");
+			const fetcher2 = vi.fn(async () => "data2");
+
+			const query1 = query("key1", fetcher1);
+			const query2 = query("key2", fetcher2);
+
+			await vi.runAllTimersAsync();
+
+			queryCache.set("key1", "updated1", 300000);
+
+			expect(query1.data).toBe("updated1");
+			expect(query2.data).toBe("data2");
+		});
+
+		it("should work with enabled: false and then external update", async () => {
+			const fetcher = vi.fn(async () => "initial");
+
+			const dataQuery = query("data", fetcher, { enabled: false });
+
+			await vi.runAllTimersAsync();
+
+			expect(dataQuery.data).toBeNull();
+			expect(fetcher).not.toHaveBeenCalled();
+
+			queryCache.set("data", "external-data", 300000);
+
+			expect(dataQuery.data).toBe("external-data");
+			expect(dataQuery.isSuccess).toBe(true);
+		});
+	});
 });

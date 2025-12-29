@@ -7,6 +7,7 @@ import type { TCacheEntry } from "./types.js";
 class QueryCache {
 	private cache = new Map<string, TCacheEntry<any>>();
 	private gcTimers = new Map<string, ReturnType<typeof setTimeout>>();
+	private listeners = new Map<string, Set<(data: any) => void>>();
 
 	/**
 	 * Get cached data for a key
@@ -35,6 +36,13 @@ class QueryCache {
 		});
 
 		this.scheduleGC(key, cacheTime);
+
+		const listeners = this.listeners.get(key);
+		if (listeners) {
+			for (const callback of listeners) {
+				callback(data);
+			}
+		}
 	}
 
 	/**
@@ -92,6 +100,35 @@ class QueryCache {
 	}
 
 	/**
+	 * Register a listener for cache changes on a specific key
+	 *
+	 * @param key Query key to watch
+	 * @param callback Function to call when cache is updated
+	 * @returns Cleanup function to remove the listener
+	 */
+	onChange(key: string, callback: (data: any) => void): () => void {
+		if (!this.listeners.has(key)) {
+			this.listeners.set(key, new Set());
+		}
+		this.listeners.get(key)!.add(callback);
+
+		return () => this.offChange(key, callback);
+	}
+
+	/**
+	 * Remove a listener for a specific key
+	 *
+	 * @param key Query key
+	 * @param callback Callback to remove
+	 */
+	offChange(key: string, callback: (data: any) => void): void {
+		this.listeners.get(key)?.delete(callback);
+		if (this.listeners.get(key)?.size === 0) {
+			this.listeners.delete(key);
+		}
+	}
+
+	/**
 	 * Schedule garbage collection for inactive query
 	 *
 	 * @param key Query key
@@ -123,6 +160,8 @@ class QueryCache {
 			clearTimeout(timer);
 		}
 		this.gcTimers.clear();
+
+		this.listeners.clear();
 	}
 
 	/**

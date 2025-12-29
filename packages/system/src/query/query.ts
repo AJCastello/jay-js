@@ -187,6 +187,13 @@ export function query<TData = unknown, TError = Error>(
 			}
 		}
 
+		const unsubscribeListener = queryCache.onChange(queryKey, (data) => {
+			internalState.value.data = data;
+			internalState.value.isSuccess = true;
+			internalState.value.status = "success";
+		});
+		cleanupFns.push(unsubscribeListener);
+
 		if (opts.refetchOnFocus) {
 			cleanupFns.push(
 				setupFocusRefetch(() => {

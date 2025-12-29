@@ -137,4 +137,87 @@ describe("queryCache", () => {
 			expect(keys).toEqual([]);
 		});
 	});
+
+	describe("Listeners", () => {
+		it("should call listener when cache is updated", () => {
+			const listener = vi.fn();
+
+			queryCache.onChange("test", listener);
+			queryCache.set("test", "data1", 5000);
+
+			expect(listener).toHaveBeenCalledTimes(1);
+			expect(listener).toHaveBeenCalledWith("data1");
+		});
+
+		it("should call listener on subsequent updates", () => {
+			const listener = vi.fn();
+
+			queryCache.onChange("test", listener);
+			queryCache.set("test", "data1", 5000);
+			queryCache.set("test", "data2", 5000);
+			queryCache.set("test", "data3", 5000);
+
+			expect(listener).toHaveBeenCalledTimes(3);
+			expect(listener).toHaveBeenNthCalledWith(1, "data1");
+			expect(listener).toHaveBeenNthCalledWith(2, "data2");
+			expect(listener).toHaveBeenNthCalledWith(3, "data3");
+		});
+
+		it("should support multiple listeners for same key", () => {
+			const listener1 = vi.fn();
+			const listener2 = vi.fn();
+
+			queryCache.onChange("test", listener1);
+			queryCache.onChange("test", listener2);
+			queryCache.set("test", "data", 5000);
+
+			expect(listener1).toHaveBeenCalledWith("data");
+			expect(listener2).toHaveBeenCalledWith("data");
+		});
+
+		it("should not call listener for different key", () => {
+			const listener = vi.fn();
+
+			queryCache.onChange("test1", listener);
+			queryCache.set("test2", "data", 5000);
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		it("should remove listener when cleanup is called", () => {
+			const listener = vi.fn();
+
+			const cleanup = queryCache.onChange("test", listener);
+			queryCache.set("test", "data1", 5000);
+
+			cleanup();
+
+			queryCache.set("test", "data2", 5000);
+
+			expect(listener).toHaveBeenCalledTimes(1);
+			expect(listener).toHaveBeenCalledWith("data1");
+		});
+
+		it("should clear all listeners on cache.clear()", () => {
+			const listener = vi.fn();
+
+			queryCache.onChange("test", listener);
+			queryCache.clear();
+			queryCache.set("test", "data", 5000);
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		it("should allow manual offChange", () => {
+			const listener = vi.fn();
+
+			queryCache.onChange("test", listener);
+			queryCache.set("test", "data1", 5000);
+
+			queryCache.offChange("test", listener);
+			queryCache.set("test", "data2", 5000);
+
+			expect(listener).toHaveBeenCalledTimes(1);
+		});
+	});
 });
