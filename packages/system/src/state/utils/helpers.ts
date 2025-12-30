@@ -41,9 +41,10 @@ export function effect(fn: () => void) {
  * created to update the value when the state changes.
  *
  * @param fn Function that returns the value to be set
+ * @param element Optional HTMLElement to track subscriptions for automatic cleanup
  * @returns Function for setting values in objects
  */
-export function values(fn: () => any): (object: any, ...path: string[]) => void {
+export function values(fn: () => any, element?: HTMLElement): (object: any, ...path: string[]) => void {
 	const _set_value: ISetValue = Object.assign(
 		() => {
 			if (_set_value._path.length > 0) {
@@ -64,6 +65,7 @@ export function values(fn: () => any): (object: any, ...path: string[]) => void 
 			_object_ref: undefined,
 			_path: [] as string[],
 			_fn: fn,
+			_element: element,
 			[SETVALUE_MARKER]: true,
 		},
 	);

@@ -55,12 +55,12 @@ function isReactiveValue(value: any): boolean {
 	return typeof value === "function" && (value as any)[REACTIVE_MARKER] === true;
 }
 
-function autoWrapReactiveValues<T>(value: T | (() => T)): T | ReactiveEffect {
+function autoWrapReactiveValues<T>(value: T | (() => T), element?: HTMLElement): T | ReactiveEffect {
 	if (typeof value === "function") {
 		if ((value as any)[REACTIVE_MARKER] === true) {
 			return value as unknown as ReactiveEffect;
 		}
-		return values(value as () => T) as unknown as ReactiveEffect;
+		return values(value as () => T, element) as unknown as ReactiveEffect;
 	}
 	return value;
 }
@@ -87,7 +87,20 @@ export function Base<T extends TBaseTagMap = "div">(
 		typeof children === "function" ||
 		(Array.isArray(children) && children.some((c) => typeof c === "function"));
 
-	const hasLifecycle = Boolean(onmount || onunmount || ref || hasReactiveChildren);
+	const hasReactiveProps =
+		typeof id === "function" ||
+		typeof className === "function" ||
+		(typeof style === "object" &&
+			style !== null &&
+			!isReactiveValue(style) &&
+			Object.values(style).some((v) => typeof v === "function")) ||
+		(typeof dataset === "object" &&
+			dataset !== null &&
+			!isReactiveValue(dataset) &&
+			Object.values(dataset).some((v) => typeof v === "function")) ||
+		Object.values(props).some((v) => typeof v === "function" && !isEventHandler("", v));
+
+	const hasLifecycle = Boolean(onmount || onunmount || ref || hasReactiveChildren || hasReactiveProps);
 
 	if (hasLifecycle) {
 		registerJayJsElement(tag || "div");
@@ -108,7 +121,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (id) {
-		const wrappedId = autoWrapReactiveValues(id);
+		const wrappedId = autoWrapReactiveValues(id, base);
 		if (isReactiveValue(wrappedId)) {
 			(wrappedId as unknown as ReactiveEffect)(base, "id");
 		} else {
@@ -117,7 +130,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	}
 
 	if (className) {
-		const wrappedClassName = autoWrapReactiveValues(className);
+		const wrappedClassName = autoWrapReactiveValues(className, base);
 		if (isReactiveValue(wrappedClassName)) {
 			(wrappedClassName as unknown as ReactiveEffect)(base, "className");
 		} else {
@@ -136,7 +149,7 @@ export function Base<T extends TBaseTagMap = "div">(
 		} else {
 			Object.entries(style).forEach(([key, value]: [string, any]) => {
 				if (key === "parentRule" || key === "length") return;
-				const wrappedValue = autoWrapReactiveValues(value);
+				const wrappedValue = autoWrapReactiveValues(value, base);
 				if (isReactiveValue(wrappedValue)) {
 					(wrappedValue as unknown as ReactiveEffect)(base.style, key);
 				} else {
@@ -151,7 +164,7 @@ export function Base<T extends TBaseTagMap = "div">(
 			(dataset as unknown as ReactiveEffect)(base, "dataset");
 		} else {
 			Object.entries(dataset).forEach(([key, value]) => {
-				const wrappedValue = autoWrapReactiveValues(value);
+				const wrappedValue = autoWrapReactiveValues(value, base);
 				if (isReactiveValue(wrappedValue)) {
 					(wrappedValue as unknown as ReactiveEffect)(base.dataset, key);
 				} else {
@@ -209,7 +222,7 @@ export function Base<T extends TBaseTagMap = "div">(
 				return;
 			}
 
-			const wrappedValue = autoWrapReactiveValues(value);
+			const wrappedValue = autoWrapReactiveValues(value, base);
 			if (isReactiveValue(wrappedValue)) {
 				(wrappedValue as unknown as ReactiveEffect)(base, key);
 			} else {

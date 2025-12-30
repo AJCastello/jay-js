@@ -71,4 +71,5 @@ export interface ISetValue {
 	_object_ref: any;
 	_path: string[];
 	_fn: () => any;
+	_element?: HTMLElement;
 }
