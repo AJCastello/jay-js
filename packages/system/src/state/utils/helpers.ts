@@ -87,11 +87,18 @@ export function values(fn: () => any): (object: any, ...path: string[]) => void 
  * @param fn Function that generates the child elements
  * @param nodeRefId Reference identifier for the target node
  * @param setChild Callback function to execute when children need to be updated
+ * @param element Optional HTMLElement to track subscriptions for automatic cleanup
  */
-export function childs(fn: any, nodeRefId: string, setChild: () => void): any {
+export function childs(
+	fn: any,
+	nodeRefId: string,
+	setChild: () => void,
+	element?: HTMLElement,
+): any {
 	const _set_child = Object.assign(setChild, {
 		_fn: fn,
 		_ref: nodeRefId,
+		_element: element,
 		[SETCHILD_MARKER]: true,
 	});
 

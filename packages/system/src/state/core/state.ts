@@ -1,6 +1,7 @@
 import type { TSetOptions, TState } from "../types.js";
 import { generateFunctionHash, SETCHILD_MARKER, SETVALUE_MARKER } from "../utils/helpers.js";
 import { subscriberManager } from "./subscriber.js";
+import { subscriptionRegistry } from "./subscription-registry.js";
 
 const buildPath = (segments: Array<string | symbol>): string =>
 	segments.length ? segments.map(String).join(".") : "<root>";
@@ -52,6 +53,14 @@ export const state = <T>(data: T): TState<T> => {
 		}
 
 		const hash = generateFunctionHash(currentSubscriber, path);
+
+		// Register in subscription registry if element is available
+		const element = (currentSubscriber as any)._element;
+		if (element && element instanceof HTMLElement) {
+			const cleanupFn = () => state.unsub(hash);
+			subscriptionRegistry.registerSubscription(element, hash, state, cleanupFn);
+		}
+
 		state.sub(hash, Object.assign(currentSubscriber, { _target: path }));
 		_effects_ids.add(hash);
 	}
