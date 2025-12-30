@@ -83,7 +83,11 @@ export function Base<T extends TBaseTagMap = "div">(
 		tag: "div",
 	},
 ): HTMLElementTagNameMap[T] {
-	const hasLifecycle = Boolean(onmount || onunmount || ref);
+	const hasReactiveChildren =
+		typeof children === "function" ||
+		(Array.isArray(children) && children.some((c) => typeof c === "function"));
+
+	const hasLifecycle = Boolean(onmount || onunmount || ref || hasReactiveChildren);
 
 	if (hasLifecycle) {
 		registerJayJsElement(tag || "div");
@@ -159,7 +163,7 @@ export function Base<T extends TBaseTagMap = "div">(
 
 	if (children !== null && children !== undefined && typeof children !== "boolean") {
 		if (typeof children === "function") {
-			appendChildToBase(base, children);
+			appendChildToBase(base, children, base);
 		} else if (children instanceof Promise) {
 			const elementSlot = document.createElement("jayjs-lazy-slot");
 			base.appendChild(elementSlot);
@@ -180,12 +184,12 @@ export function Base<T extends TBaseTagMap = "div">(
 			if (Array.isArray(children)) {
 				children.forEach((child) => {
 					if (child !== null && child !== undefined && typeof child !== "boolean") {
-						appendChildToBase(base, child);
+						appendChildToBase(base, child, base);
 					}
 				});
 			} else {
 				if (typeof children !== "boolean") {
-					appendChildToBase(base, children);
+					appendChildToBase(base, children, base);
 				}
 			}
 		}
@@ -294,10 +298,10 @@ function updateChildNode(
 	return currentNode;
 }
 
-function appendChildToBase(base: HTMLElement, child: TChildren): void {
+function appendChildToBase(base: HTMLElement, child: TChildren, rootElement?: HTMLElement): void {
 	if (Array.isArray(child)) {
 		for (const nestedChild of child) {
-			appendChildToBase(base, nestedChild);
+			appendChildToBase(base, nestedChild, rootElement);
 		}
 		return;
 	}
@@ -338,7 +342,8 @@ function appendChildToBase(base: HTMLElement, child: TChildren): void {
 			nodeRef.current = updateChildNode(nodeRef.current as TNodeRef, result);
 		};
 
-		childs(child, nodeRefId, setChild);
+		const targetElement = rootElement || base;
+		childs(child, nodeRefId, setChild, targetElement);
 
 		return;
 	}
