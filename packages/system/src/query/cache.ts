@@ -28,6 +28,8 @@ class QueryCache {
 	 */
 	set<TData>(key: string, data: TData, cacheTime: number): void {
 		const existing = this.cache.get(key);
+		console.log('[Cache] 💾 Setting data for key:', key);
+		console.log('[Cache] 📊 Data:', data);
 
 		this.cache.set(key, {
 			data,
@@ -38,6 +40,7 @@ class QueryCache {
 		this.scheduleGC(key, cacheTime);
 
 		const listeners = this.listeners.get(key);
+		console.log('[Cache] 🔔 Notifying', listeners?.size || 0, 'listeners for key:', key);
 		if (listeners) {
 			for (const callback of listeners) {
 				callback(data);
@@ -111,6 +114,7 @@ class QueryCache {
 			this.listeners.set(key, new Set());
 		}
 		this.listeners.get(key)!.add(callback);
+		console.log('[Cache] ➕ Added listener for key:', key, '- Total listeners:', this.listeners.get(key)!.size);
 
 		return () => this.offChange(key, callback);
 	}
@@ -122,7 +126,10 @@ class QueryCache {
 	 * @param callback Callback to remove
 	 */
 	offChange(key: string, callback: (data: any) => void): void {
+		const beforeSize = this.listeners.get(key)?.size || 0;
 		this.listeners.get(key)?.delete(callback);
+		const afterSize = this.listeners.get(key)?.size || 0;
+		console.log('[Cache] ➖ Removed listener for key:', key, '- Listeners before:', beforeSize, 'after:', afterSize);
 		if (this.listeners.get(key)?.size === 0) {
 			this.listeners.delete(key);
 		}

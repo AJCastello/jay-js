@@ -1,3 +1,4 @@
+
 /**
  * Query key type - can be static string or reactive function
  *
@@ -179,6 +180,11 @@ export type TQueryStore<TData, TError = Error> = {
 	 * Cancel ongoing request
 	 */
 	cancel: () => void;
+
+	/**
+	 * Dispose query and cleanup all subscriptions
+	 */
+	dispose: () => void;
 };
 
 /**

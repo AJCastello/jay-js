@@ -107,10 +107,20 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 
 		currentController = new AbortController();
 
-		internalState.value.isLoading = true;
-		internalState.value.isIdle = false;
-		internalState.value.isError = false;
-		internalState.value.status = "loading";
+		internalState.set((currentState) => {
+			return {
+				...currentState,
+				isLoading: true,
+				isIdle: false,
+				isError: false,
+				status: "loading"
+			}
+		});
+
+		// internalState.value.isLoading = true;
+		// internalState.value.isIdle = false;
+		// internalState.value.isError = false;
+		// internalState.value.status = "loading";
 
 		let context: TContext | undefined;
 
@@ -126,11 +136,22 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 				currentController.signal,
 			);
 
-			internalState.value.data = data;
-			internalState.value.error = null;
-			internalState.value.isError = false;
-			internalState.value.isSuccess = true;
-			internalState.value.status = "success";
+			internalState.set((currentState) => {
+				return {
+					...currentState,
+					data: data,
+					error: null,
+					isError: false,
+					isSuccess: true,
+					status: "success"
+				}
+			});
+
+			// internalState.value.data = data;
+			// internalState.value.error = null;
+			// internalState.value.isError = false;
+			// internalState.value.isSuccess = true;
+			// internalState.value.status = "success";
 
 			if (options.onSuccess) {
 				await options.onSuccess(data, variables, context);
@@ -158,10 +179,20 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 		} catch (error) {
 			const err = error as TError;
 
-			internalState.value.error = err;
-			internalState.value.isError = true;
-			internalState.value.isSuccess = false;
-			internalState.value.status = "error";
+			internalState.set((currentState) => {
+				return {
+					...currentState,
+					error: err,
+					isError: true,
+					isSuccess: false,
+					status: "error"
+				}
+			});
+
+			// internalState.value.error = err;
+			// internalState.value.isError = true;
+			// internalState.value.isSuccess = false;
+			// internalState.value.status = "error";
 
 			if (options.onError) {
 				await options.onError(err, variables, context);
@@ -173,7 +204,13 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 
 			throw err;
 		} finally {
-			internalState.value.isLoading = false;
+			//internalState.value.isLoading = false;
+			internalState.set((currentState) => {
+				return {
+					...currentState,
+					isLoading: false
+				}
+			});
 			currentController = null;
 		}
 	};
@@ -187,13 +224,25 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 	};
 
 	const reset = (): void => {
-		internalState.value.data = null;
-		internalState.value.error = null;
-		internalState.value.isLoading = false;
-		internalState.value.isError = false;
-		internalState.value.isSuccess = false;
-		internalState.value.isIdle = true;
-		internalState.value.status = "idle";
+		internalState.set((currentState) => {
+			return {
+				...currentState,
+				data: null,
+				error: null,
+				isLoading: false,
+				isError: false,
+				isSuccess: false,
+				isIdle: true,
+				status: "idle"
+			}
+		});
+		// internalState.value.data = null;
+		// internalState.value.error = null;
+		// internalState.value.isLoading = false;
+		// internalState.value.isError = false;
+		// internalState.value.isSuccess = false;
+		// internalState.value.isIdle = true;
+		// internalState.value.status = "idle";
 	};
 
 	const cancel = (): void => {
@@ -201,38 +250,45 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 			currentController.abort();
 			currentController = null;
 		}
-		internalState.value.isLoading = false;
+		//internalState.value.isLoading = false;
+		internalState.set((currentState) => {
+			return {
+				...currentState,
+				isLoading: false
+			}
+		});
+
 	};
 
-	const data = derived(() => internalState.value.data);
-	const error = derived(() => internalState.value.error);
-	const isLoading = derived(() => internalState.value.isLoading);
-	const isError = derived(() => internalState.value.isError);
-	const isSuccess = derived(() => internalState.value.isSuccess);
-	const isIdle = derived(() => internalState.value.isIdle);
-	const status = derived(() => internalState.value.status);
+	// const data = derived(() => internalState.value.data);
+	// const error = derived(() => internalState.value.error);
+	// const isLoading = derived(() => internalState.value.isLoading);
+	// const isError = derived(() => internalState.value.isError);
+	// const isSuccess = derived(() => internalState.value.isSuccess);
+	// const isIdle = derived(() => internalState.value.isIdle);
+	// const status = derived(() => internalState.value.status);
 
 	return {
 		get data() {
-			return data.value;
+			return internalState.value.data;
 		},
 		get error() {
-			return error.value;
+			return internalState.value.error;
 		},
 		get isLoading() {
-			return isLoading.value;
+			return internalState.value.isLoading;
 		},
 		get isError() {
-			return isError.value;
+			return internalState.value.isError;
 		},
 		get isSuccess() {
-			return isSuccess.value;
+			return internalState.value.isSuccess;
 		},
 		get isIdle() {
-			return isIdle.value;
+			return internalState.value.isIdle;
 		},
 		get status() {
-			return status.value;
+			return internalState.value.status;
 		},
 		mutate,
 		mutateAsync,
