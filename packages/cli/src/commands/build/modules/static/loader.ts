@@ -24,7 +24,7 @@ async function getPackagePath() {
 		...Object.keys(packageJson.dependencies || {}),
 		...Object.keys(packageJson.devDependencies || {}),
 	];
-	return filterDependenciesAndDevDependencies.filter((dep) => !dep.startsWith("@jay-js/jsx"));
+	return filterDependenciesAndDevDependencies;
 }
 
 export async function resolve(
@@ -49,17 +49,6 @@ export async function resolve(
 		if (!DEFAULT_EXTENSIONS.includes(extname)) {
 			const dirName = path.dirname(fileURLToPath(context.parentURL as string));
 			const resolvedPath = path.resolve(dirName, specifier);
-
-			if (specifier.startsWith("@jay-js/jsx")) {
-				const modulePath = path.resolve(process.cwd(), "node_modules", `${specifier}.js`);
-				if (await checkFileExists(modulePath)) {
-					return await Promise.resolve({
-						url: pathToFileURL(modulePath).href,
-						shortCircuit: true,
-						format: "module",
-					});
-				}
-			}
 
 			if (await checkFileExists(`${resolvedPath}.js`)) {
 				return await Promise.resolve({

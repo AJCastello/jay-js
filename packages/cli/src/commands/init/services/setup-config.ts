@@ -3,8 +3,6 @@ import type { IPackageFile, IPackageVersion, ITsConfigFile } from "../types/inde
 export const packageVersion: IPackageVersion = {
 	"@jay-js/static": "^1.3.0",
 	"@jay-js/system": "^4.0.0",
-	"@jay-js/elements": "^1.2.0", // DEPRECATED: Replaced by native JSX components
-	"@jay-js/jsx": "^1.3.0", // DEPRECATED: Replaced by JSX runtime integrated into @jay-js/system
 	vite: "^7.1.0",
 	tailwindcss: "^4.1.0",
 	"@tailwindcss/vite": "^4.1.0",
@@ -36,7 +34,6 @@ export const packageFile: IPackageFile = {
 	scripts: {},
 	dependencies: {
 		"@jay-js/system": packageVersion["@jay-js/system"],
-		"@jay-js/elements": packageVersion["@jay-js/elements"],
 	},
 	devDependencies: {},
 };

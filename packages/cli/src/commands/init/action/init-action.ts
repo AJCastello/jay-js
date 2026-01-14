@@ -3,7 +3,6 @@ import { finalizeInitialization } from "../modules/finalize-initialization.js";
 import { installDependencies } from "../modules/install-dependencies.js";
 import { setupBuildTools } from "../modules/setup-build-tools.js";
 import { setupCloneTemplate } from "../modules/setup-clone-template.js";
-import { setupJSXConfig } from "../modules/setup-jsx-config.js";
 import { setupProjectStructure } from "../modules/setup-project-structure.js";
 import { setupProjectType } from "../modules/setup-project-type.js";
 import { setupStylesAndElements } from "../modules/setup-styles-and-elements.js";
@@ -16,7 +15,7 @@ export async function init(options: IJayJSCLIInitOptions) {
 	await setupBuildTools(options);
 	await setupStylesAndElements(options);
 	await setupProjectType(options);
-	setupJSXConfig(options);
+	// JSX configuration is now handled in vite.config.js (esbuild) and tsconfig.json
 	await finalizeInitialization(options);
 	face.endProgress();
 	log`{gray {green ✔}  Project "{green ${options.projectName}}" has been successfully set up!}`;
