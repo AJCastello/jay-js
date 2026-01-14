@@ -1,6 +1,7 @@
 import { packageFile, packageVersion, tsConfigFile } from "../services/setup-config.js";
 import type { IJayJSCLIInitOptions } from "../types/index.js";
 
+// DEPRECATED: JSX runtime is now natively integrated into @jay-js/system
 export function setupJSXConfig(options: IJayJSCLIInitOptions) {
 	if (options.useJSX) {
 		packageFile.dependencies["@jay-js/jsx"] = packageVersion["@jay-js/jsx"];

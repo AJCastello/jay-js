@@ -2,6 +2,7 @@
   "name": "@jay-js/jsx",
   "version": "2.0.0",
   "description": "A JSX library for Jay JS",
+  "deprecated": "This package has been replaced by JSX runtime integrated directly into @jay-js/system. Do not use.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
