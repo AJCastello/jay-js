@@ -10,3 +10,6 @@ builder
 .ai
 llm
 console
+.studio
+jayjs-docs
+.vscode
