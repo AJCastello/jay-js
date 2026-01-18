@@ -5,6 +5,9 @@ import type { ISetValue, TState } from "../types.js";
 export const REACTIVE_MARKER = Symbol("reactive");
 export const SETVALUE_MARKER = Symbol("setValue");
 export const SETCHILD_MARKER = Symbol("setChildren");
+export const DERIVED_MARKER = Symbol("derived");
+
+let derivedIdCounter = 0;
 
 /**
  * Creates a derived state that automatically recalculates whenever states
@@ -16,9 +19,17 @@ export const SETCHILD_MARKER = Symbol("setChildren");
  */
 export function derived<T>(fn: () => T): TState<T> {
 	const derivedState = state(fn());
-	effect(() => {
+	const derivedId = ++derivedIdCounter;
+
+	const effectFn = () => {
 		derivedState.set(fn());
-	});
+	};
+
+	// Adiciona metadados à função para gerar hash único
+	(effectFn as any)[DERIVED_MARKER] = true;
+	(effectFn as any)._derivedId = derivedId;
+
+	effect(effectFn);
 	return derivedState;
 }
 
@@ -127,6 +138,10 @@ export function generateFunctionHash(fn: (...args: never) => unknown, path?: str
 	if ((fn as any)[SETCHILD_MARKER]) {
 		suffix = `__childref:${(fn as any)._ref}`;
 		_fn = (fn as any)._fn;
+	}
+
+	if ((fn as any)[DERIVED_MARKER]) {
+		suffix = `${suffix}__derived:${(fn as any)._derivedId}`;
 	}
 
 	suffix = path ? `${suffix}__target:${path}` : suffix;
