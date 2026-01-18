@@ -229,11 +229,9 @@ export function query<TData = unknown, TError = Error>(
 
 	const initialize = (): void => {
 		const queryKey = currentKey();
-		console.log('[Query] 🚀 Initializing query for key:', queryKey);
 
 		const cached = queryCache.get<TData>(queryKey);
 		const isStale = cached ? queryCache.isStale(queryKey, opts.staleTime) : true;
-		console.log('[Query] 📋 Cache status - cached:', !!cached, 'isStale:', isStale);
 
 		if (cached && !isStale) {
 			// internalState.value.data = cached.data;
@@ -260,9 +258,6 @@ export function query<TData = unknown, TError = Error>(
 		}
 
 		const unsubscribeListener = queryCache.onChange(queryKey, (data) => {
-			console.log('[Query] 🔔 Cache listener fired for key:', queryKey);
-			console.log('[Query] 📦 New data from cache:', data);
-			console.log('[Query] 📊 Current internalState.value.data BEFORE update:', internalState.value.data);
 			// internalState.value.data = data;
 			// internalState.value.isSuccess = true;
 			// internalState.value.status = "success";
@@ -274,7 +269,6 @@ export function query<TData = unknown, TError = Error>(
 					status: "success"
 				}
 			});
-			console.log('[Query] ✅ Updated internalState.value.data to:', internalState.value.data);
 		});
 		cleanupFns.push(unsubscribeListener);
 
@@ -301,8 +295,6 @@ export function query<TData = unknown, TError = Error>(
 
 	const cleanup = (): void => {
 		const queryKey = currentKey();
-		console.log('[Query] 🧹 Cleanup called for key:', queryKey);
-		console.log('[Query] 🧹 Cleaning up', cleanupFns.length, 'functions');
 
 		for (const fn of cleanupFns) {
 			fn();
@@ -315,7 +307,6 @@ export function query<TData = unknown, TError = Error>(
 		}
 
 		queryCache.unsubscribe(queryKey);
-		console.log('[Query] ✅ Cleanup completed for key:', queryKey);
 	};
 
 	if (typeof key === "function") {
