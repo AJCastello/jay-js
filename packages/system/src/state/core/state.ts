@@ -239,6 +239,14 @@ export const state = <T>(data: T): TState<T> => {
 				return;
 			}
 
+			// Detecta se o objeto/array raiz foi completamente trocado
+			// Isso inclui: object->object, object->null, null->object, array->array
+			const wasObjectLike = isObjectLike(_data);
+			const isObjectLike_new = isObjectLike(newValue);
+			const isRootObjectReplaced =
+				(wasObjectLike || isObjectLike_new) &&
+				_data !== newValue;
+
 			_data = newValue;
 
 			if (options?.silent) {
@@ -250,7 +258,13 @@ export const state = <T>(data: T): TState<T> => {
 				return;
 			}
 
-			runEffects();
+			// Se o objeto/array raiz foi trocado, todas as propriedades mudaram
+			// Dispara TODOS os effects (globais + targeted)
+			if (isRootObjectReplaced) {
+				runEffects(null, _effects_ids, true);
+			} else {
+				runEffects();
+			}
 		},
 
 		/**
