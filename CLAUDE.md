@@ -10,15 +10,16 @@ This is a TypeScript library monorepo for the Jay JS framework, consisting of mu
 
 - **Monorepo Management**: NPM Workspaces with NX for build orchestration
 - **Core Purpose**: TypeScript library packages published to NPM
-- **Packages**: 6 main packages in `packages/`:
+- **Packages**: 7 main packages in `packages/`:
   - `system` - Core framework with state management, routing, and lazy loading
   - `ui` - UI components and utilities
-  - `jsx` - JSX-like syntax support for Jay JS
+  - `jsx` - JSX-like syntax support for Jay JS (deprecated, integrated into system)
   - `cli` - Command-line interface for project scaffolding
   - `static` - Static site generation utilities
   - `elements` - Custom web elements and components
+  - `inspector` - Development inspector with click-to-source functionality
 - **Documentation**: Single web application in `docs/` using Vite, TypeScript, TailwindCSS with DaisyUI
-- **Build Tools**: SWC for compilation, TypeScript for type checking, Jest for testing
+- **Build Tools**: Mixed (TypeScript compiler for system, Bun for UI/CLI/JSX), TypeScript for type checking, Vitest for testing, Biome for linting
 - **No Backend**: This is a client-side framework - no server-side code
 
 ## Development Commands
@@ -30,6 +31,8 @@ This is a TypeScript library monorepo for the Jay JS framework, consisting of mu
 - `npm run build:cli` - Build CLI package
 - `npm run build:jsx` - Build JSX package
 - `npm run build:static` - Build static package
+- `npm run build:elements` - Build elements package
+- `npm run build:inspector` - Build inspector package
 
 ### Publish Commands
 - `npm run pub:all` - Publish all packages to NPM
@@ -41,6 +44,15 @@ This is a TypeScript library monorepo for the Jay JS framework, consisting of mu
 - `npm run link:all` - Get local development paths for all packages
 - Package-specific commands available in each `packages/[name]/package.json`
 - Documentation dev server: `cd docs && npm run dev`
+
+### Testing and Quality
+Available per-package (run in `packages/[name]/` directory):
+- `npm run test` - Run tests with Vitest
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:ui` - Run tests with Vitest UI
+- `npm run test:cover` - Run tests with coverage
+- `npm run lint` - Lint code with Biome (auto-fixes)
+- `npm run typecheck` - Type check with TypeScript (no emit)
 
 ## Code Conventions
 
@@ -79,10 +91,11 @@ packages/[package-name]/
 
 1. **@jay-js/system**: Core framework with state management, routing, lazy loading
 2. **@jay-js/ui**: Reusable UI components and utilities
-3. **@jay-js/jsx**: JSX-like syntax support for Jay JS framework
+3. **@jay-js/jsx**: JSX-like syntax support (deprecated, integrated into system)
 4. **@jay-js/cli**: Command-line tools for project scaffolding and development
 5. **@jay-js/static**: Static site generation utilities
 6. **@jay-js/elements**: Custom web elements and component definitions
+7. **@jay-js/inspector**: Development inspector with click-to-source functionality
 
 ### Documentation Application Structure
 
@@ -138,7 +151,7 @@ export const componentUtils = {
 
 #### Build and Distribution
 
-1. **Build Process**: Each package uses SWC for fast compilation
+1. **Build Process**: Build tools vary by package (TypeScript compiler for system, Bun for UI/CLI/JSX)
 2. **Type Generation**: TypeScript compiler generates .d.ts files
 3. **Clean Package**: Removes devDependencies from distributed package.json
 4. **NPM Publishing**: Automated through package scripts with public access
