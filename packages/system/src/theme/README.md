@@ -246,9 +246,6 @@ if (getCurrentTheme().mode === 'dark') {
 Checks if the user's system prefers a dark color scheme.
 
 ```typescript
-Checks if the user's system prefers a dark color scheme.
-
-```typescript
 function prefersColorSchemeDark(): boolean
 ```
 
@@ -337,16 +334,6 @@ themeDefineOptions({
 // - System logs warning: "Stored theme 'red' is not valid in current configuration. Falling back to default theme."
 // - Applies default theme instead
 // - User experience remains stable
-```
-
-## Examples
-```
-
-Example:
-```javascript
-if (prefersColorSchemeDark()) {
-  console.log('Dark mode is enabled on the system');
-}
 ```
 
 ## Examples
