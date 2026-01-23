@@ -4,19 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a TypeScript library monorepo for the Jay JS framework, consisting of multiple NPM packages that provide UI components, state management, routing, and development tools. The project is designed as a collection of publishable packages that work together to create modern web applications.
+This is a TypeScript library monorepo for the Jay JS framework, consisting of multiple NPM packages that provide a complete solution for modern web applications. The framework includes JSX/TSX runtime, reactive state management, client-side routing, form validation, internationalization, data fetching, theme management, and 60+ UI components. The project is designed as a collection of publishable packages (7 total, 5 active + 2 deprecated) that work together seamlessly.
 
 ## Architecture
 
 - **Monorepo Management**: NPM Workspaces with NX for build orchestration
 - **Core Purpose**: TypeScript library packages published to NPM
 - **Packages**: 7 main packages in `packages/`:
-  - `system` - Core framework with state management, routing, and lazy loading
-  - `ui` - UI components and utilities
-  - `jsx` - JSX-like syntax support for Jay JS (deprecated, integrated into system)
-  - `cli` - Command-line interface for project scaffolding
+  - `system` - Core framework with JSX runtime, state management, routing, forms, i18n, query/mutation, theme, and lazy loading
+  - `ui` - 60+ reusable UI components with Tailwind CSS and daisyUI (CLI-distributed)
+  - `jsx` - JSX-like syntax support (deprecated, integrated into system)
+  - `cli` - Command-line interface for project scaffolding and component installation
   - `static` - Static site generation utilities
-  - `elements` - Custom web elements and components
+  - `elements` - Custom web elements (deprecated, replaced by native JSX/TSX)
   - `inspector` - Development inspector with click-to-source functionality
 - **Documentation**: Single web application in `docs/` using Vite, TypeScript, TailwindCSS with DaisyUI
 - **Build Tools**: Mixed (TypeScript compiler for system, Bun for UI/CLI/JSX), TypeScript for type checking, Vitest for testing, Biome for linting
@@ -60,6 +60,7 @@ Available per-package (run in `packages/[name]/` directory):
 - **Enums**: UPPERCASE_SNAKE_CASE, e.g., `PERSON_GENDER { MALE = 'MALE' }`
 - **Functions**: camelCase, e.g., `getPersonById`
 - **Component Functions**: PascalCase, e.g., `PersonProfileComponent`
+- **Utility Functions**: Prefix with `handle*` instead of `use*` to avoid confusion with React hooks, e.g., `handleForm`, `handleModal`, `handleToast`
 - **Properties for queries/filters**: Use enums
 - **No "key" property** in components
 - **No code comments** unless explicitly requested
@@ -89,13 +90,37 @@ packages/[package-name]/
 
 ### Package Responsibilities
 
-1. **@jay-js/system**: Core framework with state management, routing, lazy loading
-2. **@jay-js/ui**: Reusable UI components and utilities
-3. **@jay-js/jsx**: JSX-like syntax support (deprecated, integrated into system)
-4. **@jay-js/cli**: Command-line tools for project scaffolding and development
+1. **@jay-js/system**: Core framework providing:
+   - **JSX Runtime** - Native JSX/TSX support (replaces deprecated @jay-js/jsx)
+   - **State Management** - Reactive state with subscriptions and computed values
+   - **Router** - Client-side routing with path parameters and navigation guards
+   - **Forms** - Form handling with `handleForm` (Yup/Zod validation support)
+   - **i18n** - Internationalization with dynamic locale switching
+   - **Query/Mutation** - Data fetching with caching and automatic revalidation
+   - **Each** - Reactive list rendering
+   - **Guard** - Route protection and navigation guards
+   - **Theme** - Theme management (dark/light modes)
+   - **Lazy** - Dynamic module loading
+   - **Utils** - DOM utilities and helpers
+
+2. **@jay-js/ui**: Reusable UI components library with 60+ components
+   - Built with Tailwind CSS and daisyUI
+   - Distributed via CLI (similar to shadcn/ui pattern)
+   - Components installed locally for customization
+   - Includes utility hooks like `handleToast`
+
+3. **@jay-js/jsx**: JSX-like syntax support (**deprecated**, integrated into @jay-js/system)
+
+4. **@jay-js/cli**: Command-line tools for project scaffolding and component installation
+   - Project templates and initialization
+   - UI component installation (`jayjs ui add [component]`)
+   - Development utilities
+
 5. **@jay-js/static**: Static site generation utilities
-6. **@jay-js/elements**: Custom web elements and component definitions
-7. **@jay-js/inspector**: Development inspector with click-to-source functionality
+
+6. **@jay-js/elements**: Custom web elements (**deprecated**, replaced by native JSX/TSX)
+
+7. **@jay-js/inspector**: Development inspector with click-to-source functionality for debugging
 
 ### Documentation Application Structure
 
@@ -221,10 +246,15 @@ When tech-lead returns:
 - typescript-specialist: TypeScript library development
 - npm-package-expert: NPM package management and publishing
 - jayjs-framework-expert: Jay JS framework development
-- jayjs-system-expert: Jay JS system package (state, router, forms, i18n)
+- jayjs-system-expert: Jay JS system package (state, router, forms, i18n, JSX runtime)
 - jayjs-ui-expert: Jay JS UI components registry and CLI distribution
-- jayjs-elements-expert: Jay JS elements package specialist
+- jayjs-context-expert: Jay JS context management for temporary state
+- jayjs-domain-expert: Jay JS domain logic and resource modules
+- jayjs-documentation-expert: Jay JS framework documentation
 - documentation-specialist: Documentation and examples
+
+**Deprecated agents (DO NOT USE for new work):**
+- jayjs-elements-expert: DEPRECATED - Use jayjs-system-expert or jayjs-ui-expert instead
 ```
 
 You MUST use these specific agents, NOT generic alternatives like "backend-developer"
@@ -249,7 +279,8 @@ The project follows a hierarchical structure:
 
 4. **Specialized Agents** (`agents/specialized/`)
    - Framework-specific experts organized by technology
-   - **Jay JS Specialists**: jayjs-framework-expert, jayjs-system-expert, jayjs-ui-expert, jayjs-elements-expert, jayjs-context-expert, jayjs-domain-expert
+   - **Jay JS Specialists** (Active): jayjs-framework-expert, jayjs-system-expert, jayjs-ui-expert, jayjs-context-expert, jayjs-domain-expert, jayjs-documentation-expert
+   - **Jay JS Specialists** (Deprecated): jayjs-elements-expert (use jayjs-system-expert or jayjs-ui-expert instead)
    - Subdirectories: jayjs/, tailwind/ (firebase/, nodejs/ removed - not applicable)
 
 ### Three-Phase Orchestration Workflow (Main Agent Coordinated)
@@ -400,14 +431,16 @@ Use ONLY the agents listed above. Do NOT use react, vue, angular, or other frame
 ```
 Main Agent: "Based on the tech-lead's routing, I'll now coordinate the implementation:"
 
-1. ✓ Using project-analyst to analyze package structure  
-2. ✓ Using jayjs-system-expert for system features (state, router, forms, i18n)
+1. ✓ Using project-analyst to analyze package structure
+2. ✓ Using jayjs-system-expert for system features (state, router, forms, i18n, JSX runtime)
 3. ✓ Using jayjs-ui-expert for UI components registry and CLI distribution
-4. ✓ Using jayjs-elements-expert for element implementation (when working with @jay-js/elements)
-5. ✓ Using jayjs-framework-expert for framework integration
-6. ✓ Using npm-package-expert for export management
-7. ✓ Using documentation-specialist for docs update
-8. ✓ Using lint-specialist and typecheck-specialist for code quality
+4. ✓ Using jayjs-context-expert for context management and temporary state
+5. ✓ Using jayjs-domain-expert for domain logic and resource modules
+6. ✓ Using jayjs-documentation-expert for Jay JS documentation
+7. ✓ Using jayjs-framework-expert for framework integration
+8. ✓ Using npm-package-expert for export management
+9. ✓ Using documentation-specialist for docs update
+10. ✓ Using lint-specialist and typecheck-specialist for code quality
 
 [Executes each step with the EXACT agents specified]
 ```
