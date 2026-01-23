@@ -8,15 +8,12 @@ export interface IJayJSCLIInitOptions {
 	language: "single" | "multi";
 	defaultLanguage?: string;
 	useThemeProvider: boolean;
-	useJSX: boolean;
 	installDependencies: "npm" | "yarn" | "pnpm" | "none";
 }
 
 export interface IPackageVersion {
 	"@jay-js/static": string;
 	"@jay-js/system": string;
-	"@jay-js/elements": string;
-	"@jay-js/jsx": string;
 	vite: string;
 	tailwindcss: string;
 	"@tailwindcss/vite": string;
@@ -55,7 +52,7 @@ export interface ITsConfigFile {
 		noUnusedParameters: boolean;
 		noFallthroughCasesInSwitch: boolean;
 		jsx: "react-jsx";
-		jsxImportSource: "@jay-js/jsx";
+		jsxImportSource: "@jay-js/system";
 		outDir: string;
 		allowJs: boolean;
 	}>;
@@ -74,19 +71,15 @@ interface IDevScripts {
 
 interface IDevDependencies {
 	"@jay-js/static": string;
-	"@jay-js/jsx": string;
 	vite: string;
 	tailwindcss: string;
 	"@tailwindcss/vite": string;
 	"@tailwindcss/cli": string;
 	typescript: string;
-	"@babel/preset-react": string;
 }
 
 interface IDependencies {
 	"@jay-js/system": string;
-	"@jay-js/elements": string;
-	"@jay-js/jsx": string;
 	"@jay-js/static": string;
 }
 
@@ -98,7 +91,4 @@ export interface IPackageFile {
 	scripts: Partial<IDevScripts>;
 	dependencies: Partial<IDependencies>;
 	devDependencies: Partial<IDevDependencies>;
-	babel?: {
-		presets: Array<string>;
-	};
 }

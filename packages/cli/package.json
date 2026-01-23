@@ -13,12 +13,15 @@
     "dist"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./*": "./dist/"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
-    "build": "swc src -d dist --strip-leading-paths && npm run build:types && npm run build:chmod",
+    "build": "bun build src/index.ts src/bin/jayjs.ts --outdir dist --target node --format esm --external '*' && npm run build:types && npm run build:chmod",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
     "build:chmod": "chmod +x ./dist/bin/jayjs.js",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",

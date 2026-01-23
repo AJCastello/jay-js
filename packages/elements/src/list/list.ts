@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TList } from "./list.types";
 
 export function List<T extends TBaseTagMap = "ul">({ ...props }: TList<T> = { tag: "ul" }): HTMLElementTagNameMap[T] {

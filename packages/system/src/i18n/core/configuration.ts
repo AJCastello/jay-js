@@ -1,4 +1,4 @@
-import { State } from "../../state/index.js";
+import { state } from "../../state/index.js";
 import type { Ti18nLanguages, Ti18nOptions, Ti18nState } from "../types.js";
 
 /**
@@ -16,9 +16,9 @@ export const i18nOptions: Ti18nOptions = {
 /**
  * State management for internationalization
  * Tracks the current locale and loaded language data
- * @type {State<Ti18nState>}
+ * @type {state<Ti18nState>}
  */
-export const i18nState = State<Ti18nState>({
+export const i18nState = state<Ti18nState>({
 	currentLocale: i18nOptions.defaultLocale,
 	language: {} as Ti18nLanguages,
 });

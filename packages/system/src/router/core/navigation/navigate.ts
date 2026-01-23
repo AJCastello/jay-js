@@ -75,11 +75,11 @@ async function runNavigationGuards(): Promise<boolean> {
  *
  * @example
  * // Navigate to the about page
- * Navigate('/about');
+ * navigate('/about');
  *
  * // With a configured prefix of '/app', this would navigate to '/app/about'
  */
-export async function Navigate(path: string) {
+export async function navigate(path: string) {
 	// Run navigation guards before proceeding
 	const canProceed = await runNavigationGuards();
 	if (!canProceed) {

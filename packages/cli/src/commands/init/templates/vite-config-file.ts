@@ -8,11 +8,23 @@ import path from "path";\n`;
 export function viteConfigFile(options: IJayJSCLIInitOptions): string {
 	const hasStaticType = options.type === "static";
 	const hasPlugins = hasStaticType;
+	const isTypeScript = options.javascriptVariant === "ts";
 
 	return `import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 ${hasStaticType ? staticImports() : ""}
-export default defineConfig({
+export default defineConfig({${
+		isTypeScript
+			? `
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "@jay-js/system",
+  },`
+			: `
+  esbuild: {
+    jsxInject: 'import { jsx, Fragment } from "@jay-js/system/jsx-runtime";',
+  },`
+	}
   ${
 		hasPlugins
 			? `plugins: [

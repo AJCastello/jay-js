@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TForm } from "./form.types";
 
 export function Form<T extends TBaseTagMap = "form">({ ...props }: TForm<T>): HTMLElementTagNameMap[T] {

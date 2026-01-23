@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TProgress } from "./progress.types";
 
 export function Progress<T extends TBaseTagMap = "progress">(

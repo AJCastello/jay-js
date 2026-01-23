@@ -1,4 +1,5 @@
-import { Input, type TBaseTagMap } from "@jay-js/elements";
+import { Input } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TRadio } from "./radio.types";
 

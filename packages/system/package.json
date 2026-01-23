@@ -3,19 +3,88 @@
   "version": "4.0.1",
   "description": "A powerful and flexible TypeScript library for UI, state management, lazy loading, routing and managing draggable elements in modern web applications.",
   "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "types": "dist/index.d.ts",
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./*": "./dist/"
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./core": {
+      "types": "./core/index.d.ts",
+      "import": "./core/index.js",
+      "default": "./core/index.js"
+    },
+    "./state": {
+      "types": "./state/index.d.ts",
+      "import": "./state/index.js",
+      "default": "./state/index.js"
+    },
+    "./query": {
+      "types": "./query/index.d.ts",
+      "import": "./query/index.js",
+      "default": "./query/index.js"
+    },
+    "./each": {
+      "types": "./each/index.d.ts",
+      "import": "./each/index.js",
+      "default": "./each/index.js"
+    },
+    "./router": {
+      "types": "./router/index.d.ts",
+      "import": "./router/index.js",
+      "default": "./router/index.js"
+    },
+    "./forms": {
+      "types": "./forms/index.d.ts",
+      "import": "./forms/index.js",
+      "default": "./forms/index.js"
+    },
+    "./guard": {
+      "types": "./guard/index.d.ts",
+      "import": "./guard/index.js",
+      "default": "./guard/index.js"
+    },
+    "./i18n": {
+      "types": "./i18n/index.d.ts",
+      "import": "./i18n/index.js",
+      "default": "./i18n/index.js"
+    },
+    "./lazy": {
+      "types": "./lazy/index.d.ts",
+      "import": "./lazy/index.js",
+      "default": "./lazy/index.js"
+    },
+    "./theme": {
+      "types": "./theme/index.d.ts",
+      "import": "./theme/index.js",
+      "default": "./theme/index.js"
+    },
+    "./utils": {
+      "types": "./utils/index.d.ts",
+      "import": "./utils/index.js",
+      "default": "./utils/index.js"
+    },
+    "./jsx-runtime": {
+      "types": "./jsx/core/jsx-runtime.d.ts",
+      "import": "./jsx/core/jsx-runtime.js",
+      "default": "./jsx/core/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./jsx/core/jsx-dev-runtime.d.ts",
+      "import": "./jsx/core/jsx-dev-runtime.js",
+      "default": "./jsx/core/jsx-dev-runtime.js"
+    }
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck",
-    "build": "swc src -d dist --strip-leading-paths && npm run build:types",
+    "build": "tsc --skipLibCheck",
     "postbuild": "clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
@@ -56,9 +125,7 @@
     "@vitest/ui": "^4.0.4",
     "jsdom": "^27.0.1",
     "typescript": "^5.4.5",
-    "vitest": "^4.0.4",
-    "yup": "^1.6.1",
-    "zod": "^4.1.5"
+    "vitest": "^4.0.4"
   },
   "peerDependencies": {
     "yup": "^1.6.1",

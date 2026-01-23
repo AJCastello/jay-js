@@ -1,5 +1,5 @@
-import type { ObjectSchema } from "yup";
-import type { TResolver } from "../types";
+import type { YupObjectSchema } from "../types/external-types.js";
+import type { TResolver } from "../types.js";
 
 /**
  * A resolver function for validating form values using a Yup schema.
@@ -17,7 +17,7 @@ import type { TResolver } from "../types";
  *
  * If no errors are found, the `errors` array will be empty.
  */
-export function yupResolver<T>(schema: ObjectSchema<any>): TResolver<T> {
+export function yupResolver<T>(schema: YupObjectSchema<any>): TResolver<T> {
 	return async (values: T, fieldName?: string) => {
 		try {
 			if (fieldName) {

@@ -7,14 +7,19 @@
     - [`selectors()`](#selectors)
   - [Rendering Functions](#rendering-functions)
     - [`render()`](#render)
+  - [Element References](#element-references)
+    - [`createRef()`](#createref)
 - [Core Utilities](#core-utilities)
   - [`uniKey()`](#unikey)
+- [Naming Conventions](#naming-conventions)
 - [Type Definitions](#type-definitions)
   - [Rendering Types](#rendering-types)
   - [Query Types](#query-types)
+  - [Reference Types](#reference-types)
 - [Usage Examples](#usage-examples)
   - [DOM Selection](#dom-selection)
   - [DOM Rendering](#dom-rendering)
+  - [Element References](#element-references-examples)
   - [Unique ID Generation](#unique-id-generation)
 
 This directory contains utility functions for DOM manipulation, rendering, and more. These utilities are core components of the @jay-js/system library.
@@ -89,6 +94,63 @@ function render(
 - When providing an array as `content`, any `null` or `undefined` values will be automatically filtered out
 - This is useful for conditional rendering where some items may not be present
 
+### Element References
+
+#### `createRef()`
+
+Creates a mutable reference object that persists across renders, allowing access to DOM elements.
+
+```typescript
+function createRef<T>(): TRefObject<T>
+```
+
+**Returns:** A reference object with a mutable `.current` property (initially `null`)
+
+**Usage with JSX:**
+
+```tsx
+import { createRef } from '@jay-js/system';
+
+const inputRef = createRef<HTMLInputElement>();
+
+const SearchForm = () => (
+  <div>
+    <input
+      ref={inputRef}
+      type="text"
+      placeholder="Search..."
+    />
+    <button onclick={() => inputRef.current?.focus()}>
+      Focus
+    </button>
+    <button onclick={() => {
+      if (inputRef.current) {
+        console.log(inputRef.current.value);
+      }
+    }}>
+      Get Value
+    </button>
+  </div>
+);
+```
+
+**Usage with Base:**
+
+```typescript
+import { Base, createRef } from '@jay-js/system';
+
+const divRef = createRef<HTMLDivElement>();
+
+const element = Base({
+  tag: 'div',
+  ref: divRef,
+  children: 'Hello World',
+  onmount: () => {
+    console.log('Element mounted:', divRef.current);
+  }
+});
+```
+
 ## Core Utilities
 
 ### `uniKey()`
@@ -109,6 +171,36 @@ function uniKey(
 **Returns:** A unique alphanumeric string
 
 **Note:** Uniqueness is not mathematically guaranteed; use longer lengths to reduce the probability of collisions.
+
+## Naming Conventions
+
+Jay JS uses `handle*` prefix instead of `use*` to avoid confusion with React hooks. This naming convention helps differentiate Jay JS utilities from React-style hooks:
+
+| Old Name | New Name | Module |
+|----------|----------|--------|
+| `useForm` | `handleForm` | forms |
+
+**Why `handle*` instead of `use*`?**
+
+1. **Avoid React confusion**: The `use*` prefix is strongly associated with React hooks
+2. **Clearer intent**: `handle*` better describes the purpose - handling/managing functionality
+3. **No hook rules**: Unlike React hooks, these functions don't follow hook rules (can be called anywhere)
+
+**Example:**
+
+```typescript
+// Correct - use handleForm
+import { handleForm } from '@jay-js/system';
+
+const form = handleForm({
+  defaultValues: { email: '', password: '' },
+  resolver: zodResolver(loginSchema)
+});
+
+// The form object provides methods, not reactive values like hooks
+form.register('email');
+form.onSubmit((data) => console.log(data));
+```
 
 ## Type Definitions
 
@@ -137,6 +229,16 @@ type TRenderTarget = HTMLElement | string | null;
 type TQueryOptions = {
   onlyVisible?: boolean;   // Only return visible elements
   includeNested?: boolean; // Include elements that are nested within other matches
+};
+```
+
+### Reference Types
+
+```typescript
+// Reference object for DOM elements
+type TRefObject<T> = {
+  current: T | null;  // The referenced DOM element (null until mounted)
+  id?: string;        // Optional identifier for internal tracking
 };
 ```
 
@@ -327,4 +429,97 @@ const tooltip = Box({
 });
 
 render('#help-section', [helpButton, tooltip]);
+```
+
+### Element References
+
+```typescript
+import { createRef, render } from '@jay-js/system';
+
+// Create a reference for an input element
+const searchInputRef = createRef<HTMLInputElement>();
+
+// Search component with ref
+const SearchBar = () => (
+  <div className="search-container">
+    <input
+      ref={searchInputRef}
+      type="text"
+      placeholder="Search..."
+      className="search-input"
+    />
+    <button
+      onclick={() => {
+        // Focus the input when button is clicked
+        searchInputRef.current?.focus();
+      }}
+    >
+      Focus
+    </button>
+    <button
+      onclick={() => {
+        // Get and log the current value
+        const value = searchInputRef.current?.value;
+        console.log('Search value:', value);
+      }}
+    >
+      Search
+    </button>
+    <button
+      onclick={() => {
+        // Clear the input
+        if (searchInputRef.current) {
+          searchInputRef.current.value = '';
+          searchInputRef.current.focus();
+        }
+      }}
+    >
+      Clear
+    </button>
+  </div>
+);
+
+render('#app', SearchBar());
+
+// Using refs with lifecycle hooks
+const videoRef = createRef<HTMLVideoElement>();
+
+const VideoPlayer = () => (
+  <div
+    onmount={() => {
+      // Auto-play when mounted
+      videoRef.current?.play();
+    }}
+    onunmount={() => {
+      // Cleanup when unmounted
+      videoRef.current?.pause();
+    }}
+  >
+    <video ref={videoRef} src="/video.mp4" />
+    <button onclick={() => videoRef.current?.play()}>Play</button>
+    <button onclick={() => videoRef.current?.pause()}>Pause</button>
+  </div>
+);
+
+// Multiple refs for complex components
+const formRefs = {
+  email: createRef<HTMLInputElement>(),
+  password: createRef<HTMLInputElement>(),
+  submit: createRef<HTMLButtonElement>()
+};
+
+const LoginForm = () => (
+  <form
+    onsubmit={(e) => {
+      e.preventDefault();
+      const email = formRefs.email.current?.value;
+      const password = formRefs.password.current?.value;
+      console.log('Login:', { email, password });
+    }}
+  >
+    <input ref={formRefs.email} type="email" name="email" />
+    <input ref={formRefs.password} type="password" name="password" />
+    <button ref={formRefs.submit} type="submit">Login</button>
+  </form>
+);
 ```

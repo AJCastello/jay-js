@@ -59,5 +59,7 @@ export function setLazyOptions(options: Partial<TLazyOptions>): void {
 		}
 	}
 	Object.assign(lazyOptions, options);
-	configChangeListeners.forEach((listener) => listener(lazyOptions));
+	for (const listener of configChangeListeners) {
+		listener(lazyOptions);
+	}
 }

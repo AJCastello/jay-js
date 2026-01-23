@@ -15,7 +15,7 @@ import type { TLazyOptions } from "../types.js";
  * - Idle detection to pause collection when app is inactive
  * - Dynamic configuration through lazyOptions
  */
-export class ModuleCollector {
+class ModuleCollector {
 	private static instance: ModuleCollector | null = null;
 	private collectorInterval: ReturnType<typeof setInterval> | null = null;
 	private idleTime = 0;
@@ -171,4 +171,4 @@ export class ModuleCollector {
 	}
 }
 
-ModuleCollector.getInstance();
+export const moduleCollector = ModuleCollector.getInstance();

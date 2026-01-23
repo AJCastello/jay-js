@@ -1,4 +1,5 @@
-import { List, type TBaseTagMap } from "@jay-js/elements";
+import { List } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TSteps } from "./steps.types";
 

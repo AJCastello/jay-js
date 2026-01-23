@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import * as yup from "yup";
 import { z } from "zod";
 import { yupResolver, zodResolver } from "../index.js";
@@ -194,6 +195,7 @@ describe("Form Resolvers", () => {
 				temCartaoCredito: yup.boolean(),
 				numeroCartao: yup.string().when("temCartaoCredito", {
 					is: true,
+					// biome-ignore lint/suspicious/noThenProperty: Yup schema requires 'then' property for conditional validation
 					then: () => yup.string().required("Card number is required when you have a card"),
 				}),
 			});

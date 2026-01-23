@@ -2,7 +2,7 @@
  * Represents a route configuration in the routing system
  * @typedef {Object} TRoute
  * @property {string} path - The URL path for the route
- * @property {Function|HTMLElement|DocumentFragment|undefined} element - The element or function that returns an element to render for this route
+ * @property {Function|HTMLElement|DocumentFragment|JSX.Element|undefined} element - The element or function that returns an element to render for this route
  * @property {HTMLElement|string} [target] - The DOM element or selector where the route content will be rendered
  * @property {boolean} [layout] - Whether this route serves as a layout for child routes
  * @property {Array<TRoute>} [children] - Child routes nested under this route
@@ -16,9 +16,11 @@
 export type TRoute = {
 	path: string;
 	element?:
-		| (HTMLElement | DocumentFragment)
-		| ((params?: any) => HTMLElement | DocumentFragment)
-		| ((params?: any) => Promise<HTMLElement | DocumentFragment>)
+		| HTMLElement
+		| DocumentFragment
+		| Promise<HTMLElement>
+		| (() => HTMLElement | DocumentFragment | Promise<HTMLElement>)
+		| ((params?: any) => HTMLElement | DocumentFragment | Promise<HTMLElement>)
 		| undefined;
 	target?: HTMLElement | string;
 	layout?: boolean;

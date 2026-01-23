@@ -14,7 +14,8 @@
     "strict": true,
     "noImplicitAny": true,
     "types": [
-      "node"
+      "node",
+      "vitest/globals"
     ],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

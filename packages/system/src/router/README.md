@@ -7,10 +7,11 @@ A lightweight, flexible routing library for client-side single-page applications
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [API Reference](#api-reference)
-  - [Router](#router)
-  - [Navigate](#navigate)
+  - [createRouter](#createrouter)
+  - [navigate](#navigate)
   - [beforeNavigate](#beforenavigate)
   - [getParams](#getparams)
+  - [Outlet](#outlet)
   - [routerDefineOptions](#routerdefineoptions)
 - [Type Definitions](#type-definitions)
   - [TRoute](#troute)
@@ -18,15 +19,16 @@ A lightweight, flexible routing library for client-side single-page applications
   - [TRouterOptions](#trouteroptions)
 - [Advanced Usage](#advanced-usage)
   - [Path Pattern Syntax](#path-pattern-syntax)
-  - [LazyModule Integration](#lazy-module-integration)
+  - [LazyModule Integration](#lazymodule-integration)
   - [Route Guards](#route-guards)
-  - [Layouts](#layouts)
+  - [Layouts with Outlet](#layouts-with-outlet)
   - [Nested Routes](#nested-routes)
   - [Route Parameters](#route-parameters)
   - [Navigation Guards](#navigation-guards)
   - [Navigation Hooks](#navigation-hooks)
   - [Route Metadata](#route-metadata)
 - [Examples](#examples)
+- [Migration from Previous Version](#migration-from-previous-version)
 
 ## Installation
 
@@ -37,10 +39,10 @@ npm install @jay-js/system
 ## Quick Start
 
 ```typescript
-import { Router, Navigate } from "@jay-js/system";
+import { createRouter, navigate } from "@jay-js/system";
 
 // Define your routes
-Router(
+createRouter(
   [
     {
       path: "/",
@@ -77,19 +79,19 @@ Router(
 document.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
-    Navigate(link.getAttribute("href"));
+    navigate(link.getAttribute("href"));
   });
 });
 ```
 
 ## API Reference
 
-### Router
+### createRouter
 
 The main function to initialize the routing system.
 
 ```typescript
-Router(routes: Array<TRoute>, options?: TRouterOptions): void
+createRouter(routes: Array<TRoute>, options?: TRouterOptions): void
 ```
 
 #### Parameters
@@ -100,12 +102,11 @@ Router(routes: Array<TRoute>, options?: TRouterOptions): void
 #### Example
 
 ```typescript
-Router(
+createRouter(
   [
     {
       path: "/",
       element: () => createHomeComponent(),
-      target: "#main-content",
     },
     {
       path: "/users/:id",
@@ -113,18 +114,19 @@ Router(
     },
   ],
   {
+    target: "#main-content",
     prefix: "/dashboard",
     onError: (err) => showErrorNotification(err.message),
   }
 );
 ```
 
-### Navigate
+### navigate
 
 Programmatically navigate to a different route without page reload.
 
 ```typescript
-Navigate(path: string): void
+navigate(path: string): Promise<void>
 ```
 
 #### Parameters
@@ -136,7 +138,7 @@ Navigate(path: string): void
 ```typescript
 // Navigate to about page
 document.getElementById("about-btn").addEventListener("click", () => {
-  Navigate("/about");
+  navigate("/about");
 });
 
 // With a configured prefix of '/app', this navigates to '/app/about'
@@ -144,7 +146,7 @@ document.getElementById("about-btn").addEventListener("click", () => {
 
 ### beforeNavigate
 
-Register a function that runs before the next navigation attempt, allowing you to interrupt navigation when necessary.
+Register a function that runs before the next navigation attempt, allowing you to interrupt navigation when necessary. The guard function is automatically removed after being executed once.
 
 ```typescript
 beforeNavigate(guardFn: () => boolean | Promise<boolean>): () => void
@@ -153,7 +155,6 @@ beforeNavigate(guardFn: () => boolean | Promise<boolean>): () => void
 #### Parameters
 
 - `guardFn`: Function that returns a boolean or Promise<boolean> indicating whether navigation should proceed
-- `options`: (Optional) Additional options for future extensions
 
 #### Returns
 
@@ -162,10 +163,10 @@ beforeNavigate(guardFn: () => boolean | Promise<boolean>): () => void
 #### Example
 
 ```typescript
-import { beforeNavigate, Navigate, selector } from "@jay-js/system";
+import { beforeNavigate, navigate } from "@jay-js/system";
 
 // Detect unsaved form changes and confirm before navigating away
-const form = selector("form");
+const form = document.querySelector("form");
 
 let isDirty = false;
 
@@ -208,6 +209,80 @@ const { id, filter } = getParams();
 // URL: '/users/123/posts/456?sort=newest'
 const { userId, postId, sort } = getParams();
 // userId = '123', postId = '456', sort = 'newest'
+```
+
+### Outlet
+
+Creates a placeholder element for rendering child routes in layouts. Used with nested routes to specify where child content should be rendered.
+
+```typescript
+Outlet(): HTMLDivElement
+```
+
+#### Returns
+
+- A div element with `display: contents` and `data-router="outlet"` attribute
+
+#### Example
+
+```typescript
+import { createRouter, Outlet } from "@jay-js/system";
+
+// Layout component with outlet
+function AdminLayout() {
+  const layout = document.createElement("div");
+  layout.className = "admin-layout";
+
+  const nav = document.createElement("nav");
+  nav.textContent = "Admin Navigation";
+
+  const main = document.createElement("main");
+  main.appendChild(Outlet());
+
+  layout.appendChild(nav);
+  layout.appendChild(main);
+
+  return layout;
+}
+
+createRouter([
+  {
+    path: "/admin",
+    element: AdminLayout,
+    layout: true,
+    children: [
+      { path: "/dashboard", element: () => createDashboard() },
+      { path: "/users", element: () => createUsersList() }
+    ]
+  }
+], { target: "#app" });
+```
+
+With JSX:
+
+```tsx
+import { createRouter, Outlet } from "@jay-js/system";
+
+const AdminLayout = () => (
+  <div class="admin-layout">
+    <nav>Admin Navigation</nav>
+    <main>
+      <Outlet />
+    </main>
+  </div>
+);
+
+createRouter([
+  {
+    path: "/admin",
+    element: () => <AdminLayout />,
+    layout: true,
+    children: [
+      { path: "/dashboard", element: () => <Dashboard /> },
+      { path: "/users", element: () => <UsersList /> }
+    ]
+  }
+], { target: "#app" });
 ```
 
 ### routerDefineOptions
@@ -274,8 +349,6 @@ type TRoute = {
 type TRouteInstance = {
   id: string;
   parentLayoutId?: string;
-  pattern?: RegExp;
-  keys?: Key[];
 } & TRoute;
 ```
 
@@ -380,9 +453,7 @@ The router supports integration with the LazyModule system for efficient lazy lo
     theme: 'dark',
     showSidebar: true
   },
-  loader: Box({
-    className: "skeleton-loader animate-pulse"
-  })
+  loader: createSkeletonLoader()
 }
 ```
 
@@ -396,21 +467,21 @@ This approach offers several benefits:
 #### Example with LazyModule
 
 ```typescript
-import { Router } from "@jay-js/system";
+import { createRouter } from "@jay-js/system";
 
 // Create a reusable loading component
 function createSkeletonLoader() {
-  return Box({
-    className: "skeleton-loader",
-    children: Array.from({ length: 4 }).map(
-      Box({
-        className: "skeleton-item",
-      })
-    ),
-  });
+  const loader = document.createElement("div");
+  loader.className = "skeleton-loader";
+  loader.innerHTML = `
+    <div class="skeleton-item"></div>
+    <div class="skeleton-item"></div>
+    <div class="skeleton-item"></div>
+  `;
+  return loader;
 }
 
-Router(
+createRouter(
   [
     {
       path: "/",
@@ -445,7 +516,7 @@ Router(
 Route guards provide a way to control access to routes based on certain conditions. Guards are functions that return a boolean value - `true` to allow navigation or `false` to prevent it. If a guard throws an error, the router will trigger the `onError` callback.
 
 ```typescript
-import { Router, Navigate } from "@jay-js/system";
+import { createRouter, navigate } from "@jay-js/system";
 
 // Authentication service example
 const authService = {
@@ -473,7 +544,7 @@ const authService = {
 function authGuard(route) {
   if (!authService.isAuthenticated) {
     // Could redirect here
-    Navigate("/login");
+    navigate("/login");
     return false;
   }
   return true;
@@ -487,7 +558,7 @@ function adminGuard(route) {
 }
 
 // Router with protected routes
-Router(
+createRouter(
   [
     {
       path: "/",
@@ -509,6 +580,7 @@ Router(
     },
   ],
   {
+    target: "#app",
     onError: (error) => {
       // Handle errors from guards
       displayErrorMessage(error.message);
@@ -518,15 +590,36 @@ Router(
 );
 ```
 
-### Layouts
+### Layouts with Outlet
 
-Layouts allow you to create a persistent UI structure across multiple routes.
+Layouts allow you to create a persistent UI structure across multiple routes. Use the `Outlet` component to specify where child content should be rendered.
 
 ```typescript
-Router([
+import { createRouter, Outlet } from "@jay-js/system";
+
+function AdminLayout() {
+  const layout = document.createElement("div");
+  layout.className = "admin-layout";
+
+  const nav = document.createElement("nav");
+  nav.innerHTML = `
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/users">Users</a>
+  `;
+
+  const main = document.createElement("main");
+  main.appendChild(Outlet());
+
+  layout.appendChild(nav);
+  layout.appendChild(main);
+
+  return layout;
+}
+
+createRouter([
   {
     path: "/admin",
-    element: () => createAdminLayout(),
+    element: AdminLayout,
     layout: true,
     children: [
       {
@@ -539,7 +632,41 @@ Router([
       },
     ],
   },
-]);
+], { target: "#app" });
+```
+
+With JSX:
+
+```tsx
+import { createRouter, navigate, Outlet } from "@jay-js/system";
+
+const AdminLayout = () => (
+  <div class="admin-layout">
+    <nav>
+      <a href="/admin/dashboard" onclick={(e) => { e.preventDefault(); navigate("/admin/dashboard"); }}>
+        Dashboard
+      </a>
+      <a href="/admin/users" onclick={(e) => { e.preventDefault(); navigate("/admin/users"); }}>
+        Users
+      </a>
+    </nav>
+    <main>
+      <Outlet />
+    </main>
+  </div>
+);
+
+createRouter([
+  {
+    path: "/admin",
+    element: () => <AdminLayout />,
+    layout: true,
+    children: [
+      { path: "/dashboard", element: () => <Dashboard /> },
+      { path: "/users", element: () => <Users /> }
+    ]
+  }
+], { target: "#app" });
 ```
 
 ### Nested Routes
@@ -547,7 +674,7 @@ Router([
 Nested routes allow you to organize your routes hierarchically.
 
 ```typescript
-Router([
+createRouter([
   {
     path: "/products",
     element: () => createProductsPage(),
@@ -570,7 +697,9 @@ Router([
 Define dynamic parts of a route path using various parameter syntax options.
 
 ```typescript
-Router([
+import { createRouter, getParams } from "@jay-js/system";
+
+createRouter([
   // Basic parameter
   {
     path: "/users/:id",
@@ -605,7 +734,7 @@ Router([
 Use `beforeNavigate` to protect navigation with custom logic:
 
 ```typescript
-import { beforeNavigate, Navigate } from "@jay-js/system";
+import { beforeNavigate, navigate } from "@jay-js/system";
 
 // Form with unsaved changes
 function setupFormProtection(formElement) {
@@ -616,6 +745,7 @@ function setupFormProtection(formElement) {
   });
 
   // Guard is only applied for the next navigation attempt
+  // and is automatically removed after execution
   beforeNavigate(() => {
     if (hasChanges) {
       const wantsToProceed = confirm("Discard unsaved changes?");
@@ -639,7 +769,7 @@ function setupFormProtection(formElement) {
 Configure hooks to run before navigation.
 
 ```typescript
-Router(
+createRouter(
   [
     // Routes definition
   ],
@@ -647,7 +777,7 @@ Router(
     beforeResolve: (route) => {
       // Run before a route is resolved
       if (route.path.includes("/admin") && !isUserLoggedIn()) {
-        Navigate("/login"); // Redirect to login
+        navigate("/login"); // Redirect to login
         return false; // Prevent original navigation
       }
       return true; // Allow navigation to proceed
@@ -661,7 +791,7 @@ Router(
 Routes can include custom metadata that can be used for various purposes in your application. Metadata is preserved during route processing and can be accessed when working with routes.
 
 ```typescript
-Router([
+createRouter([
   {
     path: "/dashboard",
     element: () => createDashboardComponent(),
@@ -700,12 +830,14 @@ Metadata can be used for various purposes:
 - **Setting document title**: Update the page title based on the current route
 
   ```typescript
-  import { getPotentialMatch } from "@jay-js/system";
+  import { resolvedRoutes } from "@jay-js/system";
 
   function updatePageTitle() {
-    const match = getPotentialMatch();
-    if (match.route?.metadata?.title) {
-      document.title = match.route.metadata.title;
+    for (const route of resolvedRoutes.values()) {
+      if (route.metadata?.title) {
+        document.title = route.metadata.title;
+        break;
+      }
     }
   }
 
@@ -750,7 +882,7 @@ Metadata can be used for various purposes:
 ### Basic SPA with Advanced Routing
 
 ```typescript
-import { Router, Navigate, getParams } from "@jay-js/system";
+import { createRouter, navigate, getParams } from "@jay-js/system";
 
 // Helper function to create page elements
 function createPage(title, content) {
@@ -768,17 +900,15 @@ function createPage(title, content) {
 }
 
 // Define routes with advanced patterns
-Router(
+createRouter(
   [
     {
       path: "/",
       element: () => createPage("Home", "Welcome to our website!"),
-      target: "#app",
     },
     {
       path: "/about",
       element: () => createPage("About", "Learn about our company history."),
-      target: "#app",
     },
     {
       path: "/products/:category?",
@@ -791,7 +921,6 @@ Router(
             : "Browse all product categories"
         );
       },
-      target: "#app",
     },
     {
       path: "/products/:category/:id(\\d+)",
@@ -802,7 +931,6 @@ Router(
           `You are viewing ${category} product #${id}`
         );
       },
-      target: "#app",
     },
     {
       path: "/blog/:year(\\d{4})/:month(\\d{2})/:slug",
@@ -813,15 +941,14 @@ Router(
           `Reading article "${slug}" from ${month}/${year}`
         );
       },
-      target: "#app",
     },
     {
       path: "*",
       element: () => createPage("Not Found", "Page not found"),
-      target: "#app",
     },
   ],
   {
+    target: "#app",
     onError: (err) => {
       console.error("Router error:", err);
     },
@@ -847,7 +974,7 @@ document.addEventListener("DOMContentLoaded", () => {
     a.textContent = link.text;
     a.addEventListener("click", (e) => {
       e.preventDefault();
-      Navigate(link.href);
+      navigate(link.href);
     });
     nav.appendChild(a);
     nav.appendChild(document.createTextNode(" | "));
@@ -855,4 +982,97 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.insertBefore(nav, document.getElementById("app"));
 });
+```
+
+### JSX Integration
+
+```tsx
+import { createRouter, navigate, getParams, Outlet } from "@jay-js/system";
+
+// Components
+const Home = () => <div><h1>Home</h1><p>Welcome!</p></div>;
+const About = () => <div><h1>About</h1><p>About us</p></div>;
+
+const UserProfile = () => {
+  const { id } = getParams();
+  return <div><h1>User Profile</h1><p>User ID: {id}</p></div>;
+};
+
+const AdminLayout = () => (
+  <div class="admin">
+    <nav>
+      <a href="/admin/dashboard" onclick={(e) => { e.preventDefault(); navigate("/admin/dashboard"); }}>
+        Dashboard
+      </a>
+      <a href="/admin/users" onclick={(e) => { e.preventDefault(); navigate("/admin/users"); }}>
+        Users
+      </a>
+    </nav>
+    <main><Outlet /></main>
+  </div>
+);
+
+const Dashboard = () => <div><h2>Dashboard</h2></div>;
+const UsersList = () => <div><h2>Users List</h2></div>;
+
+// Router setup
+createRouter([
+  { path: "/", element: () => <Home /> },
+  { path: "/about", element: () => <About /> },
+  { path: "/user/:id", element: () => <UserProfile /> },
+  {
+    path: "/admin",
+    element: () => <AdminLayout />,
+    layout: true,
+    children: [
+      { path: "/dashboard", element: () => <Dashboard /> },
+      { path: "/users", element: () => <UsersList /> }
+    ]
+  }
+], { target: "#app" });
+```
+
+## Migration from Previous Version
+
+If you're upgrading from a previous version of the router, here are the key changes:
+
+### Function Names
+
+| Old API | New API |
+|---------|---------|
+| `Router(routes, options)` | `createRouter(routes, options)` |
+| `Navigate(path)` | `navigate(path)` |
+
+### New Features
+
+- **`Outlet`**: New component for specifying where child routes should render in layouts
+- **Async Navigation Guards**: `beforeNavigate` guards are now automatically removed after execution
+- **`navigate` is async**: Returns a Promise that resolves after navigation completes
+
+### Example Migration
+
+**Before:**
+
+```typescript
+import { Router, Navigate } from "@jay-js/system";
+
+Router([
+  { path: "/", element: () => <Home /> },
+  { path: "/about", element: () => <About /> }
+], { target: "#app" });
+
+Navigate("/about");
+```
+
+**After:**
+
+```typescript
+import { createRouter, navigate } from "@jay-js/system";
+
+createRouter([
+  { path: "/", element: () => <Home /> },
+  { path: "/about", element: () => <About /> }
+], { target: "#app" });
+
+navigate("/about");
 ```

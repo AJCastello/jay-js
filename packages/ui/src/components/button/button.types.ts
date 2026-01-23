@@ -1,4 +1,4 @@
-import type { TBase, TBaseTagMap } from "@jay-js/elements";
+import type { TBase, TBaseTagMap } from "@jay-js/system";
 
 export type TButton<T extends TBaseTagMap = "button"> = {
 	variant?: "btn-outline" | "btn-dash" | "btn-soft" | "btn-ghost" | "btn-link" | "btn-active";

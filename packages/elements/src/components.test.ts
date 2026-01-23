@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import { Box } from "./box";
 import { Button } from "./button";
 import { Form } from "./form";

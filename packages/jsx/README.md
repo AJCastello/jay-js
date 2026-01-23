@@ -1,42 +1,61 @@
 # @jay-js/jsx
 
-> A JSX runtime implementation for Jay JS
+## DEPRECATED
 
-## Table of Contents
+> **Deprecated since January 14, 2026**
 
-- [Installation](#installation)
-- [Overview](#overview)
-- [Usage](#usage)
-- [API Reference](#api-reference)
-  - [JSX Functions](#jsx-functions)
-  - [Types](#types)
-- [Examples](#examples)
-- [Contributing](#contributing)
+**DO NOT USE THIS PACKAGE**
 
-## Installation
+This package has been deprecated. The JSX runtime is now integrated directly into `@jay-js/system`.
+
+---
+
+## Migration Guide
+
+### What Changed
+
+The JSX runtime (`jsx-runtime` and `jsx-dev-runtime`) has been moved from this standalone package into `@jay-js/system`. This eliminates the need for a separate JSX package.
+
+| Before | After |
+|--------|-------|
+| `@jay-js/jsx` | `@jay-js/system` |
+| Separate package | Native integration |
+
+### Step 1: Update Dependencies
 
 ```bash
-npm install @jay-js/jsx
-# or
-yarn add @jay-js/jsx
-# or
-pnpm add @jay-js/jsx
+# Remove deprecated package
+npm uninstall @jay-js/jsx
+
+# Ensure @jay-js/system is up to date
+npm install @jay-js/system@latest
 ```
 
-## Overview
+### Step 2: Update vite.config.js
 
-`@jay-js/jsx` provides a JSX runtime for Jay JS applications, allowing you to use JSX syntax to create Jay JS components. The package includes:
+**Before:**
+```javascript
+export default defineConfig({
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "@jay-js/jsx",
+  },
+});
+```
 
-- JSX runtime functions for production and development environments
-- TypeScript declarations for JSX
-- Support for automatic JSX transform
+**After:**
+```javascript
+export default defineConfig({
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "@jay-js/system",
+  },
+});
+```
 
-This package integrates with `@jay-js/elements` to render HTML elements and components in the browser.
+### Step 3: Update tsconfig.json
 
-## Usage
-
-Configure your `tsconfig.json` to use the Jay JS JSX runtime with automatic transform:
-
+**Before:**
 ```json
 {
   "compilerOptions": {
@@ -46,98 +65,28 @@ Configure your `tsconfig.json` to use the Jay JS JSX runtime with automatic tran
 }
 ```
 
-This configuration enables the modern automatic JSX transform, which means you don't need to manually import JSX functions in your files.
-
-## API Reference
-
-### JSX Functions
-
-#### `jsx(tag, props)`
-
-The main JSX transformation function for production environments.
-
-**Parameters:**
-- `tag`: `string | Function` - The HTML tag name or component function
-- `props`: `object` - The properties and attributes for the element
-
-**Returns:** `HTMLElement | Promise<HTMLElement>`
-
-#### `jsxDEV(tag, props, key, isStaticChildren, source, self)`
-
-The JSX transformation function for development environments.
-
-**Parameters:**
-- `tag`: `string | Function` - The HTML tag name or component function
-- `props`: `object` - The properties and attributes for the element
-- `key`: `string | null` - The key for the element
-- `isStaticChildren`: `boolean` - Whether the children are static
-- `source`: `any` - Source information for debugging
-- `self`: `any` - Self reference for debugging
-
-**Returns:** `HTMLElement | Promise<HTMLElement>`
-
-#### `Fragment`
-
-A special component for grouping elements without adding extra nodes to the DOM.
-
-**Example:**
-```tsx
-function MyComponent() {
-  return (
-    <>
-      <h1>Title</h1>
-      <p>Paragraph</p>
-    </>
-  );
-}
-```
-
-### Types
-
-The package provides TypeScript declarations for JSX elements:
-
-```typescript
-declare namespace JSX {
-  interface IntrinsicElements {
-    // HTML elements
-    div: TBase<"div">;
-    span: TBase<"span">;
-    // ... and all other HTML elements
-    [elemName: string]: any;
+**After:**
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@jay-js/system"
   }
 }
 ```
 
-## Examples
+---
 
-### Basic Component
+## Summary
 
-```tsx
-function Greeting({ name }) {
-  return <h1>Hello, {name}!</h1>;
-}
+- This package is no longer maintained
+- All functionality is now in `@jay-js/system`
+- New projects should use `@jay-js/system` directly
+- Existing projects should migrate immediately
 
-document.body.appendChild(<Greeting name="World" />);
-```
+---
 
-### Using Fragment
+## References
 
-```tsx
-function ItemList({ items }) {
-  return (
-    <>
-      {items.map(item => (
-        <li key={item.id}>{item.name}</li>
-      ))}
-    </>
-  );
-}
-
-const list = document.createElement('ul');
-list.appendChild(<ItemList items={[{id: 1, name: 'Item 1'}, {id: 2, name: 'Item 2'}]} />);
-document.body.appendChild(list);
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- Replacement: [@jay-js/system](https://www.npmjs.com/package/@jay-js/system)
+- Deprecation commit: `22f6455`

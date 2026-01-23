@@ -1,5 +1,5 @@
-import { Base, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
+import { Base, type TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
 import type { TCard } from "./card.types";
 
 export function Card<T extends TBaseTagMap = "div">(

@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TTypography } from "./typography.types";
 
 export function Typography<T extends TBaseTagMap = "p">(

@@ -13,15 +13,15 @@
  */
 export { i18nDefineOptions } from "./core/configuration.js";
 /**
+ * Function for accessing internationalized strings with type safety
+ * @see ./hooks/use-i18n.js for detailed documentation
+ */
+export { getI18n } from "./core/get-i18n.js";
+/**
  * Functions for managing the active language
  * @see ./core/language-manager.js for detailed documentation
  */
 export { getCurrentLocale, i18nProvider, initLanguage, setLanguage } from "./core/language-manager.js";
-/**
- * React hook for accessing internationalized strings with type safety
- * @see ./hooks/use-i18n.js for detailed documentation
- */
-export { useI18n } from "./hooks/use-i18n.js";
 
 /**
  * Type definitions for the internationalization system

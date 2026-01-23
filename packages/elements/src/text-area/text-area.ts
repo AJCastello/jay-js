@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TTextArea } from "./text-area.types";
 
 export function TextArea<T extends TBaseTagMap = "textarea">(

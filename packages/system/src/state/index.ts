@@ -1,4 +1,4 @@
-export { State } from "./core/state.js";
+export { state } from "./core/state.js";
 export { subscriberManager } from "./core/subscriber.js";
 export * from "./types.js";
-export { CombineStates, Derived, Effect, PersistentState, Values } from "./utils/helpers.js";
+export { derived, effect, REACTIVE_MARKER, SETVALUE_MARKER, DERIVED_MARKER, values } from "./utils/helpers.js";

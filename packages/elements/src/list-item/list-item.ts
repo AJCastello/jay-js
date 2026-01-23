@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TListItem } from "./list-item.types";
 
 export function ListItem<T extends TBaseTagMap = "li">(

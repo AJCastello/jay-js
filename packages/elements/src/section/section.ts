@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TSection } from "./section.types";
 
 export function Section<T extends TBaseTagMap = "section">(

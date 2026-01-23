@@ -1,7 +1,7 @@
-import { vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { TRoute } from "../../types";
 import { resolvedRoutes, routerOptions } from "../configuration";
-import { Router } from "../router";
+import { createRouter } from "../create-router";
 
 // Mock the history API
 const mockPushState = vi.fn();
@@ -99,7 +99,7 @@ describe("Router - nested routes with same path", () => {
 		];
 
 		// Initialize router
-		Router(routes, { target });
+		createRouter(routes, { target });
 
 		// Verificar se as rotas foram registradas corretamente
 		expect(resolvedRoutes.size).toBe(3); // Layout, Home e About
@@ -145,7 +145,7 @@ describe("Router - nested routes with same path", () => {
 		];
 
 		// Initialize router
-		Router(routes, { target });
+		createRouter(routes, { target });
 
 		// Verificar se as rotas foram registradas corretamente
 		expect(resolvedRoutes.size).toBe(3); // Layout, Catalog e Product

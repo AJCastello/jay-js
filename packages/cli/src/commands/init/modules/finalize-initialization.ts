@@ -7,6 +7,9 @@ export async function finalizeInitialization(options: IJayJSCLIInitOptions) {
 	const projectRoot = `./${toKebabCase(options.projectName)}`;
 	if (options.javascriptVariant === "ts") {
 		packageFile.devDependencies.typescript = packageVersion.typescript;
+		// Configure JSX for TypeScript projects
+		tsConfigFile.compilerOptions.jsx = "react-jsx";
+		tsConfigFile.compilerOptions.jsxImportSource = "@jay-js/system";
 		await createFile(`${projectRoot}/tsconfig.json`, JSON.stringify(tsConfigFile, null, 2));
 	}
 

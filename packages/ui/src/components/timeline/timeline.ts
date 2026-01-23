@@ -1,6 +1,7 @@
-import { List, type TBaseTagMap } from "@jay-js/elements";
-import { cn } from "../../utils/cn";
-import type { TTimeline } from "./timeline.types.js";
+import { List } from "@jay-js/elements";
+import type { TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
+import type { TTimeline } from "./timeline.types";
 
 export function Timeline<T extends TBaseTagMap = "ul">(
 	{ direction, compact, ...props }: TTimeline<T> = { tag: "ul" },

@@ -1,5 +1,3 @@
-import { uniKey } from "../../utils";
-import { selector } from "../../utils/dom/query";
 import type { TRoute, TRouteInstance } from "../types";
 import { routerOptions } from "./configuration";
 
@@ -39,12 +37,12 @@ export function Routes(inputRoutes: Array<TRoute>, target?: HTMLElement | string
 						.replace(/\/+$/, "")
 						.replace(/\/{2,}/g, "/");
 
-			const routeId = uniKey();
+			const routeId = crypto.randomUUID();
 
 			if (route.element || route.import) {
 				let routeTarget = route.target || target || document.body;
 				if (typeof routeTarget === "string") {
-					const targetElement = selector(routeTarget);
+					const targetElement = document.querySelector(routeTarget) as HTMLElement | null;
 					if (!targetElement && routerOptions.onError) {
 						routerOptions.onError(new Error(`Target element not found: ${routeTarget}`, { cause: "invalid-target" }));
 						routeTarget = document.body;

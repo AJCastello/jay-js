@@ -67,12 +67,6 @@ export function registerInitCommand(program: Command) {
 				//   default: "en-us",
 				// },
 				{
-					type: "confirm",
-					name: "useJSX",
-					message: "Would you like to use JSX?",
-					default: false,
-				},
-				{
 					type: "list",
 					name: "installDependencies",
 					message: "Install dependencies?",

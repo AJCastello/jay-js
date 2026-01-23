@@ -1,7 +1,7 @@
-import { Base, Box, type TBaseTagMap, Typography } from "@jay-js/elements";
-import { Effect, render, State } from "@jay-js/system";
-import { cn } from "../../utils/cn";
-import { DatePicker } from "../date-picker/date-picker";
+import { Box, Typography } from "@jay-js/elements";
+import { Base, render, type TBaseTagMap } from "@jay-js/system";
+import { cn } from "../../utils";
+import { DatePicker } from "../date-picker";
 import type { TDateRangePicker } from "./date-range-picker.types";
 
 export function DateRangePicker<T extends TBaseTagMap = "div">(
@@ -27,26 +27,41 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		...props
 	}: TDateRangePicker<T> = { tag: "div" },
 ): HTMLElementTagNameMap[T] {
-	const startDate = State<Date | null>(startValue || null);
-	const endDate = State<Date | null>(endValue || null);
-	const startError = State<string | null>(null);
-	const endError = State<string | null>(null);
+	let startDate: Date | null = startValue || null;
+	let endDate: Date | null = endValue || null;
+	let currentRangeStart: Date | null = startValue || null;
+	let currentRangeEnd: Date | null = endValue || null;
 
 	const container = Base({
 		tag: "div",
 		...props,
 		className: cn("flex", layout === "horizontal" ? "flex-row" : "flex-col", gap, "w-full", props.className),
-		onunmount: () => {
-			startDate.clear();
-			endDate.clear();
-			startError.clear();
-			endError.clear();
-		},
 	}) as HTMLDivElement;
 
+	const startErrorElement = Typography({
+		tag: "span",
+		className: "label-text-alt text-error mt-1",
+		style: { display: "none" },
+	});
+
+	const endErrorElement = Typography({
+		tag: "span",
+		className: "label-text-alt text-error mt-1",
+		style: { display: "none" },
+	});
+
+	function showError(element: HTMLElement, message: string) {
+		element.textContent = message;
+		element.style.display = "block";
+	}
+
+	function hideError(element: HTMLElement) {
+		element.style.display = "none";
+	}
+
 	function checkAndTriggerRange() {
-		const start = startDate.value;
-		const end = endDate.value;
+		const start = startDate;
+		const end = endDate;
 
 		if (start && end) {
 			if (validateRange && end < start) {
@@ -58,119 +73,97 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		}
 	}
 
+	function handleStartSelect(date: Date) {
+		startDate = date;
+		currentRangeStart = date;
+
+		if (onStartChange) {
+			onStartChange(new Date(date));
+		}
+
+		const end = endDate;
+		if (validateRange && end && date > end) {
+			showError(startErrorElement, "Data inicial não pode ser maior que a final");
+			return;
+		}
+
+		hideError(startErrorElement);
+		checkAndTriggerRange();
+		updateEndPicker();
+	}
+
+	function handleEndSelect(date: Date) {
+		endDate = date;
+		currentRangeEnd = date;
+
+		if (onEndChange) {
+			onEndChange(new Date(date));
+		}
+
+		const start = startDate;
+		if (validateRange && start && date < start) {
+			showError(endErrorElement, "Data final não pode ser menor que a inicial");
+			return;
+		}
+
+		hideError(endErrorElement);
+		checkAndTriggerRange();
+		updateStartPicker();
+	}
+
 	const startPickerContainer = Box({
 		className: cn("flex-1", "flex flex-col"),
 	}) as HTMLDivElement;
-
-	const startErrorElement = Typography({
-		tag: "span",
-		className: "label-text-alt text-error mt-1",
-		style: { display: "none" },
-	});
-
-	Effect(() => {
-		const error = startError.value;
-		if (error) {
-			startErrorElement.textContent = error;
-			startErrorElement.style.display = "block";
-		} else {
-			startErrorElement.style.display = "none";
-		}
-	});
-
-	Effect(() => {
-		const end = endDate.value;
-
-		const startPicker = DatePicker({
-			label: startLabel,
-			defaultDate: startValue || new Date(),
-			value: startValue,
-			onSelect: (date) => {
-				startDate.set(date);
-				if (onStartChange) {
-					onStartChange(new Date(date));
-				}
-
-				const end = endDate.value;
-				if (validateRange && end && date > end) {
-					startError.set("Data inicial não pode ser maior que a final");
-					return;
-				}
-
-				startError.set(null);
-				checkAndTriggerRange();
-			},
-			withTime,
-			minDate,
-			maxDate: validateRange && end ? end : maxDate,
-			color,
-			size,
-			disabled,
-			locale,
-			showToday,
-			rangeStart: startDate.value,
-			rangeEnd: end,
-		});
-
-		render(startPickerContainer, [startPicker, startErrorElement]);
-	});
 
 	const endPickerContainer = Box({
 		className: cn("flex-1", "flex flex-col"),
 	}) as HTMLDivElement;
 
-	const endErrorElement = Typography({
-		tag: "span",
-		className: "label-text-alt text-error mt-1",
-		style: { display: "none" },
-	});
+	function updateStartPicker() {
+		const startPicker = DatePicker({
+			label: startLabel,
+			defaultDate: startValue || new Date(),
+			value: startValue,
+			onSelect: handleStartSelect,
+			withTime,
+			minDate,
+			maxDate: validateRange && endDate ? endDate : maxDate,
+			color,
+			size,
+			disabled,
+			locale,
+			showToday,
+			rangeStart: currentRangeStart,
+			rangeEnd: currentRangeEnd,
+		});
 
-	Effect(() => {
-		const error = endError.value;
-		if (error) {
-			endErrorElement.textContent = error;
-			endErrorElement.style.display = "block";
-		} else {
-			endErrorElement.style.display = "none";
-		}
-	});
+		render(startPickerContainer, [startPicker, startErrorElement]);
+	}
 
-	Effect(() => {
-		const start = startDate.value;
-
+	function updateEndPicker() {
 		const endPicker = DatePicker({
 			label: endLabel,
 			defaultDate: endValue || new Date(),
 			value: endValue,
-			onSelect: (date) => {
-				endDate.set(date);
-				if (onEndChange) {
-					onEndChange(new Date(date));
-				}
-
-				const start = startDate.value;
-				if (validateRange && start && date < start) {
-					endError.set("Data final não pode ser menor que a inicial");
-					return;
-				}
-
-				endError.set(null);
-				checkAndTriggerRange();
-			},
+			onSelect: handleEndSelect,
 			withTime,
-			minDate: validateRange && start ? start : minDate,
+			minDate: validateRange && startDate ? startDate : minDate,
 			maxDate,
 			color,
 			size,
 			disabled,
 			locale,
 			showToday,
-			rangeStart: start,
-			rangeEnd: endDate.value,
+			rangeStart: currentRangeStart,
+			rangeEnd: currentRangeEnd,
 		});
 
 		render(endPickerContainer, [endPicker, endErrorElement]);
-	});
+	}
+
+	updateStartPicker();
+	updateEndPicker();
+
 	render(container, [startPickerContainer, endPickerContainer]);
 
 	return container as HTMLElementTagNameMap[T];

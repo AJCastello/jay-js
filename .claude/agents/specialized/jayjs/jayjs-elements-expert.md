@@ -1,44 +1,52 @@
 ---
 name: jayjs-elements-expert
 description: |
-  MUST BE USED for developing, modifying, or extending elements in the @jay-js/elements package. Specializes in creating type-safe HTML element wrappers with lifecycle management, Tailwind CSS integration, and custom element registration.
-  
-  Core expertise:
-  - HTML element wrapper patterns and TypeScript typing
-  - Lifecycle management (onmount/onunmount) with custom elements
-  - Tailwind CSS class merging and styling strategies
-  - Promise-based children resolution and lazy loading
-  - Event handling patterns and reference systems
-  - Custom element registration and DOM lifecycle integration
-  - Element validation with Yup schemas
-  - Headless component architecture principles
+  **[DEPRECATED - DO NOT USE]**
 
-  Examples:
+  This agent is DEPRECATED as the @jay-js/elements package has been deprecated since January 14, 2026.
+
+  **What replaced it:**
+  - The framework now uses native JSX/TSX directly instead of function-based element creation
+  - All element functionality has been replaced by standard JSX/TSX syntax
+
+  **Use these agents instead:**
+  - **jayjs-system-expert**: For JSX runtime, components, and framework features
+  - **jayjs-ui-expert**: For UI components and styling
+
+  **DO NOT invoke this agent for new development.**
+
+  This file is kept for historical reference only.
+
+  Examples of INCORRECT usage (DO NOT DO THIS):
   - <example>
     Context: User wants to add a new form element
     user: "Add a new DatePicker element to the elements package"
-    assistant: "I'll use the jayjs-elements-expert to create a new DatePicker element following the established patterns in @jay-js/elements."
-    <commentary>Elements package requires specialized knowledge of Jay JS element patterns, lifecycle management, and Tailwind integration</commentary>
-  </example>
-  
-  - <example>
-    Context: User needs to modify existing element behavior
-    user: "Update the Button element to support loading states"
-    assistant: "I'll use the jayjs-elements-expert to enhance the Button element with loading state functionality."
-    <commentary>Modifying existing elements requires understanding of the established patterns and maintaining API consistency</commentary>
-  </example>
-  
-  - <example>
-    Context: User wants to fix element styling or Tailwind integration
-    user: "The Input element classes are not merging correctly with user-provided classes"
-    assistant: "I'll use the jayjs-elements-expert to investigate and fix the class merging issue in the Input element."
-    <commentary>Class merging and Tailwind integration are core specialties of this agent</commentary>
+    assistant: "The @jay-js/elements package is deprecated. I'll use jayjs-system-expert or jayjs-ui-expert instead to create a JSX/TSX component."
+    <commentary>NEVER use jayjs-elements-expert - the package is deprecated</commentary>
   </example>
 ---
 
 # Jay JS Elements Expert
 
-You are a specialist in the `@jay-js/elements` package, responsible for developing, maintaining, and extending type-safe HTML element wrappers for the Jay JS framework.
+## ⚠️ DEPRECATED - DO NOT USE ⚠️
+
+**This agent and the @jay-js/elements package have been DEPRECATED since January 14, 2026.**
+
+### Migration Information
+
+The `@jay-js/elements` package has been completely replaced by native JSX/TSX support in the Jay JS framework.
+
+**Instead of this agent, use:**
+- **jayjs-system-expert** - For JSX/TSX components, runtime features, and framework functionality
+- **jayjs-ui-expert** - For UI components and Tailwind CSS styling
+
+**What changed:**
+- ❌ Old: Function-based element creation (`Button({ ... })`)
+- ✅ New: Native JSX syntax (`<button>...</button>`)
+
+### Historical Context (Reference Only)
+
+~~You are a specialist in the `@jay-js/elements` package, responsible for developing, maintaining, and extending type-safe HTML element wrappers for the Jay JS framework.~~
 
 ## Package Context
 

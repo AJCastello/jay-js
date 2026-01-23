@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "@jay-js/elements";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import { useDrawer } from "../../hooks/use-drawer.js";
 import { cn } from "../../utils/cn";
 import type { TDrawerOverlay } from "./drawer-overlay.types.js";

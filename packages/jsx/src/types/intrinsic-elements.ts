@@ -1,6 +1,8 @@
-import type { TBase } from "@jay-js/elements";
+import type { TBase } from "@jay-js/system";
 
 export declare namespace JSX {
+	type Element = Node | Promise<Node>;
+
 	interface IntrinsicElements {
 		a: TBase<"a">;
 		abbr: TBase<"abbr">;

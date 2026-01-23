@@ -3,8 +3,9 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Key Features](#key-features)
+- [Quick Start](#quick-start)
 - [Architecture](#architecture)
-- [LazyModule Usage](#lazymodule-usage)
+- [Lazy Usage](#lazy-usage)
   - [Basic Usage](#basic-usage)
   - [Custom Loaders](#custom-loaders)
   - [Advanced Configurations](#advanced-configurations)
@@ -14,6 +15,8 @@
   - [Idle Detection](#idle-detection)
 - [Configuration](#configuration)
 - [API Reference](#api-reference)
+- [Router Integration](#router-integration)
+- [JSX Integration](#jsx-integration)
 - [Performance Considerations](#performance-considerations)
 - [Troubleshooting](#troubleshooting)
 
@@ -29,6 +32,20 @@ The Lazy Loading Module System is a sophisticated utility designed to optimize a
 - **Idle Detection**: Optimizes garbage collection based on user activity
 - **Configurable Behavior**: Adjustable thresholds and intervals for fine-tuning performance
 
+## Quick Start
+
+```typescript
+import { Lazy } from "@jay-js/system";
+
+// Basic lazy loading
+const MyComponent = Lazy({
+  module: "MyComponent",
+  import: () => import("./components/MyComponent")
+});
+
+document.getElementById("app").appendChild(MyComponent);
+```
+
 ## Architecture
 
 The system consists of several components working together:
@@ -37,30 +54,30 @@ The system consists of several components working together:
 2. **Module Collector**: Manages the lifecycle of imported modules
 3. **Type Definitions**: Provides TypeScript interfaces for system components
 
-## LazyModule Usage
+## Lazy Usage
 
-The `LazyModule` function is the primary API for lazy loading modules in your application. It provides a simple way to defer loading of modules until they are needed.
+The `Lazy` function is the primary API for lazy loading modules in your application. It provides a simple way to defer loading of modules until they are needed.
 
 ### Basic Usage
 
-Here's a simple example of using `LazyModule` to load a component:
+Here's a simple example of using `Lazy` to load a component:
 
-```javascript
-import { LazyModule } from "@jay-js/system";
+```typescript
+import { Lazy } from "@jay-js/system";
 
 // Function to create a lazy-loaded component with named export
 function createLazyComponent() {
-  return LazyModule({
+  return Lazy({
     module: "MyComponent", // Name of the exported module
-    import: () => import("./components/MyComponent.js")
+    import: () => import("./components/MyComponent")
   });
 }
 
 // Function to create a lazy-loaded component with default export
 function createLazyDefaultComponent() {
-  return LazyModule({
+  return Lazy({
     // No need to specify module name for default exports
-    import: () => import("./components/DefaultComponent.js")
+    import: () => import("./components/DefaultComponent")
   });
 }
 
@@ -74,8 +91,8 @@ container.appendChild(createLazyDefaultComponent());
 
 You can provide a custom loader element that will be displayed while the module is loading:
 
-```javascript
-import { LazyModule } from "@jay-js/system";
+```typescript
+import { Lazy } from "@jay-js/system";
 
 // Create a custom loader
 const createLoader = () => {
@@ -90,11 +107,11 @@ const createLoader = () => {
   return loader;
 };
 
-// Use the custom loader with LazyModule
+// Use the custom loader with Lazy
 function LazyUserProfile() {
-  return LazyModule({
+  return Lazy({
     module: "UserProfile",
-    import: () => import("./components/UserProfile.js")
+    import: () => import("./components/UserProfile")
   }, createLoader());
 }
 
@@ -104,10 +121,10 @@ document.getElementById("profile-container").appendChild(LazyUserProfile());
 
 ### Advanced Configurations
 
-You can pass additional options to the `LazyModule` function:
+You can pass additional options to the `Lazy` function:
 
-```javascript
-import { LazyModule, setLazyOptions } from "@jay-js/system";
+```typescript
+import { Lazy, setLazyOptions } from "@jay-js/system";
 
 // Configure global lazy loading options
 setLazyOptions({
@@ -117,9 +134,9 @@ setLazyOptions({
 
 // Create a lazy-loaded module with params and disable garbage collection
 function LazyDataTable() {
-  return LazyModule({
+  return Lazy({
     module: "DataTable",
-    import: () => import("./components/DataTable.js"),
+    import: () => import("./components/DataTable"),
     params: {
       data: fetchData(),
       pageSize: 10,
@@ -181,39 +198,111 @@ Configuration changes are applied dynamically without requiring application rest
 
 ## API Reference
 
-### LazyModule
+### Lazy
 
 ```typescript
-function LazyModule(lazy: ILazyModule, loader?: HTMLElement): HTMLElement
+function Lazy(lazy: TLazyModule, loader?: HTMLElement): HTMLElement
 
-interface ILazyModule {
-  module?: string;        // Name of the exported module (optional for default exports)
-  import: () => Promise<any>; // Dynamic import function
+type TLazyModule = {
+  module?: string;              // Name of the exported module (optional for default exports)
+  import: () => Promise<any>;   // Dynamic import function
   params?: Record<string, any>; // Props to pass to the module
-  collect?: boolean;     // Whether the module can be garbage collected
-}
+  collect?: boolean;            // Whether the module can be garbage collected (default: true)
+  loader?: HTMLElement | DocumentFragment; // Custom loader element
+};
 ```
 
-### ModuleCollector
+### setLazyOptions
 
 ```typescript
-// Get the singleton instance
-const collector = ModuleCollector.getInstance();
+import { setLazyOptions } from "@jay-js/system";
 
-// Manually dispose of the collector (rarely needed)
-collector.dispose();
-```
-
-### Configuration API
-
-```typescript
-import { setLazyOptions } from '@jay-js/system';
+type TLazyOptions = {
+  gcThreshold?: number;  // Time threshold for marking module as unused (ms)
+  gcInterval?: number;   // Time between collection cycles (ms)
+  defaultLoader?: HTMLElement | DocumentFragment; // Default loader for all lazy modules
+};
 
 // Configure the lazy loading system
 setLazyOptions({
-  gcThreshold: 300000, // 5 minutes
-  gcInterval: 60000    // 1 minute
+  gcThreshold: 300000, // 5 minutes (default)
+  gcInterval: 60000    // 1 minute (default)
 });
+```
+
+### moduleCollector
+
+```typescript
+import { moduleCollector } from "@jay-js/system";
+
+// The collector is automatically initialized
+// Manually dispose (rarely needed)
+moduleCollector.dispose();
+```
+
+## Router Integration
+
+The `Lazy` function integrates seamlessly with the Jay JS Router for route-based code splitting:
+
+```typescript
+import { Router, Lazy } from "@jay-js/system";
+
+Router([
+  {
+    path: "/",
+    element: () => Lazy({
+      module: "HomePage",
+      import: () => import("./pages/HomePage")
+    }),
+    target: document.getElementById("app")
+  },
+  {
+    path: "/dashboard",
+    element: () => Lazy({
+      module: "Dashboard",
+      import: () => import("./pages/Dashboard"),
+      collect: false // Keep dashboard in memory
+    }),
+    target: document.getElementById("app")
+  },
+  {
+    path: "/settings",
+    element: () => Lazy({
+      import: () => import("./pages/Settings") // Default export
+    }),
+    target: document.getElementById("app")
+  }
+]);
+```
+
+## JSX Integration
+
+Using `Lazy` with JSX components:
+
+```tsx
+import { Lazy } from "@jay-js/system";
+
+// Create a loading indicator component
+const LoadingSpinner = () => (
+  <div class="loading">
+    <span>Loading...</span>
+  </div>
+);
+
+// Lazy load a heavy component
+const HeavyChart = () => Lazy({
+  module: "Chart",
+  import: () => import("./components/Chart"),
+  params: { data: chartData }
+}, <LoadingSpinner />);
+
+// Use in your app
+const App = () => (
+  <div>
+    <h1>Dashboard</h1>
+    <HeavyChart />
+  </div>
+);
 ```
 
 ## Performance Considerations

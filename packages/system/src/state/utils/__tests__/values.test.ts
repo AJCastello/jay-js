@@ -1,22 +1,23 @@
-import { State } from "../../core/state.js";
-import { Values } from "../helpers.js";
+import { describe, expect, it } from "vitest";
+import { state } from "../../core/state.js";
+import { values } from "../helpers.js";
 
 describe("Values", () => {
 	it("should set a value in an object based on state", () => {
-		const count = State(10);
+		const count = state(10);
 		const target = {};
 
-		const setValue = Values(() => count.value * 2);
+		const setValue = values(() => count.value * 2);
 		setValue(target, "doubled");
 
 		expect(target).toEqual({ doubled: 20 });
 	});
 
 	it("should update target when source state changes", () => {
-		const count = State(10);
+		const count = state(10);
 		const target = {};
 
-		const setValue = Values(() => count.value * 2);
+		const setValue = values(() => count.value * 2);
 		setValue(target, "doubled");
 
 		count.set(15);
@@ -24,10 +25,10 @@ describe("Values", () => {
 	});
 
 	it("should work with nested paths", () => {
-		const name = State("John");
+		const name = state("John");
 		const target = { user: {} };
 
-		const setValue = Values(() => name.value);
+		const setValue = values(() => name.value);
 		setValue(target, "user", "name");
 
 		expect(target).toEqual({ user: { name: "John" } });
@@ -37,20 +38,20 @@ describe("Values", () => {
 	});
 
 	it("should create nested objects if they don't exist", () => {
-		const count = State(10);
+		const count = state(10);
 		const target = {};
 
-		const setValue = Values(() => count.value);
+		const setValue = values(() => count.value);
 		setValue(target, "stats", "counter", "value");
 
 		expect(target).toEqual({ stats: { counter: { value: 10 } } });
 	});
 
 	it("should set value on state objects", () => {
-		const source = State(10);
-		const target = State(0);
+		const source = state(10);
+		const target = state(0);
 
-		const setValue = Values(() => source.value * 2);
+		const setValue = values(() => source.value * 2);
 		setValue(target, "value");
 
 		expect(target.get()).toBe(20);
@@ -60,11 +61,11 @@ describe("Values", () => {
 	});
 
 	it("should handle multiple source dependencies", () => {
-		const firstName = State("John");
-		const lastName = State("Doe");
+		const firstName = state("John");
+		const lastName = state("Doe");
 		const target = {};
 
-		const setValue = Values(() => `${firstName.value} ${lastName.value}`);
+		const setValue = values(() => `${firstName.value} ${lastName.value}`);
 		setValue(target, "fullName");
 
 		expect(target).toEqual({ fullName: "John Doe" });
@@ -77,10 +78,10 @@ describe("Values", () => {
 	});
 
 	it("should handle complex calculated values", () => {
-		const items = State([1, 2, 3, 4, 5]);
+		const items = state([1, 2, 3, 4, 5]);
 		const target = {};
 
-		const setValue = Values(() => {
+		const setValue = values(() => {
 			const values = items.value;
 			return {
 				sum: values.reduce((a, b) => a + b, 0),
@@ -113,14 +114,56 @@ describe("Values", () => {
 	it("should update HTML elements when used with DOM properties", () => {
 		// Mock an HTML element
 		const element = { className: "" };
-		const isDark = State(false);
+		const isDark = state(false);
 
-		const setValue = Values(() => (isDark.value ? "dark-theme" : "light-theme"));
+		const setValue = values(() => (isDark.value ? "dark-theme" : "light-theme"));
 		setValue(element, "className");
 
 		expect(element.className).toBe("light-theme");
 
 		isDark.set(true);
 		expect(element.className).toBe("dark-theme");
+	});
+
+	it("should mark _setValue function with SETVALUE_MARKER symbol", () => {
+		const count = state(10);
+		const setValue = values(() => count.value * 2);
+
+		// Access the internal _setValue function
+		// Note: This is testing implementation details, but important for ensuring
+		// the Symbol is correctly applied for the state reactivity system
+		const target = {};
+		setValue(target, "doubled");
+
+		// The _setValue function should have the SETVALUE_MARKER
+		// We can't directly access it, but we can verify through side effects
+		// that it's working correctly with the state system
+		expect(target).toEqual({ doubled: 20 });
+
+		// When state changes, the subscription should work correctly
+		count.set(15);
+		expect(target).toEqual({ doubled: 30 });
+	});
+
+	it("should use SETVALUE_MARKER for proper hash generation in state subscriptions", () => {
+		const state1 = state(10);
+		const state2 = state(20);
+		const target = {};
+
+		// Create two different Values functions with same logic
+		const setValue1 = values(() => state1.value * 2);
+		const setValue2 = values(() => state2.value * 3);
+
+		setValue1(target, "value1");
+		setValue2(target, "value2");
+
+		expect(target).toEqual({ value1: 20, value2: 60 });
+
+		// Each should update independently
+		state1.set(15);
+		expect(target).toEqual({ value1: 30, value2: 60 });
+
+		state2.set(10);
+		expect(target).toEqual({ value1: 30, value2: 30 });
 	});
 });

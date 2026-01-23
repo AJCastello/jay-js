@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import type { TPermission } from "../../types";
 /**
  * Tests for the permission utility functions

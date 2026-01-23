@@ -3,7 +3,7 @@
  * @description Provides the JSX transformation functions for production use
  */
 
-import { Base, Fragment } from "@jay-js/elements";
+import { Base, Fragment } from "@jay-js/system";
 
 /**
  * Type definition for JSX props
@@ -16,7 +16,7 @@ export interface JSXProps {
 /**
  * Type definition for JSX component function
  */
-export type JSXComponent = (props: JSXProps) => HTMLElement | Promise<HTMLElement>;
+export type JSXComponent = (props: JSXProps) => Node | Promise<Node>;
 
 /**
  * JSX transformation function for production use
@@ -25,7 +25,7 @@ export type JSXComponent = (props: JSXProps) => HTMLElement | Promise<HTMLElemen
  * @param props - Element properties and attributes
  * @returns HTMLElement or Promise<HTMLElement>
  */
-function jsx(tag: any, props: JSXProps): HTMLElement | Promise<HTMLElement> {
+function jsx(tag: any, props: JSXProps): Node | Promise<Node> {
 	if (typeof tag === "function") {
 		return tag({ ...props });
 	}

@@ -1,4 +1,4 @@
-import { Base, type TBaseTagMap } from "../base";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import type { TSelectItem } from "./select-item.types";
 
 export function SelectItem<T extends TBaseTagMap = "option">(
