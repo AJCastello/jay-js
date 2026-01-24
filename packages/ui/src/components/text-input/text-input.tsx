@@ -11,12 +11,21 @@ export function TextInput({
 	startAdornment,
 	endAdornment,
 	...props
-}: TTextInput = {}): HTMLInputElement | HTMLLabelElement {
-	const inputElement = (<input {...(props as any)} />) as unknown as HTMLInputElement;
-
+}: TTextInput = {}) {
 	const inputId =
 		(props as any).id ?? (props as any).name ?? `jay-ui-text-input-${Math.random().toString(36).slice(2)}`;
-	inputElement.id = inputId;
+
+	const inputElement = (
+		<input
+			{...(props as any)}
+			id={inputId}
+			className={
+				startAdornment || endAdornment
+					? cn(className)
+					: cn("input", variant, color, inputSize, className, fullWidth ? "w-full" : "")
+			}
+		/>
+	) as HTMLInputElement;
 
 	function getStartAdornment() {
 		if (!startAdornment) {
@@ -33,8 +42,6 @@ export function TextInput({
 	}
 
 	if (startAdornment || endAdornment) {
-		inputElement.className = cn(className);
-
 		return (
 			<label
 				htmlFor={inputId}
@@ -44,9 +51,7 @@ export function TextInput({
 				{inputElement}
 				{getEndAdornment()}
 			</label>
-		) as unknown as HTMLLabelElement;
+		);
 	}
-
-	inputElement.className = cn("input", variant, color, inputSize, className, fullWidth ? "w-full" : "");
 	return inputElement;
 }

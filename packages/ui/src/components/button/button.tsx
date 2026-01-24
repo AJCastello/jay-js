@@ -13,7 +13,7 @@ export function Button({
 	disabled,
 	children,
 	...props
-}: TButton = {}): HTMLButtonElement {
+}: TButton = {}) {
 	return (
 		<button
 			{...(props as any)}
@@ -33,5 +33,5 @@ export function Button({
 		>
 			{children}
 		</button>
-	) as unknown as HTMLButtonElement;
+	);
 }

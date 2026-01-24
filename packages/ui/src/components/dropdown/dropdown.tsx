@@ -9,7 +9,7 @@ export function Dropdown({
 	className,
 	children,
 	...props
-}: TDropdown = {}): HTMLElementTagNameMap["div"] {
+}: TDropdown = {}) {
 	return (
 		<div
 			{...(props as any)}
@@ -24,5 +24,5 @@ export function Dropdown({
 		>
 			{children}
 		</div>
-	) as unknown as HTMLElementTagNameMap["div"];
+	);
 }

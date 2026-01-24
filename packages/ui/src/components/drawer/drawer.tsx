@@ -1,10 +1,7 @@
-import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TDrawer } from "./drawer.types.js";
 
-export function Drawer<T extends TBaseTagMap = "div">(
-	{ tag, className, asChild = false, position = "left", children, ...props }: TDrawer<T> = { tag: "div" as T },
-): HTMLElementTagNameMap[T] {
+export function Drawer({ className, asChild = false, position = "left", children, ...props }: TDrawer = {}) {
 	const positionClass = {
 		left: "justify-start",
 		right: "justify-end",
@@ -21,17 +18,16 @@ export function Drawer<T extends TBaseTagMap = "div">(
 		className,
 	);
 
-	const Tag = (tag ?? "div") as any;
 	const drawer = (
-		<Tag {...(props as any)} className={drawerClassName}>
+		<div {...(props as any)} className={drawerClassName}>
 			{children}
-		</Tag>
-	) as unknown as HTMLElementTagNameMap[T];
+		</div>
+	);
 
-	const drawerId = drawer.id;
+	const drawerId = props.id;
 
 	if (drawerId && document.querySelector(`#${drawerId}`)) {
-		return document.querySelector(`#${drawerId}`) as HTMLElementTagNameMap[T];
+		return document.querySelector<HTMLDivElement>(`#${drawerId}`) as HTMLDivElement;
 	}
 
 	return drawer;

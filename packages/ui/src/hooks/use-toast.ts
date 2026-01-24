@@ -31,14 +31,14 @@ export function useToast({ ...props }: TUseToast = {}) {
 		throw new Error(`useToast: No element found for selector: ${selector}`);
 	}
 
-	return ({ duration, vertical, horizontal, children, ...props }: TToast<"div">): void => {
+	return ({ duration, vertical, horizontal, children, ...props }: TToast): void => {
 		const toastSettings = (toastContainer as HTMLDivElement).dataset;
 
 		if (!vertical) {
-			vertical = (toastSettings.vertical as TToast<"div">["vertical"]) || "toast-top";
+			vertical = (toastSettings.vertical as TToast["vertical"]) || "toast-top";
 		}
 		if (!horizontal) {
-			horizontal = (toastSettings.horizontal as TToast<"div">["horizontal"]) || "toast-end";
+			horizontal = (toastSettings.horizontal as TToast["horizontal"]) || "toast-end";
 		}
 		if (!duration) {
 			duration = Number(toastSettings.duration) || 5000;

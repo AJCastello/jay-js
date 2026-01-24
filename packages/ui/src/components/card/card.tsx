@@ -1,15 +1,7 @@
 import { cn } from "../../utils/cn";
 import type { TCard } from "./card.types";
 
-export function Card({
-	className,
-	imagePosition,
-	imageFull,
-	variant,
-	size,
-	children,
-	...props
-}: TCard = {}): HTMLDivElement {
+export function Card({ className, imagePosition, imageFull, variant, size, children, ...props }: TCard = {}) {
 	return (
 		<div
 			{...(props as any)}
@@ -24,5 +16,5 @@ export function Card({
 		>
 			{children}
 		</div>
-	) as unknown as HTMLDivElement;
+	);
 }

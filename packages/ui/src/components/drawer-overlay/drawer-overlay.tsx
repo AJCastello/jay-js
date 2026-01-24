@@ -1,11 +1,8 @@
-import type { TBaseTagMap } from "@jay-js/system";
 import { useDrawer } from "../../hooks/use-drawer.js";
 import { cn } from "../../utils/cn";
 import type { TDrawerOverlay } from "./drawer-overlay.types.js";
 
-export function DrawerOverlay<T extends TBaseTagMap = "div">(
-	{ tag, className, onclick, children, ...props }: TDrawerOverlay<T> = { tag: "div" as T },
-): HTMLElementTagNameMap[T] {
+export function DrawerOverlay({ className, onclick, dataset, children, ...props }: TDrawerOverlay = {}) {
 	const overlayClassName = cn(
 		"transition-opacity",
 		"ease-in-out",
@@ -19,12 +16,17 @@ export function DrawerOverlay<T extends TBaseTagMap = "div">(
 	);
 
 	const handleDrawer = useDrawer({ drawerId: props.id });
-	const Tag = (tag ?? "div") as any;
+	const extraDataset = typeof dataset === "function" ? dataset() : dataset;
+	const overlayDataset = {
+		...(extraDataset ?? {}),
+		drawerFor: props.id || "",
+	};
 
-	const overlay = (
-		<Tag
+	return (
+		<div
 			{...(props as any)}
 			className={overlayClassName}
+			dataset={overlayDataset}
 			onclick={
 				onclick ||
 				((e: Event) => {
@@ -34,9 +36,6 @@ export function DrawerOverlay<T extends TBaseTagMap = "div">(
 			}
 		>
 			{children}
-		</Tag>
-	) as unknown as HTMLElementTagNameMap[T];
-
-	overlay.dataset.drawerFor = props.id || "";
-	return overlay;
+		</div>
+	);
 }

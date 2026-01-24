@@ -1,14 +1,7 @@
 import { cn } from "../../utils/cn";
 import type { TTabItem } from "./tab-item.types";
 
-export function TabItem({
-	size,
-	active,
-	disabled,
-	className,
-	children,
-	...props
-}: TTabItem = {}): HTMLElementTagNameMap["a"] {
+export function TabItem({ size, active, disabled, className, children, ...props }: TTabItem = {}) {
 	return (
 		<a
 			{...(props as any)}
@@ -17,5 +10,5 @@ export function TabItem({
 		>
 			{children}
 		</a>
-	) as unknown as HTMLElementTagNameMap["a"];
+	);
 }

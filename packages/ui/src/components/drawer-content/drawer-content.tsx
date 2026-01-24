@@ -1,10 +1,7 @@
-import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TDrawerContent } from "./drawer-content.types";
 
-export function DrawerContent<T extends TBaseTagMap = "div">(
-	{ tag, className, position = "left", children, ...props }: TDrawerContent<T> = { tag: "div" as T },
-): HTMLElementTagNameMap[T] {
+export function DrawerContent({ className, position = "left", children, ...props }: TDrawerContent = {}) {
 	const translateClass = {
 		left: "-translate-x-full",
 		right: "translate-x-full",
@@ -25,11 +22,9 @@ export function DrawerContent<T extends TBaseTagMap = "div">(
 		className,
 	);
 
-	const Tag = (tag ?? "div") as any;
-
 	return (
-		<Tag {...(props as any)} className={contentClassName}>
+		<div {...(props as any)} className={contentClassName}>
 			{children}
-		</Tag>
-	) as unknown as HTMLElementTagNameMap[T];
+		</div>
+	);
 }

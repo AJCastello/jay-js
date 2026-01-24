@@ -1,14 +1,7 @@
 import { cn } from "../../utils";
 import type { TMenuItem } from "./menu-item.types";
 
-export function MenuItem({
-	disabled,
-	active,
-	focus,
-	className,
-	children,
-	...props
-}: TMenuItem = {}): HTMLElementTagNameMap["li"] {
+export function MenuItem({ disabled, active, focus, className, children, ...props }: TMenuItem = {}) {
 	return (
 		<li
 			{...(props as any)}
@@ -16,5 +9,5 @@ export function MenuItem({
 		>
 			{children}
 		</li>
-	) as unknown as HTMLElementTagNameMap["li"];
+	);
 }
