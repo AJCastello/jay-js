@@ -2,24 +2,26 @@
 category: UI
 categoryId: 1
 articleId: 9
-slug: hooks
-title: Hooks
-description: Hooks personalizados para funcionalidades comuns, incluindo useModal, useDrawer, useToast, useRef e useListener.
+slug: handlers
+title: Handlers
+description: Funções utilitárias para funcionalidades comuns, incluindo handleModal, handleDrawer, handleToast, useRef e useListener.
 ---
 
-# Hooks
+# Handlers (Funções de Controle)
 
-Os hooks do @jay-js/ui fornecem funcionalidades reutilizáveis e abstrações úteis para operações comuns em aplicações web. Eles encapsulam lógica complexa em interfaces simples, facilitando o gerenciamento de estado, manipulação do DOM e controle de componentes.
+As funções de controle (handlers) do @jay-js/ui fornecem funcionalidades reutilizáveis e abstrações úteis para operações comuns em aplicações web. Elas encapsulam lógica complexa em interfaces simples, facilitando o gerenciamento de estado, manipulação do DOM e controle de componentes.
+
+**Nota:** No Jay JS, usamos a convenção `handle*` para funções de controle/gerenciamento de UI, evitando confusão com React Hooks.
 
 ## Referência da API
 
-### useModal
+### handleModal
 
-Hook para controlar a abertura, fechamento e estado de modais.
+Função para controlar a abertura, fechamento e estado de modais.
 
 #### Assinatura da Função
 ```typescript
-function useModal(options: TUseModal): TModalControls
+function handleModal(options: THandleModal): TModalControls
 ```
 
 #### Parâmetros
@@ -38,13 +40,13 @@ interface TModalControls {
 }
 ```
 
-### useDrawer
+### handleDrawer
 
-Hook para controlar gavetas/painéis deslizantes.
+Função para controlar gavetas/painéis deslizantes.
 
 #### Assinatura da Função
 ```typescript
-function useDrawer(options: TUseDrawer): TDrawerControls
+function handleDrawer(options: THandleDrawer): TDrawerControls
 ```
 
 #### Parâmetros
@@ -63,13 +65,13 @@ interface TDrawerControls {
 }
 ```
 
-### useToast
+### handleToast
 
-Hook para exibir notificações toast temporárias.
+Função para exibir notificações toast temporárias.
 
 #### Assinatura da Função
 ```typescript
-function useToast(options: TUseToast): TToastControls
+function handleToast(options: THandleToast): TToastControls
 ```
 
 #### Parâmetros
@@ -93,7 +95,7 @@ interface TToastControls {
 
 ### useRef
 
-Hook para obter referências de elementos DOM com recursos adicionais.
+Função para obter referências de elementos DOM com recursos adicionais.
 
 #### Assinatura da Função
 ```typescript
@@ -120,7 +122,7 @@ interface TRefControls<T> {
 
 ### useListener
 
-Hook para gerenciar event listeners de forma eficiente.
+Função para gerenciar event listeners de forma eficiente.
 
 #### Assinatura da Função
 ```typescript
@@ -151,8 +153,8 @@ interface TListenerControls {
 
 ## Visão Geral
 
-### useModal - Controle de Modais
-O hook useModal simplifica o gerenciamento de modais, fornecendo métodos convenientes para abrir, fechar e alternar modais, além de callbacks para eventos de mudança de estado.
+### handleModal - Controle de Modais
+A função handleModal simplifica o gerenciamento de modais, fornecendo métodos convenientes para abrir, fechar e alternar modais, além de callbacks para eventos de mudança de estado.
 
 **Características principais:**
 - Controle programático de modais
@@ -160,8 +162,8 @@ O hook useModal simplifica o gerenciamento de modais, fornecendo métodos conven
 - Verificação automática de existência do elemento
 - Interface simples e consistente
 
-### useDrawer - Controle de Gavetas
-O useDrawer oferece controle similar ao useModal, mas específico para elementos drawer/sidebar, com funcionalidades adaptadas para painéis deslizantes.
+### handleDrawer - Controle de Gavetas
+O handleDrawer oferece controle similar ao handleModal, mas específico para elementos drawer/sidebar, com funcionalidades adaptadas para painéis deslizantes.
 
 **Características principais:**
 - Controle de painéis deslizantes
@@ -169,8 +171,8 @@ O useDrawer oferece controle similar ao useModal, mas específico para elementos
 - Gerenciamento de estado automático
 - Callbacks para eventos de navegação
 
-### useToast - Sistema de Notificações
-O useToast fornece um sistema completo de notificações temporárias, com diferentes tipos, posicionamento flexível e controle de duração.
+### handleToast - Sistema de Notificações
+O handleToast fornece um sistema completo de notificações temporárias, com diferentes tipos, posicionamento flexível e controle de duração.
 
 **Características principais:**
 - Múltiplos tipos de notificação (success, error, warning, info)
@@ -200,10 +202,10 @@ O useListener facilita o gerenciamento de event listeners, fornecendo controle s
 
 ### Controle de Modal
 ```typescript
-import { useModal } from '@jay-js/ui';
+import { handleModal } from '@jay-js/ui';
 
-// Hook básico para modal
-const modal = useModal({
+// Função básica para modal
+const modal = handleModal({
   id: 'my-modal',
   onOpen: () => console.log('Modal aberto'),
   onClose: () => console.log('Modal fechado')
@@ -245,10 +247,10 @@ const modalElement = 'dialog', {
 
 ### Sistema de Notificações
 ```typescript
-import { useToast } from '@jay-js/ui';
+import { handleToast } from '@jay-js/ui';
 
 // Configuração do sistema de toast
-const toast = useToast({
+const toast = handleToast({
   position: 'top-right',
   duration: 3000,
   maxToasts: 5
@@ -408,10 +410,10 @@ const listenerControls = 'div', {
 
 ### Controle de Drawer
 ```typescript
-import { useDrawer } from '@jay-js/ui';
+import { handleDrawer } from '@jay-js/ui';
 
-// Hook para drawer de navegação
-const navigationDrawer = useDrawer({
+// Função para drawer de navegação
+const navigationDrawer = handleDrawer({
   id: 'nav-drawer',
   onOpen: () => console.log('Menu aberto'),
   onClose: () => console.log('Menu fechado')
@@ -477,11 +479,11 @@ const drawerNavigation = 'div', {
 
 ### Sistema de Confirmação com Modal
 ```typescript
-import { useModal, useToast } from '@jay-js/ui';
+import { handleModal, handleToast } from '@jay-js/ui';
 
 function ConfirmationSystem({ onConfirm }) {
-  const modal = useModal({ id: 'confirm-modal' });
-  const toast = useToast();
+  const modal = handleModal({ id: 'confirm-modal' });
+  const toast = handleToast();
   
   const handleConfirm = async () => {
     try {
@@ -538,10 +540,10 @@ const confirmSystem = ConfirmationSystem({
 
 ### Drawer Responsivo com Persistência
 ```typescript
-import { useDrawer, useListener } from '@jay-js/ui';
+import { handleDrawer, useListener } from '@jay-js/ui';
 
 function ResponsiveNavigation() {
-  const drawer = useDrawer({
+  const drawer = handleDrawer({
     id: 'responsive-nav',
     onOpen: () => localStorage.setItem('nav-open', 'true'),
     onClose: () => localStorage.setItem('nav-open', 'false')
@@ -590,11 +592,11 @@ function ResponsiveNavigation() {
 
 ### Sistema de Notificações Avançado
 ```typescript
-import { useToast } from '@jay-js/ui';
+import { handleToast } from '@jay-js/ui';
 
 class NotificationManager {
   constructor() {
-    this.toast = useToast({
+    this.toast = handleToast({
       position: 'top-right',
       duration: 4000,
       maxToasts: 3
@@ -694,17 +696,17 @@ const handleAsyncAction = async () => {
 
 ## Padrões Avançados
 
-### Hook Customizado Combinado
+### Função Customizada Combinado
 ```typescript
-import { useModal, useToast, useRef } from '@jay-js/ui';
+import { handleModal, handleToast, useRef } from '@jay-js/ui';
 
 function useFormModal({ formId, onSubmit, validationRules = {} }) {
-  const modal = useModal({
+  const modal = handleModal({
     id: `${formId}-modal`,
     onClose: () => resetForm()
   });
   
-  const toast = useToast();
+  const toast = handleToast();
   const formRef = useRef(`#${formId}`);
   
   const resetForm = () => {
@@ -804,7 +806,7 @@ function useFormModal({ formId, onSubmit, validationRules = {} }) {
   };
 }
 
-// Uso do hook combinado
+// Uso da função combinado
 const userFormModal = useFormModal({
   formId: 'user-form',
   validationRules: {
@@ -979,7 +981,7 @@ window.addEventListener('beforeunload', cleanup);
 ### 2. Verificação de Elementos
 ```typescript
 // Sempre verifique se elementos existem antes de usar
-const modal = useModal({ 
+const modal = handleModal({ 
   id: 'my-modal',
   onOpen: () => {
     const element = document.getElementById('my-modal');
@@ -1005,7 +1007,7 @@ const debouncedResize = useListener(
 ### 4. Configuração de Toast Consistente
 ```typescript
 // Mantenha configurações consistentes
-const toast = useToast({
+const toast = handleToast({
   position: 'top-right', // Sempre na mesma posição
   duration: 4000,        // Duração consistente
   maxToasts: 3           // Limite razoável
@@ -1016,24 +1018,24 @@ const toast = useToast({
 
 ```typescript
 import { 
-  useModal, useDrawer, useToast, useRef, useListener 
+  handleModal, handleDrawer, handleToast, useRef, useListener 
 } from '@jay-js/ui';
 
 function InteractiveDashboard() {
   // Hooks principais
-  const settingsModal = useModal({ 
+  const settingsModal = handleModal({ 
     id: 'settings-modal',
     onOpen: () => toast.info('Configurações abertas'),
     onClose: () => toast.info('Configurações fechadas')
   });
   
-  const sidebarDrawer = useDrawer({ 
+  const sidebarDrawer = handleDrawer({ 
     id: 'sidebar-drawer',
     onOpen: () => localStorage.setItem('sidebar-open', 'true'),
     onClose: () => localStorage.setItem('sidebar-open', 'false')
   });
   
-  const toast = useToast({ 
+  const toast = handleToast({ 
     position: 'top-right',
     duration: 3000 
   });
