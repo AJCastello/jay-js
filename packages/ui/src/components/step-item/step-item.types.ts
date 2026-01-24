@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TStepItem<T extends TBaseTagMap> = {
+export type TStepItem = {
 	color?:
 		| "step-primary"
 		| "step-secondary"
@@ -9,4 +9,4 @@ export type TStepItem<T extends TBaseTagMap> = {
 		| "step-success"
 		| "step-warning"
 		| "step-error";
-} & TBase<T>;
+} & Omit<TBase<"li">, "tag">;

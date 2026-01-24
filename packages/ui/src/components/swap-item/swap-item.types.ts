@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TSwapItem<T extends TBaseTagMap> = {
+export type TSwapItem = {
 	state?: "swap-on" | "swap-off";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

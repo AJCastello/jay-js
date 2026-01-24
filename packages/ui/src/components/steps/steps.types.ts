@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TSteps<T extends TBaseTagMap> = {
+export type TSteps = {
 	orientation?: "steps-vertical" | "steps-horizontal";
-} & TBase<T>;
+} & Omit<TBase<"ul">, "tag">;

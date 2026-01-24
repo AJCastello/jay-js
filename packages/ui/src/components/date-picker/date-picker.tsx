@@ -1,4 +1,4 @@
-import { Base, render, type TBaseTagMap } from "@jay-js/system";
+import { Base, render } from "@jay-js/system";
 import { cn } from "../../utils";
 import type { TDatePicker } from "./date-picker.types";
 
@@ -8,26 +8,26 @@ function Box(props: AnyProps): HTMLDivElement {
 	return Base({
 		tag: "div",
 		...props,
-	}) as HTMLDivElement;
+	});
 }
 
 function Button(props: AnyProps): HTMLButtonElement {
 	return Base({
 		tag: "button",
 		...props,
-	}) as HTMLButtonElement;
+	});
 }
 
-function Typography<T extends TBaseTagMap = "span">(
+function Typography(
 	props: AnyProps & {
-		tag?: T;
+		tag?: "span" | "label";
 	},
-): HTMLElementTagNameMap[T] {
+): HTMLSpanElement | HTMLLabelElement {
 	const { tag, ...rest } = props;
 	return Base({
-		tag: (tag ?? "span") as T,
+		tag: tag ?? "span",
 		...rest,
-	}) as HTMLElementTagNameMap[T];
+	});
 }
 
 const LOCALES = {
@@ -90,25 +90,26 @@ const LOCALES = {
 	},
 };
 
-export function DatePicker<T extends TBaseTagMap = "div">(
-	{
-		label,
-		defaultDate = new Date(),
-		value,
-		onSelect,
-		withTime = false,
-		minDate,
-		maxDate,
-		color = "btn-primary",
-		size = "btn-sm",
-		disabled = false,
-		locale = "pt-BR",
-		showToday = true,
-		rangeStart,
-		rangeEnd,
-		...props
-	}: TDatePicker<T> = { tag: "div" },
-): HTMLElementTagNameMap[T] {
+export function DatePicker({
+	label,
+	defaultDate = new Date(),
+	value,
+	onSelect,
+	withTime = false,
+	minDate,
+	maxDate,
+	color = "btn-primary",
+	size = "btn-sm",
+	disabled = false,
+	locale = "pt-BR",
+	showToday = true,
+	rangeStart,
+	rangeEnd,
+	className,
+	onmount,
+	...props
+}: TDatePicker = {}) {
+	const mergedClassName = cn("w-full max-w-sm", className);
 	const strings = LOCALES[locale] || LOCALES["pt-BR"];
 
 	let currentDate = new Date(defaultDate);
@@ -119,39 +120,46 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 
 	const monthYearId = `month-year-${Math.random().toString(36).slice(2, 11)}`;
 	const calendarDaysId = `calendar-days-${Math.random().toString(36).slice(2, 11)}`;
+	let mountedContainer: HTMLDivElement | null = null;
+	let contentContainer: HTMLDivElement | null = null;
 
-	const container = Base({
-		tag: "div",
-		...props,
-		className: cn("w-full max-w-sm", props.className),
-	}) as HTMLDivElement;
+	function showCalendar() {
+		if (!mountedContainer || !contentContainer) return;
+		render(contentContainer, createCalendar(mountedContainer));
+		renderCalendarDays(mountedContainer);
+	}
+
+	function showTimeSelector() {
+		if (!contentContainer) return;
+		render(contentContainer, createTimeSelector());
+	}
 
 	function updateMonthYear(element: HTMLElement) {
 		element.textContent = `${strings.months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 	}
 
-	function previousMonth() {
+	function previousMonth(container: HTMLDivElement) {
 		const newDate = new Date(currentDate);
 		newDate.setMonth(newDate.getMonth() - 1);
 		currentDate = newDate;
 
-		const monthYearElement = container.querySelector(`#${monthYearId}`) as HTMLElement;
-		if (monthYearElement) {
+		const monthYearElement = container.querySelector(`#${monthYearId}`);
+		if (monthYearElement instanceof HTMLElement) {
 			updateMonthYear(monthYearElement);
 		}
-		renderCalendarDays();
+		renderCalendarDays(container);
 	}
 
-	function nextMonth() {
+	function nextMonth(container: HTMLDivElement) {
 		const newDate = new Date(currentDate);
 		newDate.setMonth(newDate.getMonth() + 1);
 		currentDate = newDate;
 
-		const monthYearElement = container.querySelector(`#${monthYearId}`) as HTMLElement;
-		if (monthYearElement) {
+		const monthYearElement = container.querySelector(`#${monthYearId}`);
+		if (monthYearElement instanceof HTMLElement) {
 			updateMonthYear(monthYearElement);
 		}
-		renderCalendarDays();
+		renderCalendarDays(container);
 	}
 
 	function selectDate(day: number) {
@@ -232,8 +240,9 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 	}
 
 	function renderTimeDisplay() {
-		const timeContainer = contentContainer.querySelector(".time-display-container") as HTMLElement;
-		if (!timeContainer) return;
+		if (!contentContainer) return;
+		const timeContainer = contentContainer.querySelector(".time-display-container");
+		if (!(timeContainer instanceof HTMLElement)) return;
 
 		const hourColumn = createTimeColumn("hour", selectedHour);
 		const minuteColumn = createTimeColumn("minute", selectedMinute);
@@ -306,9 +315,9 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		});
 	}
 
-	function renderCalendarDays() {
-		const calendarDaysElement = container.querySelector(`#${calendarDaysId}`) as HTMLElement;
-		if (!calendarDaysElement) return;
+	function renderCalendarDays(container: HTMLDivElement) {
+		const calendarDaysElement = container.querySelector(`#${calendarDaysId}`);
+		if (!(calendarDaysElement instanceof HTMLElement)) return;
 
 		const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 		const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -354,7 +363,7 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		render(calendarDaysElement, days);
 	}
 
-	function createCalendar(): HTMLElement {
+	function createCalendar(container: HTMLDivElement): HTMLElement {
 		const monthYearElement = Typography({
 			id: monthYearId,
 			className: "font-semibold text-base",
@@ -378,7 +387,7 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 							className: cn("btn btn-ghost btn-square", size),
 							children: "‹",
 							disabled,
-							onclick: previousMonth,
+							onclick: () => previousMonth(container),
 						}),
 						monthYearElement,
 						Button({
@@ -386,7 +395,7 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 							className: cn("btn btn-ghost btn-square", size),
 							children: "›",
 							disabled,
-							onclick: nextMonth,
+							onclick: () => nextMonth(container),
 						}),
 					],
 				}),
@@ -404,41 +413,43 @@ export function DatePicker<T extends TBaseTagMap = "div">(
 		});
 	}
 
-	const contentContainer = Box({
-		className: "w-full",
-	});
+	return (
+		<div
+			{...props}
+			className={mergedClassName}
+			onmount={(element) => {
+				if (!(element instanceof HTMLDivElement)) {
+					return onmount?.(element);
+				}
+				mountedContainer = element;
+				contentContainer = Box({
+					className: "w-full",
+				});
 
-	function showCalendar() {
-		render(contentContainer, createCalendar());
-		renderCalendarDays();
-	}
+				if (currentView === "calendar") {
+					showCalendar();
+				} else {
+					showTimeSelector();
+				}
 
-	function showTimeSelector() {
-		render(contentContainer, createTimeSelector());
-	}
+				const children: HTMLElement[] = [contentContainer];
 
-	if (currentView === "calendar") {
-		showCalendar();
-	} else {
-		showTimeSelector();
-	}
+				if (label) {
+					const labelElement = Typography({
+						tag: "label",
+						className: "label",
+						children: Base({
+							tag: "span",
+							className: "label-text font-semibold",
+							children: label,
+						}),
+					});
+					children.unshift(labelElement);
+				}
 
-	const children: HTMLElement[] = [contentContainer];
-
-	if (label) {
-		const labelElement = Typography({
-			tag: "label",
-			className: "label",
-			children: Base({
-				tag: "span",
-				className: "label-text font-semibold",
-				children: label,
-			}),
-		});
-		children.unshift(labelElement);
-	}
-
-	render(container, children);
-
-	return container as HTMLElementTagNameMap[T];
+				render(element, children);
+				return onmount?.(element);
+			}}
+		/>
+	);
 }

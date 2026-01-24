@@ -1,19 +1,22 @@
-import { Base } from "@jay-js/system";
+import { cn } from "../../utils/cn";
 import type { IResizableSplitter } from "./resizable-splitter.types.js";
 
-export function ResizableSplitter({ direction = "vertical", ...props }: IResizableSplitter = {}): HTMLDivElement {
-	const splitter = Base({
-		className: "bg-base-300 flex flex-shrink-0",
-		style: {
-			cursor: direction === "horizontal" ? "row-resize" : "col-resize",
-			width: direction === "horizontal" ? "100%" : "0.25rem",
-			height: direction === "horizontal" ? "0.25rem" : "100%",
-		},
-		...props,
-	}) as HTMLDivElement;
+export function ResizableSplitter({ direction = "vertical", className, onmount, ...props }: IResizableSplitter = {}) {
+	const mergedClassName = cn("bg-base-300 flex flex-shrink-0", className);
 
-	bindColumnResizeHandler(splitter, direction);
-	return splitter;
+	return (
+		<div
+			{...props}
+			className={mergedClassName}
+			onmount={(element) => {
+				element.style.cursor = direction === "horizontal" ? "row-resize" : "col-resize";
+				element.style.width = direction === "horizontal" ? "100%" : "0.25rem";
+				element.style.height = direction === "horizontal" ? "0.25rem" : "100%";
+				bindColumnResizeHandler(element, direction);
+				return onmount?.(element);
+			}}
+		/>
+	);
 }
 
 function bindColumnResizeHandler(handle: HTMLElement, direction: "horizontal" | "vertical") {
@@ -24,8 +27,8 @@ function bindColumnResizeHandler(handle: HTMLElement, direction: "horizontal" | 
 	handle.addEventListener("mousedown", (e: MouseEvent) => {
 		isDragging = true;
 		if (e.target instanceof HTMLElement) {
-			previousElement = e.target.previousElementSibling as HTMLElement;
-			nextElement = e.target.nextElementSibling as HTMLElement;
+			previousElement = e.target.previousElementSibling instanceof HTMLElement ? e.target.previousElementSibling : null;
+			nextElement = e.target.nextElementSibling instanceof HTMLElement ? e.target.nextElementSibling : null;
 		}
 	});
 

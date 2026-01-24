@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type IAvatar<T extends TBaseTagMap> = {
+export type IAvatar = {
 	state?: "avatar-online" | "avatar-offline";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

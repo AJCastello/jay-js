@@ -10,14 +10,14 @@ export function TextInput({
 	inputSize,
 	startAdornment,
 	endAdornment,
+	id,
 	...props
 }: TTextInput = {}) {
-	const inputId =
-		(props as any).id ?? (props as any).name ?? `jay-ui-text-input-${Math.random().toString(36).slice(2)}`;
+	const inputId = typeof id === "string" ? id : `jay-ui-text-input-${Math.random().toString(36).slice(2)}`;
 
 	const inputElement = (
 		<input
-			{...(props as any)}
+			{...props}
 			id={inputId}
 			className={
 				startAdornment || endAdornment
@@ -25,20 +25,32 @@ export function TextInput({
 					: cn("input", variant, color, inputSize, className, fullWidth ? "w-full" : "")
 			}
 		/>
-	) as HTMLInputElement;
+	);
 
 	function getStartAdornment() {
 		if (!startAdornment) {
 			return null;
 		}
-		return typeof startAdornment === "function" ? startAdornment(inputElement) : startAdornment;
+		if (typeof startAdornment === "function") {
+			if (inputElement instanceof HTMLInputElement) {
+				return startAdornment(inputElement);
+			}
+			throw new Error("TextInput: startAdornment callback requires a synchronous <input> element");
+		}
+		return startAdornment;
 	}
 
 	function getEndAdornment() {
 		if (!endAdornment) {
 			return null;
 		}
-		return typeof endAdornment === "function" ? endAdornment(inputElement) : endAdornment;
+		if (typeof endAdornment === "function") {
+			if (inputElement instanceof HTMLInputElement) {
+				return endAdornment(inputElement);
+			}
+			throw new Error("TextInput: endAdornment callback requires a synchronous <input> element");
+		}
+		return endAdornment;
 	}
 
 	if (startAdornment || endAdornment) {

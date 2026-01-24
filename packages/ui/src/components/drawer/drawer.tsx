@@ -19,15 +19,18 @@ export function Drawer({ className, asChild = false, position = "left", children
 	);
 
 	const drawer = (
-		<div {...(props as any)} className={drawerClassName}>
+		<div {...props} className={drawerClassName}>
 			{children}
 		</div>
 	);
 
 	const drawerId = props.id;
 
-	if (drawerId && document.querySelector(`#${drawerId}`)) {
-		return document.querySelector<HTMLDivElement>(`#${drawerId}`) as HTMLDivElement;
+	if (drawerId) {
+		const existingDrawer = document.querySelector<HTMLDivElement>(`#${drawerId}`);
+		if (existingDrawer) {
+			return existingDrawer;
+		}
 	}
 
 	return drawer;

@@ -6,10 +6,6 @@ function ensureHTMLDivElement(value: unknown): HTMLDivElement {
 		return value;
 	}
 
-	if (value instanceof HTMLElement && value.tagName === "DIV") {
-		return value as HTMLDivElement;
-	}
-
 	throw new Error("Toast: expected a synchronous <div> element");
 }
 
@@ -23,7 +19,7 @@ export function Toast({
 }: TToast = {}) {
 	const toastClassName = cn("toast", asChild ? "absolute" : "", horizontal, vertical, className);
 	const toast = ensureHTMLDivElement(
-		<div {...(props as any)} className={toastClassName}>
+		<div {...props} className={toastClassName}>
 			{children}
 		</div>,
 	);
