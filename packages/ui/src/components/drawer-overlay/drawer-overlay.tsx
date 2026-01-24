@@ -1,4 +1,4 @@
-import { useDrawer } from "../../hooks/use-drawer.js";
+import { useDrawer } from "../../handlers/use-drawer.js";
 import { cn } from "../../utils/cn";
 import type { TDrawerOverlay } from "./drawer-overlay.types.js";
 
