@@ -1,9 +1,9 @@
 import { Toast, type TToast } from "../components";
 
 /**
- * Configuration options for the useToast hook
+ * Configuration options for the handleToast function
  */
-type TUseToast = {
+type THandleToast = {
 	/**
 	 * Optional ID of the toast container element
 	 * If provided, toast will be rendered in the element with this ID
@@ -16,19 +16,19 @@ type TUseToast = {
 };
 
 /**
- * A hook to create and manage toast notifications
+ * A function to create and manage toast notifications
  *
  * @param props - Configuration options for the toast
  * @returns A function that creates and displays a toast notification
  * @throws Error if no toast container element is found
  */
-export function useToast({ ...props }: TUseToast = {}) {
+export function handleToast({ ...props }: THandleToast = {}) {
 	const toastContainerId = props.toastId || props.for;
 	const selector = toastContainerId ? `#${toastContainerId}` : ".toast-container";
 	const toastContainer = document.querySelector(selector);
 
 	if (!toastContainer) {
-		throw new Error(`useToast: No element found for selector: ${selector}`);
+		throw new Error(`handleToast: No element found for selector: ${selector}`);
 	}
 
 	return ({ duration, vertical, horizontal, children, ...props }: TToast): void => {

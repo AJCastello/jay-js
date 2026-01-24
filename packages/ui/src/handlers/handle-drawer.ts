@@ -1,7 +1,7 @@
 /**
- * Configuration options for the useDrawer hook
+ * Configuration options for the handleDrawer function
  */
-type TUseDrawer = {
+type THandleDrawer = {
 	/**
 	 * ID of the drawer element to control
 	 */
@@ -40,12 +40,12 @@ export type TDrawerControls = {
 };
 
 /**
- * A hook to control drawer component functionality
+ * A function to control drawer component functionality
  *
  * @param props - Configuration options for the drawer
  * @returns Object with methods to open, close, or toggle the drawer
  */
-export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
+export function handleDrawer({ ...props }: THandleDrawer): TDrawerControls {
 	const drawerId = props.drawerId || props.for;
 
 	const getElements = () => {
@@ -65,12 +65,12 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 		const { drawer, drawerOverlay, drawerContent } = elements;
 
 		if (!drawerContent) {
-			console.warn("useDrawer: No element found for selector: .drawer-content");
+			console.warn("handleDrawer: No element found for selector: .drawer-content");
 			return;
 		}
 
 		if (!drawer) {
-			console.warn(`useDrawer: No element found for selector: #${drawerId}`);
+			console.warn(`handleDrawer: No element found for selector: #${drawerId}`);
 			return;
 		}
 
@@ -119,12 +119,12 @@ export function useDrawer({ ...props }: TUseDrawer): TDrawerControls {
 		const { drawer, drawerOverlay, drawerContent } = elements;
 
 		if (!drawerContent) {
-			console.warn("useDrawer: No element found for selector: .drawer-content");
+			console.warn("handleDrawer: No element found for selector: .drawer-content");
 			return;
 		}
 
 		if (!drawer) {
-			console.warn(`useDrawer: No element found for selector: #${drawerId}`);
+			console.warn(`handleDrawer: No element found for selector: #${drawerId}`);
 			return;
 		}
 

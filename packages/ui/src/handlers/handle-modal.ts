@@ -1,7 +1,7 @@
 /**
- * Configuration options for the useModal hook
+ * Configuration options for the handleModal function
  */
-type TUseModal = {
+type THandleModal = {
 	/**
 	 * ID of the modal element to control
 	 */
@@ -35,18 +35,18 @@ export type TModalControls = {
 };
 
 /**
- * A hook to control modal component functionality
+ * A function to control modal component functionality
  *
  * @param props - Configuration options for the modal
  * @returns Object with methods to open, close, or toggle the modal
  */
-export function useModal({ ...props }: TUseModal): TModalControls {
+export function handleModal({ ...props }: THandleModal): TModalControls {
 	const modalId = props.modalId;
 
 	const getModal = () => {
 		const dialogModal = document.querySelector(`#${modalId}`) as HTMLDialogElement;
 		if (!dialogModal) {
-			console.warn(`useModal: No element found for selector: #${modalId}`);
+			console.warn(`handleModal: No element found for selector: #${modalId}`);
 			return;
 		}
 		if (dialogModal && dialogModal instanceof HTMLDialogElement) {

@@ -1,4 +1,4 @@
-import { useDrawer } from "../../handlers/use-drawer.js";
+import { handleDrawer } from "../../handlers/handle-drawer.js";
 import { cn } from "../../utils/cn";
 import type { TDrawerOverlay } from "./drawer-overlay.types.js";
 
@@ -15,7 +15,7 @@ export function DrawerOverlay({ className, onclick, dataset, children, ...props 
 		className,
 	);
 
-	const handleDrawer = useDrawer({ drawerId: props.id });
+	const drawerControls = handleDrawer({ drawerId: props.id });
 	const extraDataset = typeof dataset === "function" ? dataset() : dataset;
 	const overlayDataset = {
 		...(extraDataset ?? {}),
@@ -31,7 +31,7 @@ export function DrawerOverlay({ className, onclick, dataset, children, ...props 
 				onclick ||
 				((e: Event) => {
 					e.preventDefault();
-					handleDrawer.close();
+					drawerControls.close();
 				})
 			}
 		>
