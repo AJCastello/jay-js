@@ -1,2 +1,2 @@
-export * from "./button";
-export * from "./button.types";
+export * from "./button.js";
+export * from "./button.types.js";
