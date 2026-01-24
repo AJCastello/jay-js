@@ -1,7 +1,6 @@
-import type { TList } from "@jay-js/elements";
-import type { TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TMenu<T extends TBaseTagMap> = {
+export type TMenu = {
 	size?: "menu-xs" | "menu-sm" | "menu-md" | "menu-lg" | "menu-xl";
 	position?: "menu-vertical" | "menu-horizontal";
-} & TList<T>;
+} & Omit<TBase<"ul">, "tag">;

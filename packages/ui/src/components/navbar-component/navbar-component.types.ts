@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TNavbarComponent<T extends TBaseTagMap> = {
+export type TNavbarComponent = {
 	component?: "navbar-start" | "navbar-center" | "navbar-end";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

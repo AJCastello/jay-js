@@ -13,3 +13,4 @@
 - Migração dos componentes de feedback para TSX: `Alert`, `Badge`, `Indicator`, `Loading`, `Progress`, `Tooltip`, `Toast`, `ToastContainer`, `Modal` (e subcomponentes), `Drawer` (e subcomponentes).
 - Remoção de dependências diretas de `@jay-js/elements` nos componentes de feedback migrados.
 - Padronização de exports ESM em `Progress` e `Indicator`.
+- Migração dos componentes de navegação para TSX: `Navbar`, `NavbarComponent`, `Menu`, `MenuItem`, `MenuTitle`, `Tabs`, `TabItem`, `Breadcrumbs`, `Link`, `Dropdown`, `DropdownContent`, `DropdownLabel`, `BottomNavigation`, `BottomNavigationItem`.
