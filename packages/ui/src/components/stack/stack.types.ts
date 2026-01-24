@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TStack<T extends TBaseTagMap> = {
+export type TStack = {
 	position?: "stack-top" | "stack-bottom" | "stack-start" | "stack-end";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

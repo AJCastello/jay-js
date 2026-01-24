@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDivider<T extends TBaseTagMap> = {
+export type TDivider = {
 	orientation?: "divider-vertical" | "divider-horizontal";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;
