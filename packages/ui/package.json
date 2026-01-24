@@ -18,7 +18,7 @@
   "scripts": {
     "build:types": "tsc --emitDeclarationOnly --declaration --skipLibCheck && node -e \"const fs=require('node:fs');fs.writeFileSync('dist/index.d.ts','export * from \\\"./ui/src/index.js\\\";\\n');\"",
     "prebuild": "rimraf ./dist",
-    "build": "bun build src/index.ts --outdir dist --target browser --format esm --external @jay-js/elements --external @jay-js/system --external clsx --external tailwind-merge && npm run build:types",
+    "build": "bun build src/index.ts --outdir dist --target browser --format esm --external @jay-js/system --external clsx --external tailwind-merge && npm run build:types",
     "postbuild": "cpy ./src/**/*.{css,styled} ./dist && clean-package && cpy ./package.json ./dist && cpy ./README.md ./dist && node -e \"const fs=require('node:fs');const p='dist/package.json';const pkg=JSON.parse(fs.readFileSync(p,'utf8'));if(pkg.exports&&pkg.exports['.']){pkg.exports['.']={types:'./index.d.ts',import:'./index.js',default:'./index.js'};}fs.writeFileSync(p,JSON.stringify(pkg,null,2)+'\\n');\" && clean-package restore",
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
@@ -64,7 +64,6 @@
     "tailwind-merge": "^2.3.0"
   },
   "peerDependencies": {
-    "@jay-js/elements": "^1.0.0",
     "@jay-js/system": "^4.0.0",
     "tailwind-merge": "^2.3.0",
     "clsx": "^2.1.1"

@@ -1,4 +1,3 @@
-import { Box, Typography } from "@jay-js/elements";
 import { Base, render, type TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils";
 import { DatePicker } from "../date-picker";
@@ -38,13 +37,13 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		className: cn("flex", layout === "horizontal" ? "flex-row" : "flex-col", gap, "w-full", props.className),
 	}) as HTMLDivElement;
 
-	const startErrorElement = Typography({
+	const startErrorElement = Base({
 		tag: "span",
 		className: "label-text-alt text-error mt-1",
 		style: { display: "none" },
 	});
 
-	const endErrorElement = Typography({
+	const endErrorElement = Base({
 		tag: "span",
 		className: "label-text-alt text-error mt-1",
 		style: { display: "none" },
@@ -111,11 +110,13 @@ export function DateRangePicker<T extends TBaseTagMap = "div">(
 		updateStartPicker();
 	}
 
-	const startPickerContainer = Box({
+	const startPickerContainer = Base({
+		tag: "div",
 		className: cn("flex-1", "flex flex-col"),
 	}) as HTMLDivElement;
 
-	const endPickerContainer = Box({
+	const endPickerContainer = Base({
+		tag: "div",
 		className: cn("flex-1", "flex flex-col"),
 	}) as HTMLDivElement;
 

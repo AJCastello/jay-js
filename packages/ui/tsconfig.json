@@ -19,8 +19,6 @@
     ],
     "esModuleInterop": true,
     "paths": {
-      "@jay-js/elements": ["../elements/src"],
-      "@jay-js/elements/*": ["../elements/src/*"],
       "@jay-js/system": ["../system/src/index.ts"],
       "@jay-js/system/*": ["../system/src/*"],
       "@jay-js/system/jsx-runtime": ["../system/src/jsx/core/jsx-runtime.ts"],

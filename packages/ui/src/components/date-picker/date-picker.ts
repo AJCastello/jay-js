@@ -1,7 +1,34 @@
-import { Box, Button, Typography } from "@jay-js/elements";
 import { Base, render, type TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils";
 import type { TDatePicker } from "./date-picker.types";
+
+type AnyProps = Record<string, unknown>;
+
+function Box(props: AnyProps): HTMLDivElement {
+	return Base({
+		tag: "div",
+		...props,
+	}) as HTMLDivElement;
+}
+
+function Button(props: AnyProps): HTMLButtonElement {
+	return Base({
+		tag: "button",
+		...props,
+	}) as HTMLButtonElement;
+}
+
+function Typography<T extends TBaseTagMap = "span">(
+	props: AnyProps & {
+		tag?: T;
+	},
+): HTMLElementTagNameMap[T] {
+	const { tag, ...rest } = props;
+	return Base({
+		tag: (tag ?? "span") as T,
+		...rest,
+	}) as HTMLElementTagNameMap[T];
+}
 
 const LOCALES = {
 	"pt-BR": {

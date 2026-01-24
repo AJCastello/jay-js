@@ -1,5 +1,4 @@
-import { List } from "@jay-js/elements";
-import type { TBaseTagMap } from "@jay-js/system";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils";
 import type { TTimeline } from "./timeline.types";
 
@@ -8,7 +7,7 @@ export function Timeline<T extends TBaseTagMap = "ul">(
 ): HTMLElementTagNameMap[T] {
 	const className = cn("timeline", direction, compact ? "timeline-compact" : "", props.className);
 
-	return List({
+	return Base({
 		...props,
 		className,
 	}) as HTMLElementTagNameMap[T];

@@ -1,5 +1,4 @@
-import { List } from "@jay-js/elements";
-import type { TBaseTagMap } from "@jay-js/system";
+import { Base, type TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TSteps } from "./steps.types";
 
@@ -8,7 +7,7 @@ export function Steps<T extends TBaseTagMap = "ul">(
 ): HTMLElementTagNameMap[T] {
 	const className = cn("steps", orientation, props.className);
 
-	return List({
+	return Base({
 		...props,
 		className,
 	}) as HTMLElementTagNameMap[T];
