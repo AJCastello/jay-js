@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TCheckbox<T extends TBaseTagMap = "input"> = {
+export type TCheckbox = {
 	color?:
 		| "checkbox-primary"
 		| "checkbox-secondary"
@@ -12,4 +12,5 @@ export type TCheckbox<T extends TBaseTagMap = "input"> = {
 		| "checkbox-error";
 	size?: "checkbox-xl" | "checkbox-lg" | "checkbox-md" | "checkbox-sm" | "checkbox-xs";
 	indeterminate?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"input">, "tag">;
+

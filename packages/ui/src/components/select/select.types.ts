@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TSelect<T extends TBaseTagMap = "select"> = {
+export type TSelect = {
 	variant?: "select-ghost";
 	color?:
 		| "select-primary"
@@ -13,4 +13,5 @@ export type TSelect<T extends TBaseTagMap = "select"> = {
 		| "select-error";
 	size?: "select-xl" | "select-lg" | "select-md" | "select-sm" | "select-xs";
 	fullWidth?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"select">, "tag">;
+
