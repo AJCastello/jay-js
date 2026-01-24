@@ -5,8 +5,8 @@ A comprehensive collection of reusable UI components for Jay-JS framework. This 
 ## 📦 About This Package
 
 This package contains **60+ UI components** built with:
-- **@jay-js/elements** - Core element creation library
-- **Tailwind CSS** - Utility-first CSS framework  
+- **@jay-js/system** - Core primitives and runtime utilities
+- **Tailwind CSS** - Utility-first CSS framework
 - **daisyUI** - Component library for Tailwind CSS
 - **TypeScript** - Full type safety
 
@@ -16,7 +16,7 @@ Instead of installing this package directly, use the **Jay-JS CLI** to add speci
 
 ```bash
 # Install the Jay-JS CLI globally
-npm install -g @jay-js/cli
+bun add -g @jay-js/cli
 
 # Add individual components to your project
 jayjs ui add alert
@@ -38,7 +38,7 @@ jayjs ui add button modal
 ### Layout & Structure
 - **Card** (+ card-actions, card-body, card-description, card-figure, card-title)
 - **Divider**
-- **Footer** 
+- **Footer**
 - **Join**
 - **Stack**
 
@@ -98,7 +98,7 @@ document.body.appendChild(alertElement);
 
 The package also includes useful React-like hooks for vanilla JavaScript:
 - `useToast` - Toast notification management
-- `useModal` - Modal state management  
+- `useModal` - Modal state management
 - `useDrawer` - Drawer state management
 - `useRef` - Element reference management
 - `useListener` - Event listener management

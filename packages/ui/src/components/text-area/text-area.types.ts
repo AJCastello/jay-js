@@ -14,4 +14,3 @@ export type TTextArea = {
 	size?: "textarea-xl" | "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
 	fullWidth?: boolean;
 } & Omit<TBase<"textarea">, "tag">;
-

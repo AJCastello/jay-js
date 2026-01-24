@@ -14,4 +14,3 @@ export type TFileInput = {
 	size?: "file-input-xl" | "file-input-lg" | "file-input-md" | "file-input-sm" | "file-input-xs";
 	fullWidth?: boolean;
 } & Omit<TBase<"input">, "tag">;
-

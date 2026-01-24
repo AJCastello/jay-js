@@ -12,4 +12,3 @@ export type TRange = {
 		| "range-error";
 	size?: "range-xl" | "range-lg" | "range-md" | "range-sm" | "range-xs";
 } & Omit<TBase<"input">, "tag">;
-

@@ -17,4 +17,3 @@ export type TTextInput = {
 	startAdornment?: HTMLElement | string | ((inputElement: HTMLInputElement) => HTMLElement | string);
 	endAdornment?: HTMLElement | string | ((inputElement: HTMLInputElement) => HTMLElement | string);
 } & Omit<TBase<"input">, "tag">;
-

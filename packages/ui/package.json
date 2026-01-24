@@ -23,7 +23,7 @@
     "pub": "cd ./dist && npm publish --access public",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write ./src",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:ui": "vitest --ui",
     "test:cover": "vitest run --coverage",
     "test:watch": "vitest"

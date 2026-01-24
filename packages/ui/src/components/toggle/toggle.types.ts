@@ -15,4 +15,3 @@ export type TToggle = {
 	position?: "toggle-before" | "toggle-after";
 	formControl?: Omit<TBase<"div">, "tag">;
 } & Omit<TBase<"input">, "tag">;
-

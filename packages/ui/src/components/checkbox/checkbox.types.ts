@@ -13,4 +13,3 @@ export type TCheckbox = {
 	size?: "checkbox-xl" | "checkbox-lg" | "checkbox-md" | "checkbox-sm" | "checkbox-xs";
 	indeterminate?: boolean;
 } & Omit<TBase<"input">, "tag">;
-

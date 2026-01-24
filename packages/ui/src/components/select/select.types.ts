@@ -14,4 +14,3 @@ export type TSelect = {
 	size?: "select-xl" | "select-lg" | "select-md" | "select-sm" | "select-xs";
 	fullWidth?: boolean;
 } & Omit<TBase<"select">, "tag">;
-

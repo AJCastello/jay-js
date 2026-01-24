@@ -12,4 +12,3 @@ export type TRadio = {
 		| "radio-error";
 	size?: "radio-xl" | "radio-lg" | "radio-md" | "radio-sm" | "radio-xs";
 } & Omit<TBase<"input">, "tag">;
-
