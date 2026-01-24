@@ -1,33 +1,35 @@
-import { Base, type TBaseTagMap } from "@jay-js/system";
+import type { TBaseTagMap } from "@jay-js/system";
 import { cn } from "../../utils/cn";
 import type { TDrawerContent } from "./drawer-content.types";
 
 export function DrawerContent<T extends TBaseTagMap = "div">(
-	{ position = "left", ...props }: TDrawerContent<T> = { tag: "div" },
+	{ tag, className, position = "left", children, ...props }: TDrawerContent<T> = { tag: "div" as T },
 ): HTMLElementTagNameMap[T] {
 	const translateClass = {
 		left: "-translate-x-full",
 		right: "translate-x-full",
 		top: "-translate-y-full",
 		bottom: "translate-y-full",
-	};
+	} as const;
 
-	const className = cn(
+	const contentClassName = cn(
 		"drawer-content",
 		`drawer-${position}`,
 		"transition-transform",
 		"duration-300",
 		"ease-in-out",
 		"relative",
-		// "flex-1",
 		"flex",
 		"z-20",
 		translateClass[position],
-		props.className,
+		className,
 	);
 
-	return Base({
-		...props,
-		className,
-	}) as HTMLElementTagNameMap[T];
+	const Tag = (tag ?? "div") as any;
+
+	return (
+		<Tag {...(props as any)} className={contentClassName}>
+			{children}
+		</Tag>
+	) as unknown as HTMLElementTagNameMap[T];
 }
