@@ -18,15 +18,17 @@ function Button(props: AnyProps): HTMLButtonElement {
 	});
 }
 
-function Typography(
-	props: AnyProps & {
-		tag?: "span" | "label";
-	},
-): HTMLSpanElement | HTMLLabelElement {
-	const { tag, ...rest } = props;
+function Span(props: AnyProps): HTMLSpanElement {
 	return Base({
-		tag: tag ?? "span",
-		...rest,
+		tag: "span",
+		...props,
+	});
+}
+
+function Label(props: AnyProps): HTMLLabelElement {
+	return Base({
+		tag: "label",
+		...props,
 	});
 }
 
@@ -248,8 +250,7 @@ export function DatePicker({
 		const minuteColumn = createTimeColumn("minute", selectedMinute);
 		const separator = Box({
 			className: "flex items-center justify-center px-2",
-			children: Typography({
-				tag: "span",
+			children: Span({
 				children: ":",
 				className: "font-mono text-2xl font-bold",
 				style: { userSelect: "none" },
@@ -268,8 +269,7 @@ export function DatePicker({
 		const minuteColumn = createTimeColumn("minute", selectedMinute);
 		const separator = Box({
 			className: "flex items-center justify-center px-2",
-			children: Typography({
-				tag: "span",
+			children: Span({
 				children: ":",
 				className: "font-mono text-2xl font-bold",
 				style: { userSelect: "none" },
@@ -364,7 +364,7 @@ export function DatePicker({
 	}
 
 	function createCalendar(container: HTMLDivElement): HTMLElement {
-		const monthYearElement = Typography({
+		const monthYearElement = Span({
 			id: monthYearId,
 			className: "font-semibold text-base",
 		});
@@ -435,8 +435,7 @@ export function DatePicker({
 				const children: HTMLElement[] = [contentContainer];
 
 				if (label) {
-					const labelElement = Typography({
-						tag: "label",
+					const labelElement = Label({
 						className: "label",
 						children: Base({
 							tag: "span",
