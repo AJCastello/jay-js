@@ -12,12 +12,7 @@ describe("SubscriptionRegistry", () => {
 		const subscriptionId = "test-sub-1";
 		const cleanupFn = vi.fn();
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			subscriptionId,
-			myState,
-			cleanupFn,
-		);
+		subscriptionRegistry.registerSubscription(element, subscriptionId, myState, cleanupFn);
 
 		expect(subscriptionRegistry.hasSubscriptions(element)).toBe(true);
 		expect(subscriptionRegistry.getSubscriptionCount(element)).toBe(1);
@@ -28,18 +23,8 @@ describe("SubscriptionRegistry", () => {
 		const state1 = state({ value: 10 });
 		const state2 = state({ value: 20 });
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-1",
-			state1,
-			vi.fn(),
-		);
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-2",
-			state2,
-			vi.fn(),
-		);
+		subscriptionRegistry.registerSubscription(element, "sub-1", state1, vi.fn());
+		subscriptionRegistry.registerSubscription(element, "sub-2", state2, vi.fn());
 
 		expect(subscriptionRegistry.getSubscriptionCount(element)).toBe(2);
 	});
@@ -49,12 +34,7 @@ describe("SubscriptionRegistry", () => {
 		const myState = state({ value: 10 });
 		const cleanupFn = vi.fn();
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-1",
-			myState,
-			cleanupFn,
-		);
+		subscriptionRegistry.registerSubscription(element, "sub-1", myState, cleanupFn);
 		subscriptionRegistry.cleanupElement(element);
 
 		expect(cleanupFn).toHaveBeenCalledTimes(1);
@@ -62,28 +42,18 @@ describe("SubscriptionRegistry", () => {
 	});
 
 	it("should handle cleanup errors gracefully", () => {
-		const consoleErrorSpy = vi
-			.spyOn(console, "error")
-			.mockImplementation(() => {});
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		const element = document.createElement("div");
 		const myState = state({ value: 10 });
 		const cleanupFn = vi.fn(() => {
 			throw new Error("Cleanup error");
 		});
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-1",
-			myState,
-			cleanupFn,
-		);
+		subscriptionRegistry.registerSubscription(element, "sub-1", myState, cleanupFn);
 		subscriptionRegistry.cleanupElement(element);
 
 		expect(cleanupFn).toHaveBeenCalled();
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"JayJS: Error cleaning up subscription:",
-			expect.any(Error),
-		);
+		expect(consoleErrorSpy).toHaveBeenCalledWith("JayJS: Error cleaning up subscription:", expect.any(Error));
 
 		consoleErrorSpy.mockRestore();
 	});
@@ -111,12 +81,7 @@ describe("SubscriptionRegistry", () => {
 		const myState = state({ value: 10 });
 		const cleanupFn = vi.fn();
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			subscriptionId,
-			myState,
-			cleanupFn,
-		);
+		subscriptionRegistry.registerSubscription(element, subscriptionId, myState, cleanupFn);
 
 		subscriptionRegistry.cleanupElement(element);
 
@@ -132,9 +97,7 @@ describe("SubscriptionRegistry", () => {
 	});
 
 	it("should not throw when cleaning non-existent subscription ID", () => {
-		expect(() =>
-			subscriptionRegistry.cleanupSubscription("non-existent"),
-		).not.toThrow();
+		expect(() => subscriptionRegistry.cleanupSubscription("non-existent")).not.toThrow();
 	});
 
 	it("should handle multiple cleanup calls on same element", () => {
@@ -142,12 +105,7 @@ describe("SubscriptionRegistry", () => {
 		const myState = state({ value: 10 });
 		const cleanupFn = vi.fn();
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-1",
-			myState,
-			cleanupFn,
-		);
+		subscriptionRegistry.registerSubscription(element, "sub-1", myState, cleanupFn);
 
 		subscriptionRegistry.cleanupElement(element);
 		expect(cleanupFn).toHaveBeenCalledTimes(1);
@@ -190,9 +148,7 @@ describe("SubscriptionRegistry", () => {
 	});
 
 	it("should continue cleanup even if one cleanup function fails", () => {
-		const consoleErrorSpy = vi
-			.spyOn(console, "error")
-			.mockImplementation(() => {});
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		const element = document.createElement("div");
 		const myState = state({ value: 10 });
 
@@ -211,10 +167,7 @@ describe("SubscriptionRegistry", () => {
 		expect(cleanup1).toHaveBeenCalledTimes(1);
 		expect(cleanup2).toHaveBeenCalledTimes(1);
 		expect(cleanup3).toHaveBeenCalledTimes(1);
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"JayJS: Error cleaning up subscription:",
-			expect.any(Error),
-		);
+		expect(consoleErrorSpy).toHaveBeenCalledWith("JayJS: Error cleaning up subscription:", expect.any(Error));
 
 		consoleErrorSpy.mockRestore();
 	});
@@ -225,18 +178,8 @@ describe("SubscriptionRegistry", () => {
 		const cleanup1 = vi.fn();
 		const cleanup2 = vi.fn();
 
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-1",
-			myState,
-			cleanup1,
-		);
-		subscriptionRegistry.registerSubscription(
-			element,
-			"sub-1",
-			myState,
-			cleanup2,
-		);
+		subscriptionRegistry.registerSubscription(element, "sub-1", myState, cleanup1);
+		subscriptionRegistry.registerSubscription(element, "sub-1", myState, cleanup2);
 
 		expect(subscriptionRegistry.getSubscriptionCount(element)).toBe(2);
 

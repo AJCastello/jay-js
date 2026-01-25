@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it, vi } from "vitest";
-import { Base } from "../base.js";
 import { state } from "../../../state/core/state.js";
 import { subscriptionRegistry } from "../../../state/core/subscription-registry.js";
+import { Base } from "../base.js";
 
 describe("Subscription Cleanup End-to-End", () => {
 	it("should register and cleanup subscriptions automatically with Base component", () => {
@@ -60,10 +60,7 @@ describe("Subscription Cleanup End-to-End", () => {
 
 		const element = Base({
 			tag: "div",
-			children: [
-				() => `First: ${state1.value.value}`,
-				() => ` Second: ${state2.value.value}`,
-			],
+			children: [() => `First: ${state1.value.value}`, () => ` Second: ${state2.value.value}`],
 		});
 
 		document.body.appendChild(element);
@@ -177,8 +174,7 @@ describe("Subscription Cleanup End-to-End", () => {
 		const createPage = (route: string) => {
 			return Base({
 				tag: "div",
-				children: () =>
-					`Route: ${globalState.value.route} | Count: ${globalState.value.data.count}`,
+				children: () => `Route: ${globalState.value.route} | Count: ${globalState.value.data.count}`,
 			});
 		};
 

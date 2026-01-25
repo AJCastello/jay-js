@@ -102,12 +102,7 @@ export function values(fn: () => any, element?: HTMLElement): (object: any, ...p
  * @param setChild Callback function to execute when children need to be updated
  * @param element Optional HTMLElement to track subscriptions for automatic cleanup
  */
-export function childs(
-	fn: any,
-	nodeRefId: string,
-	setChild: () => void,
-	element?: HTMLElement,
-): any {
+export function childs(fn: any, nodeRefId: string, setChild: () => void, element?: HTMLElement): any {
 	const _set_child = Object.assign(setChild, {
 		_fn: fn,
 		_ref: nodeRefId,

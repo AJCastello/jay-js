@@ -1,5 +1,4 @@
 import { state } from "../state/core/state.js";
-import { derived } from "../state/utils/helpers.js";
 import { queryCache } from "./cache.js";
 import type { TMutationFetcher, TMutationOptions, TMutationStatus, TMutationStore } from "./types.js";
 import { defaultRetryDelay, executeWithRetry } from "./utils.js";
@@ -113,14 +112,9 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 				isLoading: true,
 				isIdle: false,
 				isError: false,
-				status: "loading"
-			}
+				status: "loading",
+			};
 		});
-
-		// internalState.value.isLoading = true;
-		// internalState.value.isIdle = false;
-		// internalState.value.isError = false;
-		// internalState.value.status = "loading";
 
 		let context: TContext | undefined;
 
@@ -143,15 +137,9 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 					error: null,
 					isError: false,
 					isSuccess: true,
-					status: "success"
-				}
+					status: "success",
+				};
 			});
-
-			// internalState.value.data = data;
-			// internalState.value.error = null;
-			// internalState.value.isError = false;
-			// internalState.value.isSuccess = true;
-			// internalState.value.status = "success";
 
 			if (options.onSuccess) {
 				await options.onSuccess(data, variables, context);
@@ -185,14 +173,9 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 					error: err,
 					isError: true,
 					isSuccess: false,
-					status: "error"
-				}
+					status: "error",
+				};
 			});
-
-			// internalState.value.error = err;
-			// internalState.value.isError = true;
-			// internalState.value.isSuccess = false;
-			// internalState.value.status = "error";
 
 			if (options.onError) {
 				await options.onError(err, variables, context);
@@ -208,8 +191,8 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 			internalState.set((currentState) => {
 				return {
 					...currentState,
-					isLoading: false
-				}
+					isLoading: false,
+				};
 			});
 			currentController = null;
 		}
@@ -233,16 +216,9 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 				isError: false,
 				isSuccess: false,
 				isIdle: true,
-				status: "idle"
-			}
+				status: "idle",
+			};
 		});
-		// internalState.value.data = null;
-		// internalState.value.error = null;
-		// internalState.value.isLoading = false;
-		// internalState.value.isError = false;
-		// internalState.value.isSuccess = false;
-		// internalState.value.isIdle = true;
-		// internalState.value.status = "idle";
 	};
 
 	const cancel = (): void => {
@@ -254,19 +230,10 @@ export function mutation<TData = unknown, TError = Error, TVariables = void, TCo
 		internalState.set((currentState) => {
 			return {
 				...currentState,
-				isLoading: false
-			}
+				isLoading: false,
+			};
 		});
-
 	};
-
-	// const data = derived(() => internalState.value.data);
-	// const error = derived(() => internalState.value.error);
-	// const isLoading = derived(() => internalState.value.isLoading);
-	// const isError = derived(() => internalState.value.isError);
-	// const isSuccess = derived(() => internalState.value.isSuccess);
-	// const isIdle = derived(() => internalState.value.isIdle);
-	// const status = derived(() => internalState.value.status);
 
 	return {
 		get data() {

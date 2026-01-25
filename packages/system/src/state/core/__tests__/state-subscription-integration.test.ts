@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from "vitest";
-import { state } from "../state.js";
 import { childs } from "../../utils/helpers.js";
+import { state } from "../state.js";
 import { subscriptionRegistry } from "../subscription-registry.js";
 
 describe("State + Subscription Registry Integration", () => {

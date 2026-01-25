@@ -274,10 +274,7 @@ describe("query()", () => {
 
 			const previous = queryCache.get("todos");
 
-			const optimistic = [
-				...(previous?.data || []),
-				{ id: 2, text: "Todo 2" },
-			];
+			const optimistic = [...(previous?.data || []), { id: 2, text: "Todo 2" }];
 			queryCache.set("todos", optimistic, 300000);
 
 			expect(todosQuery.data).toEqual([
