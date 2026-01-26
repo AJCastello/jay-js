@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type IBottomNavigation<T extends TBaseTagMap> = {
+export type IBottomNavigation = {
 	size?: "btm-nav-xs" | "btm-nav-sm" | "btm-nav-md" | "btm-nav-lg";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

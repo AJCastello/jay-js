@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TRadio<T extends TBaseTagMap = "input"> = {
+export type TRadio = {
 	color?:
 		| "radio-primary"
 		| "radio-secondary"
@@ -11,4 +11,4 @@ export type TRadio<T extends TBaseTagMap = "input"> = {
 		| "radio-info"
 		| "radio-error";
 	size?: "radio-xl" | "radio-lg" | "radio-md" | "radio-sm" | "radio-xs";
-} & TBase<T>;
+} & Omit<TBase<"input">, "tag">;

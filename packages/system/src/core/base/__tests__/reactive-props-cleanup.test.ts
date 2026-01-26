@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from "vitest";
-import { Base } from "../base.js";
 import { state } from "../../../state/core/state.js";
 import { subscriptionRegistry } from "../../../state/core/subscription-registry.js";
+import { Base } from "../base.js";
 
 describe("Reactive Props Cleanup", () => {
 	it("should track and cleanup subscriptions for reactive id", () => {

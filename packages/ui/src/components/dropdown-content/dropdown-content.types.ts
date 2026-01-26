@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDropdownContent<T extends TBaseTagMap> = {
+export type TDropdownContent = {
 	orientation?: "divider-vertical" | "divider-horizontal";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

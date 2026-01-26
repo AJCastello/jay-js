@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TKbd<T extends TBaseTagMap> = {
+export type TKbd = {
 	size?: "kbd-xl" | "kbd-lg" | "kbd-md" | "kbd-sm" | "kbd-xs";
-} & TBase<T>;
+} & Omit<TBase<"kbd">, "tag">;

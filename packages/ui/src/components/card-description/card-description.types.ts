@@ -1,3 +1,3 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TCardDescription<T extends TBaseTagMap> = TBase<T>;
+export type TCardDescription = Omit<TBase<"p">, "tag">;

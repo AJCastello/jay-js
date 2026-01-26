@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TChatComponent<T extends TBaseTagMap> = {
+export type TChatComponent = {
 	component?: "chat-bubble" | "chat-image" | "chat-header" | "chat-footer";
 	color?:
 		| "chat-bubble-primary"
@@ -11,4 +11,4 @@ export type TChatComponent<T extends TBaseTagMap> = {
 		| "chat-bubble-success"
 		| "chat-bubble-warning"
 		| "chat-bubble-error";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

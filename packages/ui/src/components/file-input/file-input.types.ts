@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TFileInput<T extends TBaseTagMap = "input"> = {
+export type TFileInput = {
 	variant?: "file-input-ghost";
 	color?:
 		| "file-input-primary"
@@ -13,4 +13,4 @@ export type TFileInput<T extends TBaseTagMap = "input"> = {
 		| "file-input-error";
 	size?: "file-input-xl" | "file-input-lg" | "file-input-md" | "file-input-sm" | "file-input-xs";
 	fullWidth?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"input">, "tag">;

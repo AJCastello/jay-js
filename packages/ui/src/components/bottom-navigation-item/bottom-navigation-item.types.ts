@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TBottomNavigationItem<T extends TBaseTagMap> = {
+export type TBottomNavigationItem = {
 	active?: boolean;
 	disabled?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"a">, "tag">;

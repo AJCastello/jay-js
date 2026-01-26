@@ -511,28 +511,6 @@ const Form = () => (
 
 See [Utils README](./src/utils/README.md) for complete documentation.
 
----
-
-### Naming Conventions
-
-Jay JS uses `handle*` prefix instead of `use*` to avoid confusion with React hooks:
-
-| Old Name | New Name |
-|----------|----------|
-| `useForm` | `handleForm` |
-
-```typescript
-// Correct usage
-import { handleForm } from "@jay-js/system";
-
-const form = handleForm({
-  defaultValues: { email: "", password: "" },
-  resolver: zodResolver(schema)
-});
-```
-
----
-
 ## Subpath Imports
 
 Each module can be imported individually for tree-shaking:
@@ -545,32 +523,6 @@ import { getI18n, setLanguage } from "@jay-js/system/i18n";
 import { query, mutation } from "@jay-js/system/query";
 import { themeDefineOptions, initTheme } from "@jay-js/system/theme";
 import { render, createRef } from "@jay-js/system/utils";
-```
-
-## Migration
-
-If you are migrating from `@jay-js/jsx` or `@jay-js/elements`, these packages are now deprecated. All functionality has been consolidated into `@jay-js/system`.
-
-### From @jay-js/jsx
-
-1. Update `tsconfig.json`:
-```diff
-- "jsxImportSource": "@jay-js/jsx"
-+ "jsxImportSource": "@jay-js/system"
-```
-
-2. Update imports:
-```diff
-- import { Fragment } from "@jay-js/jsx";
-+ import { Fragment } from "@jay-js/system";
-```
-
-### From @jay-js/elements
-
-The elements package functionality is now part of the core system. Update imports:
-```diff
-- import { Base } from "@jay-js/elements";
-+ import { Base } from "@jay-js/system";
 ```
 
 ## TypeScript Support

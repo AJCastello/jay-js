@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TFooter<T extends TBaseTagMap> = {
+export type TFooter = {
 	position?: "footer-center";
 	direction?: "footer-vertical" | "footer-horizontal";
-} & TBase<T>;
+} & Omit<TBase<"footer">, "tag">;

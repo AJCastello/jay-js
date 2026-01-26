@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TRange<T extends TBaseTagMap = "input"> = {
+export type TRange = {
 	color?:
 		| "range-primary"
 		| "range-secondary"
@@ -11,4 +11,4 @@ export type TRange<T extends TBaseTagMap = "input"> = {
 		| "range-info"
 		| "range-error";
 	size?: "range-xl" | "range-lg" | "range-md" | "range-sm" | "range-xs";
-} & TBase<T>;
+} & Omit<TBase<"input">, "tag">;

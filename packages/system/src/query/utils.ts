@@ -68,7 +68,7 @@ export async function executeWithRetry<TData>(
 ): Promise<TData> {
 	const maxAttempts = typeof retry === "boolean" ? (retry ? 3 : 0) : retry;
 	let attempt = 0;
-	let lastError: Error;
+	let lastError: Error = new Error("Unknown error");
 
 	while (attempt <= maxAttempts) {
 		try {
@@ -91,7 +91,7 @@ export async function executeWithRetry<TData>(
 		}
 	}
 
-	throw lastError!;
+	throw lastError;
 }
 
 /**

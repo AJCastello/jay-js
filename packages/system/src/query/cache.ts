@@ -110,7 +110,7 @@ class QueryCache {
 		if (!this.listeners.has(key)) {
 			this.listeners.set(key, new Set());
 		}
-		this.listeners.get(key)!.add(callback);
+		this.listeners.get(key)?.add(callback);
 
 		return () => this.offChange(key, callback);
 	}

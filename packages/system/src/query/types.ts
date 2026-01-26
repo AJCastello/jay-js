@@ -1,4 +1,3 @@
-
 /**
  * Query key type - can be static string or reactive function
  *

@@ -1,3 +1,3 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TNavbar<T extends TBaseTagMap> = TBase<T>;
+export type TNavbar = Omit<TBase<"nav">, "tag">;

@@ -1,9 +1,9 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TToast<T extends TBaseTagMap> = {
+export type TToast = {
 	horizontal?: "toast-start" | "toast-center" | "toast-end";
 	vertical?: "toast-top" | "toast-middle" | "toast-bottom";
 	duration?: number;
 	asChild?: boolean;
 	children?: HTMLElement;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDrawerContent<T extends TBaseTagMap> = {
+export type TDrawerContent = {
 	position?: "top" | "left" | "right" | "bottom";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

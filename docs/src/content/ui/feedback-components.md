@@ -132,10 +132,10 @@ const successAlert = Alert({
 
 ### Sistema Modal
 ```typescript
-import { Modal, ModalBackdrop, ModalBox, ModalAction, useModal } from '@jay-js/ui';
+import { Modal, ModalBackdrop, ModalBox, ModalAction, handleModal } from '@jay-js/ui';
 
 // Hook para controle do modal
-const modalState = useModal();
+const modalState = handleModal();
 
 // Estrutura básica do modal
 const modal = Modal({
@@ -172,10 +172,10 @@ modalState.open();
 
 ### Toast Notifications
 ```typescript
-import { Toast, ToastContainer, useToast } from '@jay-js/ui';
+import { Toast, ToastContainer, handleToast } from '@jay-js/ui';
 
 // Sistema de toast
-const toastSystem = useToast();
+const toastSystem = handleToast();
 
 // Container de toasts
 const toastContainer = ToastContainer();
@@ -269,7 +269,7 @@ function FormWithValidation() {
 import { Modal, ModalBox, ModalAction } from '@jay-js/ui';
 
 function DeleteConfirmation(onConfirm: () => void) {
-  const modal = useModal();
+  const modal = handleModal();
   
   return Modal({
     children: [
@@ -305,11 +305,11 @@ function DeleteConfirmation(onConfirm: () => void) {
 
 ### Sistema de Notificações Globais
 ```typescript
-import { ToastContainer, useToast } from '@jay-js/ui';
+import { ToastContainer, handleToast } from '@jay-js/ui';
 
 // Sistema global de notificações
 class NotificationService {
-  private toastSystem = useToast();
+  private toastSystem = handleToast();
   
   success(message: string) {
     this.toastSystem.show({
@@ -390,7 +390,7 @@ interface ModalOptions {
 }
 
 function createDynamicModal(options: ModalOptions) {
-  const modal = useModal();
+  const modal = handleModal();
   
   return Modal({
     children: [
@@ -479,12 +479,12 @@ function AsyncButton(onClick: () => Promise<void>) {
 ## Exemplo Completo
 
 ```typescript
-import { Alert, Modal, Toast, useModal, useToast } from '@jay-js/ui';
+import { Alert, Modal, Toast, handleModal, handleToast } from '@jay-js/ui';
 
 // Sistema completo de feedback
 class FeedbackSystem {
-  private modal = useModal();
-  private toast = useToast();
+  private modal = handleModal();
+  private toast = handleToast();
   
   // Alerta inline para validação
   showValidationAlert(message: string) {

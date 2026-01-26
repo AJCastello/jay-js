@@ -1,3 +1,3 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TModalAction<T extends TBaseTagMap> = TBase<T>;
+export type TModalAction = Omit<TBase<"div">, "tag">;

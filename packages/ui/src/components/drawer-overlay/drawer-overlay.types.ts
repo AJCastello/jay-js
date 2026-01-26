@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDrawerOverlay<T extends TBaseTagMap> = {
+export type TDrawerOverlay = {
 	id?: string;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;
