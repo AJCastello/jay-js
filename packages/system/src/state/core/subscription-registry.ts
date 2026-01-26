@@ -7,18 +7,10 @@ export interface ISubscriptionRecord {
 }
 
 class SubscriptionRegistry {
-	private subscriptionsByElement = new WeakMap<
-		HTMLElement,
-		Set<ISubscriptionRecord>
-	>();
+	private subscriptionsByElement = new WeakMap<HTMLElement, Set<ISubscriptionRecord>>();
 	private elementBySubscriptionId = new Map<string, WeakRef<HTMLElement>>();
 
-	registerSubscription(
-		element: HTMLElement,
-		subscriptionId: string,
-		state: TState<any>,
-		cleanupFn: () => void,
-	): void {
+	registerSubscription(element: HTMLElement, subscriptionId: string, state: TState<any>, cleanupFn: () => void): void {
 		const record: ISubscriptionRecord = {
 			subscriptionId,
 			state,

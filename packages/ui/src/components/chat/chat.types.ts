@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TChat<T extends TBaseTagMap> = {
+export type TChat = {
 	position?: "chat-start" | "chat-end";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

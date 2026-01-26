@@ -6,7 +6,9 @@
       "ESNext",
       "DOM"
     ],
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@jay-js/system",
     "sourceMap": true,
     "declaration": true,
     "outDir": "./dist",
@@ -17,8 +19,10 @@
     ],
     "esModuleInterop": true,
     "paths": {
-      "@jay-js/elements": ["../elements/src"],
-      "@jay-js/elements/*": ["../elements/src/*"]
+      "@jay-js/system": ["../system/src/index.ts"],
+      "@jay-js/system/*": ["../system/src/*"],
+      "@jay-js/system/jsx-runtime": ["../system/src/jsx/core/jsx-runtime.ts"],
+      "@jay-js/system/jsx-dev-runtime": ["../system/src/jsx/core/jsx-dev-runtime.ts"]
     }
   },
   "include": [

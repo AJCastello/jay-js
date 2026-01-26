@@ -1,8 +1,7 @@
-import type { TListItem } from "@jay-js/elements";
-import type { TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TMenuItem<T extends TBaseTagMap> = {
+export type TMenuItem = {
 	disabled?: boolean;
 	active?: boolean;
 	focus?: boolean;
-} & TListItem<T>;
+} & Omit<TBase<"li">, "tag">;

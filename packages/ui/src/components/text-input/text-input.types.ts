@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TTextInput<T extends TBaseTagMap> = {
+export type TTextInput = {
 	placeholder?: string;
 	fullWidth?: boolean;
 	variant?: "input-ghost";
@@ -16,4 +16,4 @@ export type TTextInput<T extends TBaseTagMap> = {
 	inputSize?: "input-xl" | "input-lg" | "input-md" | "input-sm" | "input-xs";
 	startAdornment?: HTMLElement | string | ((inputElement: HTMLInputElement) => HTMLElement | string);
 	endAdornment?: HTMLElement | string | ((inputElement: HTMLInputElement) => HTMLElement | string);
-} & TBase<T>;
+} & Omit<TBase<"input">, "tag">;

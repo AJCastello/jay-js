@@ -9,6 +9,7 @@
     "ignoreUnknown": false,
     "includes": [
       "**/*.ts",
+      "**/*.tsx",
       "**/*.js"
     ],
     "experimentalScannerIgnores": [

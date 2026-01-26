@@ -1,7 +1,7 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TRadialProgress<T extends TBaseTagMap> = {
+export type TRadialProgress = {
 	value?: number;
 	size?: string;
 	thickness?: string;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

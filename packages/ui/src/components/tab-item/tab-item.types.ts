@@ -1,7 +1,7 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TTabItem<T extends TBaseTagMap> = {
+export type TTabItem = {
 	size?: "tab-xs" | "tab-sm" | "tab-md" | "tab-lg";
 	active?: boolean;
 	disabled?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"a">, "tag">;

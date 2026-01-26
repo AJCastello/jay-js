@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDateRangePicker<T extends TBaseTagMap> = {
+export type TDateRangePicker = {
 	startLabel?: string;
 	endLabel?: string;
 	startValue?: Date;
@@ -19,4 +19,4 @@ export type TDateRangePicker<T extends TBaseTagMap> = {
 	layout?: "horizontal" | "vertical";
 	gap?: "gap-1" | "gap-2" | "gap-3" | "gap-4" | "gap-5" | "gap-6";
 	validateRange?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

@@ -2,24 +2,26 @@
 category: UI
 categoryId: 1
 articleId: 9
-slug: hooks
-title: Hooks
-description: Hooks personalizados para funcionalidades comuns, incluindo useModal, useDrawer, useToast, useRef e useListener.
+slug: handlers
+title: Handlers
+description: Funções utilitárias para funcionalidades comuns, incluindo handleModal, handleDrawer, handleToast, useRef e useListener.
 ---
 
-# Hooks
+# Handlers (Funções de Controle)
 
-Os hooks do @jay-js/ui fornecem funcionalidades reutilizáveis e abstrações úteis para operações comuns em aplicações web. Eles encapsulam lógica complexa em interfaces simples, facilitando o gerenciamento de estado, manipulação do DOM e controle de componentes.
+As funções de controle (handlers) do @jay-js/ui fornecem funcionalidades reutilizáveis e abstrações úteis para operações comuns em aplicações web. Elas encapsulam lógica complexa em interfaces simples, facilitando o gerenciamento de estado, manipulação do DOM e controle de componentes.
+
+**Nota:** No Jay JS, usamos a convenção `handle*` para funções de controle/gerenciamento de UI, evitando confusão com React Hooks.
 
 ## Referência da API
 
-### useModal
+### handleModal
 
-Hook para controlar a abertura, fechamento e estado de modais.
+Função para controlar a abertura, fechamento e estado de modais.
 
 #### Assinatura da Função
 ```typescript
-function useModal(options: TUseModal): TModalControls
+function handleModal(options: THandleModal): TModalControls
 ```
 
 #### Parâmetros
@@ -38,13 +40,13 @@ interface TModalControls {
 }
 ```
 
-### useDrawer
+### handleDrawer
 
-Hook para controlar gavetas/painéis deslizantes.
+Função para controlar gavetas/painéis deslizantes.
 
 #### Assinatura da Função
 ```typescript
-function useDrawer(options: TUseDrawer): TDrawerControls
+function handleDrawer(options: THandleDrawer): TDrawerControls
 ```
 
 #### Parâmetros
@@ -63,13 +65,13 @@ interface TDrawerControls {
 }
 ```
 
-### useToast
+### handleToast
 
-Hook para exibir notificações toast temporárias.
+Função para exibir notificações toast temporárias.
 
 #### Assinatura da Função
 ```typescript
-function useToast(options: TUseToast): TToastControls
+function handleToast(options: THandleToast): TToastControls
 ```
 
 #### Parâmetros
@@ -93,7 +95,7 @@ interface TToastControls {
 
 ### useRef
 
-Hook para obter referências de elementos DOM com recursos adicionais.
+Função para obter referências de elementos DOM com recursos adicionais.
 
 #### Assinatura da Função
 ```typescript
@@ -120,7 +122,7 @@ interface TRefControls<T> {
 
 ### useListener
 
-Hook para gerenciar event listeners de forma eficiente.
+Função para gerenciar event listeners de forma eficiente.
 
 #### Assinatura da Função
 ```typescript
@@ -151,8 +153,8 @@ interface TListenerControls {
 
 ## Visão Geral
 
-### useModal - Controle de Modais
-O hook useModal simplifica o gerenciamento de modais, fornecendo métodos convenientes para abrir, fechar e alternar modais, além de callbacks para eventos de mudança de estado.
+### handleModal - Controle de Modais
+A função handleModal simplifica o gerenciamento de modais, fornecendo métodos convenientes para abrir, fechar e alternar modais, além de callbacks para eventos de mudança de estado.
 
 **Características principais:**
 - Controle programático de modais
@@ -160,8 +162,8 @@ O hook useModal simplifica o gerenciamento de modais, fornecendo métodos conven
 - Verificação automática de existência do elemento
 - Interface simples e consistente
 
-### useDrawer - Controle de Gavetas
-O useDrawer oferece controle similar ao useModal, mas específico para elementos drawer/sidebar, com funcionalidades adaptadas para painéis deslizantes.
+### handleDrawer - Controle de Gavetas
+O handleDrawer oferece controle similar ao handleModal, mas específico para elementos drawer/sidebar, com funcionalidades adaptadas para painéis deslizantes.
 
 **Características principais:**
 - Controle de painéis deslizantes
@@ -169,8 +171,8 @@ O useDrawer oferece controle similar ao useModal, mas específico para elementos
 - Gerenciamento de estado automático
 - Callbacks para eventos de navegação
 
-### useToast - Sistema de Notificações
-O useToast fornece um sistema completo de notificações temporárias, com diferentes tipos, posicionamento flexível e controle de duração.
+### handleToast - Sistema de Notificações
+O handleToast fornece um sistema completo de notificações temporárias, com diferentes tipos, posicionamento flexível e controle de duração.
 
 **Características principais:**
 - Múltiplos tipos de notificação (success, error, warning, info)
@@ -200,10 +202,10 @@ O useListener facilita o gerenciamento de event listeners, fornecendo controle s
 
 ### Controle de Modal
 ```typescript
-import { useModal } from '@jay-js/ui';
+import { handleModal } from '@jay-js/ui';
 
-// Hook básico para modal
-const modal = useModal({
+// Função básica para modal
+const modal = handleModal({
   id: 'my-modal',
   onOpen: () => console.log('Modal aberto'),
   onClose: () => console.log('Modal fechado')
@@ -245,10 +247,10 @@ const modalElement = 'dialog', {
 
 ### Sistema de Notificações
 ```typescript
-import { useToast } from '@jay-js/ui';
+import { handleToast } from '@jay-js/ui';
 
 // Configuração do sistema de toast
-const toast = useToast({
+const toast = handleToast({
   position: 'top-right',
   duration: 3000,
   maxToasts: 5
@@ -272,7 +274,7 @@ const showWarning = () => {
 
 const showInfo = () => {
   const toastId = toast.info('Processando...');
-  
+
   // Remove após alguma operação
   setTimeout(() => {
     toast.dismiss(toastId);
@@ -320,9 +322,9 @@ const focusInput = () => inputRef.focus();
 const blurInput = () => inputRef.blur();
 
 const scrollToInput = () => {
-  inputRef.scrollIntoView({ 
-    behavior: 'smooth', 
-    block: 'center' 
+  inputRef.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
   });
 };
 
@@ -335,7 +337,7 @@ const formWithControls = 'form', {
       placeholder: 'Nome de usuário',
       ref: inputRef.setRef // Define a referência
     },
-    
+
     'div', { className: 'flex gap-2' },
     [
       'button', {
@@ -408,10 +410,10 @@ const listenerControls = 'div', {
 
 ### Controle de Drawer
 ```typescript
-import { useDrawer } from '@jay-js/ui';
+import { handleDrawer } from '@jay-js/ui';
 
-// Hook para drawer de navegação
-const navigationDrawer = useDrawer({
+// Função para drawer de navegação
+const navigationDrawer = handleDrawer({
   id: 'nav-drawer',
   onOpen: () => console.log('Menu aberto'),
   onClose: () => console.log('Menu fechado')
@@ -427,11 +429,11 @@ const headerWithMenu = 'header', {
       onClick: navigationDrawer.toggle,
       children: '☰'
     }],
-    
+
     'div', { className: 'navbar-center' },
-    ['h1', { 
+    ['h1', {
       className: 'text-xl font-bold',
-      children: 'Minha App' 
+      children: 'Minha App'
     }]
   ]
 };
@@ -445,10 +447,10 @@ const drawerNavigation = 'div', {
       type: 'checkbox',
       className: 'drawer-toggle'
     },
-    
+
     'div', { className: 'drawer-content' },
     [/* Conteúdo principal */],
-    
+
     'div', { className: 'drawer-side' },
     [
       'label', {
@@ -477,19 +479,19 @@ const drawerNavigation = 'div', {
 
 ### Sistema de Confirmação com Modal
 ```typescript
-import { useModal, useToast } from '@jay-js/ui';
+import { handleModal, handleToast } from '@jay-js/ui';
 
 function ConfirmationSystem({ onConfirm }) {
-  const modal = useModal({ id: 'confirm-modal' });
-  const toast = useToast();
-  
+  const modal = handleModal({ id: 'confirm-modal' });
+  const toast = handleToast();
+
   const handleConfirm = async () => {
     try {
       modal.close();
       toast.info('Processando...');
-      
+
       await onConfirm();
-      
+
       toast.dismissAll();
       toast.success('Ação confirmada com sucesso!');
     } catch (error) {
@@ -511,7 +513,7 @@ function ConfirmationSystem({ onConfirm }) {
         </div>
       `;
     }
-    
+
     modal.open();
   };
 
@@ -538,10 +540,10 @@ const confirmSystem = ConfirmationSystem({
 
 ### Drawer Responsivo com Persistência
 ```typescript
-import { useDrawer, useListener } from '@jay-js/ui';
+import { handleDrawer, useListener } from '@jay-js/ui';
 
 function ResponsiveNavigation() {
-  const drawer = useDrawer({
+  const drawer = handleDrawer({
     id: 'responsive-nav',
     onOpen: () => localStorage.setItem('nav-open', 'true'),
     onClose: () => localStorage.setItem('nav-open', 'false')
@@ -551,7 +553,7 @@ function ResponsiveNavigation() {
   const restoreState = () => {
     const wasOpen = localStorage.getItem('nav-open') === 'true';
     const isLargeScreen = window.innerWidth >= 1024;
-    
+
     if (wasOpen && isLargeScreen) {
       drawer.open();
     } else if (!isLargeScreen) {
@@ -590,16 +592,16 @@ function ResponsiveNavigation() {
 
 ### Sistema de Notificações Avançado
 ```typescript
-import { useToast } from '@jay-js/ui';
+import { handleToast } from '@jay-js/ui';
 
 class NotificationManager {
   constructor() {
-    this.toast = useToast({
+    this.toast = handleToast({
       position: 'top-right',
       duration: 4000,
       maxToasts: 3
     });
-    
+
     this.queue = [];
     this.processing = false;
   }
@@ -607,15 +609,15 @@ class NotificationManager {
   // Processa fila de notificações
   async processQueue() {
     if (this.processing || this.queue.length === 0) return;
-    
+
     this.processing = true;
-    
+
     while (this.queue.length > 0) {
       const notification = this.queue.shift();
       await this.showNotification(notification);
       await new Promise(resolve => setTimeout(resolve, 500)); // Delay entre notificações
     }
-    
+
     this.processing = false;
   }
 
@@ -625,7 +627,7 @@ class NotificationManager {
       onShow: () => console.log(`Toast ${type} exibido`),
       onHide: () => console.log(`Toast ${type} removido`)
     });
-    
+
     return toastId;
   }
 
@@ -654,23 +656,23 @@ class NotificationManager {
   // Notificações de progresso
   async showProgress(message, asyncOperation) {
     const progressId = this.toast.info(`${message} 0%`, { persistent: true });
-    
+
     try {
       let progress = 0;
       const interval = setInterval(() => {
         progress += 10;
         this.toast.update(progressId, `${message} ${progress}%`);
-        
+
         if (progress >= 100) {
           clearInterval(interval);
         }
       }, 200);
-      
+
       const result = await asyncOperation();
-      
+
       this.toast.dismiss(progressId);
       this.toast.success('Operação concluída!');
-      
+
       return result;
     } catch (error) {
       this.toast.dismiss(progressId);
@@ -694,19 +696,19 @@ const handleAsyncAction = async () => {
 
 ## Padrões Avançados
 
-### Hook Customizado Combinado
+### Função Customizada Combinado
 ```typescript
-import { useModal, useToast, useRef } from '@jay-js/ui';
+import { handleModal, handleToast, useRef } from '@jay-js/ui';
 
 function useFormModal({ formId, onSubmit, validationRules = {} }) {
-  const modal = useModal({
+  const modal = handleModal({
     id: `${formId}-modal`,
     onClose: () => resetForm()
   });
-  
-  const toast = useToast();
+
+  const toast = handleToast();
   const formRef = useRef(`#${formId}`);
-  
+
   const resetForm = () => {
     if (formRef.current) {
       formRef.current.reset();
@@ -720,10 +722,10 @@ function useFormModal({ formId, onSubmit, validationRules = {} }) {
 
     const formData = new FormData(form);
     const errors = {};
-    
+
     Object.entries(validationRules).forEach(([field, rules]) => {
       const value = formData.get(field);
-      
+
       rules.forEach(rule => {
         if (!rule.test(value)) {
           errors[field] = rule.message;
@@ -744,11 +746,11 @@ function useFormModal({ formId, onSubmit, validationRules = {} }) {
       const fieldElement = document.querySelector(`[name="${field}"]`);
       if (fieldElement) {
         fieldElement.classList.add('input-error');
-        
+
         // Remove erro existente
         const existingError = fieldElement.parentNode.querySelector('.error-message');
         if (existingError) existingError.remove();
-        
+
         // Adiciona nova mensagem
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message text-error text-sm mt-1';
@@ -761,11 +763,11 @@ function useFormModal({ formId, onSubmit, validationRules = {} }) {
   const clearValidationErrors = () => {
     const form = formRef.current;
     if (!form) return;
-    
+
     form.querySelectorAll('.input-error').forEach(input => {
       input.classList.remove('input-error');
     });
-    
+
     form.querySelectorAll('.error-message').forEach(error => {
       error.remove();
     });
@@ -773,22 +775,22 @@ function useFormModal({ formId, onSubmit, validationRules = {} }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     try {
       const formData = new FormData(formRef.current);
       const data = Object.fromEntries(formData);
-      
+
       toast.info('Enviando formulário...');
-      
+
       await onSubmit(data);
-      
+
       toast.dismissAll();
       toast.success('Formulário enviado com sucesso!');
       modal.close();
       resetForm();
-      
+
     } catch (error) {
       toast.dismissAll();
       toast.error(error.message || 'Erro ao enviar formulário');
@@ -804,7 +806,7 @@ function useFormModal({ formId, onSubmit, validationRules = {} }) {
   };
 }
 
-// Uso do hook combinado
+// Uso da função combinado
 const userFormModal = useFormModal({
   formId: 'user-form',
   validationRules: {
@@ -838,7 +840,7 @@ class EventManager {
   addGlobalListener(event, handler, options = {}) {
     const listener = useListener(document, event, handler, options);
     listener.attach();
-    
+
     this.globalListeners.push({
       event,
       listener,
@@ -902,7 +904,7 @@ class EventManager {
       pressedKeys.push(e.key.toLowerCase());
 
       const shortcut = keys.toLowerCase().split('+').map(k => k.trim());
-      
+
       if (shortcut.every(key => pressedKeys.includes(key))) {
         e.preventDefault();
         handler(e);
@@ -979,7 +981,7 @@ window.addEventListener('beforeunload', cleanup);
 ### 2. Verificação de Elementos
 ```typescript
 // Sempre verifique se elementos existem antes de usar
-const modal = useModal({ 
+const modal = handleModal({
   id: 'my-modal',
   onOpen: () => {
     const element = document.getElementById('my-modal');
@@ -1005,7 +1007,7 @@ const debouncedResize = useListener(
 ### 4. Configuração de Toast Consistente
 ```typescript
 // Mantenha configurações consistentes
-const toast = useToast({
+const toast = handleToast({
   position: 'top-right', // Sempre na mesma posição
   duration: 4000,        // Duração consistente
   maxToasts: 3           // Limite razoável
@@ -1015,31 +1017,31 @@ const toast = useToast({
 ## Exemplo Completo: Dashboard Interativo
 
 ```typescript
-import { 
-  useModal, useDrawer, useToast, useRef, useListener 
+import {
+  handleModal, handleDrawer, handleToast, useRef, useListener
 } from '@jay-js/ui';
 
 function InteractiveDashboard() {
   // Hooks principais
-  const settingsModal = useModal({ 
+  const settingsModal = handleModal({
     id: 'settings-modal',
     onOpen: () => toast.info('Configurações abertas'),
     onClose: () => toast.info('Configurações fechadas')
   });
-  
-  const sidebarDrawer = useDrawer({ 
+
+  const sidebarDrawer = handleDrawer({
     id: 'sidebar-drawer',
     onOpen: () => localStorage.setItem('sidebar-open', 'true'),
     onClose: () => localStorage.setItem('sidebar-open', 'false')
   });
-  
-  const toast = useToast({ 
+
+  const toast = handleToast({
     position: 'top-right',
-    duration: 3000 
+    duration: 3000
   });
-  
+
   const searchRef = useRef('#search-input');
-  
+
   // Event listeners
   const keyboardListener = useListener(
     document,
@@ -1050,13 +1052,13 @@ function InteractiveDashboard() {
         e.preventDefault();
         searchRef.focus();
       }
-      
+
       // Atalho para configurações
       if (e.ctrlKey && e.key === ',') {
         e.preventDefault();
         settingsModal.open();
       }
-      
+
       // Atalho para sidebar
       if (e.ctrlKey && e.key === 'b') {
         e.preventDefault();
@@ -1068,13 +1070,13 @@ function InteractiveDashboard() {
   // Inicialização
   const initialize = () => {
     keyboardListener.attach();
-    
+
     // Restaura estado da sidebar
     const sidebarWasOpen = localStorage.getItem('sidebar-open') === 'true';
     if (sidebarWasOpen) {
       sidebarDrawer.open();
     }
-    
+
     toast.info('Dashboard carregado!');
   };
 
@@ -1089,14 +1091,14 @@ function InteractiveDashboard() {
   const saveSettings = async (formData) => {
     try {
       toast.info('Salvando configurações...');
-      
+
       // Simula API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       toast.dismissAll();
       toast.success('Configurações salvas!');
       settingsModal.close();
-      
+
     } catch (error) {
       toast.dismissAll();
       toast.error('Erro ao salvar configurações');
@@ -1117,7 +1119,7 @@ function InteractiveDashboard() {
             title: 'Menu (Ctrl+B)',
             children: '☰'
           }],
-          
+
           'div', { className: 'navbar-center flex-1' },
           ['div', { className: 'form-control w-full max-w-md' },
           ['input', {
@@ -1133,7 +1135,7 @@ function InteractiveDashboard() {
               }
             }
           }]],
-          
+
           'div', { className: 'navbar-end' },
           ['button', {
             className: 'btn btn-ghost',
@@ -1163,9 +1165,9 @@ function InteractiveDashboard() {
             'div', { className: 'card bg-base-100 shadow-xl' },
             ['div', { className: 'card-body' },
             [
-              'h2', { 
+              'h2', {
                 className: 'card-title',
-                children: 'Estatísticas' 
+                children: 'Estatísticas'
               },
               'p', { children: 'Dados em tempo real...' },
               'div', { className: 'card-actions justify-end' },
@@ -1179,9 +1181,9 @@ function InteractiveDashboard() {
             'div', { className: 'card bg-base-100 shadow-xl' },
             ['div', { className: 'card-body' },
             [
-              'h2', { 
+              'h2', {
                 className: 'card-title',
-                children: 'Ações Rápidas' 
+                children: 'Ações Rápidas'
               },
               'div', { className: 'flex flex-col gap-2 mt-4' },
               [
@@ -1212,9 +1214,9 @@ function InteractiveDashboard() {
             children: [
               'div', { className: 'p-4' },
               [
-                'h3', { 
+                'h3', {
                   className: 'font-bold text-lg mb-4',
-                  children: 'Navegação' 
+                  children: 'Navegação'
                 },
                 'ul', { className: 'menu space-y-1' },
                 [
@@ -1236,11 +1238,11 @@ function InteractiveDashboard() {
         children: [
           'div', { className: 'modal-box w-11/12 max-w-2xl' },
           [
-            'h3', { 
+            'h3', {
               className: 'font-bold text-lg mb-4',
-              children: 'Configurações' 
+              children: 'Configurações'
             },
-            
+
             'form', {
               onSubmit: async (e) => {
                 e.preventDefault();
@@ -1251,9 +1253,9 @@ function InteractiveDashboard() {
                 'div', { className: 'form-control mb-4' },
                 [
                   'label', { className: 'label' },
-                  ['span', { 
+                  ['span', {
                     className: 'label-text',
-                    children: 'Nome da Aplicação' 
+                    children: 'Nome da Aplicação'
                   }],
                   'input', {
                     name: 'appName',
@@ -1267,9 +1269,9 @@ function InteractiveDashboard() {
                 [
                   'label', { className: 'label cursor-pointer' },
                   [
-                    'span', { 
+                    'span', {
                       className: 'label-text',
-                      children: 'Notificações' 
+                      children: 'Notificações'
                     },
                     'input', {
                       name: 'notifications',

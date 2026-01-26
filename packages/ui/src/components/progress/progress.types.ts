@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TProgress<T extends TBaseTagMap = "progress"> = {
+export type TProgress = {
 	color?:
 		| "progress-primary"
 		| "progress-secondary"
@@ -10,4 +10,4 @@ export type TProgress<T extends TBaseTagMap = "progress"> = {
 		| "progress-warning"
 		| "progress-info"
 		| "progress-error";
-} & TBase<T>;
+} & Omit<TBase<"progress">, "tag">;

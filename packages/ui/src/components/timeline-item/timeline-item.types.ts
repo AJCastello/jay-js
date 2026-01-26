@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type ITimelineItem<T extends TBaseTagMap> = {
+export type ITimelineItem = {
 	component?: "timeline-start" | "timeline-middle" | "timeline-end";
 	boxed?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

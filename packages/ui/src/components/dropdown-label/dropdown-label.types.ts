@@ -1,3 +1,3 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDropdownLabel<T extends TBaseTagMap> = TBase<T>;
+export type TDropdownLabel = Omit<TBase<"button">, "tag">;

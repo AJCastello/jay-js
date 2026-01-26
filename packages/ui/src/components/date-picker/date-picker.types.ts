@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TDatePicker<T extends TBaseTagMap> = {
+export type TDatePicker = {
 	label?: string;
 	defaultDate?: Date;
 	value?: Date;
@@ -15,4 +15,4 @@ export type TDatePicker<T extends TBaseTagMap> = {
 	showToday?: boolean;
 	rangeStart?: Date | null;
 	rangeEnd?: Date | null;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

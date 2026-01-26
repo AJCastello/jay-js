@@ -84,8 +84,7 @@ export function Base<T extends TBaseTagMap = "div">(
 	},
 ): HTMLElementTagNameMap[T] {
 	const hasReactiveChildren =
-		typeof children === "function" ||
-		(Array.isArray(children) && children.some((c) => typeof c === "function"));
+		typeof children === "function" || (Array.isArray(children) && children.some((c) => typeof c === "function"));
 
 	const hasReactiveProps =
 		typeof id === "function" ||

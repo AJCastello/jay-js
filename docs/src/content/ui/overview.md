@@ -80,15 +80,17 @@ Componentes para casos de uso específicos:
 - **KBD**: Representação de teclas do teclado
 - **Resizable Splitter**: Divisores redimensionáveis
 
-## Hooks Utilitários
+## Funções de Controle (Handlers)
 
-O pacote também inclui hooks personalizados para funcionalidades comuns:
+O pacote também inclui funções utilitárias para funcionalidades comuns:
 
-- **useDrawer**: Gerenciamento de estado de gavetas
-- **useModal**: Controle de modais
-- **useToast**: Sistema de notificações
+- **handleDrawer**: Gerenciamento de estado de gavetas
+- **handleModal**: Controle de modais
+- **handleToast**: Sistema de notificações
 - **useRef**: Referências de elementos
 - **useListener**: Gerenciamento de event listeners
+
+**Nota:** Usamos a convenção `handle*` para funções de controle de UI, evitando confusão com React Hooks.
 
 ## Instalação
 
@@ -110,7 +112,7 @@ yarn add @jay-js/ui
 import { Alert, Badge, Card } from '@jay-js/ui';
 
 // Hooks específicos
-import { useModal, useToast } from '@jay-js/ui';
+import { handleModal, handleToast } from '@jay-js/ui';
 ```
 
 ### Importação Completa

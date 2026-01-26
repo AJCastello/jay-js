@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TTextArea<T extends TBaseTagMap = "textarea"> = {
+export type TTextArea = {
 	variant?: "textarea-ghost";
 	color?:
 		| "textarea-primary"
@@ -13,4 +13,4 @@ export type TTextArea<T extends TBaseTagMap = "textarea"> = {
 		| "textarea-error";
 	size?: "textarea-xl" | "textarea-lg" | "textarea-md" | "textarea-sm" | "textarea-xs";
 	fullWidth?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"textarea">, "tag">;

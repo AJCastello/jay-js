@@ -111,12 +111,7 @@ describe("mutation()", () => {
 			await vi.runAllTimersAsync();
 			await promise;
 
-			expect(executionOrder).toEqual([
-				"onMutate",
-				"fetcher",
-				"onSuccess",
-				"onSettled",
-			]);
+			expect(executionOrder).toEqual(["onMutate", "fetcher", "onSuccess", "onSettled"]);
 		});
 
 		it("should execute callbacks in correct order on error", async () => {
@@ -147,12 +142,7 @@ describe("mutation()", () => {
 				//
 			}
 
-			expect(executionOrder).toEqual([
-				"onMutate",
-				"fetcher",
-				"onError",
-				"onSettled",
-			]);
+			expect(executionOrder).toEqual(["onMutate", "fetcher", "onError", "onSettled"]);
 		});
 
 		it("should call onMutate before mutation", async () => {

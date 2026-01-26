@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TLink<T extends TBaseTagMap = "a"> = {
+export type TLink = {
 	variant?: "link-hover";
 	color?:
 		| "link-primary"
@@ -11,4 +11,4 @@ export type TLink<T extends TBaseTagMap = "a"> = {
 		| "link-warning"
 		| "link-info"
 		| "link-error";
-} & TBase<T>;
+} & Omit<TBase<"a">, "tag">;

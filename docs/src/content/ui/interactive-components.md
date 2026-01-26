@@ -606,10 +606,10 @@ function MultiLevelDropdown({ menu }) {
 
 ### Drawer Responsivo com Hook
 ```typescript
-import { Drawer, DrawerContent, DrawerOverlay, useDrawer } from '@jay-js/ui';
+import { Drawer, DrawerContent, DrawerOverlay, handleDrawer } from '@jay-js/ui';
 
 function ResponsiveNavigation({ navigationItems }) {
-  const drawer = useDrawer({ id: 'main-navigation' });
+  const drawer = handleDrawer({ id: 'main-navigation' });
 
   const NavigationMenu = () => 'ul', {
     className: 'menu p-4 w-80 space-y-2',
@@ -844,11 +844,11 @@ import {
   Collapse, CollapseTitle, CollapseContent,
   Drawer, DrawerContent, DrawerOverlay,
   Toggle, Swap, SwapItem,
-  useDrawer
+  handleDrawer
 } from '@jay-js/ui';
 
 function AdminInterface({ user, settings, onSettingsChange }) {
-  const sidebarDrawer = useDrawer({ id: 'admin-sidebar' });
+  const sidebarDrawer = handleDrawer({ id: 'admin-sidebar' });
   
   return 'div', {
     className: 'min-h-screen bg-base-100',

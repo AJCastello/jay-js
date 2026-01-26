@@ -208,7 +208,7 @@ export const state = <T>(data: T): TState<T> => {
 			}
 		}
 
-		const executedFunctions = new Set<Function>();
+		const executedFunctions = new Set<(...args: never) => unknown>();
 
 		for (const id of effectsToRun) {
 			const effect = _effects.get(id);
@@ -243,9 +243,7 @@ export const state = <T>(data: T): TState<T> => {
 			// Isso inclui: object->object, object->null, null->object, array->array
 			const wasObjectLike = isObjectLike(_data);
 			const isObjectLike_new = isObjectLike(newValue);
-			const isRootObjectReplaced =
-				(wasObjectLike || isObjectLike_new) &&
-				_data !== newValue;
+			const isRootObjectReplaced = (wasObjectLike || isObjectLike_new) && _data !== newValue;
 
 			_data = newValue;
 
@@ -312,7 +310,7 @@ export const state = <T>(data: T): TState<T> => {
 				if (!_effects_by_target.has(target)) {
 					_effects_by_target.set(target, new Set());
 				}
-				_effects_by_target.get(target)!.add(id);
+				_effects_by_target.get(target)?.add(id);
 			} else if (!(effect as any)[SETVALUE_MARKER] && !(effect as any)[SETCHILD_MARKER]) {
 				_effects_global.add(id);
 			}

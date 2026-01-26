@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TTooltip<T extends TBaseTagMap> = {
+export type TTooltip = {
 	tip?: string;
 	color?:
 		| "tooltip-primary"
@@ -12,4 +12,4 @@ export type TTooltip<T extends TBaseTagMap> = {
 		| "tooltip-error";
 	position?: "tooltip-top" | "tooltip-bottom" | "tooltip-left" | "tooltip-right";
 	forceOpen?: boolean;
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

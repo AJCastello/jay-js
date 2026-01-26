@@ -1,6 +1,6 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TToggle<T extends TBaseTagMap> = {
+export type TToggle = {
 	label?: string;
 	color?:
 		| "toggle-primary"
@@ -13,5 +13,5 @@ export type TToggle<T extends TBaseTagMap> = {
 		| "toggle-error";
 	size?: "toggle-xl" | "toggle-lg" | "toggle-md" | "toggle-sm" | "toggle-xs";
 	position?: "toggle-before" | "toggle-after";
-	formControl?: TBase<T>;
-} & TBase<T>;
+	formControl?: Omit<TBase<"div">, "tag">;
+} & Omit<TBase<"input">, "tag">;

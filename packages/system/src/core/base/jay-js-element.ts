@@ -1,6 +1,6 @@
+import { subscriptionRegistry } from "../../state/core/subscription-registry.js";
 import type { TRefObject } from "../../utils/dom/use-ref.js";
 import type { TBaseTagMap } from "./base.types";
-import { subscriptionRegistry } from "../../state/core/subscription-registry.js";
 
 export function createJayJsElementClass<T extends TBaseTagMap>(tagName: T): new () => HTMLElement {
 	if (!/^[a-z][a-z0-9-]*$/.test(tagName)) {

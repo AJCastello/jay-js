@@ -1,0 +1,16 @@
+# Changelog
+
+## Unreleased
+
+### Changed
+
+- Migração do componente `Button` para TSX, removendo dependência direta do pacote de elements (legado).
+- `Button` não aceita mais `tag` customizável (sempre renderiza `<button>`).
+- Migração dos componentes básicos de formulário para TSX: `Checkbox`, `Radio`, `Range`, `FileInput`, `Select`, `TextArea`, `TextInput`, `Toggle`.
+- Componentes migrados não aceitam mais `tag` customizável (seguem o padrão do piloto).
+- Ajustes de configuração no `@jay-js/ui` para suportar `.tsx` (TypeScript e Biome).
+- Migração dos componentes de layout para TSX: `Card` (e subcomponentes), `Divider`, `Stack`.
+- Migração dos componentes de feedback para TSX: `Alert`, `Badge`, `Indicator`, `Loading`, `Progress`, `Tooltip`, `Toast`, `ToastContainer`, `Modal` (e subcomponentes), `Drawer` (e subcomponentes).
+- Remoção de dependências diretas do pacote de elements (legado) nos componentes de feedback migrados.
+- Padronização de exports ESM em `Progress` e `Indicator`.
+- Migração dos componentes de navegação para TSX: `Navbar`, `NavbarComponent`, `Menu`, `MenuItem`, `MenuTitle`, `Tabs`, `TabItem`, `Breadcrumbs`, `Link`, `Dropdown`, `DropdownContent`, `DropdownLabel`, `BottomNavigation`, `BottomNavigationItem`.

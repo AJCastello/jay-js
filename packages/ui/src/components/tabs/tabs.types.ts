@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TTabs<T extends TBaseTagMap> = {
+export type TTabs = {
 	variant?: "tabs-boxed" | "tabs-bordered" | "tabs-lifted";
-} & TBase<T>;
+} & Omit<TBase<"div">, "tag">;

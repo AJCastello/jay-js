@@ -1,5 +1,5 @@
-import type { TBase, TBaseTagMap } from "@jay-js/system";
+import type { TBase } from "@jay-js/system";
 
-export type TModal<T extends TBaseTagMap> = {
+export type TModal = {
 	position?: "modal-top" | "modal-bottom" | "modal-middle" | "modal-start" | "modal-end";
-} & TBase<T>;
+} & Omit<TBase<"dialog">, "tag">;

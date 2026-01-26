@@ -5,8 +5,8 @@ A comprehensive collection of reusable UI components for Jay-JS framework. This 
 ## 📦 About This Package
 
 This package contains **60+ UI components** built with:
-- **@jay-js/elements** - Core element creation library
-- **Tailwind CSS** - Utility-first CSS framework  
+- **@jay-js/system** - Core primitives and runtime utilities
+- **Tailwind CSS** - Utility-first CSS framework
 - **daisyUI** - Component library for Tailwind CSS
 - **TypeScript** - Full type safety
 
@@ -16,7 +16,7 @@ Instead of installing this package directly, use the **Jay-JS CLI** to add speci
 
 ```bash
 # Install the Jay-JS CLI globally
-npm install -g @jay-js/cli
+bun add -g @jay-js/cli
 
 # Add individual components to your project
 jayjs ui add alert
@@ -38,7 +38,7 @@ jayjs ui add button modal
 ### Layout & Structure
 - **Card** (+ card-actions, card-body, card-description, card-figure, card-title)
 - **Divider**
-- **Footer** 
+- **Footer**
 - **Join**
 - **Stack**
 
@@ -94,14 +94,37 @@ const alertElement = Alert({
 document.body.appendChild(alertElement);
 ```
 
-## 🧠 Built-in Hooks
+## 🧠 Funções de Controle de UI (Handlers)
 
-The package also includes useful React-like hooks for vanilla JavaScript:
-- `useToast` - Toast notification management
-- `useModal` - Modal state management  
-- `useDrawer` - Drawer state management
-- `useRef` - Element reference management
-- `useListener` - Event listener management
+O pacote inclui funções utilitárias para gerenciamento imperativo de componentes UI. No Jay JS, usamos a convenção `handle*` para deixar explícito que não são React Hooks e podem ser chamados livremente em qualquer contexto:
+
+- `handleToast` - Gerenciamento de notificações toast
+- `handleModal` - Controle de estado de modais
+- `handleDrawer` - Controle de estado de drawers/gavetas
+- `useRef` - Gerenciamento de referências de elementos
+- `useListener` - Gerenciamento de event listeners
+
+### Exemplo de uso:
+
+```javascript
+import { handleModal } from '@jay-js/ui';
+
+const modal = handleModal({ modalId: 'my-modal' });
+modal.open();  // Abre o modal
+modal.close(); // Fecha o modal
+```
+
+### ⚠️ Nota de Migração (v4.x → v5.x)
+
+As antigas APIs com prefixo `use*` foram renomeadas para `handle*` na versão 4.3.0 para evitar confusão com React Hooks:
+
+| Deprecated (v4.x) | Nova API (v4.3.0+) | Status |
+|-------------------|-------------------|--------|
+| `useModal` | `handleModal` | ⚠️ Será removido em v5.0.0 |
+| `useDrawer` | `handleDrawer` | ⚠️ Será removido em v5.0.0 |
+| `useToast` | `handleToast` | ⚠️ Será removido em v5.0.0 |
+
+**As versões antigas (`use*`) continuam funcionando como aliases na v4.3.0, mas serão removidas na v5.0.0.**
 
 ## 🎨 Styling
 
